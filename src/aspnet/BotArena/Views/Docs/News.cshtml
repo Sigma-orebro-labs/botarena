@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "What's new?";
+}
+
+@section styles {
+    <link rel="stylesheet" href="@Url.Content("~/Content/Pages/Docs/Index.less")" />
+}
+
+<h2>What's New?</h2>
+
+<h3>2014-01-21</h3>
+
+<ul>
+    <li>
+        The same bot can now be added multiple times to an FFA match, so that you can play matches agains yourself.
+        This is done by simply clicking the bot's name multiple times on the match setup page.
+    </li>
+    <li>
+        You can now download and upload the source code for your bot through a small REST API. See the docs for more info.
+    </li>
+</ul>
+
+<h3>2014-01-15</h3>
+
+<ul>
+    <li>Added documentation for the onCollission event and the actionsPerRound property of the bot status object</li>
+    <li>Added health to the bot status object</li>
+    <li>Fixed bug where users were allowed to register more than one bot in a single script</li>
+</ul>

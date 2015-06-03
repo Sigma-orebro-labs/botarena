@@ -1,0 +1,35 @@
+﻿@import "Setup.less";
+
+#match-setup {
+    h2 {
+        margin-bottom: 5px;
+    }
+}
+
+#bot-lists-container {
+    margin-top: 0;
+
+    .selected {
+             background-color: #dff0d8;
+    }
+}
+
+#available-bots-container {
+    .make-sm-column(12);
+
+    li.bot {
+        font-size: 12px;
+
+       .author {
+           color: @backgroundInfoColor;
+           float: none;
+           display: block;
+           width: 100%;
+           text-align: right;
+        }
+    }
+}
+
+#selected-bots-container {
+    display: none;
+}

@@ -1,0 +1,24 @@
+﻿@model GosuArena.Entities.Bot
+
+@section styles {
+    <link rel="stylesheet" href="@Url.Content("~/Content/GosuArena.less")" />
+}
+
+@Html.ValidationSummary(true, "The bot could not be created")
+
+<form method="POST" action="@Url.Action("Create", "Bot")" role="form">
+        
+    @Html.AntiForgeryToken()
+
+    <fieldset class="col-md-4">
+        <legend>Create bot</legend>
+
+        <div>
+            <label for="Name">Name</label>
+            <input name="Name" type="text" placeholder="Name" value="@Model.Name" />
+            @Html.ValidationMessageFor(m => m.Name)
+        </div>
+
+        <button type="submit" class="main-submit">Create</button>
+    </fieldset>
+</form>

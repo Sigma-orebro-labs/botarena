@@ -1,0 +1,16 @@
+﻿@using Microsoft.Ajax.Utilities
+
+@{
+    ViewBag.Title = "Error";
+}
+
+@section styles {
+    <link rel="stylesheet" href="@Url.Content("~/Content/GosuArena.less")" />
+}
+
+<h2>An error occurred :(</h2>
+
+@if (!string.IsNullOrWhiteSpace(ViewBag.ErrorMessage))
+{
+    <p>@Model</p>
+}

@@ -1,0 +1,96 @@
+﻿@model GosuArena.Entities.User
+
+@section styles
+{
+    <link rel="stylesheet" href="@Url.Content("~/Content/Pages/User/Profile.less")" />
+}
+
+@section scripts {
+    <script type="text/javascript" src="@Url.Content("~/Content/bootstrap-3.0.3/js/scrollspy.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/User/profile.js")"></script>
+}
+
+<menu id="profile-menu" class="col-md-3">
+    <ul class="nav nav-pills nav-stacked">
+        <li><a href="#bot-heading">My Bots</a></li>
+        <li><a href="#api">API Access</a></li>
+    </ul>
+</menu>
+<section class="col-md-9">
+    
+    <h2>Profile for @Model.Username</h2>
+    
+    <h3 id="bot-heading">Bots</h3>
+    <ul id="bots">
+        @foreach (var bot in Model.Bots.OrderByDescending(x => x.CreatedDate))
+        {
+            <li class="well">
+
+
+                <a href="@Url.Action("Edit", "Bot", new { id = bot.Id })">
+                    <span class="name">@bot.Name</span>
+                    <span class="created-date">Created @bot.CreatedDate.ToShortDateString()</span>
+                </a>
+
+                <div class="actions">
+                    @if (bot.CanBeEdited)
+                    {
+                        <a href="@Url.Action("Edit", "Bot", new { id = bot.Id })" class="edit-bot">Edit</a>
+                    }
+
+                    <form class="delete-bot" method="POST" action="@Url.Action("Delete", "Bot", new { id = bot.Id})">
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit" data-confirm="Do you really want to delete your bot?">Delete</button>
+                    </form>
+                </div>
+
+
+            </li>
+        }
+    </ul>
+    
+    <menu id="bot-actions">
+        <a class="btn btn-primary btn-lg pull-right" href="@Url.Action("Create", "Bot")">Create new bot</a>
+    </menu>
+
+    <section id="api">
+        <h3>API Access</h3>
+
+        <p>
+            If you want to work with the code for your bots from a third party application you can do so by 
+            enabling API access to your bots. When you enable API access you get an API key which you can
+            use to authorize your API requests.
+        </p>
+        
+        <p>
+            See the @Html.ActionLink("documentation", "Index", "Docs", null, null, "api", null, null) for more information.
+        </p>
+
+        @{
+            var apiAccessStatus = Model.IsApiAccessAllowed ? "enabled" : "disabled";
+            var apiAccessAction = Model.IsApiAccessAllowed ? "Disable" : "Enable";
+            var apiAccessActionUrl = Model.IsApiAccessAllowed ? Url.Action("DisableApiAccess", "User") : Url.Action("EnableApiAccess", "User");
+            var apiAccessActionType = Model.IsApiAccessAllowed ? "danger" : "warning";
+            var apiAccessStatusType = Model.IsApiAccessAllowed ? "success" : "danger";
+        }
+
+        <p>
+            API access is currently <span id="api-access-status" class="text-@apiAccessStatusType">@apiAccessStatus</span>.
+            Your API key is: <span id="api-key" style="display: none">@Model.ApiKey</span><a id="show-api-key" href="#">(show)</a>
+        </p>
+
+        <form action="@apiAccessActionUrl" method="POST">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-@apiAccessActionType pull-right">@apiAccessAction</button>
+        </form>
+        
+        @if(Model.IsApiAccessAllowed)
+        {
+            <form action="@Url.Action("RegenerateApiKey", "User")" method="POST">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-default pull-right">Regenerate key</button>
+            </form>
+        }
+    </section>
+</section>

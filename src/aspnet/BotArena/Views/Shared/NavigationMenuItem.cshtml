@@ -1,0 +1,7 @@
+﻿@model GosuArena.Models.Controls.NavigationMenuItemModel
+
+@{
+    var cssClass = Model.IsCurrentPage(Html) ? "active" : null;
+}
+
+<a href="@Url.Action(Model.ActionName, Model.ControllerName)" class="@cssClass">@Model.LinkText</a>

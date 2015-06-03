@@ -1,0 +1,95 @@
+﻿@model GosuArena.Models.Match.MatchSetupModel
+
+@section styles {
+    <link rel="stylesheet" href="@Url.Content("~/Content/Pages/Match/SetupMatch.less")" />
+}
+
+@section scripts {
+    <script type="text/javascript" src="@Url.Content("~/Scripts/lib/knockout/knockout-3.0.0.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/Match/Setup/rosterViewModel.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/Match/Setup/setupViewModel.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/Match/Setup/botSelectionViewModel.js")"></script>
+}
+
+@{
+    ViewBag.Title = "Play match!";
+}
+
+<h2>Which bots should face each other in combat?</h2>
+
+<div class="row">
+    <div id="info">
+        <p id="info-message" class="alert alert-info">
+            Can't find the droids you are looking for? Make sure they have been made public by their authors
+        </p>
+    </div>
+    <form id="start-match" method="GET" action="@Url.Action("Play", "Match")">
+        
+        @for (int teamIndex = 0; teamIndex < Model.MaxRosterCount; teamIndex++)
+        {
+            var inputName = string.Format("rosters[{0}]", teamIndex);
+            var valueBindingPath = string.Format("rosters()[{0}].selectedBotNames", teamIndex);
+                
+            <input type="hidden" name="@inputName" id="@inputName" data-bind="value: @valueBindingPath" />  
+        }    
+
+        <input type="hidden" name="isTeam" value="@Model.IsTeamSetup.ToString().ToLower()" />
+
+        <button type="submit" id="play-button" class="btn btn-lg btn-primary">Play!</button>
+    </form>
+</div>
+
+@if (Model.IsTeamSetup)
+{
+    <ul id="team-menu" class="nav nav-tabs">
+
+    @for (int i = 1; i <= Model.MaxRosterCount; i++)
+    {
+        var teamName = string.Format("team{0}", i);
+
+        <li data-bind="css: { active: currentRosterNumber() == @i }">
+            <a href="#@teamName" data-bind="click: function() { setCurrentRoster(@i); }">@teamName</a>
+        </li>
+    }
+
+    </ul>
+}
+
+<section id="bot-lists-container" data-bind="with: currentRoster">
+    <div id="available-bots-container">
+        <ul id="bots" data-bind="foreach: visibleBots">
+            <li class="bot well" data-bind="click: $parent.addBot">
+                <span class="name" data-bind="text: name"></span>
+                <span class="author" data-bind="text: authorDescription"></span>
+            </li>
+        </ul>
+        <span id="result-filtered-message" data-bind="visible: isResultLimited()">Result has been limited due to too many matches</span>
+    </div>
+
+    <div id="selected-bots-container">
+        <span class="no-selection-message well" data-bind="visible: isSelectionEmpty()">No bots have been selected</span>
+        <ul id="selected-bots" data-bind="foreach: selectedBots">
+            <li class="bot well" data-bind="click: $parent.removeBot">
+                <span class="name" data-bind="text: name"></span>
+                <span class="author" data-bind="text: authorDescription"></span>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<script type="text/javascript">
+    var ga = ga || {};
+    
+    $(function() {
+        var bots = [
+            @foreach (var bot in Model.Bots)
+            {
+                @:{ id: @bot.Id, name: '@bot.Name', authorUsername: '@bot.AuthorUsername' },
+            }
+        ];
+        
+        ga.setupViewModel = gosuArena.factories.createSetupViewModel(bots, @Model.MaxRosterCount);
+        
+        ko.applyBindings(ga.setupViewModel);
+    });
+</script>

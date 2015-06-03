@@ -1,0 +1,20 @@
+﻿@model GosuArena.Entities.User
+
+@section styles
+{
+    <link rel="stylesheet" href="@Url.Content("~/Content/Pages/User/Profile.less")" />
+}
+
+<h2>Profile for @Model.Username</h2>
+
+<ul id="bots">
+    @foreach (var bot in Model.Bots.OrderByDescending(x => x.CreatedDate))
+    {
+        <li class="well">
+            <a href="@Url.Action("Edit", "Bot", new { id = bot.Id })">
+                <span class="name">@bot.Name</span>
+                <span class="created-date">Created @bot.CreatedDate.ToShortDateString()</span>
+            </a>
+        </li>
+    }
+</ul>

@@ -1,0 +1,43 @@
+﻿@using Microsoft.Ajax.Utilities
+@model GosuArena.Models.Controls.QuickMatchSetupModel
+
+<h2>@Model.Title</h2>
+
+<section id="bot-lists-container">
+    <div id="available-bots-container">
+        <ul id="bots" data-bind="foreach: allBots">
+            <li class="bot well" data-bind="click: $parent.toggleSelection, css: { selected: isSelected }">
+                <span class="name" data-bind="text: name"></span>
+                <span class="author" data-bind="text: authorDescription"></span>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<form id="start-match" method="GET" action="@Url.Action("Play", "Match")" target="_blank">
+    <input type="hidden" name="rosters[0]" id="names" data-bind="value: selectedBotNames" />
+    <input type="hidden" name="training" value="@Model.IsTraining.ToString().ToLower()" />
+
+    <button type="submit" id="play-button" class="btn btn-lg btn-primary">Play!</button>
+</form>
+
+<script type="text/javascript">
+    $(function() {
+        var bots = [
+            @foreach (var bot in Model.SelectableBots)
+            {
+                @:{ id: @bot.Id, name: '@bot.Name', authorUsername: '@bot.AuthorUsername' },
+            }
+        ];
+
+        var preselectedBots = [
+            @foreach (var bot in Model.PreselectedBots)
+            {
+                @:{ id: @bot.Id, name: '@bot.Name', authorUsername: '@bot.AuthorUsername' },
+            }
+        ];
+
+        var setupViewModel = gosuArena.factories.createSetupViewModel(bots, preselectedBots);
+        ko.applyBindings(setupViewModel);
+    });
+</script>

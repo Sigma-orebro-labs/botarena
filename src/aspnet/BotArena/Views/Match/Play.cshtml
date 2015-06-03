@@ -1,0 +1,123 @@
+﻿@using System.Web.Optimization
+
+@model IList<GosuArena.Models.Match.BotModel>
+
+@{
+    ViewBag.Title = "Play match!";
+}
+
+@section styles
+{
+    <link rel="stylesheet" href="@Url.Content("~/Content/Pages/Match/Play.less")" />
+}
+
+@section scripts {
+    <script type="text/javascript" src="@Url.Content("~/Scripts/lib/knockout/knockout-3.0.0.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/Match/Play/botViewModel.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/Match/Play/matchViewModel.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/Match/Play/matchUI.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/Match/Play/match.js")"> </script>
+}
+
+<div id="playing-field">
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <form class="options">
+        <label for="showBotNames">Show bot names</label>
+        <input id="showBotNames" type="checkbox" name="showBotNames" />
+
+        <label for="showBotSights">Show bot sights</label>
+        <input id="showBotSights" type="checkbox" name="showBotSights" />
+    </form>
+
+    <menu class="actions">
+        <button id="restartMatch" class="btn btn-primary">Start match</button>
+        <button id="stopMatch">Stop match</button>
+    </menu>
+</div>
+
+<ul id="botLegends" data-bind="foreach: botLegends">
+    <li data-bind="css: { killed: !isAlive() }">
+        <div class="health" data-bind="style: { height: health() + '%' }"></div>
+        <div class="color" data-bind='style: { backgroundColor : color }'></div>
+        <span class="name" data-bind="text: name"></span>
+    </li>
+</ul>
+
+@Scripts.Render("~/bundles/gosuarena")
+
+@foreach (var bot in Model.Where(x => !string.IsNullOrWhiteSpace(x.Script)))
+{
+    <script type="text/javascript">
+        // @bot.Name.ToUpper()
+        // A few lines of code have been added to the bot definition, to make it
+        // play nice with the framework. The code written by the user can be seen a few lines below
+        gosuArena.initiateBotRegistration({
+            id: @bot.Id,
+            name: "@bot.Name",
+            teamId: @bot.TeamId
+        }, function() {
+            // Redefine globals
+            var window = {};
+            var document = {};
+            var alert = function() { };
+            var XMLHttpRequest = function() { };
+            var jQuery = function () { };
+            var $ = function () { };
+
+            // User written code starts here:
+            
+            @Html.Raw(bot.GetScriptToRender(User))
+            
+            // User written code ends here
+        });
+    </script>
+}
+
+<script type="text/javascript">
+    
+    gosuArena.sprites = gosuArena.sprites || {};
+
+    var requestedResources = [];
+
+    function areAllSpritesLoaded() {
+        for (var i = 0; i < requestedResources.length; i++) {
+            var resourceName = requestedResources[i];
+            
+            // Make sure that all requested resources have been initialized
+            if (!gosuArena.sprites[resourceName]) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+
+    function loadSprite(name, url) {
+        
+        // Mark the resource as requested, to keep track of all resources are loaded
+        requestedResources.push(name);
+
+        var img = new Image();
+
+        img.onload = function () {
+            gosuArena.sprites[name] = img;
+            
+            if (areAllSpritesLoaded()) {
+                gosuArena.events.raiseResourcesLoaded();
+                gosuArena.sprites.isLoaded = true;
+            }
+        };
+
+        img.src = url;
+    }
+
+    loadSprite('background', '@Url.Content("~/Content/images/sprites/map.jpg")');
+    loadSprite('wallNorth', '@Url.Content("~/Content/images/sprites/wall_north.png")');
+    loadSprite('wallSouth', '@Url.Content("~/Content/images/sprites/wall_south.png")');
+    loadSprite('wallEast', '@Url.Content("~/Content/images/sprites/wall_east.png")');
+    loadSprite('wallWest', '@Url.Content("~/Content/images/sprites/wall_west.png")');
+    loadSprite('wallCornerLeft', '@Url.Content("~/Content/images/sprites/wall_corner_left.png")');
+    loadSprite('wallCornerRight', '@Url.Content("~/Content/images/sprites/wall_corner_right.png")');
+    loadSprite('bot', '@Url.Content("~/Content/images/sprites/mech2.png")');
+</script>

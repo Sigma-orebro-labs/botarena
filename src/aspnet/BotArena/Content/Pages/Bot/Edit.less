@@ -1,0 +1,131 @@
+﻿@import "../Match/SetupTrainingMatch.less";
+
+legend {
+    display: none;
+}
+
+label[for=Script] {
+    display: none;
+}
+
+textarea {
+    display: block;
+}
+
+form {
+    margin: 0;
+    padding: 0;
+}
+
+html, body, div.container {
+    height: 100%;
+}
+
+@content-top-margin: 70px;
+
+body {
+    div.container {
+        position: relative;
+    }
+
+    #page-container {
+        position: absolute;
+        top: 50px;
+        bottom: 0;
+        width: 100%;
+        pointer-events: none;
+    }
+}
+
+form#script-editor-form {
+    position: absolute;
+    top: @content-top-margin;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: all;
+    margin: 0;
+
+    div {
+        margin: 0;
+    }
+
+    fieldset {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        textarea, .CodeMirror {
+            height: auto;
+            font-size: 15px;
+            border-style: solid;
+            border-width: 1px;
+            border-color: #cecece;
+                        
+            position: absolute;
+            top: 37px;
+            left: 0;
+            right: 0;
+            bottom: 70px;
+        }
+
+        .CodeMirror-scroll {
+            // Fixes double scroll bar issue in CodeMirror
+            overflow-y: hidden;
+        }
+
+        .CodeMirror-matchingbracket {
+            color: black;
+            background-color: #ffd800;
+        }
+
+        .cm-matchhighlight {
+	        background-color: #fff9ff;
+        }
+
+        
+
+        button {
+            position: absolute;
+            bottom: 20px;
+            right: 0;
+        }
+    }
+    
+}
+
+#match-setup {
+    position: absolute;
+    right: 0;
+    top: @content-top-margin;
+    bottom: 0;
+    pointer-events: all;
+
+    h2 {
+        margin-top: 0;
+        font-size: 25px;
+    }
+
+    ul#bots {
+        margin: 5px 0;
+
+        li.bot {
+            padding: 6px 12px;
+            margin: 4px 0px;
+        }
+    }
+
+    .name {
+        font-size: 15px;
+    }
+
+    form {
+        margin: 0;
+
+        button {
+            width: 100%;
+        }
+    }
+}

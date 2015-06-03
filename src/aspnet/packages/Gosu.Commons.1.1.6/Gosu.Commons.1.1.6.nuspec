@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Gosu.Commons</id>
+    <version>1.1.6</version>
+    <authors>Erik Öjebo</authors>
+    <owners>Erik Öjebo</owners>
+    <projectUrl>https://github.com/erikojebo/gosu.commons/wiki</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Lots of useful stuff for doing all kinds of things in .NET</description>
+    <releaseNotes>Minor changes to extensions</releaseNotes>
+    <copyright>Copyright 2013</copyright>
+    <tags>.net helpers utils gosu commons reflection dynamic</tags>
+  </metadata>
+</package>

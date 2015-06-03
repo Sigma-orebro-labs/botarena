@@ -1,0 +1,60 @@
+﻿@import "../../GosuArena.less";
+
+@itemFontSize: 20px;
+
+#bot-lists-container {
+    .make-row();
+    margin-top: 20px;
+}
+
+form#start-match {
+    .make-row();
+}
+
+#selected-bots-container, #available-bots-container {
+    padding: 0;
+}
+
+li.bot {
+    list-style: none;
+    font-size: @itemFontSize;
+    cursor: pointer;
+    margin: 0 0 10px 0;
+
+    .author {
+        color: @backgroundInfoColor;
+        float: right;
+    }
+}
+
+ul {
+    padding: 0;
+}
+
+.no-selection-message {
+	font-style: italic;
+    color: #ccc;
+    background-color: #fdfdfd;
+    border-style: dotted;
+    font-size: 16px;
+    display: block;
+    font-size: @itemFontSize;
+}
+
+#result-filtered-message {
+	font-style: italic;
+    width: 100%;
+    text-align: right;
+    display: block;
+}
+
+ul#selected-bots {
+    li.bot {
+        background-color: #dff0d8;
+    }
+}
+
+#play-button {
+    float: right;
+    min-width: 150px;
+}
