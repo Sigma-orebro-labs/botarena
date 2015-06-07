@@ -221,6 +221,8 @@
     <Content Include="Scripts\game\terrain.js" />
     <Content Include="Scripts\game\worldObject.js" />
     <Content Include="Scripts\gosu\meta.js" />
+    <Content Include="Scripts\lib\threejs\three.js" />
+    <Content Include="Scripts\lib\threejs\three.min.js" />
     <Content Include="Scripts\lib\underscore-min.js" />
     <Content Include="Scripts\Pages\Account\List.js" />
     <Content Include="Scripts\Pages\Match\Play\botViewModel.js" />

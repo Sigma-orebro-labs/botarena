@@ -14,8 +14,16 @@ namespace GosuArena
                         "~/Scripts/lib/jquery/jquery.unobtrusive*",
                         "~/Scripts/lib/jquery/jquery.validate*"));
 
-#if !DEBUG
+#if DEBUG
+            BundleTable.EnableOptimizations = false;
+
+            bundles.Add(new ScriptBundle("~/bundles/threejs").Include(
+                        "~/Scripts/lib/threejs/three.js"));
+#else
             BundleTable.EnableOptimizations = true;
+
+            bundles.Add(new ScriptBundle("~/bundles/threejs").Include(
+            "~/Scripts/lib/threejs/three.min.js"));
 #endif
 
             bundles.Add(new ScriptBundle("~/bundles/gosuarena").Include(
