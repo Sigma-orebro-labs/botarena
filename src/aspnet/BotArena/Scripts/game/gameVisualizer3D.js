@@ -44,11 +44,35 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
 
         addBots(arenaState);
         addLights();
+
+        addEventListeners();
+    }
+
+    function renderBullets(arenaState) {
+        for (var i = 0; i < arenaState.bullets.length; i++) {
+            var bullet = arenaState.bullets[i];
+        
+            if (!bullet.mesh) {
+                var sphereGeometry = new THREE.SphereGeometry(3, 30, 30);
+
+                var sphereMaterial = new THREE.MeshPhongMaterial({
+                    color: 0xff0000,
+                    shininess: 30,
+                    metal: true
+                })
+
+                bullet.mesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
+                scene.add(bullet.mesh);
+            }
+
+            setMeshRotation(bullet);
+            setMeshPosition(bullet, 5);
+        }
     }
 
     function addPlane() {
-        var planeGeometry = new THREE.PlaneGeometry(1000, 1000);
-        var planeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        var planeGeometry = new THREE.PlaneGeometry(600, 600);
+        var planeMaterial = new THREE.MeshBasicMaterial({ color: 0x6F553A });
         planeMaterial.side = THREE.DoubleSide;
         plane = new THREE.Mesh(planeGeometry, planeMaterial);
 
@@ -62,22 +86,43 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
             var terrain = arenaState.terrain[i];
 
             var boxGeometry = new THREE.BoxGeometry(200, 20, 5);
-            var boxMaterial = new THREE.MeshLambertMaterial({ color: 0x0000ff });
+            var boxMaterial = new THREE.MeshPhongMaterial({
+                shininess: 20,
+                metal: true
+            })
+
             terrain.mesh = new THREE.Mesh(boxGeometry, boxMaterial);
 
             setMeshRotation(terrain);
-            setMeshPosition(terrain);
+            setMeshPosition(terrain, 10);
 
             scene.add(terrain.mesh);
         }
     }
 
     function addLights() {
-        var directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
-        directionalLight.position.set(0, 1, 0);
-        scene.add(directionalLight);
+        var ambientLight = new THREE.AmbientLight(0x404040);
+        scene.add(ambientLight);
 
-        var light = new THREE.AmbientLight(0x404040);
+        var hemisphereLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 2.5);
+        scene.add(hemisphereLight);
+
+        addPointLight(60, 10, -60);
+        addPointLight(-60, 10, -60);
+        addPointLight(60, 10, 60);
+        addPointLight(-60, 10, 60);
+        addPointLight(0, 10, 0);
+        
+        addPointLight(75, 20, -75);
+        addPointLight(-75, 20, -75);
+        addPointLight(75, 20, 75);
+        addPointLight(-75, 20, 75);
+        addPointLight(0, 20, 0);
+    }
+
+    function addPointLight(x, y, z) {
+        var light = new THREE.PointLight(0xffffff, 0.8, 0);
+        light.position.set(x, y, z);
         scene.add(light);
     }
 
@@ -86,11 +131,14 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
             var bot = arenaState.bots[i];
 
             var boxGeometry = new THREE.BoxGeometry(10, 10, 10);
-            var boxMaterial = new THREE.MeshLambertMaterial({ color: 0x0000ff });
+            var boxMaterial = new THREE.MeshPhongMaterial({
+                shininess: 30,
+                metal: true
+            })
 
             bot.mesh = new THREE.Mesh(boxGeometry, boxMaterial);
             setMeshRotation(bot);
-            setMeshPosition(bot);
+            setMeshPosition(bot, 5);
 
             scene.add(bot.mesh);
         }
@@ -99,6 +147,11 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
     function updateBots(arenaState) {
         for (var i = 0; i < arenaState.bots.length; i++) {
             var bot = arenaState.bots[i];
+
+            if (!bot.isAlive()) {
+                removeObjectFromScene(bot);
+            }
+            
             setMeshRotation(bot);
             setMeshPosition(bot);
         }
@@ -108,9 +161,10 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         bot.mesh.rotation.y = gosu.math.degreesToRadians(-bot.angle);
     }
 
-    function setMeshPosition(bot) {
+    function setMeshPosition(bot, y) {
+        y = y || bot.mesh.position.y;
         var position = toCartesianCoordinates(bot.center(), 100);
-        bot.mesh.position.set(position.x, 0, position.z);
+        bot.mesh.position.set(position.x, y, position.z);
     }
 
     function toCartesianCoordinates(pos2D, scale) {
@@ -122,11 +176,50 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
 
     function render(arenaState) {
         updateBots(arenaState);
+        renderBullets(arenaState);
         renderer.render(scene, camera);
+    }
+
+    function removeObjectFromScene(object) {
+        if (object && object.mesh) {
+            scene.remove(object.mesh);
+        }
+    }
+
+    function addEventListeners() {
+        window.addEventListener('keydown', function (e) { onKeyDown(event); }, false);
+    }
+
+    function onKeyDown(e) {
+
+        if (e.keyCode == UP) {
+            camera.position.y += CAMERA_MOVE_SPEED;
+        }
+
+        if (e.keyCode == DOWN) {
+            camera.position.y -= CAMERA_MOVE_SPEED;
+        }
+
+        if (e.keyCode == LEFT) {
+            camera.position.x -= CAMERA_MOVE_SPEED;
+        }
+
+        if (e.keyCode == RIGHT) {
+            camera.position.x += CAMERA_MOVE_SPEED;
+        }
+
+        if (e.keyCode == R_UP) {
+            camera.rotation.x += gosu.math.degreesToRadians(CAMERA_ROTATION_SPEED);
+        }
+
+        if (e.keyCode == R_DOWN) {
+            camera.rotation.x -= gosu.math.degreesToRadians(CAMERA_ROTATION_SPEED);
+        }
     }
 
     return {
         createScene: createScene,
+        removeObjectFromScene : removeObjectFromScene,
         render: render
     };
 };

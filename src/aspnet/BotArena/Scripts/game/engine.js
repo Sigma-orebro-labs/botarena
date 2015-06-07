@@ -121,6 +121,7 @@ gosuArena.engine = (function () {
             hitBullets.forEach(function (bullet) {
                 bot.hitBy(bullet);
                 arenaState.removeBullet(bullet);
+                visualizer3D.removeObjectFromScene(bullet);
             });
         });
 
@@ -129,6 +130,7 @@ gosuArena.engine = (function () {
 
             hitBullets.forEach(function (bullet) {
                 arenaState.removeBullet(bullet);
+                visualizer3D.removeObjectFromScene(bullet);
             });
         });
     }
