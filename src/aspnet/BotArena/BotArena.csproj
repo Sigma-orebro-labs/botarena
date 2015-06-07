@@ -218,6 +218,7 @@
     <Content Include="Robots.txt" />
     <Content Include="Scripts\bots\waller.js" />
     <Content Include="Scripts\game\botRegistrar.js" />
+    <Content Include="Scripts\game\gameVisualizer3D.js" />
     <Content Include="Scripts\game\terrain.js" />
     <Content Include="Scripts\game\worldObject.js" />
     <Content Include="Scripts\gosu\meta.js" />

@@ -7,6 +7,7 @@ gosuArena.engine = (function () {
     var isTraining = null;
     var gameListeners = [];
     var visualizer = null;
+    var visualizer3D = null;
     var collisionDetector = gosuArena.factories.createCollisionDetector(arenaState);
 
     var botRegistrar = gosuArena.botRegistrar.create(collisionDetector, arenaState);
@@ -166,6 +167,7 @@ gosuArena.engine = (function () {
         updateBullets();
 
         visualizer.render(arenaState);
+        visualizer3D.render(arenaState);
     }
 
     function initializeGameListeners() {
@@ -189,7 +191,7 @@ gosuArena.engine = (function () {
         })
     }
 
-    function restartMatch(gameVisualizer, gameClock, options) {
+    function restartMatch(gameVisualizer, gameVisualizer3D, gameClock, options) {
         options = options || {};
 
         gameListeners = options.listeners || [];
@@ -197,6 +199,8 @@ gosuArena.engine = (function () {
 
         botRegistrar.setIsTraining(isTraining);
         visualizer = gameVisualizer;
+        visualizer3D = gameVisualizer3D;
+
 
         arenaState.clear();
 
@@ -209,6 +213,8 @@ gosuArena.engine = (function () {
         raiseReadyEvent();
 
         fixStartPositionsToAvoidCollisions();
+
+        visualizer3D.createScene(arenaState);
 
         startGameLoop(gameClock);
 

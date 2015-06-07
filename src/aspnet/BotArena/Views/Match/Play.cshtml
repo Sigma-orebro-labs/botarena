@@ -44,6 +44,10 @@
     </li>
 </ul>
 
+<div id="3d-playing-field">
+    <canvas id="3d-game-canvas" width="800" height="600"></canvas>
+</div>
+
 @Scripts.Render("~/bundles/gosuarena")
 
 @foreach (var bot in Model.Where(x => !string.IsNullOrWhiteSpace(x.Script)))

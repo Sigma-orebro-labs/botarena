@@ -19,7 +19,10 @@
         var canvas = document.getElementById("gameCanvas");
         var gameVisualizer = gosuArena.factories.createGameVisualizer(canvas);
 
-        gosuArena.engine.start(gameVisualizer, gameClock, {
+        var canvas3D = document.getElementById("3d-game-canvas");
+        var gameVisualizer3D = gosuArena.factories.createGameVisualizer3D(canvas3D);
+
+        gosuArena.engine.start(gameVisualizer, gameVisualizer3D, gameClock, {
             isTraining: gosuArena.settings.isTraining(),
             listeners: [gosuArena.matchViewModel]
         });
