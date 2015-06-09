@@ -222,6 +222,37 @@
     <Content Include="Scripts\game\terrain.js" />
     <Content Include="Scripts\game\worldObject.js" />
     <Content Include="Scripts\gosu\meta.js" />
+    <Content Include="Scripts\lib\threejs\loaders\AssimpJSONLoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\AWDLoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\BabylonLoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\BinaryLoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\ColladaLoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\ctm\ctm.js" />
+    <Content Include="Scripts\lib\threejs\loaders\ctm\CTMLoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\ctm\CTMWorker.js" />
+    <Content Include="Scripts\lib\threejs\loaders\ctm\license\js-lzma.txt" />
+    <Content Include="Scripts\lib\threejs\loaders\ctm\license\js-openctm.txt" />
+    <Content Include="Scripts\lib\threejs\loaders\ctm\license\OpenCTM.txt" />
+    <Content Include="Scripts\lib\threejs\loaders\ctm\lzma.js" />
+    <Content Include="Scripts\lib\threejs\loaders\DDSLoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\deprecated\SceneLoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\gltf\glTF-parser.js" />
+    <Content Include="Scripts\lib\threejs\loaders\gltf\glTFAnimation.js" />
+    <Content Include="Scripts\lib\threejs\loaders\gltf\glTFLoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\gltf\glTFLoaderUtils.js" />
+    <Content Include="Scripts\lib\threejs\loaders\MTLLoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\OBJLoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\OBJMTLLoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\PDBLoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\PLYLoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\PVRLoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\RGBELoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\STLLoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\SVGLoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\TGALoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\UTF8Loader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\VRMLLoader.js" />
+    <Content Include="Scripts\lib\threejs\loaders\VTKLoader.js" />
     <Content Include="Scripts\lib\threejs\three.js" />
     <Content Include="Scripts\lib\threejs\three.min.js" />
     <Content Include="Scripts\lib\underscore-min.js" />
@@ -472,6 +503,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

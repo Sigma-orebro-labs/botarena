@@ -7,6 +7,9 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
     var HEIGHT = 600;
     var CAMERA_MOVE_SPEED = 5;
     var CAMERA_ROTATION_SPEED = 1;
+    var SCALE = 100;
+    var MODEL_SCALE = 30.0;
+    var MODEL_Y = 5.0;
 
     // Key codes
     var UP = 87;
@@ -23,26 +26,34 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
     var camera = null;
     var cube = null;
     var plane = null;
+    var tankModel = null;
 
     function createScene(arenaState) {
         scene = new THREE.Scene();
         camera = new THREE.PerspectiveCamera(75, WIDTH / HEIGHT, 0.1, 1000);
 
-        camera.position.x = -5;
-        camera.position.y = 150;
-        camera.position.z = 60;
-        camera.rotation.x = gosu.math.degreesToRadians(-70);
+        var loader1 = new THREE.AssimpJSONLoader();
+        loader1.load('Content/models/jeep.assimp.json', function (object) {
+        
+            object.scale.multiplyScalar(1);
+            tankModel = object;
+            addBotModels(arenaState);
+        });
 
-        // Top downish camera
-        //camera.position.x = -5;
+        camera.position.x = 0;
+        camera.position.y = 135;
+        camera.position.z = 80;
+        camera.rotation.x = gosu.math.degreesToRadians(-67);
+
+         //Top down camera
+        //camera.position.x = 0;
         //camera.position.y = 150;
-        //camera.position.z = -10;
+        //camera.position.z = 0;
         //camera.rotation.x = gosu.math.degreesToRadians(-90);
 
         addPlane();
         addTerrain(arenaState);
-
-        addBots(arenaState);
+        
         addLights();
 
         addEventListeners();
@@ -53,10 +64,10 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
             var bullet = arenaState.bullets[i];
         
             if (!bullet.mesh) {
-                var sphereGeometry = new THREE.SphereGeometry(3, 30, 30);
+                var sphereGeometry = new THREE.SphereGeometry(2, 10, 10);
 
                 var sphereMaterial = new THREE.MeshPhongMaterial({
-                    color: 0xff0000,
+                    color: 0xffffcc,
                     shininess: 30,
                     metal: true
                 })
@@ -71,7 +82,7 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
     }
 
     function addPlane() {
-        var planeGeometry = new THREE.PlaneGeometry(600, 600);
+        var planeGeometry = new THREE.PlaneGeometry(1000, 1000);
         var planeMaterial = new THREE.MeshBasicMaterial({ color: 0x6F553A });
         planeMaterial.side = THREE.DoubleSide;
         plane = new THREE.Mesh(planeGeometry, planeMaterial);
@@ -82,42 +93,91 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
     }
 
     function addTerrain(arenaState) {
-        for (var i = 0; i < arenaState.terrain.length; i++) {
-            var terrain = arenaState.terrain[i];
+        function renderWallEndBox(vec3, rotation) {
+            var boxGeometry = new THREE.BoxGeometry(15, 16, 15, 1, 1, 1);
+            var boxMaterial = new THREE.MeshPhongMaterial({
+                color: 0xe1e6e8,
+                shininess: 20,
+                metal: true
+            })
 
-            var boxGeometry = new THREE.BoxGeometry(200, 20, 5);
+            var mesh = new THREE.Mesh(boxGeometry, boxMaterial);
+
+            if (rotation) {
+                mesh.rotation.y = gosu.math.degreesToRadians(rotation);
+            }
+
+            mesh.position.set(vec3.x, vec3.y + 8, vec3.z);
+
+            scene.add(mesh);
+        }
+
+        function renderWallBox(vec3, rotation) {
+            var boxGeometry = new THREE.BoxGeometry(200, 10, 8, 1, 1, 1);
             var boxMaterial = new THREE.MeshPhongMaterial({
                 shininess: 20,
                 metal: true
             })
 
-            terrain.mesh = new THREE.Mesh(boxGeometry, boxMaterial);
+            var mesh = new THREE.Mesh(boxGeometry, boxMaterial);
 
-            setMeshRotation(terrain);
-            setMeshPosition(terrain, 10);
+            if (rotation) {
+                mesh.rotation.y = gosu.math.degreesToRadians(rotation);
+            }
 
-            scene.add(terrain.mesh);
+            mesh.position.set(vec3.x, vec3.y + 5, vec3.z);
+
+            scene.add(mesh);
         }
+
+        var topLeft = gosu.math.createVector(-25, -25);
+        var topRight = gosu.math.createVector(825, -25);
+        var bottomLeft = gosu.math.createVector(-25, 575);
+        var bottomRight = gosu.math.createVector(825, 575);
+        var centerTop = gosu.math.createVector(400, -25);
+        var centerLeft = gosu.math.createVector(-25, 300);
+        var centerRight = gosu.math.createVector(825, 300);
+        var centerBottom = gosu.math.createVector(400, 575);
+
+        var tl = toCartesianCoordinates(topLeft);
+        var tr = toCartesianCoordinates(topRight);
+        var bl = toCartesianCoordinates(bottomLeft);
+        var br = toCartesianCoordinates(bottomRight);
+
+        var ct = toCartesianCoordinates(centerTop);
+        var cl = toCartesianCoordinates(centerLeft);
+        var cr = toCartesianCoordinates(centerRight);
+        var cb = toCartesianCoordinates(centerBottom);
+
+        renderWallEndBox(tl);
+        renderWallEndBox(tr);
+        renderWallEndBox(bl);
+        renderWallEndBox(br);
+
+        renderWallBox(ct, 0);
+        renderWallBox(cl, -90);
+        renderWallBox(cr, -90);
+        renderWallBox(cb, 0);
+
     }
 
     function addLights() {
         var ambientLight = new THREE.AmbientLight(0x404040);
         scene.add(ambientLight);
 
-        var hemisphereLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 2.5);
+        var hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x85c333, 0.2);
         scene.add(hemisphereLight);
 
-        addPointLight(60, 10, -60);
-        addPointLight(-60, 10, -60);
-        addPointLight(60, 10, 60);
-        addPointLight(-60, 10, 60);
-        addPointLight(0, 10, 0);
+        scene.add(new THREE.AmbientLight(0xcccccc));
         
-        addPointLight(75, 20, -75);
-        addPointLight(-75, 20, -75);
-        addPointLight(75, 20, 75);
-        addPointLight(-75, 20, 75);
-        addPointLight(0, 20, 0);
+        var directionalLight = new THREE.DirectionalLight(0xeeeeee);
+
+        directionalLight.position.x = 0;
+        directionalLight.position.y = 150;
+        directionalLight.position.z = 0;
+        directionalLight.rotation.x = gosu.math.degreesToRadians(-90);
+
+        scene.add(directionalLight);
     }
 
     function addPointLight(x, y, z) {
@@ -144,6 +204,25 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         }
     }
 
+    function addBotModels(arenaState) {
+        for (var i = 0; i < arenaState.bots.length; i++) {
+            var bot = arenaState.bots[i];
+
+            var boxGeometry = new THREE.BoxGeometry(10, 10, 10);
+            var boxMaterial = new THREE.MeshPhongMaterial({
+                shininess: 30,
+                metal: true
+            })
+
+            bot.mesh = tankModel.clone();
+            // TODO(Jocke): Fix this!
+            setMeshRotation(bot, 180);
+            setMeshPosition(bot, 5);
+
+            scene.add(bot.mesh);
+        }
+    }
+
     function updateBots(arenaState) {
         for (var i = 0; i < arenaState.bots.length; i++) {
             var bot = arenaState.bots[i];
@@ -151,27 +230,36 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
             if (!bot.isAlive()) {
                 removeObjectFromScene(bot);
             }
-            
-            setMeshRotation(bot);
+
+            // TODO(Jocke): Fix this!
+            setMeshRotation(bot, 180);
             setMeshPosition(bot);
         }
     }
 
-    function setMeshRotation(bot) {
-        bot.mesh.rotation.y = gosu.math.degreesToRadians(-bot.angle);
+    function setMeshRotation(bot, additionalRotation) {
+        if (!bot.mesh)
+            return;
+
+        var angle = -bot.angle + additionalRotation || 0;
+        bot.mesh.rotation.y = gosu.math.degreesToRadians(angle);
     }
 
     function setMeshPosition(bot, y) {
+        if (!bot.mesh)
+            return;
+
         y = y || bot.mesh.position.y;
         var position = toCartesianCoordinates(bot.center(), 100);
+
         bot.mesh.position.set(position.x, y, position.z);
     }
 
-    function toCartesianCoordinates(pos2D, scale) {
+    function toCartesianCoordinates(pos2D) {
         var x = (pos2D.x / WIDTH) * 2 - 1;
-        var z = (pos2D.y / HEIGHT) * 2 - 1;
+        var z = -(pos2D.y / HEIGHT) * 2 + 1;
 
-        return new THREE.Vector3(x * scale, 0, z * scale);
+        return new THREE.Vector3(x * SCALE, 0, -z * SCALE);
     }
 
     function render(arenaState) {

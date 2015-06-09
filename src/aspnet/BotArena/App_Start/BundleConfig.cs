@@ -18,7 +18,8 @@ namespace GosuArena
             BundleTable.EnableOptimizations = false;
 
             bundles.Add(new ScriptBundle("~/bundles/threejs").Include(
-                        "~/Scripts/lib/threejs/three.js"));
+                        "~/Scripts/lib/threejs/three.js",
+                        "~/Scripts/lib/threejs/loaders/*.js"));
 #else
             BundleTable.EnableOptimizations = true;
 
