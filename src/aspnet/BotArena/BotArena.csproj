@@ -455,6 +455,8 @@
     <Content Include="Content\Pages\Match\SetupMatch.less" />
     <Content Include="Content\Pages\Match\SetupTrainingMatch.less" />
     <Content Include="Content\Pages\Account\List.less" />
+    <Content Include="Content\models\mountain_landscape.dae" />
+    <Content Include="Content\models\mountain_landscape_with_background.dae" />
     <None Include="Scripts\lib\jquery\jquery-2.0.0.intellisense.js" />
     <Content Include="Scripts\lib\jquery\jquery-2.0.0.js" />
     <Content Include="Scripts\lib\jquery\jquery-2.0.0.min.js" />
@@ -503,7 +505,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

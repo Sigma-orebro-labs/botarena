@@ -27,6 +27,7 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
     var cube = null;
     var plane = null;
     var tankModel = null;
+    var landscape = null;
 
     function createScene(arenaState) {
         scene = new THREE.Scene();
@@ -41,9 +42,14 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         });
 
         camera.position.x = 0;
-        camera.position.y = 135;
-        camera.position.z = 80;
-        camera.rotation.x = gosu.math.degreesToRadians(-67);
+
+        //camera.position.y = 135;
+        //camera.position.z = 80;
+        //camera.rotation.x = gosu.math.degreesToRadians(-67);
+        
+        camera.position.y = 200;
+        camera.position.z = 200;
+        camera.rotation.x = gosu.math.degreesToRadians(-40);
 
          //Top down camera
         //camera.position.x = 0;
@@ -51,7 +57,8 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         //camera.position.z = 0;
         //camera.rotation.x = gosu.math.degreesToRadians(-90);
 
-        addPlane();
+        //addPlane();
+        addLandscape();
         addTerrain(arenaState);
         
         addLights();
@@ -90,6 +97,17 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         plane.rotation.x = gosu.math.degreesToRadians(90);
 
         scene.add(plane);
+    }
+
+    function addLandscape() {
+        var loader = new THREE.ColladaLoader();
+        loader.load('Content/models/mountain_landscape_with_background.dae', function (collada) {
+            
+            landscape = collada.scene;
+            landscape.rotation.set(-Math.PI * 0.5, 0, 0);
+            landscape.scale.x = landscape.scale.y = landscape.scale.z = 40;
+            scene.add(landscape);
+        });
     }
 
     function addTerrain(arenaState) {
