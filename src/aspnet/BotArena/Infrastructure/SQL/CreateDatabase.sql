@@ -1,4 +1,19 @@
-﻿GO
+﻿-- To get the database up and running, first create a database called gosuarena
+-- in your local SQLEXPRESS instance. 
+
+-- Then run the script files in the following order:
+-- 1. CreateDatabase.sql
+-- 2. Elmah.sql
+-- 3. ElmahPermissions.sql
+-- 4. DefaultData.sql
+
+-- Or simply restore the "production" database from the the latest SQL file in the Data
+-- directory which can be found in the root of the source repository.
+
+
+GO
+CREATE LOGIN [arenauser] WITH PASSWORD = N'arenauser'
+GO
 CREATE USER [arenauser] FOR LOGIN [arenauser] WITH DEFAULT_SCHEMA=[dbo]
 GO
 CREATE TABLE [dbo].[Users](
