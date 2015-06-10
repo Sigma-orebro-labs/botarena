@@ -193,9 +193,9 @@ gosuArena.engine = (function () {
     }
 
     function raiseMatchStartedEvent() {
-        matchStartedCallbacks.forEach(function (callback) {
+        matchStartedCallbacks.forEach(function(callback) {
             callback.call({});
-        })
+        });
     }
 
     function restartMatch(gameVisualizer, gameVisualizer3D, gameClock, options) {

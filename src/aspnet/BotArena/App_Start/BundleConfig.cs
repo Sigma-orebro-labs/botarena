@@ -14,19 +14,19 @@ namespace GosuArena
                         "~/Scripts/lib/jquery/jquery.unobtrusive*",
                         "~/Scripts/lib/jquery/jquery.validate*"));
 
-#if DEBUG
-            BundleTable.EnableOptimizations = false;
-
             bundles.Add(new ScriptBundle("~/bundles/threejs").Include(
                         "~/Scripts/lib/threejs/three.js",
-                        "~/Scripts/lib/threejs/FlyControls.js",
+                        //"~/Scripts/lib/threejs/FlyControls.js",
                         "~/Scripts/lib/threejs/loaders/*.js"));
-#else
-            BundleTable.EnableOptimizations = true;
 
-            bundles.Add(new ScriptBundle("~/bundles/threejs").Include(
-            "~/Scripts/lib/threejs/three.min.js"));
-#endif
+//#if DEBUG
+//            BundleTable.EnableOptimizations = false;
+//#else
+//            BundleTable.EnableOptimizations = true;
+//#endif
+
+            BundleTable.EnableOptimizations = false;
+
 
             bundles.Add(new ScriptBundle("~/bundles/gosuarena").Include(
                 "~/Scripts/gosu/math/*.js",

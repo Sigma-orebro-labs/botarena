@@ -460,6 +460,8 @@
     <Content Include="Content\models\mountain_landscape.dae" />
     <Content Include="Content\models\mountain_landscape_with_background.dae" />
     <Content Include="Content\models\jeep.assimp.json" />
+    <None Include="Properties\PublishProfiles\botarena - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\botarena - Web Deploy.pubxml" />
     <None Include="Scripts\lib\jquery\jquery-2.0.0.intellisense.js" />
     <Content Include="Scripts\lib\jquery\jquery-2.0.0.js" />
     <Content Include="Scripts\lib\jquery\jquery-2.0.0.min.js" />

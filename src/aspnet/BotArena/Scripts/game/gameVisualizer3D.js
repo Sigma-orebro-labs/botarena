@@ -31,7 +31,7 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
     var plane = null;
     var tankModel = null;
     var landscape = null;
-    var controls = null;
+    //var controls = null;
 
     function createScene(arenaState) {
         scene = new THREE.Scene();
@@ -67,15 +67,15 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         
         addLights();
 
-        //addEventListeners();
+        addEventListeners();
 
-        controls = new THREE.FlyControls(camera);
+        //controls = new THREE.FlyControls(camera);
 
-        controls.movementSpeed = 0.0005;
-        controls.domElement = document.getElementById("3d-game-canvas");
-        controls.rollSpeed = Math.PI / 24;
-        controls.autoForward = false;
-        controls.dragToLook = true;
+        //controls.movementSpeed = 0.0005;
+        //controls.domElement = document.getElementById("3d-game-canvas");
+        //controls.rollSpeed = Math.PI / 24;
+        //controls.autoForward = false;
+        //controls.dragToLook = true;
     }
 
     function renderBullets(arenaState) {
@@ -294,7 +294,7 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         updateBots(arenaState);
         renderBullets(arenaState);
 
-        controls.update(FAKE_DT);
+        //controls.update(FAKE_DT);
 
         renderer.render(scene, camera);
     }
@@ -303,6 +303,12 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         if (object && object.mesh) {
             scene.remove(object.mesh);
         }
+    }
+
+    function addEventListeners() {
+        window.addEventListener('keydown', function(e) {
+             onKeyDown(event);
+        }, false);
     }
 
     function onKeyDown(e) {
