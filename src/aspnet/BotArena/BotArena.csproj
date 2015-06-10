@@ -215,6 +215,7 @@
     <Content Include="Content\images\sprites\wall_north.png" />
     <Content Include="Content\images\sprites\wall_south.png" />
     <Content Include="Content\images\sprites\wall_west.png" />
+    <Content Include="Content\models\jeep1.jpg" />
     <Content Include="Robots.txt" />
     <Content Include="Scripts\bots\waller.js" />
     <Content Include="Scripts\game\botRegistrar.js" />
@@ -222,6 +223,7 @@
     <Content Include="Scripts\game\terrain.js" />
     <Content Include="Scripts\game\worldObject.js" />
     <Content Include="Scripts\gosu\meta.js" />
+    <Content Include="Scripts\lib\threejs\FlyControls.js" />
     <Content Include="Scripts\lib\threejs\loaders\AssimpJSONLoader.js" />
     <Content Include="Scripts\lib\threejs\loaders\AWDLoader.js" />
     <Content Include="Scripts\lib\threejs\loaders\BabylonLoader.js" />
@@ -457,6 +459,7 @@
     <Content Include="Content\Pages\Account\List.less" />
     <Content Include="Content\models\mountain_landscape.dae" />
     <Content Include="Content\models\mountain_landscape_with_background.dae" />
+    <Content Include="Content\models\jeep.assimp.json" />
     <None Include="Scripts\lib\jquery\jquery-2.0.0.intellisense.js" />
     <Content Include="Scripts\lib\jquery\jquery-2.0.0.js" />
     <Content Include="Scripts\lib\jquery\jquery-2.0.0.min.js" />
@@ -494,7 +497,9 @@
     <Content Include="Scripts\Pages\notifications.js" />
     <Content Include="Scripts\SpecRunner.html" />
     <Content Include="Scripts\game\userActionQueue.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

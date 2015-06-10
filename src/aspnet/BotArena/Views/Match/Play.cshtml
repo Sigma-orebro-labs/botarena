@@ -20,32 +20,35 @@
 }
 
 <div id="playing-field">
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
-
+    <div class="row">
+        <div class="col-md-11">
+            <canvas style="display: none;" id="gameCanvas" width="800" height="600"></canvas>
+            <canvas id="3d-game-canvas" width="1024" height="768"></canvas>
+        </div>
+        <div class="col-md-1">
+            <ul id="botLegends" data-bind="foreach: botLegends">
+                <li data-bind="css: { killed: !isAlive() }">
+                    <div class="health" data-bind="style: { height: health() + '%' }"></div>
+                    <div class="color" data-bind='style: { backgroundColor : color }'></div>
+                    <span class="name" data-bind="text: name"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
     <form class="options">
         <label for="showBotNames">Show bot names</label>
         <input id="showBotNames" type="checkbox" name="showBotNames" />
-
+    
         <label for="showBotSights">Show bot sights</label>
         <input id="showBotSights" type="checkbox" name="showBotSights" />
     </form>
-
+    
     <menu class="actions">
+        <button id="2d-mode" class="btn btn-default">2D</button>
+        <button id="3d-mode" class="btn btn-default">3D</button>
         <button id="restartMatch" class="btn btn-primary">Start match</button>
         <button id="stopMatch">Stop match</button>
     </menu>
-</div>
-
-<ul id="botLegends" data-bind="foreach: botLegends">
-    <li data-bind="css: { killed: !isAlive() }">
-        <div class="health" data-bind="style: { height: health() + '%' }"></div>
-        <div class="color" data-bind='style: { backgroundColor : color }'></div>
-        <span class="name" data-bind="text: name"></span>
-    </li>
-</ul>
-
-<div id="3d-playing-field">
-    <canvas id="3d-game-canvas" width="800" height="600"></canvas>
 </div>
 
 @Scripts.Render("~/bundles/gosuarena")

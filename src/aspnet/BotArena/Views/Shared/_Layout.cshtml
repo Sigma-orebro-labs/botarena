@@ -13,10 +13,6 @@
     </head>
     <body>
         <div class="container">
-            <header>
-                <h1><a href="@Url.Action("Index", "Match")">Gosu Bot Arena</a></h1>
-            </header>
-        
             <section id="page-container">
                 @RenderBody()
             </section>
@@ -32,6 +28,7 @@
                             <li>@Html.NavigationMenuItem("MyProfile", "User", "Profile")</li>
                         }
                         
+                        <li>@Html.NavigationMenuItem("Index", "Match", "Gosu Bot Arena")</li>
                         <li>@Html.NavigationMenuItem("Index", "Docs", "Documentation")</li>
                         <li>@Html.NavigationMenuItem("News", "Docs", "What's new?")</li>
                         

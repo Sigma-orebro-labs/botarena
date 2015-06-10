@@ -3,13 +3,15 @@ gosuArena.factories = gosuArena.factories || {};
 
 gosuArena.factories.createGameVisualizer3D = function (canvas) {
     // Constants
-    var WIDTH = 800;
-    var HEIGHT = 600;
+    var WIDTH = 1024;
+    var HEIGHT = 768;
     var CAMERA_MOVE_SPEED = 5;
     var CAMERA_ROTATION_SPEED = 1;
     var SCALE = 100;
     var MODEL_SCALE = 30.0;
     var MODEL_Y = 5.0;
+    // 60 fps
+    var FAKE_DT = 0.16;
 
     // Key codes
     var UP = 87;
@@ -24,19 +26,21 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
 
     var scene = null;
     var camera = null;
+    var wallObjects = [];
     var cube = null;
     var plane = null;
     var tankModel = null;
     var landscape = null;
+    var controls = null;
 
     function createScene(arenaState) {
         scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(75, WIDTH / HEIGHT, 0.1, 1000);
+        camera = new THREE.PerspectiveCamera(60, WIDTH / HEIGHT, 0.1, 1000);
 
         var loader1 = new THREE.AssimpJSONLoader();
         loader1.load('Content/models/jeep.assimp.json', function (object) {
         
-            object.scale.multiplyScalar(1);
+            //object.scale.multiplyScalar(1);
             tankModel = object;
             addBotModels(arenaState);
         });
@@ -63,7 +67,15 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         
         addLights();
 
-        addEventListeners();
+        //addEventListeners();
+
+        controls = new THREE.FlyControls(camera);
+
+        controls.movementSpeed = 0.0005;
+        controls.domElement = document.getElementById("3d-game-canvas");
+        controls.rollSpeed = Math.PI / 24;
+        controls.autoForward = false;
+        controls.dragToLook = true;
     }
 
     function renderBullets(arenaState) {
@@ -146,22 +158,24 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
             mesh.position.set(vec3.x, vec3.y + 5, vec3.z);
 
             scene.add(mesh);
+
+            wallObjects.push(mesh);
         }
 
         var topLeft = gosu.math.createVector(-25, -25);
-        var topRight = gosu.math.createVector(825, -25);
-        var bottomLeft = gosu.math.createVector(-25, 575);
-        var bottomRight = gosu.math.createVector(825, 575);
-        var centerTop = gosu.math.createVector(400, -25);
-        var centerLeft = gosu.math.createVector(-25, 300);
-        var centerRight = gosu.math.createVector(825, 300);
-        var centerBottom = gosu.math.createVector(400, 575);
+        var topRight = gosu.math.createVector(1049, -25);
+        var bottomLeft = gosu.math.createVector(-25, 743);
+        var bottomRight = gosu.math.createVector(1049, 743);
+        var centerTop = gosu.math.createVector(512, -25);
+        var centerLeft = gosu.math.createVector(-25, 384);
+        var centerRight = gosu.math.createVector(1049, 384);
+        var centerBottom = gosu.math.createVector(512, 743);
 
         var tl = toCartesianCoordinates(topLeft);
         var tr = toCartesianCoordinates(topRight);
         var bl = toCartesianCoordinates(bottomLeft);
         var br = toCartesianCoordinates(bottomRight);
-
+        
         var ct = toCartesianCoordinates(centerTop);
         var cl = toCartesianCoordinates(centerLeft);
         var cr = toCartesianCoordinates(centerRight);
@@ -182,18 +196,21 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
     function addLights() {
         var ambientLight = new THREE.AmbientLight(0x404040);
         scene.add(ambientLight);
-
-        var hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x85c333, 0.2);
-        scene.add(hemisphereLight);
-
-        scene.add(new THREE.AmbientLight(0xcccccc));
         
-        var directionalLight = new THREE.DirectionalLight(0xeeeeee);
+        addDirectionalLight(wallObjects[0]);
+        addDirectionalLight(wallObjects[1]);
+        addDirectionalLight(wallObjects[2]);
+        addDirectionalLight(wallObjects[3]);
+    }
+
+    function addDirectionalLight(target) {
+        var directionalLight = new THREE.DirectionalLight(0x404040, 0.8);
 
         directionalLight.position.x = 0;
-        directionalLight.position.y = 150;
+        directionalLight.position.y = 200;
         directionalLight.position.z = 0;
-        directionalLight.rotation.x = gosu.math.degreesToRadians(-90);
+
+        directionalLight.target = target;
 
         scene.add(directionalLight);
     }
@@ -273,16 +290,12 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         bot.mesh.position.set(position.x, y, position.z);
     }
 
-    function toCartesianCoordinates(pos2D) {
-        var x = (pos2D.x / WIDTH) * 2 - 1;
-        var z = -(pos2D.y / HEIGHT) * 2 + 1;
-
-        return new THREE.Vector3(x * SCALE, 0, -z * SCALE);
-    }
-
     function render(arenaState) {
         updateBots(arenaState);
         renderBullets(arenaState);
+
+        controls.update(FAKE_DT);
+
         renderer.render(scene, camera);
     }
 
@@ -290,10 +303,6 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         if (object && object.mesh) {
             scene.remove(object.mesh);
         }
-    }
-
-    function addEventListeners() {
-        window.addEventListener('keydown', function (e) { onKeyDown(event); }, false);
     }
 
     function onKeyDown(e) {
@@ -319,8 +328,15 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         }
 
         if (e.keyCode == R_DOWN) {
-            camera.rotation.x -= gosu.math.degreesToRadians(CAMERA_ROTATION_SPEED);
+            camera.rotation.x -= gosu.math.degreesToRadians(CAMERA_ROTATION_SPEED);sw
         }
+    }
+
+    function toCartesianCoordinates(vec2D) {
+        var x = (vec2D.x / WIDTH) * 2 - 1;
+        var z = -(vec2D.y / HEIGHT) * 2 + 1;
+
+        return new THREE.Vector3(x * SCALE, 0, -z * SCALE);
     }
 
     return {

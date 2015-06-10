@@ -33,6 +33,20 @@
         isRunning = true;
     };
 
+    function setRenderingMode(e) {
+        var mode = e.target.id;
+        if (mode === "2d-mode") {
+            gosuArena.engine.setRenderingMode("2D");
+            $("#gameCanvas").show();
+            $("#3d-game-canvas").hide();
+        }
+        else {
+            gosuArena.engine.setRenderingMode("3D");
+            $("#gameCanvas").hide();
+            $("#3d-game-canvas").show();
+        }
+    };
+
     function stopMatch() {
         if (gameClock) {
             gameClock.stop();
@@ -43,6 +57,9 @@
 
     document.getElementById("restartMatch").onclick = restartMatch;
     document.getElementById("stopMatch").onclick = stopMatch;
+
+    document.getElementById("2d-mode").onclick = setRenderingMode;
+    document.getElementById("3d-mode").onclick = setRenderingMode;
 
     // Make sure the match is not started until all resources have been loaded
     // that are needed for the game (e.g. sprites)

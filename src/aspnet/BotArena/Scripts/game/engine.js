@@ -8,6 +8,7 @@ gosuArena.engine = (function () {
     var gameListeners = [];
     var visualizer = null;
     var visualizer3D = null;
+    var renderingMode = "3D";
     var collisionDetector = gosuArena.factories.createCollisionDetector(arenaState);
 
     var botRegistrar = gosuArena.botRegistrar.create(collisionDetector, arenaState);
@@ -168,8 +169,12 @@ gosuArena.engine = (function () {
         updateBots();
         updateBullets();
 
-        visualizer.render(arenaState);
-        visualizer3D.render(arenaState);
+        if (renderingMode === "2D") {
+            visualizer.render(arenaState);
+        }
+        else {
+            visualizer3D.render(arenaState);
+        }
     }
 
     function initializeGameListeners() {
@@ -229,8 +234,18 @@ gosuArena.engine = (function () {
         nextBotId = 0;
     }
 
+    function setRenderingMode(mode) {
+        if (mode === "2D") {
+            renderingMode = "2D";
+        }
+        else {
+            renderingMode = "3D";
+        }
+    }
+
     return {
         start: restartMatch,
-        reset: reset
+        reset: reset,
+        setRenderingMode: setRenderingMode
     };
 })();
