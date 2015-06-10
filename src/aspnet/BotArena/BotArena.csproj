@@ -201,6 +201,8 @@
     <Content Include="Content\bootstrap-notify\js\bootstrap-notify.js" />
     <Content Include="Content\images\docs\bot_api_get_request.PNG" />
     <Content Include="Content\images\docs\bot_api_put_request.PNG" />
+    <Content Include="Content\images\docs\chrome_devtools_debug_breakpoints.PNG" />
+    <Content Include="Content\images\docs\chrome_devtools_debug_find_bot.PNG" />
     <Content Include="Content\images\docs\high_performance.png" />
     <Content Include="Content\images\docs\profile_after_show_api_key.PNG" />
     <Content Include="Content\images\docs\profile_enable_api_access.PNG" />

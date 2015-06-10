@@ -22,6 +22,8 @@
     <li><a href="#bot-status">Bot Status Object</a></li>
     <li><a href="#action-queue">Action Queue Object</a></li>
     <li><a href="#coordinate-system">Coordinate System and Angles</a></li>
+    <li><a href="#debugging">Debugging your bot</a></li>
+    <li><a href="#team-games">Team Games</a></li>
     <li><a href="#technical-details">Technical Details</a></li>
     <li><a href="#private-bots">Public and Private Bots</a></li>
     <li><a href="#game-performance">Game Performance (FPS)</a></li>
@@ -172,6 +174,14 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 
 <pre class="prettyprint">
     {
+        id, // The identifier for your bot
+
+        // The identifier of your bot's team, if you are playing a team match.
+        // Use this value together with the teamId property of the objects in the seenBots
+        // array of the status object to determine if the bots you can see are friends
+        // or enemies.
+        teamId, 
+
         position: {
             x,
             y,
@@ -206,12 +216,12 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 
         // Remaining health (hit points) for the bot. The bot hass 100 hp when the match starts.
         // At 0 hp the bot is killed
-        health: bot.health,
+        health,
 
         // The number of actions that the bot can take during one round. For example, forward(1) would
-        // be one action. forward(2) would be 2 actions, and forward followed(1) by turn(1) would be 
+        // be one action. forward(2) would be 2 actions, and forward(1) followed by turn(1) would be 
         // two actions in total.
-        actionsPerRound: bot.actionsPerRound,
+        actionsPerRound,
 
         // An array of <a href="#bot-status">bot status</a> objects representing the bots your bot currently can see.
         // The line of sight of the bot is a thin, straight line from the sight and forward so you can only see bots
@@ -240,6 +250,23 @@ Your bot interacts with gosuArena through a couple of different events, and thos
     }
 
 </pre>
+
+<h4>Seen Bots</h4>
+
+<p>
+    As mentioned above, as a part of the <a href="#bot-status">bot status</a> object there 
+    is an array of all the bots that your own bot currently can see. The objects in the 
+    seenBots array are themselves bot status objects, so you can get quite a lot of information
+    about the bots you can see, which can help your bot make intelligent decisions. For example,
+    your bot can look at the position and direction of the bot to guess where the bot will be in
+    a few turns, so that it can fire at that point rather than at the point where the opponent
+    currently is located.
+</p>
+
+<p>
+    Note that the bots in the seenBots array all have teamId properties which you can (and should!)
+    use to avoid firing at your team mates when playing a team game.
+</p>
 
 <h3 id="action-queue">Action Queue</h3>
 
@@ -319,22 +346,32 @@ Your bot interacts with gosuArena through a couple of different events, and thos
     On the same note, if you rotate 1 degree when at 359 degrees you will end up at 0 degrees.
 </p>
 
-<h3 id="technical-details">Technical Details</h3>
+<h3 id="debugging">Debugging Your Bot</h3>
 
 <p>
-    In this section you can read about a few technical details which might be of interest when you are
-    developing your bot. If you just want to go ahead and start coding, feel free to skip this part. But
-    you might want to return to this section when you've written some code and feel confused about something
-    around how your script is executed.
+    This section gives an introduction to how you can approach debugging your bot AI.
 </p>
-
-<h4>Debugging</h4>
 
 <p>
     Your bot script is rendered in a scrpit tag as a part of the page when playing a game. This enables you
     to use the dev tools in your favorite browser to debug your script. Note that the script is included in the
     actual page and not in a separate script file. This works fine to debug using Chrome Dev Tools.
     Look for a script block with a comment including the name of your bot to find your code.
+</p>
+
+<img src="@Url.Content("~/Content/images/docs/chrome_devtools_debug_find_bot.png")" alt="The code for your bot is embedded in the main page and can be found by using the source tab of your dev tools and searching for the name of your bot" />
+
+<p>
+    When you have found the code for your bot you can go ahead and set breakpoints just like you would for any
+    other JavaScript code.
+</p>
+
+<img src="@Url.Content("~/Content/images/docs/chrome_devtools_debug_breakpoints.png")" alt="The code for your bot is embedded in the main page and can be found by using the source tab of your dev tools and searching for the name of your bot" />
+
+<p>
+    However, keep in mind that your function is called many times per second, so you have to be a bit creative
+    with your debugging. If you are interested in a given condition, add an if statement and put the break
+    point in the if statement body, even if you don't actually need the if statement itself.
 </p>
 
 <h5>Debugging Position Dependent Behavior</h5>
@@ -355,7 +392,6 @@ Your bot interacts with gosuArena through a couple of different events, and thos
     tick: function (actionQueue, status) {
         // Bot logic goes here...
     },
-
     // You specify the training starting position as a property on the options object,
     // which in turn is a property on the object passed to the register method.
     options: {
@@ -367,6 +403,30 @@ Your bot interacts with gosuArena through a couple of different events, and thos
     }
 });
 </pre>
+
+<h3 id="team-games">Team Games</h3>
+
+<p>
+    Bot arena has two major game modes, 1v1 and team games. In a team game you can set up
+    up to four separate teams with a number of bots in each team. It is then up to you to
+    keep track of which bots are friends and which are enemies (see the 
+    <a href="#bot-status">bot status</a> section for more info).
+</p>
+
+<p class="alert alert-warning">
+    Note that friendly fire is ON, so you better hold your fire when spotting a friendly bot
+    out there on the battle field.
+</p>
+
+
+<h3 id="technical-details">Technical Details</h3>
+
+<p>
+    In this section you can read about a few technical details which might be of interest when you are
+    developing your bot. If you just want to go ahead and start coding, feel free to skip this part. But
+    you might want to return to this section when you've written some code and feel confused about something
+    around how your script is executed.
+</p>
 
 <h4>Globals and Scoping</h4>
 
