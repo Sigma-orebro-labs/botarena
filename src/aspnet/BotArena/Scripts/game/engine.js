@@ -6,8 +6,11 @@ gosuArena.engine = (function () {
     var matchStartedCallbacks = [];
     var isTraining = null;
     var gameListeners = [];
-    var visualizer = null;
-    var renderingMode = "3D";
+
+    var arenaHeight = 550;
+    var arenaWidth = 750;
+    var wallThickness = 25;
+
     var collisionDetector = gosuArena.factories.createCollisionDetector(arenaState);
 
     var botRegistrar = gosuArena.botRegistrar.create(collisionDetector, arenaState);
@@ -24,15 +27,6 @@ gosuArena.engine = (function () {
     }
 
     function initializeTerrain() {
-
-        // Coordinates here need to be given in the game coordinate
-        // system to make the collission detection work properly.
-        // The coordinates will be transformed to the canvas coordinate
-        // system at render time
-
-        var arenaHeight = visualizer.arenaHeight;
-        var arenaWidth = visualizer.arenaWidth;
-        var wallThickness = visualizer.wallThickness;
 
         var horizontalWallWidth = arenaWidth + 2 * wallThickness;
         var verticalWallWidth = arenaHeight + 2 * wallThickness;
@@ -157,8 +151,6 @@ gosuArena.engine = (function () {
 
         var endTime = new Date().getTime();
         console.log("Time (ms): "  + (endTime - startTime));
-
-        visualizer.render(arenaState);
     }
 
     function tick() {
@@ -166,10 +158,6 @@ gosuArena.engine = (function () {
         updateBots();
         updateBullets();
 
-        if (renderingMode === "2D") {
-            visualizer.render(arenaState);
-        }
-        
         arenaState.tick();
     }
 
@@ -194,19 +182,18 @@ gosuArena.engine = (function () {
         });
     }
 
-    function restartMatch(gameVisualizer, gameClock, options) {
+    function restartMatch(gameClock, options) {
         options = options || {};
 
         gameListeners = options.listeners || [];
         isTraining = options.isTraining;
 
         botRegistrar.setIsTraining(isTraining);
-        visualizer = gameVisualizer;
 
         arenaState.clear();
 
-        gosuArena.arenaWidth = gameVisualizer.arenaWidth;
-        gosuArena.arenaHeight = gameVisualizer.arenaHeight;
+        gosuArena.arenaWidth = arenaWidth;
+        gosuArena.arenaHeight = arenaHeight;
 
         initializeTerrain();
         initializeGameListeners();
@@ -223,21 +210,10 @@ gosuArena.engine = (function () {
     function reset() {
         arenaState.clear();
         readyCallbacks.length = 0;
-        nextBotId = 0;
-    }
-
-    function setRenderingMode(mode) {
-        if (mode === "2D") {
-            renderingMode = "2D";
-        }
-        else {
-            renderingMode = "3D";
-        }
     }
 
     return {
         start: restartMatch,
-        reset: reset,
-        setRenderingMode: setRenderingMode
+        reset: reset
     };
 })();

@@ -37,6 +37,12 @@ gosuArena.factories.createGameVisualizer = function (canvas) {
         matchResult = result;
     });
 
+    function initialize(arenaState) {
+        arenaState.onTick(function() {
+            render(arenaState);
+        });
+    }
+
     function clearField() {
 
         if (gosuArena.sprites.background) {
@@ -372,6 +378,7 @@ gosuArena.factories.createGameVisualizer = function (canvas) {
         arenaWidth: arena.right - arena.left,
         arenaHeight: arena.bottom - arena.top,
         wallThickness: wallThickness,
-        render: render
+        render: render,
+        initialize: initialize
     };
 };

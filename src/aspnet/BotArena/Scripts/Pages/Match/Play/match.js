@@ -22,9 +22,9 @@
         var canvas3D = document.getElementById("3d-game-canvas");
         var gameVisualizer3D = gosuArena.factories.createGameVisualizer3D(canvas3D);
 
-        gosuArena.engine.start(gameVisualizer, gameClock, {
+        gosuArena.engine.start(gameClock, {
             isTraining: gosuArena.settings.isTraining(),
-            listeners: [gosuArena.matchViewModel, gameVisualizer3D]
+            listeners: [gosuArena.matchViewModel, gameVisualizer3D, gameVisualizer]
         });
 
         gosuArena.events.raiseGameStarting();
@@ -36,12 +36,10 @@
     function setRenderingMode(e) {
         var mode = e.target.id;
         if (mode === "2d-mode") {
-            gosuArena.engine.setRenderingMode("2D");
             $("#gameCanvas").show();
             $("#3d-game-canvas").hide();
         }
         else {
-            gosuArena.engine.setRenderingMode("3D");
             $("#gameCanvas").hide();
             $("#3d-game-canvas").show();
         }
