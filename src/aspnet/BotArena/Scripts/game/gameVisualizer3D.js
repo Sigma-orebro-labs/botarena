@@ -8,10 +8,6 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
     var CAMERA_MOVE_SPEED = 5;
     var CAMERA_ROTATION_SPEED = 1;
     var SCALE = 100;
-    var MODEL_SCALE = 30.0;
-    var MODEL_Y = 5.0;
-    // 60 fps
-    var FAKE_DT = 0.16;
 
     // Key codes
     var UP = 87;
@@ -31,16 +27,18 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
     var plane = null;
     var tankModel = null;
     var landscape = null;
-    //var controls = null;
+    var controls = null;
 
     function createScene(arenaState) {
         scene = new THREE.Scene();
         camera = new THREE.PerspectiveCamera(60, WIDTH / HEIGHT, 0.1, 1000);
 
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.target = new THREE.Vector3(0, 100, 0);
+
         var loader1 = new THREE.AssimpJSONLoader();
         loader1.load('Content/models/jeep.assimp.json', function (object) {
         
-            //object.scale.multiplyScalar(1);
             tankModel = object;
             addBotModels(arenaState);
         });
@@ -61,21 +59,10 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         //camera.position.z = 0;
         //camera.rotation.x = gosu.math.degreesToRadians(-90);
 
-        //addPlane();
         addLandscape();
         addTerrain(arenaState);
         
         addLights();
-
-        addEventListeners();
-
-        //controls = new THREE.FlyControls(camera);
-
-        //controls.movementSpeed = 0.0005;
-        //controls.domElement = document.getElementById("3d-game-canvas");
-        //controls.rollSpeed = Math.PI / 24;
-        //controls.autoForward = false;
-        //controls.dragToLook = true;
     }
 
     function renderBullets(arenaState) {
@@ -250,6 +237,7 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
             })
 
             bot.mesh = tankModel.clone();
+
             // TODO(Jocke): Fix this!
             setMeshRotation(bot, 180);
             setMeshPosition(bot, 5);
@@ -294,7 +282,7 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         updateBots(arenaState);
         renderBullets(arenaState);
 
-        //controls.update(FAKE_DT);
+        controls.update();
 
         renderer.render(scene, camera);
     }
@@ -302,39 +290,6 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
     function removeObjectFromScene(object) {
         if (object && object.mesh) {
             scene.remove(object.mesh);
-        }
-    }
-
-    function addEventListeners() {
-        window.addEventListener('keydown', function(e) {
-             onKeyDown(event);
-        }, false);
-    }
-
-    function onKeyDown(e) {
-
-        if (e.keyCode == UP) {
-            camera.position.y += CAMERA_MOVE_SPEED;
-        }
-
-        if (e.keyCode == DOWN) {
-            camera.position.y -= CAMERA_MOVE_SPEED;
-        }
-
-        if (e.keyCode == LEFT) {
-            camera.position.x -= CAMERA_MOVE_SPEED;
-        }
-
-        if (e.keyCode == RIGHT) {
-            camera.position.x += CAMERA_MOVE_SPEED;
-        }
-
-        if (e.keyCode == R_UP) {
-            camera.rotation.x += gosu.math.degreesToRadians(CAMERA_ROTATION_SPEED);
-        }
-
-        if (e.keyCode == R_DOWN) {
-            camera.rotation.x -= gosu.math.degreesToRadians(CAMERA_ROTATION_SPEED);sw
         }
     }
 

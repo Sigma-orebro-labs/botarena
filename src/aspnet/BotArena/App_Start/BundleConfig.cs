@@ -16,7 +16,7 @@ namespace GosuArena
 
             bundles.Add(new ScriptBundle("~/bundles/threejs").Include(
                         "~/Scripts/lib/threejs/three.js",
-                        //"~/Scripts/lib/threejs/FlyControls.js",
+                        "~/Scripts/lib/threejs/OrbitControls.js",
                         "~/Scripts/lib/threejs/loaders/*.js"));
 
 //#if DEBUG
