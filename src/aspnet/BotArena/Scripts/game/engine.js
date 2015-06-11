@@ -7,7 +7,6 @@ gosuArena.engine = (function () {
     var isTraining = null;
     var gameListeners = [];
     var visualizer = null;
-    var visualizer3D = null;
     var renderingMode = "3D";
     var collisionDetector = gosuArena.factories.createCollisionDetector(arenaState);
 
@@ -170,9 +169,8 @@ gosuArena.engine = (function () {
         if (renderingMode === "2D") {
             visualizer.render(arenaState);
         }
-        else {
-            visualizer3D.render(arenaState);
-        }
+        
+        arenaState.tick();
     }
 
     function initializeGameListeners() {
@@ -196,7 +194,7 @@ gosuArena.engine = (function () {
         });
     }
 
-    function restartMatch(gameVisualizer, gameVisualizer3D, gameClock, options) {
+    function restartMatch(gameVisualizer, gameClock, options) {
         options = options || {};
 
         gameListeners = options.listeners || [];
@@ -204,8 +202,6 @@ gosuArena.engine = (function () {
 
         botRegistrar.setIsTraining(isTraining);
         visualizer = gameVisualizer;
-        visualizer3D = gameVisualizer3D;
-
 
         arenaState.clear();
 
@@ -218,8 +214,6 @@ gosuArena.engine = (function () {
         raiseReadyEvent();
 
         fixStartPositionsToAvoidCollisions();
-
-        visualizer3D.initialize(arenaState);
 
         startGameLoop(gameClock);
 

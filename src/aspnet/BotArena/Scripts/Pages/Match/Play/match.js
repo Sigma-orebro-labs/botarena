@@ -22,9 +22,9 @@
         var canvas3D = document.getElementById("3d-game-canvas");
         var gameVisualizer3D = gosuArena.factories.createGameVisualizer3D(canvas3D);
 
-        gosuArena.engine.start(gameVisualizer, gameVisualizer3D, gameClock, {
+        gosuArena.engine.start(gameVisualizer, gameClock, {
             isTraining: gosuArena.settings.isTraining(),
-            listeners: [gosuArena.matchViewModel]
+            listeners: [gosuArena.matchViewModel, gameVisualizer3D]
         });
 
         gosuArena.events.raiseGameStarting();

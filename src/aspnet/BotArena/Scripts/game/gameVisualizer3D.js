@@ -25,6 +25,9 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         arenaState.onBulletHitBot(onBulletRemoved);
         arenaState.onBulletHitTerrain(onBulletRemoved);
         arenaState.onShotFired(onShotFired);
+        arenaState.onTick(function () {
+            render(arenaState);
+        });
 
         scene = new THREE.Scene();
         camera = new THREE.PerspectiveCamera(60, WIDTH / HEIGHT, 0.1, 1000);
