@@ -82,8 +82,8 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
                 scene.add(bullet.mesh);
             }
 
-            setMeshRotation(bullet);
-            setMeshPosition(bullet, 5);
+            setMeshRotation(bullet, bullet.mesh);
+            setMeshPosition(bullet, bullet.mesh, 5);
         }
     }
 
@@ -219,8 +219,8 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
             })
 
             bot.mesh = new THREE.Mesh(boxGeometry, boxMaterial);
-            setMeshRotation(bot);
-            setMeshPosition(bot, 5);
+            setMeshRotation(bot.mesh);
+            setMeshPosition(bot, bot.mesh, 5);
 
             scene.add(bot.mesh);
         }
@@ -230,19 +230,18 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         for (var i = 0; i < arenaState.bots.length; i++) {
             var bot = arenaState.bots[i];
 
-            var boxGeometry = new THREE.BoxGeometry(10, 10, 10);
-            var boxMaterial = new THREE.MeshPhongMaterial({
-                shininess: 30,
-                metal: true
-            })
-
             bot.mesh = tankModel.clone();
 
-            // TODO(Jocke): Fix this!
-            setMeshRotation(bot, 180);
-            setMeshPosition(bot, 5);
-
+            setMeshRotation(bot, bot.mesh, 180);
+            setMeshPosition(bot, bot.mesh, 5);
             scene.add(bot.mesh);
+
+            var boxGeometry = new THREE.BoxGeometry(12, 2, 2);
+            var boxMaterial = new THREE.MeshBasicMaterial({ color: 0xce2121 })
+            bot.healthBarMesh = new THREE.Mesh(boxGeometry, boxMaterial);
+
+            setMeshPosition(bot, bot.healthBarMesh, 15);
+            scene.add(bot.healthBarMesh);
         }
     }
 
@@ -251,31 +250,44 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
             var bot = arenaState.bots[i];
 
             if (!bot.isAlive()) {
-                removeObjectFromScene(bot);
+                removeMeshFromScene(bot.mesh);
+                removeMeshFromScene(bot.healthBarMesh);
+                continue;
             }
 
-            // TODO(Jocke): Fix this!
-            setMeshRotation(bot, 180);
-            setMeshPosition(bot);
+            setMeshRotation(bot, bot.mesh, 180);
+            setMeshPosition(bot, bot.mesh);
+
+            setMeshPosition(bot, bot.healthBarMesh);
+            if (bot.healthBarMesh) {
+                bot.healthBarMesh.scale.x = bot.healthPercentage();
+            }
         }
     }
 
-    function setMeshRotation(bot, additionalRotation) {
-        if (!bot.mesh)
+    function setMeshRotationByAngle(mesh, angle) {
+        if (!mesh)
             return;
 
-        var angle = -bot.angle + additionalRotation || 0;
-        bot.mesh.rotation.y = gosu.math.degreesToRadians(angle);
+        mesh.rotation.y = gosu.math.degreesToRadians(angle);
     }
 
-    function setMeshPosition(bot, y) {
-        if (!bot.mesh)
+    function setMeshRotation(object, mesh, additionalRotation) {
+        if (!mesh)
             return;
 
-        y = y || bot.mesh.position.y;
-        var position = toCartesianCoordinates(bot.center(), 100);
+        var angle = -object.angle + additionalRotation || 0;
+        mesh.rotation.y = gosu.math.degreesToRadians(angle);
+    }
 
-        bot.mesh.position.set(position.x, y, position.z);
+    function setMeshPosition(object, mesh, y) {
+        if (!mesh)
+            return;
+
+        y = y || mesh.position.y;
+        var position = toCartesianCoordinates(object.center(), 100);
+
+        mesh.position.set(position.x, y, position.z);
     }
 
     function render(arenaState) {
@@ -287,9 +299,9 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         renderer.render(scene, camera);
     }
 
-    function removeObjectFromScene(object) {
-        if (object && object.mesh) {
-            scene.remove(object.mesh);
+    function removeMeshFromScene(mesh) {
+        if (mesh) {
+            scene.remove(mesh);
         }
     }
 
@@ -302,7 +314,7 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
 
     return {
         createScene: createScene,
-        removeObjectFromScene : removeObjectFromScene,
+        removeMeshFromScene: removeMeshFromScene,
         render: render
     };
 };
