@@ -9,6 +9,7 @@
         @RenderSection("styles", required: false)
         
         @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
         @Scripts.Render("~/bundles/threejs")
     </head>
     <body>
@@ -30,6 +31,7 @@
                         
                         <li>@Html.NavigationMenuItem("Index", "Match", "Gosu Bot Arena")</li>
                         <li>@Html.NavigationMenuItem("Index", "Docs", "Documentation")</li>
+                        <li>@Html.NavigationMenuItem("Index", "SceneEditor", "Scene editor")</li>
                         <li>@Html.NavigationMenuItem("News", "Docs", "What's new?")</li>
                         
                         @if (User.IsAdmin())

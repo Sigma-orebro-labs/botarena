@@ -14,6 +14,9 @@ namespace GosuArena
                         "~/Scripts/lib/jquery/jquery.unobtrusive*",
                         "~/Scripts/lib/jquery/jquery.validate*"));
 
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+                        "~/Content/bootstrap-3.0.3/js/dropdown.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/threejs").Include(
                         "~/Scripts/lib/threejs/three.js",
                         "~/Scripts/lib/threejs/OrbitControls.js",

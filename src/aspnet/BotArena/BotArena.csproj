@@ -177,6 +177,7 @@
     <Compile Include="Controllers\BotController.cs" />
     <Compile Include="Controllers\DocsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\SceneEditorController.cs" />
     <Compile Include="Controllers\MatchController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Extensions\AuthorizationExtensions.cs" />
@@ -266,6 +267,9 @@
     <Content Include="Scripts\Pages\Match\Play\matchUI.js" />
     <Content Include="Scripts\Pages\Match\Play\matchViewModel.js" />
     <Content Include="Scripts\Pages\Match\Setup\rosterViewModel.js" />
+    <Content Include="Scripts\editor\sceneEditor.js" />
+    <Content Include="Scripts\Pages\SceneEditor\editor.js" />
+    <Content Include="Scripts\Pages\SceneEditor\editorViewModel.js" />
     <Content Include="Scripts\Pages\User\profile.js" />
     <Compile Include="Services\FileBotRepository.cs" />
   </ItemGroup>
@@ -463,6 +467,7 @@
     <Content Include="Content\models\mountain_landscape.dae" />
     <Content Include="Content\models\mountain_landscape_with_background.dae" />
     <Content Include="Content\models\jeep.assimp.json" />
+    <Content Include="Content\Pages\SceneEditor\Index.less" />
     <None Include="Properties\PublishProfiles\botarena - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\botarena - Web Deploy.pubxml" />
     <None Include="Scripts\lib\jquery\jquery-2.0.0.intellisense.js" />
@@ -512,6 +517,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Views\Web.config" />
+    <Content Include="Views\SceneEditor\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
