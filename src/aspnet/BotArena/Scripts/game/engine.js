@@ -121,8 +121,7 @@ gosuArena.engine = (function () {
 
             hitBullets.forEach(function (bullet) {
                 bot.hitBy(bullet);
-                arenaState.removeBullet(bullet);
-                visualizer3D.removeMeshFromScene(bullet.mesh);
+                arenaState.bulletHitBot(bullet);
             });
         });
 
@@ -130,8 +129,7 @@ gosuArena.engine = (function () {
             var hitBullets = collisionDetector.bulletsHitTerrain(terrain);
 
             hitBullets.forEach(function (bullet) {
-                arenaState.removeBullet(bullet);
-                visualizer3D.removeMeshFromScene(bullet.mesh);
+                arenaState.bulletHitTerrain(bullet);
             });
         });
     }
@@ -221,7 +219,7 @@ gosuArena.engine = (function () {
 
         fixStartPositionsToAvoidCollisions();
 
-        visualizer3D.createScene(arenaState);
+        visualizer3D.initialize(arenaState);
 
         startGameLoop(gameClock);
 

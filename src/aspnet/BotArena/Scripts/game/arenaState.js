@@ -6,6 +6,8 @@ gosuArena.arenaState.create = function () {
     var botKilledCallbacks = [];
     var botAddedCallbacks = [];
     var botHitByBulletCallbacks = [];
+    var bulletHitBotCallbacks = [];
+    var bulletHitTerrainCallbacks = [];
     var shotFiredCallbacks = [];
 
     var arenaState = {
@@ -58,7 +60,17 @@ gosuArena.arenaState.create = function () {
         });
     };
 
-    arenaState.removeBullet = function (bullet) {
+    arenaState.bulletHitBot = function(bullet) {
+        removeBullet(bullet);
+        raiseOnBulletHitBot(bullet);
+    };
+
+    arenaState.bulletHitTerrain = function (bullet) {
+        removeBullet(bullet);
+        raiseOnBulletHitTerrain(bullet);
+    };
+
+    function removeBullet(bullet) {
         var index = arenaState.bullets.indexOf(bullet);
         arenaState.bullets.splice(index, 1);
     };
@@ -88,6 +100,13 @@ gosuArena.arenaState.create = function () {
         raiseOnBotAdded(bot);
     };
 
+    function onShotFiredByBot(bot) {
+        var bullet = gosuArena.factories.createBullet(bot);
+        arenaState.addBullet(bullet);
+
+        raiseOnShotFired(bot, bullet);
+    }
+
     arenaState.addTerrain = function (terrain) {
         arenaState.terrain.push(terrain);
     };
@@ -108,6 +127,18 @@ gosuArena.arenaState.create = function () {
         botHitByBulletCallbacks.push(callback);
     };
 
+    arenaState.onShotFired = function (callback) {
+        shotFiredCallbacks.push(callback);
+    };
+
+    arenaState.onBulletHitBot = function (callback) {
+        bulletHitBotCallbacks.push(callback);
+    };
+
+    arenaState.onBulletHitTerrain = function (callback) {
+        bulletHitTerrainCallbacks.push(callback);
+    };
+
     function raiseOnBotKilled(bot) {
         botKilledCallbacks.forEach(function (callback) {
             callback(bot);
@@ -126,9 +157,22 @@ gosuArena.arenaState.create = function () {
         });
     }
 
-    function onShotFiredByBot(bot) {
-        var bullet = gosuArena.factories.createBullet(bot);
-        arenaState.addBullet(bullet);
+    function raiseOnShotFired(bullet) {
+        shotFiredCallbacks.forEach(function (callback) {
+            callback(bullet);
+        });
+    }
+
+    function raiseOnBulletHitBot(bullet) {
+        bulletHitBotCallbacks.forEach(function (callback) {
+            callback(bullet);
+        });
+    }
+
+    function raiseOnBulletHitTerrain(bullet) {
+        bulletHitTerrainCallbacks.forEach(function (callback) {
+            callback(bullet);
+        });
     }
 
     return arenaState;

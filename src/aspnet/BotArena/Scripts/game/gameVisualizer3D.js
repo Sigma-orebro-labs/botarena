@@ -5,17 +5,7 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
     // Constants
     var WIDTH = 1024;
     var HEIGHT = 768;
-    var CAMERA_MOVE_SPEED = 5;
-    var CAMERA_ROTATION_SPEED = 1;
     var SCALE = 100;
-
-    // Key codes
-    var UP = 87;
-    var LEFT = 65;
-    var DOWN = 83;
-    var RIGHT = 68;
-    var R_UP = 81;
-    var R_DOWN = 69;
 
     var renderer = new THREE.WebGLRenderer({ canvas: canvas });
     renderer.setSize(WIDTH, HEIGHT);
@@ -29,7 +19,13 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
     var landscape = null;
     var controls = null;
 
-    function createScene(arenaState) {
+    function initialize(arenaState) {
+
+        arenaState.onBotKilled(onBotKilled);
+        arenaState.onBulletHitBot(onBulletRemoved);
+        arenaState.onBulletHitTerrain(onBulletRemoved);
+        arenaState.onShotFired(onShotFired);
+
         scene = new THREE.Scene();
         camera = new THREE.PerspectiveCamera(60, WIDTH / HEIGHT, 0.1, 1000);
 
@@ -63,6 +59,19 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         addTerrain(arenaState);
         
         addLights();
+    }
+
+    function onBotKilled(bot) {
+        removeMeshFromScene(bot.mesh);
+        removeMeshFromScene(bot.healthBarMesh);
+    }
+
+    function onBulletRemoved(bullet) {
+        removeMeshFromScene(bullet.mesh);
+    }
+
+    function onShotFired(bot, bullet) {
+        
     }
 
     function renderBullets(arenaState) {
@@ -249,12 +258,6 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         for (var i = 0; i < arenaState.bots.length; i++) {
             var bot = arenaState.bots[i];
 
-            if (!bot.isAlive()) {
-                removeMeshFromScene(bot.mesh);
-                removeMeshFromScene(bot.healthBarMesh);
-                continue;
-            }
-
             setMeshRotation(bot, bot.mesh, 180);
             setMeshPosition(bot, bot.mesh);
 
@@ -313,7 +316,7 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
     }
 
     return {
-        createScene: createScene,
+        initialize: initialize,
         removeMeshFromScene: removeMeshFromScene,
         render: render
     };
