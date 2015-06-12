@@ -3,24 +3,21 @@ gosuArena.factories = gosuArena.factories || {};
 
 gosuArena.factories.createGameVisualizer3D = function (canvas) {
     // Constants
-    var WIDTH = 1024;
-    var HEIGHT = 768;
+    var width = canvas.width;
+    var height = canvas.height;
     var SCALE = 100;
 
     var renderer = new THREE.WebGLRenderer({ canvas: canvas });
-    renderer.setSize(WIDTH, HEIGHT);
+    renderer.setSize(width, height);
 
     var scene = null;
     var camera = null;
-    var wallObjects = [];
-    var cube = null;
-    var plane = null;
     var tankModel = null;
     var landscape = null;
     var controls = null;
 
     function initialize(arenaState) {
-
+        console.log(arenaState);
         arenaState.onBotKilled(onBotKilled);
         arenaState.onBulletHitBot(onBulletRemoved);
         arenaState.onBulletHitTerrain(onBulletRemoved);
@@ -30,7 +27,7 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         });
 
         scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(60, WIDTH / HEIGHT, 0.1, 2000);
+        camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 2000);
 
         var loader1 = new THREE.AssimpJSONLoader();
         loader1.load('Content/models/jeep.assimp.json', function (object) {
@@ -50,7 +47,7 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         camera.position.z = 500;
         camera.position.y = -550;
         camera.position.x = 0;
-        camera.lookAt(scene.position);
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
 
 
         addLandscape();
@@ -58,8 +55,8 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         addLights();
 
         scene.rotateOnAxis(new THREE.Vector3(1, 0, 0), gosu.math.degreesToRadians(-180))
-        scene.translateX(-400);
-        scene.translateY(-300);
+        scene.translateX(-(width / 2));
+        scene.translateY(-(height / 2));
 
         controls = new THREE.OrbitControls(camera);
     }
@@ -132,9 +129,6 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
             mesh.position.set(position.x, position.y, -10);
 
             scene.add(mesh);
-
-            wallObjects.push(mesh);
-
         }
     }
 
