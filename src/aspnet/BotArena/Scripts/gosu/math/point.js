@@ -52,3 +52,10 @@ gosu.math.isPointInsideEdges = function (point, edges) {
 
     return edgesWithPointToRight.length == 4;
 }
+
+gosu.math.toCartesianCoordinates = function (point, width, height) {
+    var x = (point.x / width) * 2 - 1;
+    var z = -(width.y / height) * 2 + 1;
+
+    return new THREE.Vector3(x, 0, z);
+}

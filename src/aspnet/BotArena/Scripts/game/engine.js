@@ -6,9 +6,11 @@ gosuArena.engine = (function () {
     var matchStartedCallbacks = [];
     var isTraining = null;
     var gameListeners = [];
-    var visualizer = null;
-    var visualizer3D = null;
-    var renderingMode = "3D";
+
+    var arenaHeight = 550;
+    var arenaWidth = 750;
+    var wallThickness = 25;
+
     var collisionDetector = gosuArena.factories.createCollisionDetector(arenaState);
 
     var botRegistrar = gosuArena.botRegistrar.create(collisionDetector, arenaState);
@@ -25,15 +27,6 @@ gosuArena.engine = (function () {
     }
 
     function initializeTerrain() {
-
-        // Coordinates here need to be given in the game coordinate
-        // system to make the collission detection work properly.
-        // The coordinates will be transformed to the canvas coordinate
-        // system at render time
-
-        var arenaHeight = visualizer.arenaHeight;
-        var arenaWidth = visualizer.arenaWidth;
-        var wallThickness = visualizer.wallThickness;
 
         var horizontalWallWidth = arenaWidth + 2 * wallThickness;
         var verticalWallWidth = arenaHeight + 2 * wallThickness;
@@ -121,8 +114,7 @@ gosuArena.engine = (function () {
 
             hitBullets.forEach(function (bullet) {
                 bot.hitBy(bullet);
-                arenaState.removeBullet(bullet);
-                visualizer3D.removeMeshFromScene(bullet.mesh);
+                arenaState.bulletHitBot(bullet);
             });
         });
 
@@ -130,8 +122,7 @@ gosuArena.engine = (function () {
             var hitBullets = collisionDetector.bulletsHitTerrain(terrain);
 
             hitBullets.forEach(function (bullet) {
-                arenaState.removeBullet(bullet);
-                visualizer3D.removeMeshFromScene(bullet.mesh);
+                arenaState.bulletHitTerrain(bullet);
             });
         });
     }
@@ -160,8 +151,6 @@ gosuArena.engine = (function () {
 
         var endTime = new Date().getTime();
         console.log("Time (ms): "  + (endTime - startTime));
-
-        visualizer.render(arenaState);
     }
 
     function tick() {
@@ -169,12 +158,7 @@ gosuArena.engine = (function () {
         updateBots();
         updateBullets();
 
-        if (renderingMode === "2D") {
-            visualizer.render(arenaState);
-        }
-        else {
-            visualizer3D.render(arenaState);
-        }
+        arenaState.tick();
     }
 
     function initializeGameListeners() {
@@ -198,30 +182,26 @@ gosuArena.engine = (function () {
         });
     }
 
-    function restartMatch(gameVisualizer, gameVisualizer3D, gameClock, options) {
+    function restartMatch(gameClock, options) {
         options = options || {};
 
         gameListeners = options.listeners || [];
         isTraining = options.isTraining;
 
         botRegistrar.setIsTraining(isTraining);
-        visualizer = gameVisualizer;
-        visualizer3D = gameVisualizer3D;
-
 
         arenaState.clear();
 
-        gosuArena.arenaWidth = gameVisualizer.arenaWidth;
-        gosuArena.arenaHeight = gameVisualizer.arenaHeight;
+        gosuArena.arenaWidth = arenaWidth;
+        gosuArena.arenaHeight = arenaHeight;
 
         initializeTerrain();
-        initializeGameListeners();
 
         raiseReadyEvent();
 
         fixStartPositionsToAvoidCollisions();
 
-        visualizer3D.createScene(arenaState);
+        initializeGameListeners();
 
         startGameLoop(gameClock);
 
@@ -231,21 +211,10 @@ gosuArena.engine = (function () {
     function reset() {
         arenaState.clear();
         readyCallbacks.length = 0;
-        nextBotId = 0;
-    }
-
-    function setRenderingMode(mode) {
-        if (mode === "2D") {
-            renderingMode = "2D";
-        }
-        else {
-            renderingMode = "3D";
-        }
     }
 
     return {
         start: restartMatch,
-        reset: reset,
-        setRenderingMode: setRenderingMode
+        reset: reset
     };
 })();

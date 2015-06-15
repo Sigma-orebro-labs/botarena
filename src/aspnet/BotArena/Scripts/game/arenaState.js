@@ -6,12 +6,19 @@ gosuArena.arenaState.create = function () {
     var botKilledCallbacks = [];
     var botAddedCallbacks = [];
     var botHitByBulletCallbacks = [];
+    var bulletHitBotCallbacks = [];
+    var bulletHitTerrainCallbacks = [];
     var shotFiredCallbacks = [];
+    var tickCallbacks = [];
 
     var arenaState = {
         bots: [],
         terrain: [],
         bullets: []
+    };
+
+    arenaState.tick = function tick() {
+        raiseOnTick();
     };
 
     function handleOnBotKilled(bot) {
@@ -58,7 +65,17 @@ gosuArena.arenaState.create = function () {
         });
     };
 
-    arenaState.removeBullet = function (bullet) {
+    arenaState.bulletHitBot = function(bullet) {
+        removeBullet(bullet);
+        raiseOnBulletHitBot(bullet);
+    };
+
+    arenaState.bulletHitTerrain = function (bullet) {
+        removeBullet(bullet);
+        raiseOnBulletHitTerrain(bullet);
+    };
+
+    function removeBullet(bullet) {
         var index = arenaState.bullets.indexOf(bullet);
         arenaState.bullets.splice(index, 1);
     };
@@ -88,6 +105,13 @@ gosuArena.arenaState.create = function () {
         raiseOnBotAdded(bot);
     };
 
+    function onShotFiredByBot(bot) {
+        var bullet = gosuArena.factories.createBullet(bot);
+        arenaState.addBullet(bullet);
+
+        raiseOnShotFired(bot, bullet);
+    }
+
     arenaState.addTerrain = function (terrain) {
         arenaState.terrain.push(terrain);
     };
@@ -108,6 +132,22 @@ gosuArena.arenaState.create = function () {
         botHitByBulletCallbacks.push(callback);
     };
 
+    arenaState.onShotFired = function (callback) {
+        shotFiredCallbacks.push(callback);
+    };
+
+    arenaState.onBulletHitBot = function (callback) {
+        bulletHitBotCallbacks.push(callback);
+    };
+
+    arenaState.onBulletHitTerrain = function (callback) {
+        bulletHitTerrainCallbacks.push(callback);
+    };
+
+    arenaState.onTick = function (callback) {
+        tickCallbacks.push(callback);
+    };
+
     function raiseOnBotKilled(bot) {
         botKilledCallbacks.forEach(function (callback) {
             callback(bot);
@@ -126,9 +166,28 @@ gosuArena.arenaState.create = function () {
         });
     }
 
-    function onShotFiredByBot(bot) {
-        var bullet = gosuArena.factories.createBullet(bot);
-        arenaState.addBullet(bullet);
+    function raiseOnShotFired(bullet) {
+        shotFiredCallbacks.forEach(function (callback) {
+            callback(bullet);
+        });
+    }
+
+    function raiseOnBulletHitBot(bullet) {
+        bulletHitBotCallbacks.forEach(function (callback) {
+            callback(bullet);
+        });
+    }
+
+    function raiseOnBulletHitTerrain(bullet) {
+        bulletHitTerrainCallbacks.forEach(function (callback) {
+            callback(bullet);
+        });
+    }
+
+    function raiseOnTick() {
+        tickCallbacks.forEach(function (callback) {
+            callback();
+        });
     }
 
     return arenaState;
