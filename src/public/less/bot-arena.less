@@ -1,0 +1,171 @@
+﻿@import "../bower/bootstrap/less/bootstrap.less";
+@import "bot-arena-variables.less";
+@import "play.less";
+
+html {
+    font-family: verdana;
+}
+
+header {
+    height: 50px;
+
+    h1 {
+        a {
+            @headerColor: #efefef;
+
+            color: @headerColor;
+
+            &:visited {
+                color: @headerColor;
+            }
+            
+            &:hover {
+                color: #cecece;
+                text-decoration: none;
+            }
+        }
+        
+        height: 0;
+        overflow: visible;
+        text-transform: lowercase;
+        margin-top: 35px;
+        float: right;
+        font-family: verdana;
+        font-weight: bold;
+        font-size: 38px;
+    }
+}
+
+#page-container {
+    margin-top: 40px;
+}
+
+#menu-bar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #7117ae;
+    margin-top: 0;
+    height: 25px;
+    width: 100%;
+    
+    #menu-bar {
+        padding-top: 2px;
+
+        @menu-bar-item-spacing: 12px;
+        @menu-bar-item-color: white;
+
+        color: @menu-bar-item-color;
+        font-family: arial;
+        text-transform: lowercase;
+
+        .menu-bar-item {
+                font-weight: bold;
+                color: @menu-bar-item-color;
+
+                &.active {
+                    text-decoration: underline;
+                    font-weight: bolder;
+                }
+        }
+            
+        .container;
+
+        nav {
+            ul {
+                margin: 0;
+                padding: 0;
+                float: left;
+
+                li {
+                    margin-right: @menu-bar-item-spacing;
+                    list-style: none;
+                    display: inline-block;
+
+                    a {
+                        .menu-bar-item;
+                    }
+                }
+            }
+        }
+
+	    menu#account {
+            margin: 0;
+            float: right;
+
+            a {
+                margin-left: @menu-bar-item-spacing;
+
+                .menu-bar-item;
+            }
+        }
+    }
+}
+
+
+form {
+    .row;
+
+    [type=submit].main-submit {
+        .btn;
+        .btn-default;
+        .pull-right;
+    }
+
+    fieldset {
+    }
+
+    div {
+        .form-group;
+    }
+
+    input[type=text], input[type=password] {
+        .form-control;
+    }
+
+    .validation-summary-errors {
+        margin-left: 15px;
+    }
+
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.alert {
+    i {
+        margin-right: 10px;
+    }
+}
+
+h4 {
+    margin-top: 20px;
+}
+
+h5 {
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.conclusion {
+    margin: 40px 0;
+    font-size: 16px;
+}
+
+.notifications {
+    position: fixed;
+    z-index: 9999;
+    margin: 0 auto 0 auto;
+    width: 600px;
+    bottom: 0;
+    width: 100%;
+    
+
+    .alert {
+        padding: 10px;
+        margin: 0;
+    }
+}
+
+@media only screen and (min-width: 767px) {
+}

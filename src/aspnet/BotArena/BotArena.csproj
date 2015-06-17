@@ -198,6 +198,9 @@
     <Compile Include="Models\Match\BotModel.cs" />
     <Compile Include="Models\Match\MatchSetupModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Content\angular\controllers\match-controller.js" />
+    <Content Include="Content\angular\index.html" />
+    <Content Include="Content\angular\templates\match.html" />
     <Content Include="Content\lib\bootstrap-notify\css\bootstrap-notify.css" />
     <Content Include="Content\lib\bootstrap-notify\js\bootstrap-notify.js" />
     <Content Include="Content\images\docs\bot_api_get_request.PNG" />
@@ -526,6 +529,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\angular\models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

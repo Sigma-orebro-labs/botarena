@@ -3,6 +3,11 @@
 botarena.config(function ($routeProvider) {
 
     $routeProvider
+        .when('/',
+        {
+            controller: 'matchController',
+            templateUrl: 'Content/angular/templates/scene-editor.html'
+        })
         .when('/SceneEditor',
         {
             controller: 'SceneEditorController',
