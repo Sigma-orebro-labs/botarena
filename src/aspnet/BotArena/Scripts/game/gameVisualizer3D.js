@@ -58,7 +58,7 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         scene.translateX(-(width / 2));
         scene.translateY(-(height / 2));
 
-        //controls = new THREE.OrbitControls(camera);
+        controls = new THREE.OrbitControls(camera);
     }
 
     function onBotKilled(bot) {
@@ -214,7 +214,7 @@ gosuArena.factories.createGameVisualizer3D = function (canvas) {
         updateBots(arenaState);
         renderBullets(arenaState);
 
-        //controls.update();
+        controls.update();
 
         renderer.render(scene, camera);
     }
