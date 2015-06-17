@@ -9,8 +9,6 @@ app.use(bodyParser.json());
 
 var port = 8080;
 
-console.log(__dirname);
-
 app.use(lessMiddleware(path.join(__dirname, 'public'), {
 	dest: path.join(__dirname, '/public/css'),
 	debug: true,
