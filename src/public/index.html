@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html lang="en" ng-app="botArena">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>BotArena</title>
+    <link rel="stylesheet" href="css/less/bot-arena.css">
+</head>
+<body>
+<div id="menu-bar-container">
+    <div id="menu-bar">
+        <nav>
+            <ul>
+                <li>
+                    <a href="/">Gosu Bot Arena</a>
+                </li>
+                <li>
+                    <a href="/Docs">Documentation</a>
+                </li>
+            </ul>
+        </nav>
+        <menu id="account">
+            <a href="/">Login</a>
+            <a href="/">Sign up</a>
+        </menu>
+    </div>
+</div>
+<div class="container">
+    <section id="page-container">
+        <ng-view></ng-view>
+    </section>
+</div>
+<script src="bower/angular/angular.min.js"></script>
+<script src="bower/angular-route/angular-route.min.js"></script>
+<script src="js/angular/botArena.js"></script>
+<script src="js/angular/controllers/match-controller.js"></script>
+</body>
+</html>
