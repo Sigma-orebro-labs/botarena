@@ -32,9 +32,61 @@
         <ng-view></ng-view>
     </section>
 </div>
-<script src="bower/angular/angular.min.js"></script>
-<script src="bower/angular-route/angular-route.min.js"></script>
-<script src="js/angular/botArena.js"></script>
-<script src="js/angular/controllers/match-controller.js"></script>
+<!--
+    Jquery needs to be loaded before angular since angular will use it's html() function to load html in templates
+    if no jquery is found angular will use jqLite and no scripts will be executed in templates
+-->
+<script type="text/javascript" src="bower/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="bower/angular/angular.js"></script>
+<script type="text/javascript" src="bower/angular-route/angular-route.js"></script>
+
+<script type="text/javascript" src="bower/threejs/build/three.js"></script>
+<script type="text/javascript" src="bower/threejs/examples/js/loaders/AssimpJSONLoader.js"></script>
+<script type="text/javascript" src="bower/threejs/examples/js/loaders/ColladaLoader.js"></script>
+
+<script type="text/javascript" src="bower/babylonjs/babylon.2.1-beta.debug.js"></script>
+
+<script type="text/javascript" src="js/angular/botArena.js"></script>
+
+<!--Controllers-->
+<script type="text/javascript" src="js/angular/controllers/match-controller.js"></script>
+
+<!--Directives-->
+<script type="text/javascript" src="js/angular/directives/script-injector.js"></script>
+
+<!--Services-->
+<script type="text/javascript" src="js/angular/services/bot-script-factory-service.js"></script>
+
+<!--Game-->
+<script type="text/javascript" src="js/gosu/math/collissions.js"></script>
+<script type="text/javascript" src="js/gosu/math/line.js"></script>
+<script type="text/javascript" src="js/gosu/math/math.js"></script>
+<script type="text/javascript" src="js/gosu/math/point.js"></script>
+<script type="text/javascript" src="js/gosu/math/rectangle.js"></script>
+<script type="text/javascript" src="js/gosu/math/vector.js"></script>
+
+<script type="text/javascript" src="js/gosu/event-aggregator.js"></script>
+<script type="text/javascript" src="js/gosu/meta.js"></script>
+<script type="text/javascript" src="js/gosu/snapshot.js"></script>
+
+<script type="text/javascript" src="js/game/action-queue.js"></script>
+<script type="text/javascript" src="js/game/arena-state.js"></script>
+<script type="text/javascript" src="js/game/bot.js"></script>
+<script type="text/javascript" src="js/game/bot-options.js"></script>
+<script type="text/javascript" src="js/game/bot-registrar.js"></script>
+<script type="text/javascript" src="js/game/bullet.js"></script>
+<script type="text/javascript" src="js/game/collision-detector.js"></script>
+<script type="text/javascript" src="js/game/engine.js"></script>
+<script type="text/javascript" src="js/game/events.js"></script>
+<script type="text/javascript" src="js/game/fake-clock.js"></script>
+<script type="text/javascript" src="js/game/game-clock.js"></script>
+<script type="text/javascript" src="js/game/game-settings.js"></script>
+<script type="text/javascript" src="js/game/game-visualizer.js"></script>
+<script type="text/javascript" src="js/game/game-visualizer-3D.js"></script>
+<script type="text/javascript" src="js/game/rectangle-cache.js"></script>
+<script type="text/javascript" src="js/game/terrain.js"></script>
+<script type="text/javascript" src="js/game/user-action-queue.js"></script>
+<script type="text/javascript" src="js/game/world-object.js"></script>
+
 </body>
 </html>

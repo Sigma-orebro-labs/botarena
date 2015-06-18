@@ -1,5 +1,10 @@
+var fs = require('fs');
+
 module.exports = function(router) {
-	router.get('/', function(req, res) {
-		res.json({ message: 'helloas dsd world!'});
+	
+	router.get('/match/bots', function(req, res) {
+		var obj = JSON.parse(fs.readFileSync('fakeDb/bots.json', 'utf8'));
+		res.json(obj);
 	});
+	
 };

@@ -8,6 +8,8 @@
   "dependencies": {
     "bootstrap": "~3.3.5",
     "angular": "~1.4.1",
-    "angular-route": "~1.4.1"
+    "angular-route": "~1.4.1",
+    "threejs": "*",
+    "babylonjs": "~2.0.0"
   }
 }

@@ -6,6 +6,6 @@ botArena.config(function ($routeProvider) {
         .when('/',
         {
             controller: 'matchController',
-            templateUrl: 'js/angular/templates/play.html'
-        }).otherwise({ redirectTo: '/SceneEditor' });
+            templateUrl: 'js/angular/templates/match/play.html'
+        }).otherwise({ redirectTo: '/' });
 });
