@@ -1,71 +1,72 @@
 ﻿@using System.Web.Optimization
 @using GosuArena.Extensions
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width" />
-        <title>@ViewBag.Title</title>
+<html ng-app="botarena">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
 
-        @RenderSection("styles", required: false)
-        
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")
-        @Scripts.Render("~/bundles/threejs")
-    </head>
-    <body>
-        <div class="container">
-            <section id="page-container">
-                @RenderBody()
-            </section>
-        </div>
-        <div id="menu-bar-container">
-            <div id="menu-bar">
-                <nav>
-                    <ul>
-                        @if(User.Identity.IsAuthenticated)
-                        {
-                            <li>@Html.NavigationMenuItem("Setup", "Match", "Play FFA match!")</li>
-                            <li>@Html.NavigationMenuItem("TeamSetup", "Match", "Play team match!")</li>
-                            <li>@Html.NavigationMenuItem("MyProfile", "User", "Profile")</li>
-                        }
-                        
-                        <li>@Html.NavigationMenuItem("Index", "Match", "Gosu Bot Arena")</li>
-                        <li>@Html.NavigationMenuItem("Index", "Docs", "Documentation")</li>
-                        <li>@Html.NavigationMenuItem("Index", "SceneEditor", "Scene editor")</li>
-                        <li>@Html.NavigationMenuItem("News", "Docs", "What's new?")</li>
-                        
-                        @if (User.IsAdmin())
-                        {
-                            <li>@Html.NavigationMenuItem("List", "Account", "Users")</li>
-                        }
-                    </ul>
-                </nav>
+    @RenderSection("styles", required: false)
 
-                <menu id="account">
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/threejs")
+</head>
+<body>
+    <div class="container">
+        <section id="page-container">
+            @RenderBody()
+        </section>
+    </div>
+    <div id="menu-bar-container">
+        <div id="menu-bar">
+            <nav>
+                <ul>
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <span class="username">Logged in as @User.Identity.Name</span>
-                        @Html.NavigationMenuItem("LogOff", "Account", "Log out")
+                        <li>@Html.NavigationMenuItem("Setup", "Match", "Play FFA match!")</li>
+                        <li>@Html.NavigationMenuItem("TeamSetup", "Match", "Play team match!")</li>
+                        <li>@Html.NavigationMenuItem("MyProfile", "User", "Profile")</li>
                     }
-                    else
-                    {
-                        @Html.NavigationMenuItem("Login", "Account", "Login")
-                        @Html.NavigationMenuItem("Register", "Account", "Sign up")
-                    }
-                </menu>
-            </div>
-        </div>
-       
-        <aside id="notificationContainer" class="notifications"></aside>
 
-        <script type="text/javascript" src="@Url.Content("~/Scripts/lib/underscore-min.js")"> </script>
-        @Scripts.Render("~/bundles/jqueryvalidation") 
-        <script type="text/javascript" src="@Url.Content("~/Content/bootstrap-3.0.3/js/alert.js")"> </script>
-        <script type="text/javascript" src="@Url.Content("~/Content/bootstrap-notify/js/bootstrap-notify.js")"> </script>
-        <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/confirmation.js")"> </script>
-        <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/notifications.js")"> </script>
-        <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/changetracking.js")"> </script>
-    
-        @RenderSection("scripts", required: false)
-    </body>
+                    <li>@Html.NavigationMenuItem("Index", "Match", "Gosu Bot Arena")</li>
+                    <li>@Html.NavigationMenuItem("Index", "Docs", "Documentation")</li>
+                    <li>@Html.NavigationMenuItem("Index", "SceneEditor", "Scene editor")</li>
+                    <li>@Html.NavigationMenuItem("News", "Docs", "What's new?")</li>
+
+                    @if (User.IsAdmin())
+                    {
+                        <li>@Html.NavigationMenuItem("List", "Account", "Users")</li>
+                    }
+                </ul>
+            </nav>
+
+            <menu id="account">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <span class="username">Logged in as @User.Identity.Name</span>
+                    @Html.NavigationMenuItem("LogOff", "Account", "Log out")
+                }
+                else
+                {
+                    @Html.NavigationMenuItem("Login", "Account", "Login")
+                    @Html.NavigationMenuItem("Register", "Account", "Sign up")
+                }
+            </menu>
+        </div>
+    </div>
+
+    <aside id="notificationContainer" class="notifications"></aside>
+
+    <script type="text/javascript" src="@Url.Content("~/Scripts/lib/underscore-min.js")"> </script>
+    @Scripts.Render("~/bundles/jqueryvalidation")
+    <script type="text/javascript" src="@Url.Content("~/Content/lib/bootstrap-3.0.3/js/alert.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Content/lib/bootstrap-notify/js/bootstrap-notify.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/confirmation.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/notifications.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/changetracking.js")"> </script>
+
+    @RenderSection("scripts", required: false)
+</body>
 </html>

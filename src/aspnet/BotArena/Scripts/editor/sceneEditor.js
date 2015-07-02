@@ -20,6 +20,9 @@ gosuArena.factories.createSceneEditor = function (canvas) {
 
         camera.position.z = 100;
 
+        var axisHelper = new THREE.AxisHelper(7); scene.add(axisHelper);
+        scene.add(axisHelper);
+
         render();
     }
 
