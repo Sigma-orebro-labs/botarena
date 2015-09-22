@@ -446,10 +446,12 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     
     function setUpGUI() {
         
-        var gui = new bGUI.GUISystem(scene, 1200, 800);
+       /* var gui = new bGUI.GUISystem(scene, 1200, 800);
         var text = new GUIText("text....", 200, 600, null, gui);
         
-        text.update("updated text");
+        var t = new GUIObject
+        
+        text.update("updated text");*/
     }
 
     return {
