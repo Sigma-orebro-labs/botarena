@@ -1,65 +1,75 @@
-﻿(function () {
+var gosu = gosu || {};
 
-    WaterMaterial = function (name, scene, light) {
-        this.name = name;
-        this.id = name;
+(function () {
+    gosu.WaterMaterial = function (name, scene, light) {
+        BABYLON.Material.call(this, name, scene);
         this.light = light;
 
-        this._scene = scene;
-        scene.materials.push(this);
-
-        this.bumpTexture = new BABYLON.Texture("Content/textures/water/bump.png", scene);
-        this.bumpTexture.uScale = 2;
-        this.bumpTexture.vScale = 2;
+        this.bumpTexture = new BABYLON.Texture("assets/images/bump.png", scene);
+        this.bumpTexture.uScale = 1;
+        this.bumpTexture.vScale = 1;
         this.bumpTexture.wrapU = BABYLON.Texture.MIRROR_ADDRESSMODE;
         this.bumpTexture.wrapV = BABYLON.Texture.MIRROR_ADDRESSMODE;
 
         this.reflectionTexture = new BABYLON.MirrorTexture("reflection", 512, scene, true);
-        this.refractionTexture = new BABYLON.RenderTargetTexture("refraction", 512, scene, true);
+        this.refractionTexture = new BABYLON.RenderTargetTexture("refraction", 512, scene, true);        
         this.reflectionTexture.mirrorPlane = new BABYLON.Plane(0, -1, 0, 0);
 
-        this.refractionTexture.onBeforeRender = function () {
+        this.refractionTexture.onBeforeRender = function() {
             BABYLON.clipPlane = new BABYLON.Plane(0, 1, 0, 0);
         };
 
-        this.refractionTexture.onAfterRender = function () {
+        this.refractionTexture.onAfterRender = function() {
             BABYLON.clipPlane = null;
         };
 
-        this.waterColor = new BABYLON.Color3(0.0, 0.3, 0.1);
+        // original  this.waterColor = new BABYLON.Color3(0.0, 0.3, 0.1);
+        this.waterColor = new BABYLON.Color3.FromInts(200, 255, 255);
         this.waterColorLevel = 0.2;
         this.fresnelLevel = 1.0;
         this.reflectionLevel = 0.6;
         this.refractionLevel = 0.8;
+        
+        //this.waveLength = 0.1;
+        //this.waveHeight = 0.15;
+        this.waveLength = 0.05;
+        this.waveHeight = 0.8;
 
-        this.waveLength = 0.1;
-        this.waveHeight = 0.15;
-
-        this.waterDirection = new BABYLON.Vector2(0, 1.0);
+        //this.waterDirection = new BABYLON.Vector2(0, 1.0);
+        this.waterDirection = new BABYLON.Vector2(0, 0.2);
 
         this._time = 0;
     };
 
-    WaterMaterial.prototype = Object.create(BABYLON.Material.prototype);
+    gosu.WaterMaterial.prototype = Object.create(BABYLON.Material.prototype);
 
     // Properties   
-    WaterMaterial.prototype.needAlphaBlending = function () {
+    gosu.WaterMaterial.prototype.needAlphaBlending = function () {
         return false;
     };
 
-    WaterMaterial.prototype.needAlphaTesting = function () {
+    gosu.WaterMaterial.prototype.needAlphaTesting = function () {
         return false;
     };
-    
-    // Methods  
-    WaterMaterial.prototype.isReady = function (mesh) {
+
+    // Methods   
+    gosu.WaterMaterial.prototype.getRenderTargetTextures = function () {
+        var results = [];
+
+        results.push(this.reflectionTexture);
+        results.push(this.refractionTexture);
+
+        return results;
+    };
+
+    gosu.WaterMaterial.prototype.isReady = function (mesh) {
         var engine = this._scene.getEngine();
-
+        
         if (this.bumpTexture && !this.bumpTexture.isReady) {
             return false;
         }
 
-        this._effect = engine.createEffect("Content/textures/water/water",
+        this._effect = engine.createEffect("/Water/water",
             ["position", "normal", "uv"],
             ["worldViewProjection", "world", "view", "vLightPosition", "vEyePosition", "waterColor", "vLevels", "waveData", "windMatrix"],
             ["reflectionSampler", "refractionSampler", "bumpSampler"],
@@ -72,8 +82,7 @@
         return true;
     };
 
-    WaterMaterial.prototype.bind = function (world, mesh) {
-
+    gosu.WaterMaterial.prototype.bind = function (world, mesh) {
         this._time += 0.0001 * this._scene.getAnimationRatio();
 
         this._effect.setMatrix("world", world);
@@ -91,30 +100,18 @@
         this._effect.setTexture("refractionSampler", this.refractionTexture);
     };
 
-    WaterMaterial.prototype.dispose = function () {
+    gosu.WaterMaterial.prototype.dispose = function () {
         if (this.bumpTexture) {
             this.bumpTexture.dispose();
         }
-
-        if (this.groundTexture) {
-            this.groundTexture.dispose();
+        
+        if (this.reflectionTexture) {
+            this.reflectionTexture.dispose();
         }
 
-        if (this.snowTexture) {
-            this.snowTexture.dispose();
+        if (this.refractionTexture) {
+            this.refractionTexture.dispose();
         }
-        this.baseDispose();
+        BABYLON.Material.dispose.call(this);
     };
-
-    WaterMaterial.prototype.getRenderTargetTextures = function () {
-        var results = [];
-
-        results.push(this.reflectionTexture);
-        results.push(this.refractionTexture);
-
-        return results;
-    };
-
-
-
 })();

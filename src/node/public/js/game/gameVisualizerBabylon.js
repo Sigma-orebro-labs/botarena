@@ -42,7 +42,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         setUpParticleExplosion();
         setUpSkyBox();
         setUpWater(arenaState);
-        
+        setUpGUI();
         
 
         engine.runRenderLoop(function () {
@@ -60,25 +60,8 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         
         var explosion = particleExplosion.clone();
         
-        
-        if(bullet.angle <= 90){
-            
-            explosion.emitter = new BABYLON.Vector3(bullet.y - 12, shipAndBulletYvalue, bullet.x - 12);
-            
-        } else if(bullet.angle <= 180 && bullet.angle > 90){
-            
-            explosion.emitter = new BABYLON.Vector3(bullet.y + 12, shipAndBulletYvalue, bullet.x - 12);
-            
-        } else if(bullet.angle <= 270 && bullet.angle > 180 ) {
-            
-            explosion.emitter = new BABYLON.Vector3(bullet.y + 12, shipAndBulletYvalue, bullet.x + 12);
-            
-        } else {
-            
-            explosion.emitter = new BABYLON.Vector3(bullet.y - 12, shipAndBulletYvalue, bullet.x + 12);
-            
-        }
-        
+        explosion.emitter = new BABYLON.Vector3(bullet.y, shipAndBulletYvalue, bullet.x);
+       
         
         var offsetAngle1 = gosu.math.degreesToRadians(bullet.angle + 20) + Math.PI / 2;
         var offsetAngle2 = gosu.math.degreesToRadians(bullet.angle - 20) + Math.PI / 2;
@@ -86,8 +69,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         var vector1 = new BABYLON.Vector3(Math.sin(offsetAngle1) * 3, 1, Math.cos(offsetAngle1) * 3);
         var vector2 = new BABYLON.Vector3(Math.sin(offsetAngle2) * 3, -1, Math.cos(offsetAngle2) * 3);
         
-        console.log("vector1: " + vector1 + "       vector2: " + vector2);
-       
         
         explosion.direction1 = vector1;
         explosion.direction2 = vector2;     
@@ -373,7 +354,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
                 
                 bot.healthBarMesh = new BABYLON.Mesh.CreateBox("bot_" + i + "_health_bar", 10.0, scene);
                 bot.healthBarMesh.scaling = new BABYLON.Vector3(0.7, 0.7, 5);
-                bot.healthBarMesh.originalWidth = 50;
+                bot.healthBarMesh.originalScaling = 5;
                 
                 bot.healthBarMesh.material = healthBarMaterial;
                 
@@ -415,7 +396,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     function raiseOnBotHitByBullet (bot) {
         
        var size = bot.healthBarMesh.originalWidth;
-       bot.healthBarMesh.scaling.z = 5 * bot.healthPercentage();
+       bot.healthBarMesh.scaling.z = bot.healthBarMesh.originalScaling * bot.healthPercentage();
        bot.healthBarMesh.material.diffuseColor.r = 1 - bot.healthPercentage();
        bot.healthBarMesh.material.diffuseColor.g = bot.healthPercentage();
        
@@ -460,6 +441,15 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         bot.healthBarMesh.dispose();
         bot.babylonMesh.dispose();
 
+    }
+    
+    
+    function setUpGUI() {
+        
+        var gui = new bGUI.GUISystem(scene, 1200, 800);
+        var text = new GUIText("text....", 200, 600, null, gui);
+        
+        text.update("updated text");
     }
 
     return {
