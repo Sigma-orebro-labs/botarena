@@ -26,7 +26,8 @@ namespace GosuArena
             bundles.Add(new ScriptBundle("~/bundles/threejs").Include(
                         "~/Scripts/lib/threejs/three.js",
                         "~/Scripts/lib/threejs/OrbitControls.js",
-                        "~/Scripts/lib/threejs/loaders/*.js"));
+                        "~/Scripts/lib/threejs/loaders/*.js",
+                        "~/Scripts/lib/babylon.2.1.js"));
 
 //#if DEBUG
 //            BundleTable.EnableOptimizations = false;
@@ -40,7 +41,8 @@ namespace GosuArena
             bundles.Add(new ScriptBundle("~/bundles/gosuarena").Include(
                 "~/Scripts/gosu/math/*.js",
                 "~/Scripts/gosu/*.js",
-                "~/Scripts/game/*.js"));
+                "~/Scripts/game/*.js",
+                "~/Scripts/Shaders/Water/waterMaterial.js"));
         }
     }
 }

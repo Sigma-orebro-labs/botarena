@@ -19,12 +19,15 @@
         var canvas = document.getElementById("gameCanvas");
         var gameVisualizer = gosuArena.factories.createGameVisualizer(canvas);
 
-        var canvas3D = document.getElementById("3d-game-canvas");
-        var gameVisualizer3D = gosuArena.factories.createGameVisualizer3D(canvas3D);
+        /*var canvas3D = document.getElementById("3d-game-canvas");
+        var gameVisualizer3D = gosuArena.factories.createGameVisualizer3D(canvas3D);*/
+
+        var canvasBabylon = document.getElementById("3d-game-canvas-babylon");
+        var gameVisualizerBabylon = gosuArena.factories.createGameVisualizerBabylon(canvasBabylon);
 
         gosuArena.engine.start(gameClock, {
             isTraining: gosuArena.settings.isTraining(),
-            listeners: [gosuArena.matchViewModel, gameVisualizer3D, gameVisualizer]
+            listeners: [gosuArena.matchViewModel,  gameVisualizer, gameVisualizerBabylon]
         });
 
         gosuArena.events.raiseGameStarting();
@@ -38,10 +41,12 @@
         if (mode === "2d-mode") {
             $("#gameCanvas").show();
             $("#3d-game-canvas").hide();
+            $("#3d-game-canvas-babylon").hide();
         }
         else {
             $("#gameCanvas").hide();
             $("#3d-game-canvas").show();
+            $("#3d-game-canvas-babylon").show();
         }
     };
 
