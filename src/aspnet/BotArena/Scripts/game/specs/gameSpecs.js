@@ -3,8 +3,6 @@ describe("Game", function () {
     var clock = null;
     var botOptions = null;
 
-    var arenaHeight = 400;
-    var arenaWidth = 400;
     var wallThickness = 10;
     var botWidth = null;
     var botHeight = null;
@@ -18,9 +16,9 @@ describe("Game", function () {
     };
 
     function startGame() {
-        gosuArena.engine.start(visualizer, clock, {
+        gosuArena.engine.start(clock, {
             isTraining: true,
-            listeners: [arenaStateInterceptor]
+            listeners: [arenaStateInterceptor, visualizer]
         });
     }
 
@@ -28,9 +26,10 @@ describe("Game", function () {
         gosu.eventAggregator.unsubscribeAll("matchEnded");
 
         visualizer = {
+            initialize: function () { },
             render: function() { },
-            arenaHeight: arenaHeight,
-            arenaWidth: arenaWidth,
+            arenaHeight: 400,
+            arenaWidth: 400,
             wallThickness: wallThickness
         };
 
@@ -66,8 +65,8 @@ describe("Game", function () {
                             expect(status.canMoveRight()).toEqual(true);
                         }, options: {
                             startPosition: {
-                                x: arenaWidth / 2,
-                                y: arenaHeight - botWidth,
+                                x: gosuArena.arenaWidth / 2,
+                                y: gosuArena.arenaHeight - botWidth,
                                 angle: 90
                             }
                         }
@@ -275,8 +274,8 @@ describe("Game", function () {
                     },
                     options: {
                         startPosition: {
-                            x: arenaWidth - botWidth,
-                            y: arenaHeight - botHeight,
+                            x: gosuArena.arenaWidth - botWidth,
+                            y: gosuArena.arenaHeight - botHeight,
                             angle: 180
                         }
                     }
@@ -359,8 +358,9 @@ describe("Game", function () {
                 });
             });
 
-            gosuArena.engine.start(visualizer, clock, {
-                isTraining: true
+            gosuArena.engine.start(clock, {
+                isTraining: true,
+                listeners: [arenaStateInterceptor, visualizer]
             });
 
             clock.doTick();
@@ -439,8 +439,8 @@ describe("Game", function () {
             }, function () {
                 gosuArena.register({
                     tick: function (actionQueue, status) {
-                        expect(status.arena.width).toEqual(arenaWidth);
-                        expect(status.arena.height).toEqual(arenaHeight);
+                        expect(status.arena.width).toEqual(gosuArena.arenaWidth);
+                        expect(status.arena.height).toEqual(gosuArena.arenaHeight);
 
                         wasTickCalled = true;
                     }
@@ -1084,9 +1084,9 @@ describe("Game", function () {
             }
         };
 
-        gosuArena.engine.start(visualizer, clock, {
+        gosuArena.engine.start(clock, {
             isTraining: true,
-            listeners: [listener]
+            listeners: [visualizer, listener]
         });
 
         expect(wasInitializeCalled).toBe(true);

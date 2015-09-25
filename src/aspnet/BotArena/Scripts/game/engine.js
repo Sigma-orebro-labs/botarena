@@ -196,13 +196,12 @@ gosuArena.engine = (function () {
         gosuArena.arenaHeight = arenaHeight;
 
         initializeTerrain();
+        initializeGameListeners();
 
         raiseReadyEvent();
 
         fixStartPositionsToAvoidCollisions();
-
-        initializeGameListeners();
-
+        
         startGameLoop(gameClock);
 
         raiseMatchStartedEvent();

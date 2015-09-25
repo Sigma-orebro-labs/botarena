@@ -59,6 +59,7 @@ namespace GosuArena.Entities
             get
             {
                 yield return "erikojebo";
+                yield return "gosuarenatrainer";
             }
         }
     }
