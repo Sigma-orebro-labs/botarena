@@ -492,6 +492,8 @@
     <Content Include="Content\Pages\SceneEditor\Index.less" />
     <Content Include="Content\models\m_plane.babylon" />
     <Content Include="Content\models\ship.babylon" />
+    <Content Include="Content\models\newer_mountains.babylon" />
+    <Content Include="Content\models\only_plane.babylon" />
     <None Include="Properties\PublishProfiles\botarena - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\botarena - Web Deploy.pubxml" />
     <None Include="Scripts\lib\jquery\jquery-2.0.0.intellisense.js" />

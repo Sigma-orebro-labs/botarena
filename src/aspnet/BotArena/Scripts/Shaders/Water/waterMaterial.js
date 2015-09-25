@@ -31,8 +31,8 @@
         
         //this.waveLength = 0.1;
         //this.waveHeight = 0.15;
-        this.waveLength = 0.1;
-        this.waveHeight = 0.8;
+        this.waveLength = 0.01;
+        this.waveHeight = 0.08;
 
         //this.waterDirection = new BABYLON.Vector2(0, 1.0);
         this.waterDirection = new BABYLON.Vector2(0, 0.5);
