@@ -192,7 +192,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
             });
 
             for (var i = 0; i < seenBots.length; i++) {
-                if (seenBots[i].teamId == bot.teamId) {
+                if (bot.teamId && seenBots[i].teamId == bot.teamId) {
                     seenAllies.push(seenBots[i]);
                 } else {
                     seenEnemies.push(seenBots[i]);

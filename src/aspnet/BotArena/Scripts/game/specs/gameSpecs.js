@@ -33,7 +33,7 @@ describe("Game", function () {
 
         gosuArena.initiateBotRegistration({
             id: options.id || 1,
-            teamId: options.teamId || 1
+            teamId: options.teamId
         }, function () {
             gosuArena.register({
                 tick: options.tick,
@@ -683,7 +683,7 @@ describe("Game", function () {
             expect(wasTickCalled).toBe(true);
         });
 
-        it("seenAllies includes all seen bots on the same team and seenEnemies includes all other seen bots", function () {
+        it("In a team game seenAllies includes all seen bots on the same team and seenEnemies includes all other seen bots", function () {
 
             // seen
             addBot({ id: 1, teamId: 2, startPosition: { x: 1, y: 10, angle: 0 } });
@@ -716,6 +716,52 @@ describe("Game", function () {
                         expect(status.seenAllies.length).toEqual(2);
                         expect(status.seenAllies).toContainElementMatching(function (bot) { return bot.id = 2; });
                         expect(status.seenAllies).toContainElementMatching(function (bot) { return bot.id = 3; });
+
+                        wasTickCalled = true;
+                    },
+                    options: {
+                        startPosition: {
+                            x: 250,
+                            y: 0,
+                            angle: 90 // aiming west (negative x)
+                        }
+                    }
+                });
+            });
+
+            startGame();
+
+            clock.doTick();
+
+            expect(wasTickCalled).toBe(true);
+        });
+
+        it("In an FFA game seenEnemies includes all seen bots and seenAllies is empty", function () {
+
+            // seen
+            addBot({ id: 1, teamId: undefined, startPosition: { x: 1, y: 10, angle: 0 } });
+            addBot({ id: 2, teamId: undefined, startPosition: { x: 50, y: 2, angle: 90 } });
+
+            // not seen
+            addBot({ id: 3, teamId: undefined, startPosition: { x: 300, y: 4, angle: 180 } });
+
+            var wasTickCalled = false;
+            var round = 0;
+
+            // This bot spawns aiming directly at the first four other bots, which are
+            // to the west
+            gosuArena.initiateBotRegistration({
+                id: 4,
+                teamId: undefined
+            }, function () {
+                gosuArena.register({
+                    tick: function (actionQueue, status) {
+
+                        expect(status.seenEnemies.length).toEqual(2);
+                        expect(status.seenEnemies).toContainElementMatching(function (bot) { return bot.id = 1; });
+                        expect(status.seenEnemies).toContainElementMatching(function (bot) { return bot.id = 2; });
+
+                        expect(status.seenAllies).toBeEmpty();
 
                         wasTickCalled = true;
                     },
