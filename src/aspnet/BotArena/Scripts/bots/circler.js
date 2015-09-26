@@ -52,7 +52,12 @@ gosuArena.register({
         actionQueue.turn(1);
         actionQueue.forward(2);
     },
-    onHitByBullet: function (actionQueue, status, eventArgs) {
+    onHitByBullet: function (actionQueue, status, augmentations, eventArgs) {
+
+        if (!augmentations.cloak.isActive() && augmentations.cloak.roundsRemaining() > 0) {
+            augmentations.cloak.activate();
+        }
+
         actionQueue.clear();
 
         if (status.canMoveLeft()) {

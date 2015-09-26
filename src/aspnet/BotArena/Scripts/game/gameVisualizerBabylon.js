@@ -64,7 +64,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     
 
     function setUpLandscape(arenaState) {
-        BABYLON.SceneLoader.ImportMesh("", "Content/models/", "only_plane.babylon", scene, function(newMeshes, particleSystems) {
+        BABYLON.SceneLoader.ImportMesh("", "/Content/models/", "only_plane.babylon", scene, function(newMeshes, particleSystems) {
             landscape = newMeshes[0];
             landscape.convertToFlatShadedMesh();
             landscape.scaling = new BABYLON.Vector3(100, 100, 100);
@@ -81,7 +81,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         skybox = BABYLON.Mesh.CreateBox("skyBox", 10000.0, scene);
         var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
         skyboxMaterial.backFaceCulling = false;
-        skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("Content/textures/skybox/TropicalSunnyDay", scene);
+        skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("/Content/textures/skybox/TropicalSunnyDay", scene);
         skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
         skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
         skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
@@ -143,10 +143,10 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
     function setUpSounds() {
         
-        waterSound = new BABYLON.Sound("WaterSound", "Content/sounds/water_sound.wav", scene, null, { loop: true, autoplay: true, volume: 0.01 });
+        waterSound = new BABYLON.Sound("WaterSound", "/Content/sounds/water_sound.wav", scene, null, { loop: true, autoplay: true, volume: 0.01 });
         waterSound.maxDistance = 3000;
 
-        canonSound = new BABYLON.Sound("CanonSound", "Content/sounds/cork.wav", scene, null, {loop: false, autoplay: false, volume: 0.005});
+        canonSound = new BABYLON.Sound("CanonSound", "/Content/sounds/cork.wav", scene, null, {loop: false, autoplay: false, volume: 0.005});
         canonSound.maxDistance = 7000;
     };
 
@@ -171,7 +171,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         //set up material for the walls
         var brickMaterial = [];
         brickMaterial[0] = new BABYLON.StandardMaterial("bricks", scene);
-        brickMaterial[0].diffuseTexture = new BABYLON.Texture("Content/textures/Brick_Wall_03.jpg", scene);
+        brickMaterial[0].diffuseTexture = new BABYLON.Texture("/Content/textures/Brick_Wall_03.jpg", scene);
         brickMaterial[0].specularColor = new BABYLON.Color3(0, 0, 0);
 
         brickMaterial[1] = brickMaterial[0].clone();
@@ -253,7 +253,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     function assignBotModels(arenaState) {
 
 
-        BABYLON.SceneLoader.ImportMesh("", "Content/models/", "ship.babylon", scene, function (newMeshes, particleSystems) {
+        BABYLON.SceneLoader.ImportMesh("", "/Content/models/", "ship.babylon", scene, function (newMeshes, particleSystems) {
 
             var mesh = newMeshes[1];
             //mesh.convertToFlatShadedMesh();
@@ -398,7 +398,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
 
         //Texture of each particle
-        particleExplosion.particleTexture = new BABYLON.Texture("Content/images/sprites/Flare.jpg", scene);
+        particleExplosion.particleTexture = new BABYLON.Texture("/Content/images/sprites/Flare.jpg", scene);
 
 
         // Where the particles come from
@@ -450,7 +450,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         particleSmoke = new BABYLON.ParticleSystem("smoke", 4000, scene);
 
         //Texture of each particle
-        particleSmoke.particleTexture = new BABYLON.Texture("Content/images/sprites/Flare.jpg", scene);
+        particleSmoke.particleTexture = new BABYLON.Texture("/Content/images/sprites/Flare.jpg", scene);
 
 
         particleSmoke.minEmitBox = new BABYLON.Vector3(-1, -1, -1); // Starting all from
