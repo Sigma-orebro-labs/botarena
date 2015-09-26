@@ -9,7 +9,7 @@ gosuArena.register({
             }
         }
 
-        if (status.seenBots.length > 0) {
+        if (status.seenEnemies.length > 0) {
             actionQueue.clear();
             actionQueue.fire();
         }

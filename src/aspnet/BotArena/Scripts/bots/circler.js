@@ -22,10 +22,10 @@ gosuArena.register({
             }
         }
 
-        if (status.seenBots.length > 0) {
+        if (status.seenEnemies.length > 0) {
             actionQueue.clear();
             
-            var other = status.seenBots[0];
+            var other = status.seenEnemies[0];
             
             if (other.direction.x > 0) {
                 actionQueue.east();

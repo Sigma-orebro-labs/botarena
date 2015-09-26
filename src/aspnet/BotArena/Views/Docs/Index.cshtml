@@ -154,8 +154,8 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 <p>
     You might be missing some event which you feel would make your life much better. One of those might be something along the lines of
     onEnemySpotted. There is currently no such event since you can get information about all bots which your bot can currently see through
-    the seenBots property of the <a href="#bot-status">status</a> object in the existing events. However, that event might be added later
-    if people feel strongly about it.
+    the seenEnemies and seenAllies properties of the <a href="#bot-status">status</a> object in the existing events. However, that event 
+    might be added later if people feel strongly about it.
 </p>
 
 <p>
@@ -177,9 +177,6 @@ Your bot interacts with gosuArena through a couple of different events, and thos
         id, // The identifier for your bot
 
         // The identifier of your bot's team, if you are playing a team match.
-        // Use this value together with the teamId property of the objects in the seenBots
-        // array of the status object to determine if the bots you can see are friends
-        // or enemies.
         teamId, 
 
         position: {
@@ -223,10 +220,18 @@ Your bot interacts with gosuArena through a couple of different events, and thos
         // two actions in total.
         actionsPerRound,
 
-        // An array of <a href="#bot-status">bot status</a> objects representing the bots your bot currently can see.
+        // An array of <a href="#bot-status">bot status</a> objects representing the enemy bots your bot currently can see.
+        // In an FFA match, all other bots are considered enemies. In a team match, all bots on other teams are considered
+        // enemies.
         // The line of sight of the bot is a thin, straight line from the sight and forward so you can only see bots
         // on which your bot has aimed its gun.
-        seenBots, 
+        seenEnemies, 
+
+        // An array of <a href="#bot-status">bot status</a> objects representing the allied bots your bot currently can see.
+        // This property is only used during team matches. Bots on the same team as the current bot are considered allies.
+        // The line of sight of the bot is a thin, straight line from the sight and forward so you can only see bots
+        // on which your bot has aimed its gun.
+        seenAllies,
 
         canFire: function () { ... },  // True if the weapon is ready for firing, false if the weapon is still cooling down
         roundsUntilWeaponIsReady, // The number of rounds remaining until the weapon is ready to fire
@@ -251,21 +256,16 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 
 </pre>
 
-<h4>Seen Bots</h4>
+<h4>Seen Enemies / Allies</h4>
 
 <p>
     As mentioned above, as a part of the <a href="#bot-status">bot status</a> object there 
-    is an array of all the bots that your own bot currently can see. The objects in the 
-    seenBots array are themselves bot status objects, so you can get quite a lot of information
+    are two arrays containing the bots that your own bot currently can see. The objects in the 
+    seenEnemies/seenAllies array are themselves bot status objects, so you can get quite a lot of information
     about the bots you can see, which can help your bot make intelligent decisions. For example,
     your bot can look at the position and direction of the bot to guess where the bot will be in
     a few turns, so that it can fire at that point rather than at the point where the opponent
     currently is located.
-</p>
-
-<p>
-    Note that the bots in the seenBots array all have teamId properties which you can (and should!)
-    use to avoid firing at your team mates when playing a team game.
 </p>
 
 <h3 id="action-queue">Action Queue</h3>
