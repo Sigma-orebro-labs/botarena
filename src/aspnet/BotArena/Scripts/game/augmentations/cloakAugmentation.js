@@ -5,7 +5,7 @@ gosuArena.factories.augmentations = gosuArena.factories.augmentations || {};
 gosuArena.factories.augmentations.createCloak = function(botProperties) {
 
     var augmentationProperties = {
-        roundsRemaining: 20,
+        roundsRemaining: 500,
         isActive: false
     };
 
@@ -20,7 +20,7 @@ gosuArena.factories.augmentations.createCloak = function(botProperties) {
     function tick() {
         if (getRoundsRemaining() <= 0) {
             botProperties.isVisible = true;
-        } else if (state.isActive) {
+        } else if (augmentationProperties.isActive) {
             augmentationProperties.roundsRemaining -= 1;
         }
     }

@@ -301,8 +301,8 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
             actionQueue.performNext(bot);
         }
 
-        for (var j = 0; j < augmentations.length; j++) {
-            augmentations[j].tick();
+        for (var augmentationName in augmentations) {
+            augmentations[augmentationName].tick();
         }
     }
 

@@ -152,7 +152,7 @@ describe("Game", function () {
                         expect(arenaState.bots[0].isVisible()).toBe(false);
 
                     // The augmentations are ticked after the bot, so an extra round is needed for the augmentation to become inactive again
-                    } else if (roundCount > cloakDuration + 1) { 
+                    } else if (roundCount > cloakDuration) { 
                         expect(status.isVisible).toBe(true);
                         expect(arenaState.bots[0].isVisible()).toBe(true);
                     }
@@ -166,7 +166,7 @@ describe("Game", function () {
 
             cloakDuration = arenaState.bots[0].augmentations().cloak.roundsRemaining();
 
-            for (var i = 0; i < cloakDuration + 2; i++) {
+            for (var i = 0; i < cloakDuration + 10; i++) {
                 clock.doTick();
             }
 
@@ -199,7 +199,7 @@ describe("Game", function () {
                         expect(status.seenEnemies.length).toBe(0);
 
                         // The augmentations are ticked after the bot, so an extra round is needed for the augmentation to become inactive again
-                    } else if (roundCount > cloakDuration + 2) {
+                    } else if (roundCount > cloakDuration + 1) {
                         expect(status.seenEnemies.length).toBe(1);
                     }
 
@@ -212,7 +212,7 @@ describe("Game", function () {
 
             cloakDuration = arenaState.bots[0].augmentations().cloak.roundsRemaining();
 
-            for (var i = 0; i < cloakDuration + 3; i++) {
+            for (var i = 0; i < cloakDuration + 10; i++) {
                 clock.doTick();
             }
 

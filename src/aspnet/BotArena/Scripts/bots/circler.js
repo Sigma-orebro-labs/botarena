@@ -14,7 +14,7 @@ function moveTowardsCenter(actionQueue, status) {
 }
 
 gosuArena.register({
-    tick: function (actionQueue, status) {
+    tick: function (actionQueue, status, augmentations) {
 
         function tryFire() {
             if (status.canFire()) {
@@ -26,7 +26,9 @@ gosuArena.register({
             actionQueue.clear();
             
             var other = status.seenEnemies[0];
-            
+
+            tryFire();
+
             if (other.direction.x > 0) {
                 actionQueue.east();
             } else if (other.direction.x < 0) {
