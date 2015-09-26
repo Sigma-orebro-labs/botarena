@@ -175,15 +175,29 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
     bot.createStatus = function (simplified) {
 
         var seenBots = null;
+        var seenEnemies = null;
+        var seenAllies = null;
 
         // Since seenBots calls createStatus for the other bots
         // this is an endless loop waiting to happen if two bots see
         // each other at the same time. 
         if (!simplified) {
-            seenBots = collisionDetector.seenBots(bot).map(function (bot) {
+
+            seenEnemies = [];
+            seenAllies = [];
+
+            seenBots = collisionDetector.seenBots(bot).map(function (seenBot) {
                 // Use simplified status to avoid endless loop
-                return bot.createStatus(true);
+                return seenBot.createStatus(true);
             });
+
+            for (var i = 0; i < seenBots.length; i++) {
+                if (seenBots[i].teamId == bot.teamId) {
+                    seenAllies.push(seenBots[i]);
+                } else {
+                    seenEnemies.push(seenBots[i]);
+                }
+            }
         }
 
         return {
@@ -211,7 +225,8 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
             canFire: function () {
                 return bot.weapon.cooldownTimeLeft <= 0
             },
-            seenBots: seenBots,
+            seenEnemies: seenEnemies,
+            seenAllies: seenAllies,
             canMoveForward: function () {
                 return collisionDetector.canPerformMoveAction(bot, bot.moveForward)
             },
