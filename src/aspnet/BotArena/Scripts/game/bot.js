@@ -21,6 +21,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         angle: options.angle,
         direction: { x: 0, y: 0},
         color: options.color,
+        isVisible: true,
         name: options.name,
         actionsPerRound: options.actionsPerRound,
         health: options.initialHealthPoints,
@@ -220,6 +221,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
             angle: bot.angle,
             direction: bot.direction,
             health: bot.health,
+            isVisible: bot.isVisible,
             actionsPerRound: bot.actionsPerRound,
             roundsUntilWeaponIsReady: bot.weapon.cooldownTimeLeft,
             canFire: function () {

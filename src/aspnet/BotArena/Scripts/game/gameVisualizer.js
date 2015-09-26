@@ -250,6 +250,15 @@ gosuArena.factories.createGameVisualizer = function (canvas) {
                 var g = rgba[px+1];
                 var b = rgba[px+2];
 
+                var isColoredPixel = r > 0 || g > 0 || b > 0;
+
+                if (isColoredPixel) {
+
+                    var alpha = bot.isVisible ? 255 : 100;
+
+                    rgba[px + 3] = alpha; // alpha (opacity from 0 to 255)
+                }
+
                 // Color distance allowed for pixel to be kept at
                 // original color (not tinted)
                 var tintTolerance = 20;
@@ -270,7 +279,6 @@ gosuArena.factories.createGameVisualizer = function (canvas) {
                 rgba[px] = rgba[px] * (1 - tintFactor) + botColor.r * tintFactor;   // r
                 rgba[px+1] = rgba[px+1] * (1 - tintFactor) + botColor.g * tintFactor; // g
                 rgba[px+2] = rgba[px+2] * (1 - tintFactor) + botColor.b * tintFactor; // b
-                rgba[px+3]; // a
             }
 
             tintingContext.putImageData(imageData, 0, 0);

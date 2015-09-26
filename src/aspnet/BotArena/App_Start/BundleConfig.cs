@@ -41,6 +41,7 @@ namespace GosuArena
             bundles.Add(new ScriptBundle("~/bundles/gosuarena").Include(
                 "~/Scripts/gosu/math/*.js",
                 "~/Scripts/gosu/*.js",
+                "~/Scripts/game/augmentations/*.js",
                 "~/Scripts/game/*.js",
                 "~/Scripts/Shaders/Water/waterMaterial.js"));
         }

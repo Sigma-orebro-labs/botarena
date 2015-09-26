@@ -230,6 +230,7 @@
     <Content Include="Content\models\jeep1.jpg" />
     <Content Include="Content\sounds\cork.wav" />
     <Content Include="Content\sounds\water_sound.wav" />
+    <Content Include="Scripts\game\augmentations\cloakAugmentation.js" />
     <Content Include="Scripts\Shaders\Water\bump.png" />
     <Content Include="Scripts\Shaders\Water\water.fragment.fx" />
     <Content Include="Scripts\Shaders\Water\water.vertex.fx" />

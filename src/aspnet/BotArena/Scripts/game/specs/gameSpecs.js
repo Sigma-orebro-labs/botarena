@@ -66,37 +66,55 @@ describe("Game", function () {
     });
 
     describe("Bot", function () {
-        it("can move forward, back, east, west and north when facing west next to south wall", function () {
-            gosuArena.initiateBotRegistration({
-                id: 1,
-                name: "bot"
-            }, function () {
-                gosuArena.initiateBotRegistration({
-                    id: 1,
-                    name: "bot"
-                }, function () {
-                    gosuArena.register({
-                        tick: function (actionQueue, status) {
-                            expect(status.canMoveForward()).toEqual(true);
-                            expect(status.canMoveBack()).toEqual(true);
-                            expect(status.canMoveNorth()).toEqual(true);
-                            expect(status.canMoveEast()).toEqual(true);
-                            expect(status.canMoveWest()).toEqual(true);
-                            expect(status.canMoveSouth()).toEqual(false);
-                            expect(status.canMoveLeft()).toEqual(false);
-                            expect(status.canMoveRight()).toEqual(true);
-                        }, options: {
-                            startPosition: {
-                                x: gosuArena.arenaWidth / 2,
-                                y: gosuArena.arenaHeight - botWidth,
-                                angle: 90
-                            }
-                        }
-                    });
-                });
+
+        it("is visible when no augmentations are active", function() {
+            var wasTickCalled = false;
+
+            addBot({
+                tick: function(actionQueue, status) {
+                    expect(status.isVisible).toBe(true);
+                    expect(arenaState.bots[0].isVisible).toBe(true);
+                    wasTickCalled = true;
+                }
             });
 
+            startGame();
+
             clock.doTick();
+
+            expect(wasTickCalled).toBe(true);
+
+        });
+
+        it("can move forward, back, east, west and north when facing west next to south wall", function () {
+            var wasTickCalled = false;
+
+            addBot({
+                startPosition: {
+                    x: gosuArena.arenaWidth / 2,
+                    y: gosuArena.arenaHeight - botWidth,
+                    angle: 90
+                },
+                tick: function(actionQueue, status) {
+                    expect(status.canMoveForward()).toEqual(true);
+                    expect(status.canMoveBack()).toEqual(true);
+                    expect(status.canMoveNorth()).toEqual(true);
+                    expect(status.canMoveEast()).toEqual(true);
+                    expect(status.canMoveWest()).toEqual(true);
+                    expect(status.canMoveSouth()).toEqual(false);
+                    expect(status.canMoveLeft()).toEqual(false);
+                    expect(status.canMoveRight()).toEqual(true);
+
+                    wasTickCalled = true;
+                },
+            });
+
+            startGame();
+
+            clock.doTick();
+
+            expect(wasTickCalled).toBe(true);
+
         });
 
         it("user gets callback when bot collides with other bot", function () {
@@ -928,9 +946,7 @@ describe("Game", function () {
             options.weaponCooldownTime = 1;
 
             return options;
-        }
-
-        // This bot spawns aiming directly at the two other bots, which are
+        }; // This bot spawns aiming directly at the two other bots, which are
         // in a straight westward line.
         gosuArena.initiateBotRegistration({
             id: 3,
@@ -1022,9 +1038,7 @@ describe("Game", function () {
             options.weaponCooldownTime = 1;
 
             return options;
-        }
-
-        // This bot spawns aiming directly at the two other bots, which are
+        }; // This bot spawns aiming directly at the two other bots, which are
         // in a straight westward line.
         gosuArena.initiateBotRegistration({
             id: 3,
@@ -1100,9 +1114,7 @@ describe("Game", function () {
             options.weaponCooldownTime = 1;
 
             return options;
-        }
-
-        // This bot spawns aiming directly at the two other bots, which are
+        }; // This bot spawns aiming directly at the two other bots, which are
         // in a straight westward line.
         gosuArena.initiateBotRegistration({
             id: 3,
