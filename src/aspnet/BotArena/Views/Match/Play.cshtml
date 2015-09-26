@@ -65,13 +65,15 @@
             name: "@bot.Name",
             teamId: @bot.TeamId
         }, function() {
-            // Redefine globals
+            // Redefine globals to make sure that the bot scripts do not tamper
+            // with any global state
             var window = {};
             var document = {};
             var alert = function() { };
             var XMLHttpRequest = function() { };
             var jQuery = function () { };
             var $ = function () { };
+            var gosuArenaSettings = {};
 
             // User written code starts here:
             

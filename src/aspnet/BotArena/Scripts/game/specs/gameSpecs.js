@@ -30,6 +30,7 @@ describe("Game", function () {
         options.startPosition.angle = options.startPosition.angle || 0;
 
         options.tick = options.tick || function() {};
+        options.onHitByBullet = options.onHitByBullet || function () { };
 
         gosuArena.initiateBotRegistration({
             id: options.id || 1,
@@ -37,6 +38,7 @@ describe("Game", function () {
         }, function () {
             gosuArena.register({
                 tick: options.tick,
+                onHitByBullet: options.onHitByBullet,
                 options: {
                     startPosition: options.startPosition
                 }
@@ -73,7 +75,7 @@ describe("Game", function () {
             addBot({
                 tick: function(actionQueue, status) {
                     expect(status.isVisible).toBe(true);
-                    expect(arenaState.bots[0].isVisible).toBe(true);
+                    expect(arenaState.bots[0].isVisible()).toBe(true);
                     wasTickCalled = true;
                 }
             });
@@ -83,7 +85,139 @@ describe("Game", function () {
             clock.doTick();
 
             expect(wasTickCalled).toBe(true);
+        });
 
+        it("gets passed augmentations as a parameter to the tick function", function () {
+            var wasTickCalled = false;
+
+            addBot({
+                tick: function (actionQueue, status, augmentations) {
+                    expect(augmentations).toBeTruthy();
+                    wasTickCalled = true;
+                }
+            });
+
+            startGame();
+
+            clock.doTick();
+
+            expect(wasTickCalled).toBe(true);
+        });
+
+        it("gets passed augmentations as a parameter to the onHitByBullet event handler", function () {
+            var wasHitByBullet = false;
+
+            addBot({
+                startPosition: { x: 70, y: 0, angle: 90  }, // aiming west
+                tick: function (actionQueue, status, augmentations) {
+                    actionQueue.clear();
+                    actionQueue.fire();
+                }
+            });
+
+            addBot({
+                startPosition: { x: 0, y: 0 },
+                onHitByBullet: function (actionQueue, status, augmentations, eventArgs) {
+
+                    expect(augmentations).toBeTruthy();
+
+                    wasHitByBullet = true;
+                }
+            });
+
+            startGame();
+
+            for (var i = 0; i < 50; i++) {
+                clock.doTick();
+            }
+
+            expect(wasHitByBullet).toBe(true);
+        });
+
+        it("becomes invisible during a number of rounds when the cloak augmentation is activated", function() {
+            var wasTickCalled = false;
+            var roundCount = 0;
+            var cloakDuration;
+
+            addBot({
+                tick: function (actionQueue, status, augmentations) {
+
+                    // Activate the cloak during the second round to let the other bot see this one during the first round
+                    if (roundCount == 0) {
+                        augmentations.cloak.activate();
+                    }
+
+                    if (roundCount > 0 && roundCount < cloakDuration) {
+                        expect(status.isVisible).toBe(false);
+                        expect(arenaState.bots[0].isVisible()).toBe(false);
+
+                    // The augmentations are ticked after the bot, so an extra round is needed for the augmentation to become inactive again
+                    } else if (roundCount > cloakDuration + 1) { 
+                        expect(status.isVisible).toBe(true);
+                        expect(arenaState.bots[0].isVisible()).toBe(true);
+                    }
+
+                    wasTickCalled = true;
+                    roundCount++;
+                }
+            });
+
+            startGame();
+
+            cloakDuration = arenaState.bots[0].augmentations().cloak.roundsRemaining();
+
+            for (var i = 0; i < cloakDuration + 2; i++) {
+                clock.doTick();
+            }
+
+            expect(wasTickCalled).toBe(true);
+        });
+
+        it("cannot be seen by enemies when cloaked", function () {
+            var wasTick1Called = false, wasTick2Called = false;
+            var roundCount = 0;
+            var cloakDuration;
+
+            addBot({
+                startPosition: { x: 0, y: 0 },
+                tick: function (actionQueue, status, augmentations) {
+
+                    if (roundCount == 1) {
+                        augmentations.cloak.activate();
+                    }
+
+                    wasTick1Called = true;
+                }
+            });
+
+            addBot({
+                startPosition: { x: 100, y: 0, angle: 90 }, // aiming west
+                tick: function (actionQueue, status) {
+                    if (roundCount == 0) {
+                        expect(status.seenEnemies.length).toBe(1);
+                    } else if (roundCount < cloakDuration + 1) {
+                        expect(status.seenEnemies.length).toBe(0);
+
+                        // The augmentations are ticked after the bot, so an extra round is needed for the augmentation to become inactive again
+                    } else if (roundCount > cloakDuration + 2) {
+                        expect(status.seenEnemies.length).toBe(1);
+                    }
+
+                    wasTick2Called = true;
+                    roundCount++;
+                }
+            });
+
+            startGame();
+
+            cloakDuration = arenaState.bots[0].augmentations().cloak.roundsRemaining();
+
+            for (var i = 0; i < cloakDuration + 3; i++) {
+                clock.doTick();
+            }
+
+            expect(wasTick1Called).toBe(true);
+            expect(wasTick2Called).toBe(true);
         });
 
         it("can move forward, back, east, west and north when facing west next to south wall", function () {
@@ -421,7 +555,7 @@ describe("Game", function () {
             }, function () {
                 gosuArena.register({
                     tick: function (actionQueue, status) { },
-                    onHitByBullet: function (actionQueue, status, eventArgs) {
+                    onHitByBullet: function (actionQueue, status, augmentations, eventArgs) {
 
                         expect(actionQueue.left).toBeDefinedFunction();
                         expect(status.angle).toEqual(180);

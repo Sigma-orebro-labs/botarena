@@ -9,7 +9,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
     var hitByBulletCallbacks = [];
     var actionQueue = gosuArena.factories.createActionQueue(collisionDetector);
     var userActionQueue = gosuArena.factories.createUserActionQueue(actionQueue);
-    
+
     var properties = {
         id: options.id,
         teamId: options.teamId,
@@ -40,6 +40,18 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
     };
 
     var bot = gosuArena.worldObject.create(properties);
+
+    var augmentations = {
+        cloak: gosuArena.factories.augmentations.createCloak(properties)
+    };
+
+    bot.augmentations = function() {
+        return augmentations;
+    };
+
+    bot.isVisible = function() {
+        return properties.isVisible;
+    };
 
     bot.top = function() {
         return bot.rectangle().maxY;
@@ -175,7 +187,6 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
 
     bot.createStatus = function (simplified) {
 
-        var seenBots = null;
         var seenEnemies = null;
         var seenAllies = null;
 
@@ -187,16 +198,21 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
             seenEnemies = [];
             seenAllies = [];
 
-            seenBots = collisionDetector.seenBots(bot).map(function (seenBot) {
-                // Use simplified status to avoid endless loop
-                return seenBot.createStatus(true);
-            });
+            var seenBots = collisionDetector.seenBots(bot);
 
-            for (var i = 0; i < seenBots.length; i++) {
-                if (bot.teamId && seenBots[i].teamId == bot.teamId) {
-                    seenAllies.push(seenBots[i]);
+            for (var j = 0; j < seenBots.length; j++) {
+                var seenBot = seenBots[j];
+
+                if (!seenBot.isVisible()) {
+                    continue;
+                }
+
+                var botStatusForSeenBot = seenBot.createStatus(true);
+
+                if (bot.teamId && botStatusForSeenBot.teamId == bot.teamId) {
+                    seenAllies.push(botStatusForSeenBot);
                 } else {
-                    seenEnemies.push(seenBots[i]);
+                    seenEnemies.push(botStatusForSeenBot);
                 }
             }
         }
@@ -221,42 +237,42 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
             angle: bot.angle,
             direction: bot.direction,
             health: bot.health,
-            isVisible: bot.isVisible,
+            isVisible: bot.isVisible(),
             actionsPerRound: bot.actionsPerRound,
             roundsUntilWeaponIsReady: bot.weapon.cooldownTimeLeft,
             canFire: function () {
-                return bot.weapon.cooldownTimeLeft <= 0
+                return bot.weapon.cooldownTimeLeft <= 0;
             },
             seenEnemies: seenEnemies,
             seenAllies: seenAllies,
             canMoveForward: function () {
-                return collisionDetector.canPerformMoveAction(bot, bot.moveForward)
+                return collisionDetector.canPerformMoveAction(bot, bot.moveForward);
             },
             canMoveBack: function () {
-                return collisionDetector.canPerformMoveAction(bot, bot.moveBack)
+                return collisionDetector.canPerformMoveAction(bot, bot.moveBack);
             },
             canMoveNorth: function () {
-                return collisionDetector.canPerformMoveAction(bot, bot.moveNorth)
+                return collisionDetector.canPerformMoveAction(bot, bot.moveNorth);
             },
             canMoveSouth: function () {
-                return collisionDetector.canPerformMoveAction(bot, bot.moveSouth)
+                return collisionDetector.canPerformMoveAction(bot, bot.moveSouth);
             },
             canMoveEast: function () {
-                return collisionDetector.canPerformMoveAction(bot, bot.moveEast)
+                return collisionDetector.canPerformMoveAction(bot, bot.moveEast);
             },
             canMoveWest: function () {
-                return collisionDetector.canPerformMoveAction(bot, bot.moveWest)
+                return collisionDetector.canPerformMoveAction(bot, bot.moveWest);
             },
             canMoveLeft: function () {
-                return collisionDetector.canPerformMoveAction(bot, bot.moveLeft)
+                return collisionDetector.canPerformMoveAction(bot, bot.moveLeft);
             },
             canMoveRight: function () {
-                return collisionDetector.canPerformMoveAction(bot, bot.moveRight)
+                return collisionDetector.canPerformMoveAction(bot, bot.moveRight);
             },
             canTurnLeft: function () {
-                return collisionDetector.canPerformMoveAction(bot, function () {
+                return collisionDetector.canPerformMoveAction(bot, function() {
                     bot.turn(-1);
-                })
+                });
             },
             canTurnRight: function () {
                 return collisionDetector.canPerformMoveAction(bot, function () {
@@ -279,10 +295,14 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
 
         var status = bot.createStatus();
 
-        tickCallback(userActionQueue, status);
+        tickCallback(userActionQueue, status, augmentations);
 
         for (var i = 0; i < options.actionsPerRound; i++) {
             actionQueue.performNext(bot);
+        }
+
+        for (var j = 0; j < augmentations.length; j++) {
+            augmentations[j].tick();
         }
     }
 
@@ -351,7 +371,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         };
 
         hitByBulletCallbacks.forEach(function (callback) {
-            callback(userActionQueue, status, eventArgs);
+            callback(userActionQueue, status, augmentations, eventArgs);
         });
     }
 

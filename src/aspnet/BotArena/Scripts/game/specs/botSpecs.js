@@ -266,7 +266,7 @@ describe("bot", function () {
 
         var bullet = gosuArena.factories.createBullet(enemyBot);
 
-        bot.onHitByBullet(function (actionQueue, status, eventArgs) {
+        bot.onHitByBullet(function (actionQueue, status, augmentations, eventArgs) {
             expect(status.position.x).toEqual(1);
             expect(status.position.y).toEqual(2);
             expect(status.angle).toEqual(3);
@@ -286,7 +286,7 @@ describe("bot", function () {
 
         var actualAngle = null;
 
-        bot.onHitByBullet(function (actionQueue, status, eventArgs) {
+        bot.onHitByBullet(function (actionQueue, status, augmentations, eventArgs) {
             actualAngle = eventArgs.angle;
         });
 
@@ -306,7 +306,7 @@ describe("bot", function () {
 
         var actualAngle = null;
 
-        bot.onHitByBullet(function (actionQueue, status, eventArgs) {
+        bot.onHitByBullet(function (actionQueue, status, augmentations, eventArgs) {
             actualAngle = eventArgs.angle;
         });
 
@@ -363,7 +363,7 @@ describe("bot", function () {
 
         var wasCallbackCalled = false;
 
-        bot.onHitByBullet(function (actionQueue, status, eventArgs) {
+        bot.onHitByBullet(function (actionQueue, status, augmentations, eventArgs) {
 
             expect(actionQueue.performNext).toBe(undefined);
 
