@@ -7,6 +7,7 @@
 ///<reference path="~/Scripts/gosu/meta.js" />
 ///<reference path="~/Scripts/gosu/eventAggregator.js" />
 ///<reference path="~/Scripts/game/augmentations/cloakAugmentation.js" />
+///<reference path="~/Scripts/game/classes/classFactory.js" />
 ///<reference path="~/Scripts/game/actionQueue.js" />
 ///<reference path="~/Scripts/game/userActionQueue.js" />
 ///<reference path="~/Scripts/game/rectangleCache.js" />
