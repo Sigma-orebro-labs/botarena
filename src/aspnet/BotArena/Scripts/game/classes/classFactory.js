@@ -5,8 +5,8 @@ gosuArena.factories.classes = gosuArena.factories.classes || {};
 gosuArena.factories.classes.createFromOptions = function (options) {
 
     // to lower
-
-    switch (options.className) {
+    
+    switch (options.botClass) {
         case "tank":
             return gosuArena.factories.classes.tank.create();
         default:

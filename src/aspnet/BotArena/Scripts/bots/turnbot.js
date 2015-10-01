@@ -10,5 +10,7 @@
         } else {
             actionQueue.turn(status.actionsPerRound);
         }
+    }, options: {
+        botClass: "tank"
     }
 });

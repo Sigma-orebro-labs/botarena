@@ -10,14 +10,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
     var actionQueue = gosuArena.factories.createActionQueue(collisionDetector);
     var userActionQueue = gosuArena.factories.createUserActionQueue(actionQueue);
 
-    var propertyMultipliers = {
-        hp: 1,
-        damageReduction: 1,
-        weaponDamage: 1,
-        actionsPerRound: 1,
-        movementSpeed: 1,
-        size: 1
-    };
+    var propertyMultipliers = gosuArena.factories.classes.createFromOptions(options);
 
     var properties = {
         id: options.id,
@@ -33,7 +26,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         isVisible: true,
         name: options.name,
         actionsPerRound: options.actionsPerRound,
-        health: options.initialHealthPoints,
+        health: options.initialHealthPoints * propertyMultipliers.hpFactor,
         weapon: {
             width: options.weaponWidth,
             height: options.weaponHeight,

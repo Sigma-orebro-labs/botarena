@@ -42,6 +42,7 @@ namespace GosuArena
                 "~/Scripts/gosu/math/*.js",
                 "~/Scripts/gosu/*.js",
                 "~/Scripts/game/augmentations/*.js",
+                "~/Scripts/game/classes/*.js",
                 "~/Scripts/game/*.js",
                 "~/Scripts/Shaders/Water/waterMaterial.js"));
         }

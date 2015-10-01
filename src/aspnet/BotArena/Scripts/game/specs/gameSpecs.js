@@ -29,7 +29,7 @@ describe("Game", function () {
     }
 
     function addBot(options) {
-
+        console.log(JSON.stringify(options) + "\n");
         options.startPosition = options.startPosition || {};
         options.startPosition.x = options.startPosition.x || 0;
         options.startPosition.y = options.startPosition.y || 0;
@@ -46,7 +46,8 @@ describe("Game", function () {
                 tick: options.tick,
                 onHitByBullet: options.onHitByBullet,
                 options: {
-                    startPosition: options.startPosition
+                    startPosition: options.startPosition,
+                    botClass: options.botClass
                 }
             });
         });
@@ -79,8 +80,28 @@ describe("Game", function () {
 
     describe("Bot", function () {
 
-        it("with default class has 100 hp", function() {
+        it("with default class has default health points", function() {
+            addBot({
+                botClass: "default"
+            });
 
+            startGame();
+
+            var bot = arenaState.bots[0];
+
+            expect(bot.health).toBe(defaultBotOptions.initialHealthPoints);
+        });
+
+        it("with tank class has increased health points", function () {
+            addBot({
+                botClass: "tank"
+            });
+
+            startGame();
+
+            var bot = arenaState.bots[0];
+
+            expect(bot.health).toBe(defaultBotOptions.initialHealthPoints * tankClassOptions.hpFactor);
         });
 
         it("is visible when no augmentations are active", function() {

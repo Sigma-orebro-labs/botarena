@@ -75,6 +75,7 @@ gosuArena.factories.createSafeBotOptions = function (userOptions, isTraining) {
         weaponOffsetDistanceFromCenter: weaponOffsetDistanceFromCenter,
         sightWidth: sightWidth,
         sightLength: sightLength,
-        initialHealthPoints: initialHealthPoints
+        initialHealthPoints: initialHealthPoints,
+        botClass: userOptions.botClass
     };
 };
