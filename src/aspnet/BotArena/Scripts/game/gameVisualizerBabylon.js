@@ -10,10 +10,11 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     var canonSound;
     var waterSound;
     var waterMaterial;
-
     var shipAndBulletYvalue = 10;
     var skybox;
     var landscape;
+    var shadowGenerator;
+    var ground;
 
     var particleExplosion;
     var particleSmoke;
@@ -70,6 +71,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             landscape.scaling = new BABYLON.Vector3(100, 100, 100);
             landscape.position.y = -50;
             landscape.receiveShadows = true;
+ 
             setUpWater(arenaState);
 
         });
@@ -162,6 +164,9 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         sun = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(-1, -2, -1), scene);
         sun.position = new BABYLON.Vector3(1000, 10000, 1000);
         sun.intensity = 2;
+        shadowGenerator = new BABYLON.ShadowGenerator(2000, sun);
+        shadowGenerator.usePoissonSampling = true;
+        
     };
     
    
@@ -180,22 +185,22 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
         
 
-        var box = new BABYLON.Mesh.CreateBox("testbox", 100, scene);
-        box.material = new BABYLON.StandardMaterial("1", scene);
-        box.position = new BABYLON.Vector3(-1000, 250, 0);
-        box.receiveShadows = true;
+        //var box = new BABYLON.Mesh.CreateBox("testbox", 100, scene);
+        //box.material = new BABYLON.StandardMaterial("1", scene);
+        //box.position = new BABYLON.Vector3(-1000, 250, 0);
+        //box.receiveShadows = true;
         
 
 
-        var box2 = new BABYLON.Mesh.CreateBox("testbox2", 100, scene);
-        box2.scaling = new BABYLON.Vector3(10, 0.1, 10);
-        box2.position = new BABYLON.Vector3(-1000, 150, 0);
-        box2.material = new BABYLON.StandardMaterial("2", scene);
-        box2.receiveShadows = true;
+        //var box2 = new BABYLON.Mesh.CreateBox("testbox2", 100, scene);
+        //box2.scaling = new BABYLON.Vector3(10, 0.1, 10);
+        //box2.position = new BABYLON.Vector3(-1000, 150, 0);
+        //box2.material = new BABYLON.StandardMaterial("2", scene);
+        //box2.receiveShadows = true;
 
-        var shadowGenerator = new BABYLON.ShadowGenerator(8192, sun);
-        shadowGenerator.getShadowMap().renderList.push(box);
-        shadowGenerator.getShadowMap().renderList.push(box2);
+        
+        //shadowGenerator.getShadowMap().renderList.push(box);
+        //shadowGenerator.getShadowMap().renderList.push(box2);
 
         for (var i = 0; i < arenaState.terrain.length; i++) {
 
@@ -216,22 +221,32 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             if (currentTerrain.angle === 0 || currentTerrain.angle === 180) {
                 wallMesh.rotation.y = Math.PI / 2;
             }
-
+  
             
+            shadowGenerator.getShadowMap().renderList.push(wallMesh);
         }
         
     };       
     
 
+
     function setUpWater(arenaState) {
 
-       
+        ground = BABYLON.Mesh.CreateGround("ground", 10000, 10000, 1, scene);
+        ground.material = new BABYLON.StandardMaterial("ground", scene);
+        ground.material.diffuseColor = BABYLON.Color3.FromInts(193, 181, 151);
+        ground.material.specularColor = BABYLON.Color3.Black();
+        ground.receiveShadows = true;
+    
         var water = BABYLON.Mesh.CreateGround("water", 10000, 10000, 1, scene, false);
         
         waterMaterial = new gosu.WaterMaterial("water", scene, sun);
 
         
+        waterMaterial.refractionTexture.renderList.push(ground);
+        waterMaterial.refractionTexture.renderList.push(landscape);
 
+        waterMaterial.reflectionTexture.renderList.push(ground);
         waterMaterial.reflectionTexture.renderList.push(skybox);
         waterMaterial.reflectionTexture.renderList.push(landscape);
 
@@ -286,7 +301,8 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
                 bot.healthBarMesh.position.y = shipAndBulletYvalue * 4;
                 bot.healthBarMesh.position.z = bot.x;
                 bot.healthBarMesh.rotation.y = Math.PI + gosu.math.degreesToRadians(bot.angle);
-
+ 
+                shadowGenerator.getShadowMap().renderList.push(bot.babylonMesh);
 
             }
         });
@@ -370,7 +386,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
                 bullet.babylonMesh = BABYLON.Mesh.CreateSphere("bullet", 5.0, 5.0, scene);
                 bullet.babylonMesh.color = new BABYLON.Color3.Black();
                 bullet.babylonMesh.position.y = shipAndBulletYvalue;
-
+                shadowGenerator.getShadowMap().renderList.push(bullet.babylonMesh);
                 var smoke = particleSmoke.clone();
                 smoke.emitter = bullet.babylonMesh;
                 smoke.start();
@@ -388,7 +404,8 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
         bot.healthBarMesh.dispose();
         bot.babylonMesh.dispose();
-        
+        shadowGenerator.getShadowMap().renderList.pop(bot.babylonMesh);
+
 
     }
 
