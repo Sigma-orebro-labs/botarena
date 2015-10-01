@@ -1,4 +1,6 @@
-﻿INSERT INTO [Users]
+﻿USE gosuarena
+GO
+INSERT INTO [Users]
            ([Username]
            ,[HashedPassword]
            ,[LastLoginDate]
