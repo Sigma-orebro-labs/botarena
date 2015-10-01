@@ -10,9 +10,11 @@
 -- Or simply restore the "production" database from the the latest SQL file in the Data
 -- directory which can be found in the root of the source repository.
 
-
+CREATE DATABASE gosuarena
 GO
-CREATE LOGIN [arenauser] WITH PASSWORD = N'arenauser'
+USE gosuarena
+GO
+CREATE LOGIN [arenauser] WITH PASSWORD = N'arenauser', CHECK_POLICY = OFF
 GO
 CREATE USER [arenauser] FOR LOGIN [arenauser] WITH DEFAULT_SCHEMA=[dbo]
 GO

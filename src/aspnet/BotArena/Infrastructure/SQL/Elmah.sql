@@ -25,6 +25,8 @@
 -- ELMAH DDL script for Microsoft SQL Server 2000 or later.
 
 -- $Id: SQLServer.sql 677 2009-09-29 18:02:39Z azizatif $
+USE gosuarena
+GO
 
 DECLARE @DBCompatibilityLevel INT
 DECLARE @DBCompatibilityLevelMajor INT
