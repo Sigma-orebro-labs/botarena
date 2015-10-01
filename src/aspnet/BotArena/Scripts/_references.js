@@ -1,4 +1,5 @@
-﻿///<reference path="~/Scripts/gosu/math/math.js" />
+﻿///<reference path="~/Scripts/lib/jasmine-1.3.0/jasmine.js" />
+///<reference path="~/Scripts/gosu/math/math.js" />
 ///<reference path="~/Scripts/gosu/math/point.js" />
 ///<reference path="~/Scripts/gosu/math/vector.js" />
 ///<reference path="~/Scripts/gosu/math/line.js" />
@@ -8,6 +9,8 @@
 ///<reference path="~/Scripts/gosu/eventAggregator.js" />
 ///<reference path="~/Scripts/game/augmentations/cloakAugmentation.js" />
 ///<reference path="~/Scripts/game/classes/classFactory.js" />
+///<reference path="~/Scripts/game/classes/defaultClass.js" />
+///<reference path="~/Scripts/game/classes/tankClass.js" />
 ///<reference path="~/Scripts/game/actionQueue.js" />
 ///<reference path="~/Scripts/game/userActionQueue.js" />
 ///<reference path="~/Scripts/game/rectangleCache.js" />

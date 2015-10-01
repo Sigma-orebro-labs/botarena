@@ -9,6 +9,10 @@ describe("Game", function () {
     var botWidth = null;
     var botHeight = null;
 
+    var defaultBotOptions = null;
+    var defaultClassOptions = null;
+    var tankClassOptions = null;
+
     var arenaState = null;
 
     var arenaStateInterceptor = {
@@ -50,6 +54,10 @@ describe("Game", function () {
 
     beforeEach(function () {
         gosu.eventAggregator.unsubscribeAll("matchEnded");
+
+        defaultBotOptions = gosuArena.factories.createSafeBotOptions();
+        defaultClassOptions = gosuArena.factories.classes.default.create();
+        tankClassOptions = gosuArena.factories.classes.tank.create();
 
         visualizer = {
             initialize: function () { },

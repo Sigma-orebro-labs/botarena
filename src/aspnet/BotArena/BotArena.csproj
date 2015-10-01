@@ -233,6 +233,8 @@
     <Content Include="Content\sounds\water_sound.wav" />
     <Content Include="Scripts\game\augmentations\cloakAugmentation.js" />
     <Content Include="Scripts\game\classes\classFactory.js" />
+    <Content Include="Scripts\game\classes\tankClass.js" />
+    <Content Include="Scripts\game\classes\defaultClass.js" />
     <Content Include="Scripts\Shaders\Water\bump.png" />
     <Content Include="Scripts\Shaders\Water\water.fragment.fx" />
     <Content Include="Scripts\Shaders\Water\water.vertex.fx" />
