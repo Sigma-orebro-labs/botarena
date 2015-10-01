@@ -3,8 +3,6 @@ describe("Game", function () {
     var clock = null;
     var botOptions = null;
 
-    var arenaHeight = 400;
-    var arenaWidth = 400;
     var wallThickness = 10;
     var botWidth = null;
     var botHeight = null;
@@ -18,9 +16,33 @@ describe("Game", function () {
     };
 
     function startGame() {
-        gosuArena.engine.start(visualizer, clock, {
+        gosuArena.engine.start(clock, {
             isTraining: true,
-            listeners: [arenaStateInterceptor]
+            listeners: [arenaStateInterceptor, visualizer]
+        });
+    }
+
+    function addBot(options) {
+
+        options.startPosition = options.startPosition || {};
+        options.startPosition.x = options.startPosition.x || 0;
+        options.startPosition.y = options.startPosition.y || 0;
+        options.startPosition.angle = options.startPosition.angle || 0;
+
+        options.tick = options.tick || function() {};
+        options.onHitByBullet = options.onHitByBullet || function () { };
+
+        gosuArena.initiateBotRegistration({
+            id: options.id || 1,
+            teamId: options.teamId
+        }, function () {
+            gosuArena.register({
+                tick: options.tick,
+                onHitByBullet: options.onHitByBullet,
+                options: {
+                    startPosition: options.startPosition
+                }
+            });
         });
     }
 
@@ -28,9 +50,10 @@ describe("Game", function () {
         gosu.eventAggregator.unsubscribeAll("matchEnded");
 
         visualizer = {
+            initialize: function () { },
             render: function() { },
-            arenaHeight: arenaHeight,
-            arenaWidth: arenaWidth,
+            arenaHeight: 400,
+            arenaWidth: 400,
             wallThickness: wallThickness
         };
 
@@ -45,37 +68,187 @@ describe("Game", function () {
     });
 
     describe("Bot", function () {
-        it("can move forward, back, east, west and north when facing west next to south wall", function () {
-            gosuArena.initiateBotRegistration({
-                id: 1,
-                name: "bot"
-            }, function () {
-                gosuArena.initiateBotRegistration({
-                    id: 1,
-                    name: "bot"
-                }, function () {
-                    gosuArena.register({
-                        tick: function (actionQueue, status) {
-                            expect(status.canMoveForward()).toEqual(true);
-                            expect(status.canMoveBack()).toEqual(true);
-                            expect(status.canMoveNorth()).toEqual(true);
-                            expect(status.canMoveEast()).toEqual(true);
-                            expect(status.canMoveWest()).toEqual(true);
-                            expect(status.canMoveSouth()).toEqual(false);
-                            expect(status.canMoveLeft()).toEqual(false);
-                            expect(status.canMoveRight()).toEqual(true);
-                        }, options: {
-                            startPosition: {
-                                x: arenaWidth / 2,
-                                y: arenaHeight - botWidth,
-                                angle: 90
-                            }
-                        }
-                    });
-                });
+
+        it("is visible when no augmentations are active", function() {
+            var wasTickCalled = false;
+
+            addBot({
+                tick: function(actionQueue, status) {
+                    expect(status.isVisible).toBe(true);
+                    expect(arenaState.bots[0].isVisible()).toBe(true);
+                    wasTickCalled = true;
+                }
             });
 
+            startGame();
+
             clock.doTick();
+
+            expect(wasTickCalled).toBe(true);
+        });
+
+        it("gets passed augmentations as a parameter to the tick function", function () {
+            var wasTickCalled = false;
+
+            addBot({
+                tick: function (actionQueue, status, augmentations) {
+                    expect(augmentations).toBeTruthy();
+                    wasTickCalled = true;
+                }
+            });
+
+            startGame();
+
+            clock.doTick();
+
+            expect(wasTickCalled).toBe(true);
+        });
+
+        it("gets passed augmentations as a parameter to the onHitByBullet event handler", function () {
+            var wasHitByBullet = false;
+
+            addBot({
+                startPosition: { x: 70, y: 0, angle: 90  }, // aiming west
+                tick: function (actionQueue, status, augmentations) {
+                    actionQueue.clear();
+                    actionQueue.fire();
+                }
+            });
+
+            addBot({
+                startPosition: { x: 0, y: 0 },
+                onHitByBullet: function (actionQueue, status, augmentations, eventArgs) {
+
+                    expect(augmentations).toBeTruthy();
+
+                    wasHitByBullet = true;
+                }
+            });
+
+            startGame();
+
+            for (var i = 0; i < 50; i++) {
+                clock.doTick();
+            }
+
+            expect(wasHitByBullet).toBe(true);
+        });
+
+        it("becomes invisible during a number of rounds when the cloak augmentation is activated", function() {
+            var wasTickCalled = false;
+            var roundCount = 0;
+            var cloakDuration;
+
+            addBot({
+                tick: function (actionQueue, status, augmentations) {
+
+                    // Activate the cloak during the second round to let the other bot see this one during the first round
+                    if (roundCount == 0) {
+                        augmentations.cloak.activate();
+                    }
+
+                    if (roundCount > 0 && roundCount < cloakDuration) {
+                        expect(status.isVisible).toBe(false);
+                        expect(arenaState.bots[0].isVisible()).toBe(false);
+
+                    // The augmentations are ticked after the bot, so an extra round is needed for the augmentation to become inactive again
+                    } else if (roundCount > cloakDuration) { 
+                        expect(status.isVisible).toBe(true);
+                        expect(arenaState.bots[0].isVisible()).toBe(true);
+                    }
+
+                    wasTickCalled = true;
+                    roundCount++;
+                }
+            });
+
+            startGame();
+
+            cloakDuration = arenaState.bots[0].augmentations().cloak.roundsRemaining();
+
+            for (var i = 0; i < cloakDuration + 10; i++) {
+                clock.doTick();
+            }
+
+            expect(wasTickCalled).toBe(true);
+        });
+
+        it("cannot be seen by enemies when cloaked", function () {
+            var wasTick1Called = false, wasTick2Called = false;
+            var roundCount = 0;
+            var cloakDuration;
+
+            addBot({
+                startPosition: { x: 0, y: 0 },
+                tick: function (actionQueue, status, augmentations) {
+
+                    if (roundCount == 1) {
+                        augmentations.cloak.activate();
+                    }
+
+                    wasTick1Called = true;
+                }
+            });
+
+            addBot({
+                startPosition: { x: 100, y: 0, angle: 90 }, // aiming west
+                tick: function (actionQueue, status) {
+                    if (roundCount == 0) {
+                        expect(status.seenEnemies.length).toBe(1);
+                    } else if (roundCount < cloakDuration + 1) {
+                        expect(status.seenEnemies.length).toBe(0);
+
+                        // The augmentations are ticked after the bot, so an extra round is needed for the augmentation to become inactive again
+                    } else if (roundCount > cloakDuration + 1) {
+                        expect(status.seenEnemies.length).toBe(1);
+                    }
+
+                    wasTick2Called = true;
+                    roundCount++;
+                }
+            });
+
+            startGame();
+
+            cloakDuration = arenaState.bots[0].augmentations().cloak.roundsRemaining();
+
+            for (var i = 0; i < cloakDuration + 10; i++) {
+                clock.doTick();
+            }
+
+            expect(wasTick1Called).toBe(true);
+            expect(wasTick2Called).toBe(true);
+        });
+
+        it("can move forward, back, east, west and north when facing west next to south wall", function () {
+            var wasTickCalled = false;
+
+            addBot({
+                startPosition: {
+                    x: gosuArena.arenaWidth / 2,
+                    y: gosuArena.arenaHeight - botWidth,
+                    angle: 90
+                },
+                tick: function(actionQueue, status) {
+                    expect(status.canMoveForward()).toEqual(true);
+                    expect(status.canMoveBack()).toEqual(true);
+                    expect(status.canMoveNorth()).toEqual(true);
+                    expect(status.canMoveEast()).toEqual(true);
+                    expect(status.canMoveWest()).toEqual(true);
+                    expect(status.canMoveSouth()).toEqual(false);
+                    expect(status.canMoveLeft()).toEqual(false);
+                    expect(status.canMoveRight()).toEqual(true);
+
+                    wasTickCalled = true;
+                },
+            });
+
+            startGame();
+
+            clock.doTick();
+
+            expect(wasTickCalled).toBe(true);
+
         });
 
         it("user gets callback when bot collides with other bot", function () {
@@ -275,8 +448,8 @@ describe("Game", function () {
                     },
                     options: {
                         startPosition: {
-                            x: arenaWidth - botWidth,
-                            y: arenaHeight - botHeight,
+                            x: gosuArena.arenaWidth - botWidth,
+                            y: gosuArena.arenaHeight - botHeight,
                             angle: 180
                         }
                     }
@@ -359,8 +532,9 @@ describe("Game", function () {
                 });
             });
 
-            gosuArena.engine.start(visualizer, clock, {
-                isTraining: true
+            gosuArena.engine.start(clock, {
+                isTraining: true,
+                listeners: [arenaStateInterceptor, visualizer]
             });
 
             clock.doTick();
@@ -381,7 +555,7 @@ describe("Game", function () {
             }, function () {
                 gosuArena.register({
                     tick: function (actionQueue, status) { },
-                    onHitByBullet: function (actionQueue, status, eventArgs) {
+                    onHitByBullet: function (actionQueue, status, augmentations, eventArgs) {
 
                         expect(actionQueue.left).toBeDefinedFunction();
                         expect(status.angle).toEqual(180);
@@ -439,8 +613,8 @@ describe("Game", function () {
             }, function () {
                 gosuArena.register({
                     tick: function (actionQueue, status) {
-                        expect(status.arena.width).toEqual(arenaWidth);
-                        expect(status.arena.height).toEqual(arenaHeight);
+                        expect(status.arena.width).toEqual(gosuArena.arenaWidth);
+                        expect(status.arena.height).toEqual(gosuArena.arenaHeight);
 
                         wasTickCalled = true;
                     }
@@ -496,37 +670,8 @@ describe("Game", function () {
             var bot1Position = { x: 1, y: 2 };
             var bot2Position = { x: botWidth + 10, y: 0 };
 
-            gosuArena.initiateBotRegistration({
-                id: 1,
-                name: "bot"
-            }, function () {
-                gosuArena.register({
-                    tick: function (actionQueue, status) { },
-                    options: {
-                        startPosition: {
-                            x: bot1Position.x,
-                            y: bot1Position.y,
-                            angle: 0
-                        }
-                    }
-                });
-            });
-
-            gosuArena.initiateBotRegistration({
-                id: 1,
-                name: "bot"
-            }, function () {
-                gosuArena.register({
-                    tick: function (actionQueue, status) { },
-                    options: {
-                        startPosition: {
-                            x: bot2Position.x,
-                            y: bot2Position.y,
-                            angle: 0
-                        }
-                    }
-                });
-            });
+            addBot({ id: 2, teamId: 2, startPosition: bot1Position });
+            addBot({ id: 3, teamId: 3, startPosition: bot2Position });
 
             var wasTickCalled = false;
 
@@ -534,25 +679,26 @@ describe("Game", function () {
             // in a straight westward line.
             gosuArena.initiateBotRegistration({
                 id: 1,
+                teamId: 1,
                 name: "bot"
             }, function () {
                 gosuArena.register({
                     tick: function (actionQueue, status) {
 
-                        expect(status.seenBots.length).toEqual(2);
+                        expect(status.seenEnemies.length).toEqual(2);
 
                         // Make sure that the object passed as a seen bot
                         // doesn't have actual move actions defined
-                        expect(status.seenBots[0].moveForward).toBe(undefined);
+                        expect(status.seenEnemies[0].moveForward).toBe(undefined);
 
                         // Make sure there are seen bots matching the positions
                         // of the actual bots
-                        expect(status.seenBots.filter(function (b) {
+                        expect(status.seenEnemies.filter(function (b) {
                             return b.position.x == bot1Position.x &&
                                 b.position.y == bot1Position.y;
                         }).length).toEqual(1);
 
-                        expect(status.seenBots.filter(function (b) {
+                        expect(status.seenEnemies.filter(function (b) {
                             return b.position.x == bot2Position.x &&
                                 b.position.y == bot2Position.y;
                         }).length).toEqual(1);
@@ -580,22 +726,13 @@ describe("Game", function () {
 
             var bot1Position = { x: 1, y: 2 };
 
-            gosuArena.initiateBotRegistration({
+            addBot({
                 id: 1,
-                name: "bot"
-            }, function () {
-                gosuArena.register({
-                    tick: function (actionQueue, status) {
+                teamId: 2,
+                startPosition: bot1Position,
+                tick: function (actionQueue, status) {
                         actionQueue.east();
-                    },
-                    options: {
-                        startPosition: {
-                            x: bot1Position.x,
-                            y: bot1Position.y,
-                            angle: 0
-                        }
-                    }
-                });
+                }
             });
 
             var wasTickCalled = false;
@@ -605,15 +742,16 @@ describe("Game", function () {
             // to the west
             gosuArena.initiateBotRegistration({
                 id: 1,
+                teamId: 1,
                 name: "bot"
             }, function () {
                 gosuArena.register({
                     tick: function (actionQueue, status) {
 
-                        expect(status.seenBots.length).toEqual(1);
+                        expect(status.seenEnemies.length).toEqual(1);
 
                         if (round > 0) {
-                            expect(status.seenBots[0].direction).toEqualVector({ x: 1, y: 0 });
+                            expect(status.seenEnemies[0].direction).toEqualVector({ x: 1, y: 0 });
                         }
 
                         wasTickCalled = true;
@@ -669,11 +807,11 @@ describe("Game", function () {
                 gosuArena.register({
                     tick: function (actionQueue, status) {
 
-                        expect(status.seenBots.length).toEqual(1);
+                        expect(status.seenEnemies.length).toEqual(1);
 
                         if (round > 0) {
-                            expect(status.seenBots[0].id).toEqual(1);
-                            expect(status.seenBots[0].teamId).toEqual(2);
+                            expect(status.seenEnemies[0].id).toEqual(1);
+                            expect(status.seenEnemies[0].teamId).toEqual(2);
                         }
 
                         wasTickCalled = true;
@@ -692,6 +830,105 @@ describe("Game", function () {
             startGame();
 
             clock.doTick();
+            clock.doTick();
+
+            expect(wasTickCalled).toBe(true);
+        });
+
+        it("In a team game seenAllies includes all seen bots on the same team and seenEnemies includes all other seen bots", function () {
+
+            // seen
+            addBot({ id: 1, teamId: 2, startPosition: { x: 1, y: 10, angle: 0 } });
+            addBot({ id: 2, teamId: 3, startPosition: { x: 50, y: 2, angle: 90 } });
+            addBot({ id: 3, teamId: 3, startPosition: { x: 100, y: 5, angle: 270 } });
+            addBot({ id: 4, teamId: 2, startPosition: { x: 150, y: 2, angle: 180 } });
+            addBot({ id: 5, teamId: 4, startPosition: { x: 200, y: 4, angle: 180 } });
+
+            // not seen
+            addBot({ id: 6, teamId: 4, startPosition: { x: 300, y: 4, angle: 180 } });
+            addBot({ id: 7, teamId: 2, startPosition: { x: 350, y: 2, angle: 0 } });
+
+            var wasTickCalled = false;
+            var round = 0;
+
+            // This bot spawns aiming directly at the first four other bots, which are
+            // to the west
+            gosuArena.initiateBotRegistration({
+                id: 5,
+                teamId: 3
+            }, function () {
+                gosuArena.register({
+                    tick: function (actionQueue, status) {
+
+                        expect(status.seenEnemies.length).toEqual(3);
+                        expect(status.seenEnemies).toContainElementMatching(function(bot) { return bot.id = 1; });
+                        expect(status.seenEnemies).toContainElementMatching(function(bot) { return bot.id = 4; });
+                        expect(status.seenEnemies).toContainElementMatching(function(bot) { return bot.id = 5; });
+
+                        expect(status.seenAllies.length).toEqual(2);
+                        expect(status.seenAllies).toContainElementMatching(function (bot) { return bot.id = 2; });
+                        expect(status.seenAllies).toContainElementMatching(function (bot) { return bot.id = 3; });
+
+                        wasTickCalled = true;
+                    },
+                    options: {
+                        startPosition: {
+                            x: 250,
+                            y: 0,
+                            angle: 90 // aiming west (negative x)
+                        }
+                    }
+                });
+            });
+
+            startGame();
+
+            clock.doTick();
+
+            expect(wasTickCalled).toBe(true);
+        });
+
+        it("In an FFA game seenEnemies includes all seen bots and seenAllies is empty", function () {
+
+            // seen
+            addBot({ id: 1, teamId: undefined, startPosition: { x: 1, y: 10, angle: 0 } });
+            addBot({ id: 2, teamId: undefined, startPosition: { x: 50, y: 2, angle: 90 } });
+
+            // not seen
+            addBot({ id: 3, teamId: undefined, startPosition: { x: 300, y: 4, angle: 180 } });
+
+            var wasTickCalled = false;
+            var round = 0;
+
+            // This bot spawns aiming directly at the first four other bots, which are
+            // to the west
+            gosuArena.initiateBotRegistration({
+                id: 4,
+                teamId: undefined
+            }, function () {
+                gosuArena.register({
+                    tick: function (actionQueue, status) {
+
+                        expect(status.seenEnemies.length).toEqual(2);
+                        expect(status.seenEnemies).toContainElementMatching(function (bot) { return bot.id = 1; });
+                        expect(status.seenEnemies).toContainElementMatching(function (bot) { return bot.id = 2; });
+
+                        expect(status.seenAllies).toBeEmpty();
+
+                        wasTickCalled = true;
+                    },
+                    options: {
+                        startPosition: {
+                            x: 250,
+                            y: 0,
+                            angle: 90 // aiming west (negative x)
+                        }
+                    }
+                });
+            });
+
+            startGame();
+
             clock.doTick();
 
             expect(wasTickCalled).toBe(true);
@@ -843,9 +1080,7 @@ describe("Game", function () {
             options.weaponCooldownTime = 1;
 
             return options;
-        }
-
-        // This bot spawns aiming directly at the two other bots, which are
+        }; // This bot spawns aiming directly at the two other bots, which are
         // in a straight westward line.
         gosuArena.initiateBotRegistration({
             id: 3,
@@ -937,9 +1172,7 @@ describe("Game", function () {
             options.weaponCooldownTime = 1;
 
             return options;
-        }
-
-        // This bot spawns aiming directly at the two other bots, which are
+        }; // This bot spawns aiming directly at the two other bots, which are
         // in a straight westward line.
         gosuArena.initiateBotRegistration({
             id: 3,
@@ -1015,9 +1248,7 @@ describe("Game", function () {
             options.weaponCooldownTime = 1;
 
             return options;
-        }
-
-        // This bot spawns aiming directly at the two other bots, which are
+        }; // This bot spawns aiming directly at the two other bots, which are
         // in a straight westward line.
         gosuArena.initiateBotRegistration({
             id: 3,
@@ -1084,9 +1315,9 @@ describe("Game", function () {
             }
         };
 
-        gosuArena.engine.start(visualizer, clock, {
+        gosuArena.engine.start(clock, {
             isTraining: true,
-            listeners: [listener]
+            listeners: [visualizer, listener]
         });
 
         expect(wasInitializeCalled).toBe(true);

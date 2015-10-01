@@ -32,7 +32,7 @@ gosuArena.botRegistrar.create = function (collisionDetector, arenaState) {
     };
     
     function beginBotRegistration(options) {
-        currentRegisteringBotGameOptions = options;
+        currentRegisteringBotInternalOptions = options;
     }
 
     function commitBotRegistration() {
@@ -40,9 +40,9 @@ gosuArena.botRegistrar.create = function (collisionDetector, arenaState) {
         
         options.options = options.options || {};
 
-        options.options.name = currentRegisteringBotGameOptions.name;
-        options.options.id = currentRegisteringBotGameOptions.id;
-        options.options.teamId = currentRegisteringBotGameOptions.teamId;
+        options.options.name = currentRegisteringBotInternalOptions.name;
+        options.options.id = currentRegisteringBotInternalOptions.id;
+        options.options.teamId = currentRegisteringBotInternalOptions.teamId;
         options.options.uniqueId = nextUniqueBotId++;
         
         var botOptions =
@@ -59,7 +59,7 @@ gosuArena.botRegistrar.create = function (collisionDetector, arenaState) {
 
         arenaState.addBot(bot);
 
-        currentRegisteringBotGameOptions = null;
+        currentRegisteringBotInternalOptions = null;
     }
 
     return {

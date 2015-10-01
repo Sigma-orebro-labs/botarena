@@ -228,57 +228,60 @@ gosuArena.factories.createGameVisualizer = function (canvas) {
         // position is relative to that
         var image = gosuArena.sprites.bot;
 
-        if (!botCanvases[bot.uniqueId]) {
-            var canvas = document.createElement('canvas');
+        botCanvases[bot.uniqueId] = botCanvases[bot.uniqueId] || document.createElement('canvas');
+        var botCanvas = botCanvases[bot.uniqueId];
 
-            canvas.width = image.width;;
-            canvas.height = image.height;;
+        botCanvas.width = image.width;;
+        botCanvas.height = image.height;;
 
-            var tintingContext = canvas.getContext('2d');
+        var tintingContext = botCanvas.getContext('2d');
 
-            tintingContext.drawImage(image, 0, 0);
+        tintingContext.drawImage(image, 0, 0);
 
-            var imageData = tintingContext.getImageData(0, 0, image.width, image.height);
-            var rgba = imageData.data;
+        var imageData = tintingContext.getImageData(0, 0, image.width, image.height);
+        var rgba = imageData.data;
 
-            var botColor = hexToRgb(bot.color);
+        var botColor = hexToRgb(bot.color);
 
-            // Step by 4 since there are 4 values for each pixel (rgba)
-            for (var px = 0; px < rgba.length - 4; px += 4) {
+        // Step by 4 since there are 4 values for each pixel (rgba)
+        for (var px = 0; px < rgba.length - 4; px += 4) {
 
-                var r = rgba[px];
-                var g = rgba[px+1];
-                var b = rgba[px+2];
+            var r = rgba[px];
+            var g = rgba[px+1];
+            var b = rgba[px+2];
 
-                // Color distance allowed for pixel to be kept at
-                // original color (not tinted)
-                var tintTolerance = 20;
+            var isColoredPixel = r > 0 || g > 0 || b > 0;
 
-                // If the rgb values are on the same level (i.e 12,12,12)
-                // then the pixel is considered to be gray scale and should
-                // not be tinted
-                var isGrayScale = Math.abs(r - b) < tintTolerance &&
-                    Math.abs(r - g) < tintTolerance &&
-                    Math.abs(g - b) < tintTolerance;
+            if (isColoredPixel) {
 
-                if (isGrayScale) {
-                    continue;
-                }
+                var alpha = bot.isVisible() ? 255 : 100;
 
-                var tintFactor = 0.5;
-
-                rgba[px] = rgba[px] * (1 - tintFactor) + botColor.r * tintFactor;   // r
-                rgba[px+1] = rgba[px+1] * (1 - tintFactor) + botColor.g * tintFactor; // g
-                rgba[px+2] = rgba[px+2] * (1 - tintFactor) + botColor.b * tintFactor; // b
-                rgba[px+3]; // a
+                rgba[px + 3] = alpha; // alpha (opacity from 0 to 255)
             }
 
-            tintingContext.putImageData(imageData, 0, 0);
+            // Color distance allowed for pixel to be kept at
+            // original color (not tinted)
+            var tintTolerance = 20;
 
-            botCanvases[bot.uniqueId] = canvas;
+            // If the rgb values are on the same level (i.e 12,12,12)
+            // then the pixel is considered to be gray scale and should
+            // not be tinted
+            var isGrayScale = Math.abs(r - b) < tintTolerance &&
+                Math.abs(r - g) < tintTolerance &&
+                Math.abs(g - b) < tintTolerance;
+
+            if (isGrayScale) {
+                continue;
+            }
+
+            var tintFactor = 0.5;
+
+            rgba[px] = rgba[px] * (1 - tintFactor) + botColor.r * tintFactor;   // r
+            rgba[px+1] = rgba[px+1] * (1 - tintFactor) + botColor.g * tintFactor; // g
+            rgba[px+2] = rgba[px+2] * (1 - tintFactor) + botColor.b * tintFactor; // b
         }
 
-        var botCanvas = botCanvases[bot.uniqueId];
+        tintingContext.putImageData(imageData, 0, 0);
 
         context.drawImage(botCanvas, -botCanvas.width / 2, -botCanvas.height / 2);
     }

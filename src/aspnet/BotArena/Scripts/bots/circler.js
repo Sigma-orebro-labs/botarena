@@ -14,7 +14,7 @@ function moveTowardsCenter(actionQueue, status) {
 }
 
 gosuArena.register({
-    tick: function (actionQueue, status) {
+    tick: function (actionQueue, status, augmentations) {
 
         function tryFire() {
             if (status.canFire()) {
@@ -22,11 +22,13 @@ gosuArena.register({
             }
         }
 
-        if (status.seenBots.length > 0) {
+        if (status.seenEnemies.length > 0) {
             actionQueue.clear();
             
-            var other = status.seenBots[0];
-            
+            var other = status.seenEnemies[0];
+
+            tryFire();
+
             if (other.direction.x > 0) {
                 actionQueue.east();
             } else if (other.direction.x < 0) {
@@ -52,7 +54,12 @@ gosuArena.register({
         actionQueue.turn(1);
         actionQueue.forward(2);
     },
-    onHitByBullet: function (actionQueue, status, eventArgs) {
+    onHitByBullet: function (actionQueue, status, augmentations, eventArgs) {
+
+        if (!augmentations.cloak.isActive() && augmentations.cloak.roundsRemaining() > 0) {
+            augmentations.cloak.activate();
+        }
+
         actionQueue.clear();
 
         if (status.canMoveLeft()) {

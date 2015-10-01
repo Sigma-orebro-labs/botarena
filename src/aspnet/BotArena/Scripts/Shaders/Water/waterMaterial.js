@@ -5,7 +5,7 @@
         BABYLON.Material.call(this, name, scene);
         this.light = light;
 
-        this.bumpTexture = new BABYLON.Texture("Scripts/Shaders/Water/bump.png", scene);
+        this.bumpTexture = new BABYLON.Texture("/Scripts/Shaders/Water/bump.png", scene);
         this.bumpTexture.uScale = 2;
         this.bumpTexture.vScale = 2;
         this.bumpTexture.wrapU = BABYLON.Texture.MIRROR_ADDRESSMODE;
@@ -31,8 +31,8 @@
         
         //this.waveLength = 0.1;
         //this.waveHeight = 0.15;
-        this.waveLength = 0.1;
-        this.waveHeight = 0.8;
+        this.waveLength = 0.01;
+        this.waveHeight = 0.08;
 
         //this.waterDirection = new BABYLON.Vector2(0, 1.0);
         this.waterDirection = new BABYLON.Vector2(0, 0.5);
