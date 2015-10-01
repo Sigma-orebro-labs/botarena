@@ -1,3 +1,5 @@
+///<reference path="~/Scripts/_references.js" />
+
 describe("Game", function () {
     var visualizer = null;
     var clock = null;
@@ -68,6 +70,10 @@ describe("Game", function () {
     });
 
     describe("Bot", function () {
+
+        it("with default class has 100 hp", function() {
+
+        });
 
         it("is visible when no augmentations are active", function() {
             var wasTickCalled = false;

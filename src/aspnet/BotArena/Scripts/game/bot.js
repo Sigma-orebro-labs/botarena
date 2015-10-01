@@ -10,6 +10,15 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
     var actionQueue = gosuArena.factories.createActionQueue(collisionDetector);
     var userActionQueue = gosuArena.factories.createUserActionQueue(actionQueue);
 
+    var propertyMultipliers = {
+        hp: 1,
+        damageReduction: 1,
+        weaponDamage: 1,
+        actionsPerRound: 1,
+        movementSpeed: 1,
+        size: 1
+    };
+
     var properties = {
         id: options.id,
         teamId: options.teamId,
