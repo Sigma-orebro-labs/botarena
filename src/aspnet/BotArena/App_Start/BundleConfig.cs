@@ -8,35 +8,26 @@ namespace GosuArena
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/lib/jquery/jquery-{version}.js"));
+                "~/Scripts/lib/jquery/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryvalidation").Include(
-                        "~/Scripts/lib/jquery/jquery.unobtrusive*",
-                        "~/Scripts/lib/jquery/jquery.validate*"));
+                "~/Scripts/lib/jquery/jquery.unobtrusive*",
+                "~/Scripts/lib/jquery/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
-                        "~/Scripts/lib/angular/angular.min.js",
-                        "~/Scripts/lib/angular/angular-route.min.js",
-                        "~/Content/angular/app.js",
-                        "~/Content/angular/controllers/*.js"));
+                "~/Scripts/lib/angular/angular.min.js",
+                "~/Scripts/lib/angular/angular-route.min.js",
+                "~/Content/angular/app.js",
+                "~/Content/angular/controllers/*.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                        "~/Content/lib/bootstrap-3.0.3/js/dropdown.js"));
+                "~/Content/lib/bootstrap-3.0.3/js/dropdown.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/threejs").Include(
-                        "~/Scripts/lib/threejs/three.js",
-                        "~/Scripts/lib/threejs/OrbitControls.js",
-                        "~/Scripts/lib/threejs/loaders/*.js",
-                        "~/Scripts/lib/babylon.2.1.js"));
-
-//#if DEBUG
-//            BundleTable.EnableOptimizations = false;
-//#else
-//            BundleTable.EnableOptimizations = true;
-//#endif
-
-            BundleTable.EnableOptimizations = false;
-
+                "~/Scripts/lib/threejs/three.js",
+                "~/Scripts/lib/threejs/OrbitControls.js",
+                "~/Scripts/lib/threejs/loaders/*.js",
+                "~/Scripts/lib/babylon.2.1.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/gosuarena").Include(
                 "~/Scripts/gosu/math/*.js",
@@ -45,6 +36,14 @@ namespace GosuArena
                 "~/Scripts/game/classes/*.js",
                 "~/Scripts/game/*.js",
                 "~/Scripts/Shaders/Water/waterMaterial.js"));
+
+//#if DEBUG
+//            BundleTable.EnableOptimizations = false;
+//#else
+//            BundleTable.EnableOptimizations = true;
+//#endif
+
+            BundleTable.EnableOptimizations = false;
         }
     }
 }

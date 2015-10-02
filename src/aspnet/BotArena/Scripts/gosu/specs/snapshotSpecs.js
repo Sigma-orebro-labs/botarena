@@ -1,3 +1,5 @@
+///<reference path="~/Scripts/_references.js" />
+
 describe("snapshot", function () {
    it("restoring snapshot resets all properties to the values they had when the snapshot was taken", function () {
        

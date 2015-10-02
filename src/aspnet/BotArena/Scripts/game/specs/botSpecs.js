@@ -1,3 +1,5 @@
+///<reference path="~/Scripts/_references.js" />
+
 describe("bot", function () {
     var nextTickAction = function () { };
     var collisionDetector = null;

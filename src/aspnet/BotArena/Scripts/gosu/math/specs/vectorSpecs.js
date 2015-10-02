@@ -1,3 +1,5 @@
+///<reference path="~/Scripts/_references.js" />
+
 describe("math", function () {
     describe("vector", function () {
         var vector1, vector2;

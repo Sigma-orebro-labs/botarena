@@ -1,17 +1,11 @@
 ///<reference path="~/Scripts/_references.js" />
 
 describe("Game", function () {
-    var visualizer = null;
     var clock = null;
     var botOptions = null;
 
-    var wallThickness = 10;
     var botWidth = null;
     var botHeight = null;
-
-    var defaultBotOptions = null;
-    var defaultClassOptions = null;
-    var tankClassOptions = null;
 
     var arenaState = null;
 
@@ -22,51 +16,12 @@ describe("Game", function () {
     };
 
     function startGame() {
-        gosuArena.engine.start(clock, {
-            isTraining: true,
-            listeners: [arenaStateInterceptor, visualizer]
-        });
+        gosuArena.specs.game.startGame(clock, [arenaStateInterceptor]);
     }
 
-    function addBot(options) {
-        console.log(JSON.stringify(options) + "\n");
-        options.startPosition = options.startPosition || {};
-        options.startPosition.x = options.startPosition.x || 0;
-        options.startPosition.y = options.startPosition.y || 0;
-        options.startPosition.angle = options.startPosition.angle || 0;
-
-        options.tick = options.tick || function() {};
-        options.onHitByBullet = options.onHitByBullet || function () { };
-
-        gosuArena.initiateBotRegistration({
-            id: options.id || 1,
-            teamId: options.teamId
-        }, function () {
-            gosuArena.register({
-                tick: options.tick,
-                onHitByBullet: options.onHitByBullet,
-                options: {
-                    startPosition: options.startPosition,
-                    botClass: options.botClass
-                }
-            });
-        });
-    }
+    var addBot = gosuArena.specs.game.addBot;
 
     beforeEach(function () {
-        gosu.eventAggregator.unsubscribeAll("matchEnded");
-
-        defaultBotOptions = gosuArena.factories.createSafeBotOptions();
-        defaultClassOptions = gosuArena.factories.classes.default.create();
-        tankClassOptions = gosuArena.factories.classes.tank.create();
-
-        visualizer = {
-            initialize: function () { },
-            render: function() { },
-            arenaHeight: 400,
-            arenaWidth: 400,
-            wallThickness: wallThickness
-        };
 
         botOptions = gosuArena.factories.createSafeBotOptions({}, true);
 
@@ -75,34 +30,10 @@ describe("Game", function () {
 
         clock = gosuArena.gameClock.createFake();
 
-        gosuArena.engine.reset();
+        gosuArena.specs.game.cleanup();
     });
 
     describe("Bot", function () {
-
-        it("with default class has default health points", function() {
-            addBot({
-                botClass: "default"
-            });
-
-            startGame();
-
-            var bot = arenaState.bots[0];
-
-            expect(bot.health).toBe(defaultBotOptions.initialHealthPoints);
-        });
-
-        it("with tank class has increased health points", function () {
-            addBot({
-                botClass: "tank"
-            });
-
-            startGame();
-
-            var bot = arenaState.bots[0];
-
-            expect(bot.health).toBe(defaultBotOptions.initialHealthPoints * tankClassOptions.hpFactor);
-        });
 
         it("is visible when no augmentations are active", function() {
             var wasTickCalled = false;
@@ -569,7 +500,7 @@ describe("Game", function () {
 
             gosuArena.engine.start(clock, {
                 isTraining: true,
-                listeners: [arenaStateInterceptor, visualizer]
+                listeners: [arenaStateInterceptor]
             });
 
             clock.doTick();
@@ -1352,7 +1283,7 @@ describe("Game", function () {
 
         gosuArena.engine.start(clock, {
             isTraining: true,
-            listeners: [visualizer, listener]
+            listeners: [listener]
         });
 
         expect(wasInitializeCalled).toBe(true);

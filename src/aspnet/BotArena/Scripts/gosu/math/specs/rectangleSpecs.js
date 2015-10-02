@@ -1,4 +1,6 @@
-﻿describe("math", function () {
+﻿///<reference path="~/Scripts/_references.js" />
+
+describe("math", function () {
     describe("rectangle", function () {
         var rectangle1 = null;
         var rectangle2 = null;

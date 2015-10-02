@@ -1,3 +1,5 @@
+///<reference path="~/Scripts/_references.js" />
+
 describe("math", function () {
     describe("angles", function () {
         it("0 radians is 0 degrees", function () {

@@ -235,6 +235,7 @@
     <Content Include="Scripts\game\classes\classFactory.js" />
     <Content Include="Scripts\game\classes\tankClass.js" />
     <Content Include="Scripts\game\classes\defaultClass.js" />
+    <Content Include="Scripts\game\specs\botClassSpecs.js" />
     <Content Include="Scripts\Shaders\Water\bump.png" />
     <Content Include="Scripts\Shaders\Water\water.fragment.fx" />
     <Content Include="Scripts\Shaders\Water\water.vertex.fx" />
@@ -305,6 +306,7 @@
     <Content Include="Scripts\editor\sceneEditor.js" />
     <Content Include="Scripts\Pages\SceneEditor\editor.js" />
     <Content Include="Scripts\Pages\User\profile.js" />
+    <Content Include="Scripts\game\specs\gameSpecsSetup.js" />
     <Compile Include="Services\FileBotRepository.cs" />
   </ItemGroup>
   <ItemGroup>

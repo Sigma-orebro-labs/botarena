@@ -1,3 +1,5 @@
+///<reference path="~/Scripts/_references.js" />
+
 describe("math", function () {
     describe("point", function () {
         describe("rotate", function () {

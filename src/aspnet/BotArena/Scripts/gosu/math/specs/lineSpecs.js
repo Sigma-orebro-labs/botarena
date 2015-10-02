@@ -1,3 +1,5 @@
+///<reference path="~/Scripts/_references.js" />
+
 describe("math", function () {
     describe("line", function () {
         describe("intersection", function () {

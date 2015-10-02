@@ -29,3 +29,4 @@
 ///<reference path="~/Scripts/gosu/specs/jasmineMatchers.js" />
 ///<reference path="~/Scripts/gosu/math/specs/matchers.js" />
 ///<reference path="~/Scripts/game/specs/ticker.js" />
+///<reference path="~/Scripts/game/specs/gameSpecsSetup.js" />
