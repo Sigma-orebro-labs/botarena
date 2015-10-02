@@ -1,0 +1,11 @@
+*.cs         eol=crlf
+*.js         eol=crlf
+*.sql        eol=crlf
+*.css        eol=crlf
+*.less       eol=crlf
+*.html       eol=crlf
+*.config     eol=crlf
+*.csproj     eol=crlf
+*.sln        eol=crlf
+*.cshtml     eol=crlf
+*.asax       eol=crlf
