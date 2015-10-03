@@ -5,9 +5,11 @@ gosuArena.factories.classes.default = gosuArena.factories.classes.default || {};
 
 gosuArena.factories.classes.default.create = function () {
     return {
-        hpFactor: 1,
+        initialHealthPointFactor: 1,
         damageReductionFactor: 1,
         weaponDamageFactor: 1,
+        weaponCooldownTimeFactor: 1,
+        bulletSpeedFactor: 1,
         actionsPerRoundFactor: 1,
         movementSpeedFactor: 1,
         sizeFactor: 1

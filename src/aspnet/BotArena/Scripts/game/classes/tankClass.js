@@ -3,13 +3,15 @@ gosuArena.factories = gosuArena.factories || {};
 gosuArena.factories.classes = gosuArena.factories.classes || {};
 gosuArena.factories.classes.tank = gosuArena.factories.classes.tank || {};
 
-gosuArena.factories.classes.tank.create = function () {
-    return {
-        hpFactor: 1.5,
-        damageReductionFactor: 1,
-        weaponDamageFactor: 1,
-        actionsPerRoundFactor: 1,
-        movementSpeedFactor: 1,
-        sizeFactor: 1
-    };
+gosuArena.factories.classes.tank.create = function (baseClass) {
+
+    baseClass.initialHealthPointFactor = 1.5;
+    baseClass.damageReductionFactor = 1.5;
+    baseClass.weaponDamageFactor = 2;
+    baseClass.weaponCooldownTimeFactor = 2;
+    baseClass.bulletSpeedFactor = 1;
+    baseClass.movementSpeedFactor = 0.5;
+    baseClass.actionsPerRoundFactor = 0.5;
+
+    return baseClass;
 };

@@ -24,7 +24,7 @@ describe("Game", function() {
     beforeEach(function() {
         defaultBotOptions = gosuArena.factories.createSafeBotOptions();
         defaultClassOptions = gosuArena.factories.classes.default.create();
-        tankClassOptions = gosuArena.factories.classes.tank.create();
+        tankClassOptions = gosuArena.factories.classes.tank.create(defaultClassOptions);
 
         clock = gosuArena.gameClock.createFake();
 
@@ -33,7 +33,7 @@ describe("Game", function() {
 
     describe("Bot", function() {
 
-        it("with default class has default health points", function() {
+        it("with default class has default properties", function() {
             addBot({
                 botClass: "default"
             });
@@ -43,9 +43,10 @@ describe("Game", function() {
             var bot = arenaState.bots[0];
 
             expect(bot.health).toBe(defaultBotOptions.initialHealthPoints);
+            expect(bot.movementSpeed).toBe(defaultBotOptions.initialMovementSpeed);
         });
 
-        it("with tank class has increased health points", function() {
+        it("with tank class is configured according to the tank class factors", function() {
             addBot({
                 botClass: "tank"
             });
@@ -54,8 +55,8 @@ describe("Game", function() {
 
             var bot = arenaState.bots[0];
 
-            expect(bot.health).toBe(defaultBotOptions.initialHealthPoints * tankClassOptions.hpFactor);
+            expect(bot.health).toBe(defaultBotOptions.initialHealthPoints * tankClassOptions.initialHealthPointFactor);
+            expect(bot.movementSpeed).toBe(defaultBotOptions.initialMovementSpeed * tankClassOptions.movementSpeedFactor);
         });
-
     });
 });

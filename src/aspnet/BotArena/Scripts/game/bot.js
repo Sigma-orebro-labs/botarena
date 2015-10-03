@@ -26,7 +26,8 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         isVisible: true,
         name: options.name,
         actionsPerRound: options.actionsPerRound,
-        health: options.initialHealthPoints * propertyMultipliers.hpFactor,
+        health: options.initialHealthPoints * propertyMultipliers.initialHealthPointFactor,
+        movementSpeed: options.initialMovementSpeed * propertyMultipliers.movementSpeedFactor,
         weapon: {
             width: options.weaponWidth,
             height: options.weaponHeight,
@@ -239,6 +240,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
             angle: bot.angle,
             direction: bot.direction,
             health: bot.health,
+            movementSpeed: bot.movementSpeed,
             isVisible: bot.isVisible(),
             actionsPerRound: bot.actionsPerRound,
             roundsUntilWeaponIsReady: bot.weapon.cooldownTimeLeft,
