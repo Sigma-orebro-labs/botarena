@@ -20,6 +20,13 @@ describe("bot", function () {
         nextTickAction = function () { };
     }
 
+    function createOptions(options) {
+
+        options.initialMovementSpeed = options.initialMovementSpeed || 1;
+
+        return options;
+    }
+
     beforeEach(function () {
         collisionDetector = {
             seenBots: function () {
@@ -39,11 +46,11 @@ describe("bot", function () {
     */
 
     it("moves 1 distance unit north when moving forward with angle 0", function () {
-        var bot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             x: 0,
             y: 0,
             angle: 0
-        });
+        }));
 
         bot.moveForward();
 
@@ -51,11 +58,11 @@ describe("bot", function () {
     });
 
     it("moves 1 distance unit north west when moving forward with angle 45", function () {
-        var bot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             x: 1,
             y: 2,
             angle: 45
-        });
+        }));
 
         bot.moveForward();
 
@@ -119,13 +126,13 @@ describe("bot", function () {
     });
 
     it("considers x value of left-most corner to be its left position", function () {
-        var bot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             x: 1,
             y: 2,
             width: 3.5,
             height: 4,
             angle: 0
-        });
+        }));
 
         expect(bot.left()).toEqual(1);
         expect(bot.right()).toEqual(4.5);
@@ -134,13 +141,13 @@ describe("bot", function () {
     });
 
     it("takes rotation into account when determining top, bottom, left and right", function () {
-        var bot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             x: 1,
             y: 2,
             width: 2,
             height: 2,
             angle: 45
-        });
+        }));
 
         // center is at (2,3)
         expect(bot.left()).toBeCloseTo(2 - Math.sqrt(2));
@@ -150,27 +157,27 @@ describe("bot", function () {
     });
 
     it("has weapong mounting point is at the top side of the bot, offset from middle", function () {
-        var bot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             x: 1,
             y: 2,
             width: 3,
             height: 5,
             angle: 0,
             weaponOffsetDistanceFromCenter: 0.1
-        });
+        }));
 
         expect(bot.weapon.mountingPoint()).toEqualPoint({ x: 2.6, y: 7 });
     });
 
     it("takes rotation into account when determining weapon mounting point", function () {
-        var bot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             x: -1,
             y: -1,
             width: 2,
             height: 2,
             angle: 45,
             weaponOffsetDistanceFromCenter: 0
-        });
+        }));
 
         expect(bot.weapon.mountingPoint()).toEqualPoint({
             x: -1/Math.sqrt(2),
@@ -179,20 +186,20 @@ describe("bot", function () {
     });
 
     it("weapon mounting point in bot coordinate system is the vector from center to mounting point relative to bot", function () {
-        var bot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             x: -1,
             y: -1,
             width: 2,
             height: 3,
             angle: 45,
             weaponOffsetDistanceFromCenter: -0.2
-        });
+        }));
 
         expect(bot.weapon.botRelativeMountingPoint()).toEqualPoint({ x: -0.2, y: 1.5 });
     });
 
     it("weapon muzzle is at the forward end of the weapon", function () {
-        var bot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             x: -1,
             y: -1,
             width: 2,
@@ -200,13 +207,13 @@ describe("bot", function () {
             angle: 90,
             weaponHeight: 1,
             weaponOffsetDistanceFromCenter: 0.1
-        });
+        }));
 
-        expect(bot.weapon.muzzlePosition()).toEqualPoint({ x: -2, y: 0.1 })
+        expect(bot.weapon.muzzlePosition()).toEqualPoint({ x: -2, y: 0.1 });
     });
 
     it("weapon muzzle point in bot coordinate system is the vector from center to the farthest point of the weapon relative to bot", function () {
-        var bot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             x: -1.1,
             y: -1,
             width: 2,
@@ -214,16 +221,16 @@ describe("bot", function () {
             angle: 270,
             weaponHeight: 1.3,
             weaponOffsetDistanceFromCenter: 0.1            
-        });
+        }));
 
         expect(bot.weapon.botRelativeMuzzlePosition()).toEqualPoint({ x: 0.1, y: 3.3 });
     });
 
     it("raises event when killed", function () {
-        var bot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             initialHealthPoints: 50
-        }, collisionDetector);
-        var enemyBot = gosuArena.factories.createBot(tick, { });
+        }), collisionDetector);
+        var enemyBot = gosuArena.factories.createBot(tick, createOptions({ }));
 
         var wasKilledEventRaised = false;
 
@@ -239,10 +246,10 @@ describe("bot", function () {
     });
 
     it("raises event when hit by bullet", function () {
-        var bot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             initialHealthPoints: 50
-        }, collisionDetector);
-        var enemyBot = gosuArena.factories.createBot(tick, { });
+        }), collisionDetector);
+        var enemyBot = gosuArena.factories.createBot(tick, createOptions({ }));
 
         var bullet = gosuArena.factories.createBullet(enemyBot);
 
@@ -259,12 +266,12 @@ describe("bot", function () {
 
     it("sends bot status with the onHitByBullet event", function () {
 
-        var bot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             x: 1,
             y: 2,
             angle: 3
-        }, collisionDetector);
-        var enemyBot = gosuArena.factories.createBot(tick, { });
+        }), collisionDetector);
+        var enemyBot = gosuArena.factories.createBot(tick, createOptions({ }));
 
         var bullet = gosuArena.factories.createBullet(enemyBot);
 
@@ -279,10 +286,10 @@ describe("bot", function () {
 
     it("sends north-east as angle from which the bullet came with the onHitByBullet event when hit by bullet travelling south-west", function () {
 
-        var bot = gosuArena.factories.createBot(tick, { }, collisionDetector);
-        var enemyBot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({ }), collisionDetector);
+        var enemyBot = gosuArena.factories.createBot(tick, createOptions({
             angle: 45
-        });
+        }));
 
         var bullet = gosuArena.factories.createBullet(enemyBot);
 
@@ -299,10 +306,10 @@ describe("bot", function () {
 
     it("sends south-west as angle from which the bullet came with the onHitByBullet event when hit by bullet travelling north-east", function () {
 
-        var bot = gosuArena.factories.createBot(tick, { }, collisionDetector);
-        var enemyBot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({ }), collisionDetector);
+        var enemyBot = gosuArena.factories.createBot(tick, createOptions({
             angle: 135
-        });
+        }));
 
         var bullet = gosuArena.factories.createBullet(enemyBot);
 
@@ -318,24 +325,24 @@ describe("bot", function () {
     });
 
     it("includes actionsPerRound in the bot status", function () {
-        var bot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             actionsPerRound: 123
-        }, collisionDetector);
+        }), collisionDetector);
 
         var status = bot.createStatus();
 
         expect(status.actionsPerRound).toEqual(123);
     });
 
-    it("includes health in the bot status", function () {
-        var bot = gosuArena.factories.createBot(tick, {
+    it("includes health in the bot status", function() {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             initialHealthPoints: 12
-        }, collisionDetector);
+        }), collisionDetector);
 
         var status = bot.createStatus();
 
         expect(status.health).toEqual(12);
-    })
+    });
     
     it("only exposes performNext on the action queue of the bot, not on the queue sent to the tick callback", function () {
 
@@ -356,10 +363,10 @@ describe("bot", function () {
     });
 
     it("only exposes performNext on the action queue of the bot, not on the queue sent to the onHitByBullet callback", function () {
-        var bot = gosuArena.factories.createBot(tick, { }, collisionDetector);
-        var enemyBot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({ }), collisionDetector);
+        var enemyBot = gosuArena.factories.createBot(tick, createOptions({
             angle: 135
-        });
+        }));
 
         var bullet = gosuArena.factories.createBullet(enemyBot);
 
@@ -392,11 +399,11 @@ describe("bot", function () {
     });
 
     it("has no direction after standing still during a round", function () {
-        var bot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             x: 0,
             y: 0,
             angle: 0
-        }, collisionDetector);
+        }), collisionDetector);
 
         tickWith(bot, function () { bot.moveForward(); });
 
@@ -406,11 +413,11 @@ describe("bot", function () {
     });
 
     it("has direction south when moving south, north when moving north, etc.", function () {
-        var bot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             x: 0,
             y: 0,
             angle: 0
-        }, collisionDetector);
+        }), collisionDetector);
 
         expect(bot.direction).toEqualVector({ x: 0, y: 0 });
 
@@ -432,11 +439,11 @@ describe("bot", function () {
     });
 
     it("has direction which is absolute, even when moving relative to bot", function () {
-        var bot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             x: 0,
             y: 0,
             angle: 0
-        }, collisionDetector);
+        }), collisionDetector);
 
         // Facing north
 
@@ -478,11 +485,11 @@ describe("bot", function () {
     });
 
     it("combines all movement actions during a round to calculate total direction vector", function () {
-        var bot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             x: 0,
             y: 0,
             angle: 0
-        }, collisionDetector);
+        }), collisionDetector);
 
         tickWith(bot, function () {
             bot.moveNorth();
