@@ -22,8 +22,8 @@
 <div id="playing-field">
     <div class="row">
         <div class="col-md-11">
-            <canvas id="gameCanvas" width="800" height="600"></canvas>
-           <!-- <canvas id="3d-game-canvas" width="800" height="600"></canvas>-->
+            <canvas id="gameCanvas" class="hide-from-start" width="800" height="600"></canvas>
+            <!-- <canvas id="3d-game-canvas" width="800" height="600"></canvas>-->
             <canvas id="3d-game-canvas-babylon" width="1200" height="800"></canvas>
         </div>
         <div class="col-md-1">
@@ -47,6 +47,7 @@
     <menu class="actions">
         <button id="2d-mode" class="btn btn-default">2D</button>
         <button id="3d-mode" class="btn btn-default">3D</button>
+        <button id="both-mode" class="btn btn-default">2D & 3D</button>
         <button id="restartMatch" class="btn btn-primary">Start match</button>
         <button id="stopMatch">Stop match</button>
     </menu>
