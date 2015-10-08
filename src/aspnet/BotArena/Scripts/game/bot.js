@@ -12,6 +12,19 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
 
     var staticModifiers = options.staticModifiers;
 
+    var weapon = {
+        width: options.weaponWidth,
+        height: options.weaponHeight,
+        cooldownTime: options.weaponCooldownTime,
+        cooldownTimeLeft: 0,
+        baseDamage: options.weaponDamage,
+        offsetDistanceFromCenter: options.weaponOffsetDistanceFromCenter
+    };
+
+    weapon.calculateDamage = function() {
+        return weapon.baseDamage * staticModifiers.calculateWeaponDamageFactor();
+    };
+
     var properties = {
         id: options.id,
         teamId: options.teamId,
@@ -29,14 +42,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         health: options.initialHealthPoints * staticModifiers.calculateHealthPointFactor(),
         movementSpeed: options.initialMovementSpeed * staticModifiers.calculateMovementSpeedFactor(),
         damageReductionFactor: options.initialDamageReductionFactor * staticModifiers.calculateDamageReductionFactor(),
-        weapon: {
-            width: options.weaponWidth,
-            height: options.weaponHeight,
-            cooldownTime: options.weaponCooldownTime,
-            cooldownTimeLeft: 0,
-            damage: options.weaponDamage,
-            offsetDistanceFromCenter: options.weaponOffsetDistanceFromCenter
-        },
+        weapon: weapon,
         sight: {
             width: options.sightWidth,
             length: options.sightLength

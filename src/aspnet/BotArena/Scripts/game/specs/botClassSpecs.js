@@ -80,6 +80,7 @@ describe("Game", function () {
 
             expect(bot.health).toBe(defaultBotOptions.initialHealthPoints * tankClassOptions.initialHealthPointFactor);
             expect(bot.movementSpeed).toBe(defaultBotOptions.initialMovementSpeed * tankClassOptions.movementSpeedFactor);
+            expect(bot.damageReductionFactor).toBe(defaultBotOptions.initialDamageReductionFactor * tankClassOptions.damageReductionFactor);
         });
 
         it("with increased movement speed from class moves faster", function () {
@@ -179,13 +180,84 @@ describe("Game", function () {
             var armoredBot = arenaState.bots[0];
             var normalBot = arenaState.bots[1];
 
-            clock.doTick(200);
+            clock.doTick(20);
 
             expect(wasNormalBotHit).toBe(true);
             expect(wasArmoredBotHit).toBe(true);
 
             expect(armoredBot.health).toBeGreaterThan(normalBot.health);
             expect(normalBotDamageTaken).toBeLessThan(armoredBotDamageTaken);
+        });
+
+        it("with increased weapon damage output deals more damage", function() {
+
+            stubClassFactory({
+                highDamage: function(factors) {
+                    factors.weaponDamageFactor = 2;
+                    return factors;
+                }
+            });
+
+            var hasNormalBotFired = false,
+                hasHighDamageBotFired = false,
+                wasNormalBotHit = false,
+                wasHighDamageBotHit = false,
+                normalBotDamageTaken,
+                highDamageBotDamageTaken,
+                normalBotInitialHp,
+                highDamageBotInitialHp;
+
+            // Let the two bots fire a single shot at each other and see what damage they take
+
+            addBot({
+                startPosition: { x: 0, y: 0, angle: 270 }, // aiming east
+                tick: function(actionQueue, status) {
+
+                    normalBotInitialHp = status.health;
+
+                    if (!hasNormalBotFired) {
+                        actionQueue.fire();
+                    }
+
+                    hasNormalBotFired = true;
+                },
+                onHitByBullet: function(actionQueue, status) {
+                    normalBotDamageTaken = normalBotInitialHp - status.health;
+                    wasNormalBotHit = true;
+                }
+            });
+
+            addBot({
+                startPosition: { x: 100, y: 0, angle: 90 }, // aiming west
+                tick: function(actionQueue, status) {
+
+                    highDamageBotInitialHp = status.health;
+
+                    if (!hasHighDamageBotFired) {
+                        actionQueue.fire();
+                    }
+
+                    hasHighDamageBotFired = true;
+                },
+                onHitByBullet: function(actionQueue, status) {
+                    highDamageBotDamageTaken = highDamageBotInitialHp - status.health;
+                    wasHighDamageBotHit = true;
+                },
+                botClass: "highDamage"
+            });
+
+            startGame();
+
+            var normalBot = arenaState.bots[0];
+            var highDamageBot = arenaState.bots[1];
+
+            clock.doTick(20);
+
+            expect(wasNormalBotHit).toBe(true);
+            expect(wasHighDamageBotHit).toBe(true);
+
+            expect(highDamageBot.health).toBeGreaterThan(normalBot.health);
+            expect(normalBotDamageTaken).toBeGreaterThan(highDamageBotDamageTaken);
         });
     });
 });

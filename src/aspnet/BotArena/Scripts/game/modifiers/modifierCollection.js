@@ -7,5 +7,6 @@ gosuArena.factories.modifiers.createModifierCollection = function (modifiers) {
         calculateHealthPointFactor: function() { return modifiers[0].initialHealthPointFactor; },
         calculateMovementSpeedFactor: function() { return modifiers[0].movementSpeedFactor; },
         calculateDamageReductionFactor: function() { return modifiers[0].damageReductionFactor; },
+        calculateWeaponDamageFactor: function() { return modifiers[0].weaponDamageFactor; },
     };
 };

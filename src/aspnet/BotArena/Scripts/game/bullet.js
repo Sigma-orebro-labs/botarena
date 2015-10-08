@@ -16,7 +16,7 @@ gosuArena.factories.createBullet = function (bot) {
         color: "#f00",
         angle: bot.angle,
         firedBy: bot,
-        damage: bot.weapon.damage
+        damage: bot.weapon.calculateDamage()
     };
 
     var bullet = gosuArena.worldObject.create(properties);
