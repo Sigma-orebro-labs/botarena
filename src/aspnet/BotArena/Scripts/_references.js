@@ -8,9 +8,10 @@
 ///<reference path="~/Scripts/gosu/meta.js" />
 ///<reference path="~/Scripts/gosu/eventAggregator.js" />
 ///<reference path="~/Scripts/game/augmentations/cloakAugmentation.js" />
-///<reference path="~/Scripts/game/classes/classFactory.js" />
-///<reference path="~/Scripts/game/classes/defaultClass.js" />
-///<reference path="~/Scripts/game/classes/tankClass.js" />
+///<reference path="~/Scripts/game/modifiers/modifierCollection.js" />
+///<reference path="~/Scripts/game/modifiers/classes/classFactory.js" />
+///<reference path="~/Scripts/game/modifiers/classes/defaultClass.js" />
+///<reference path="~/Scripts/game/modifiers/classes/tankClass.js" />
 ///<reference path="~/Scripts/game/actionQueue.js" />
 ///<reference path="~/Scripts/game/userActionQueue.js" />
 ///<reference path="~/Scripts/game/rectangleCache.js" />

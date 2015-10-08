@@ -23,6 +23,11 @@ describe("bot", function () {
     function createOptions(options) {
 
         options.initialMovementSpeed = options.initialMovementSpeed || 1;
+        options.staticModifiers = {
+            calculateHealthPointFactor: function () { return 1; },
+            calculateMovementSpeedFactor: function () { return 1; },
+            calculateDamageReductionFactor: function () { return 1; },
+        };
 
         return options;
     }
@@ -75,9 +80,9 @@ describe("bot", function () {
     it("notifies listeners when weapon is fired", function () {
         var wasNotified = 0;
 
-        var bot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             weaponCooldownTime: 2
-        });
+        }));
 
         bot.onShotFired(function () {
             wasNotified = true;
@@ -91,9 +96,9 @@ describe("bot", function () {
     it("only fires weapon when weapon has had time to cool down after last firing", function () {
         var shotsFired = 0;
 
-        var bot = gosuArena.factories.createBot(tick, {
+        var bot = gosuArena.factories.createBot(tick, createOptions({
             weaponCooldownTime: 2
-        }, {
+        }), {
             seenBots: function () {
                 return [];
             },
@@ -354,7 +359,7 @@ describe("bot", function () {
 
             wasTickCalled = true;
 
-        }, { }, collisionDetector);
+        }, createOptions({ }), collisionDetector);
 
         bot.tick();
 

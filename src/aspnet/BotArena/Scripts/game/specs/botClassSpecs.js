@@ -1,7 +1,7 @@
 ///<reference path="~/Scripts/_references.js" />
 
 describe("Game", function () {
-    var originalClassFactory = gosuArena.factories.classes.createFromOptions;
+    var originalClassFactory = gosuArena.factories.modifiers.createClassFromOptions;
     var clock = null;
 
     var defaultBotOptions;
@@ -22,15 +22,15 @@ describe("Game", function () {
 
     function stubClassFactory(overrides) {
 
-        gosuArena.factories.classes.createFromOptions = function(options) {
+        gosuArena.factories.modifiers.createClassFromOptions = function(botClassName) {
 
-            var override = overrides[options.botClass];
+            var override = overrides[botClassName];
 
             if (!override) {
-                return originalClassFactory(options);
+                return originalClassFactory(botClassName);
             }
 
-            var defaultClass = gosuArena.factories.classes.default.create();
+            var defaultClass = gosuArena.factories.modifiers.classes.default.create();
 
             return override(defaultClass);
         };
@@ -42,14 +42,14 @@ describe("Game", function () {
     beforeEach(function () {
 
         defaultBotOptions = gosuArena.factories.createSafeBotOptions();
-        defaultClassOptions = gosuArena.factories.classes.default.create();
-        tankClassOptions = gosuArena.factories.classes.tank.create(defaultClassOptions);
+        defaultClassOptions = gosuArena.factories.modifiers.classes.default.create();
+        tankClassOptions = gosuArena.factories.modifiers.classes.tank.create(defaultClassOptions);
 
         clock = gosuArena.gameClock.createFake();
     });
 
     afterEach(function() {
-        gosuArena.factories.classes.createFromOptions = originalClassFactory;
+        gosuArena.factories.modifiers.createClassFromOptions = originalClassFactory;
         gosuArena.specs.game.cleanup();
     });
 
