@@ -1,10 +1,9 @@
 ﻿var gosuArena = gosuArena || {};
 gosuArena.factories = gosuArena.factories || {};
 gosuArena.factories.modifiers = gosuArena.factories.modifiers || {};
-gosuArena.factories.modifiers.classes = gosuArena.factories.modifiers.classes || {};
-gosuArena.factories.modifiers.classes.default = gosuArena.factories.modifiers.classes.default || {};
+gosuArena.factories.modifiers.default = gosuArena.factories.modifiers.default || {};
 
-gosuArena.factories.modifiers.classes.default.create = function () {
+gosuArena.factories.modifiers.default.create = function () {
     return {
         initialHealthPointFactor: 1,
         damageReductionFactor: 1,

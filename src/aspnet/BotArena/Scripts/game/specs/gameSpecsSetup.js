@@ -20,7 +20,8 @@ gosuArena.specs.game.addBot = function(options) {
             onHitByBullet: options.onHitByBullet,
             options: {
                 startPosition: options.startPosition,
-                botClass: options.botClass
+                botClass: options.botClass,
+                equipment: options.equipment
             }
         });
     });

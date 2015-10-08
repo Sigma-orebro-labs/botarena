@@ -232,10 +232,11 @@
     <Content Include="Content\sounds\cork.wav" />
     <Content Include="Content\sounds\water_sound.wav" />
     <Content Include="Scripts\game\augmentations\cloakAugmentation.js" />
-    <Content Include="Scripts\game\modifiers\classes\classFactory.js" />
+    <Content Include="Scripts\game\modifiers\equipment\boosters.js" />
+    <Content Include="Scripts\game\modifiers\modifierFactory.js" />
     <Content Include="Scripts\game\modifiers\classes\tankClass.js" />
-    <Content Include="Scripts\game\modifiers\classes\defaultClass.js" />
-    <Content Include="Scripts\game\specs\botClassSpecs.js" />
+    <Content Include="Scripts\game\modifiers\defaultModifier.js" />
+    <Content Include="Scripts\game\specs\botModifierSpecs.js" />
     <Content Include="Scripts\Shaders\Water\bump.png" />
     <Content Include="Scripts\Shaders\Water\water.fragment.fx" />
     <Content Include="Scripts\Shaders\Water\water.vertex.fx" />
@@ -563,7 +564,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\angular\models\" />
-    <Folder Include="Scripts\game\modifiers\equipment\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

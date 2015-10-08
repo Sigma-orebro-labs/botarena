@@ -34,6 +34,7 @@ gosuArena.factories.createSafeBotOptions = function (userOptions, isTraining) {
 
     userOptions = userOptions || {};
     userOptions.startPosition = userOptions.startPosition || {};
+    userOptions.equipment = userOptions.equipment || [];
 
     var x = Math.random() * (gosuArena.arenaWidth - width);
     var y = Math.random() * (gosuArena.arenaHeight - height);
@@ -58,8 +59,15 @@ gosuArena.factories.createSafeBotOptions = function (userOptions, isTraining) {
         color = teamColors[userOptions.teamId % teamColors.length];
     }
 
-    var classModifier = gosuArena.factories.modifiers.createClassFromOptions(userOptions.botClass);
-    var staticModifiers = gosuArena.factories.modifiers.createModifierCollection([classModifier]);
+    var classModifier = gosuArena.factories.modifiers.create(userOptions.botClass);
+
+    var equipmentModifiers = userOptions.equipment.map(function (equipmentName) {
+        return gosuArena.factories.modifiers.create(equipmentName);
+    });
+
+    var allModifiers = [classModifier].concat(equipmentModifiers);
+
+    var staticModifiers = gosuArena.factories.modifiers.createModifierCollection(allModifiers);
     
     return {
         id: userOptions.id,

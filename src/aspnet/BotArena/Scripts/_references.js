@@ -9,8 +9,8 @@
 ///<reference path="~/Scripts/gosu/eventAggregator.js" />
 ///<reference path="~/Scripts/game/augmentations/cloakAugmentation.js" />
 ///<reference path="~/Scripts/game/modifiers/modifierCollection.js" />
-///<reference path="~/Scripts/game/modifiers/classes/classFactory.js" />
-///<reference path="~/Scripts/game/modifiers/classes/defaultClass.js" />
+///<reference path="~/Scripts/game/modifiers/modifierFactory.js" />
+///<reference path="~/Scripts/game/modifiers/defaultModifier.js" />
 ///<reference path="~/Scripts/game/modifiers/classes/tankClass.js" />
 ///<reference path="~/Scripts/game/actionQueue.js" />
 ///<reference path="~/Scripts/game/userActionQueue.js" />

@@ -1,7 +1,7 @@
 ///<reference path="~/Scripts/_references.js" />
 
 describe("Game", function () {
-    var originalClassFactory = gosuArena.factories.modifiers.createClassFromOptions;
+    var originalModifierFactory = gosuArena.factories.modifiers.create;
     var clock = null;
 
     var defaultBotOptions;
@@ -22,15 +22,15 @@ describe("Game", function () {
 
     function stubClassFactory(overrides) {
 
-        gosuArena.factories.modifiers.createClassFromOptions = function(botClassName) {
+        gosuArena.factories.modifiers.create = function(botClassName) {
 
             var override = overrides[botClassName];
 
             if (!override) {
-                return originalClassFactory(botClassName);
+                return originalModifierFactory(botClassName);
             }
 
-            var defaultClass = gosuArena.factories.modifiers.classes.default.create();
+            var defaultClass = gosuArena.factories.modifiers.default.create();
 
             return override(defaultClass);
         };
@@ -42,14 +42,14 @@ describe("Game", function () {
     beforeEach(function () {
 
         defaultBotOptions = gosuArena.factories.createSafeBotOptions();
-        defaultClassOptions = gosuArena.factories.modifiers.classes.default.create();
+        defaultClassOptions = gosuArena.factories.modifiers.default.create();
         tankClassOptions = gosuArena.factories.modifiers.classes.tank.create(defaultClassOptions);
 
         clock = gosuArena.gameClock.createFake();
     });
 
     afterEach(function() {
-        gosuArena.factories.modifiers.createClassFromOptions = originalClassFactory;
+        gosuArena.factories.modifiers.create = originalModifierFactory;
         gosuArena.specs.game.cleanup();
     });
 
@@ -153,8 +153,7 @@ describe("Game", function () {
                 onHitByBullet: function (actionQueue, status) {
                     normalBotDamageTaken = normalBotInitialHp - status.health;
                     wasNormalBotHit = true;
-                },
-                botClass: "armored"
+                }
             });
 
             addBot({
@@ -172,13 +171,14 @@ describe("Game", function () {
                 onHitByBullet: function (actionQueue, status) {
                     armoredBotDamageTaken = armoredBotInitialHp - status.health;
                     wasArmoredBotHit = true;
-                }
+                },
+                botClass: "armored"
             });
 
             startGame();
 
-            var armoredBot = arenaState.bots[0];
-            var normalBot = arenaState.bots[1];
+            var normalBot = arenaState.bots[0];
+            var armoredBot = arenaState.bots[1];
 
             clock.doTick(20);
 
@@ -186,7 +186,7 @@ describe("Game", function () {
             expect(wasArmoredBotHit).toBe(true);
 
             expect(armoredBot.health).toBeGreaterThan(normalBot.health);
-            expect(normalBotDamageTaken).toBeLessThan(armoredBotDamageTaken);
+            expect(armoredBotDamageTaken).toBe(normalBotDamageTaken / 2);
         });
 
         it("with increased weapon damage output deals more damage", function() {
@@ -257,7 +257,42 @@ describe("Game", function () {
             expect(wasHighDamageBotHit).toBe(true);
 
             expect(highDamageBot.health).toBeGreaterThan(normalBot.health);
-            expect(normalBotDamageTaken).toBeGreaterThan(highDamageBotDamageTaken);
+            expect(normalBotDamageTaken).toBe(highDamageBotDamageTaken * 2);
+        });
+
+        it("equipped with speed booster equipment moves faster", function() {
+
+            stubClassFactory({
+                boosters: function(factors) {
+                    factors.movementSpeedFactor = 2;
+                    return factors;
+                }
+            });
+
+            addBot({
+                startPosition: { x: 0, y: 0, angle: 270 }, // aiming west
+                tick: function(actionQueue) {
+                    actionQueue.forward();
+                },
+                equipment: ["boosters"]
+            });
+
+            addBot({
+                startPosition: { x: 0, y: 100, angle: 270 }, // aiming west
+                tick: function(actionQueue, status) {
+                    actionQueue.forward();
+                }
+            });
+
+            startGame();
+
+            var fastBot = arenaState.bots[0];
+            var normalBot = arenaState.bots[1];
+
+            clock.doTick();
+
+            expect(fastBot.position().x).toBeGreaterThan(0);
+            expect(fastBot.position().x).toBe(normalBot.position().x * 2);
         });
     });
 });
