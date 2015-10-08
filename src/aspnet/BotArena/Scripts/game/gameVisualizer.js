@@ -10,10 +10,21 @@ gosuArena.factories.createGameVisualizer = function (canvas) {
 
     var wallColor = "#000";
     var fieldColor = "#fff";
+    var cachedResources = {
+        terrain: null
+    }
 
-    var context = canvas.getContext('2d');
+    var canvasContext = canvas.getContext('2d');
     var canvasWidth = canvas.width;
     var canvasHeight = canvas.height;
+
+    // create offscreen canvas for performance
+    var offscreenCanvas = createLayer();
+    var context = offscreenCanvas.getContext('2d');
+
+    // layer to draw terrain upon
+    var terrainLayer = createLayer();
+
     var wallThickness = 25;
     var tileWidth = 53;
     var tileHeight = 53;
@@ -38,6 +49,10 @@ gosuArena.factories.createGameVisualizer = function (canvas) {
     });
 
     function initialize(arenaState) {
+
+        // compose the wall tiles into one image
+        constructWalls(arenaState, terrainLayer);
+
         arenaState.onTick(function() {
             render(arenaState);
         });
@@ -71,12 +86,15 @@ gosuArena.factories.createGameVisualizer = function (canvas) {
         };
     }
 
-    function drawTerrain(arenaState) {
-        context.fillStyle = wallColor;
+    function constructWalls(arenaState, layer) {
 
-        arenaState.terrain.forEach(function(terrain) {
+        // compose the wall tiles into one image
 
-            context.save();
+        layer.context.fillStyle = wallColor;
+
+        arenaState.terrain.forEach(function (terrain) {
+
+            layer.context.save();
 
             var terrainRectangle = terrain.rectangle();
 
@@ -84,12 +102,12 @@ gosuArena.factories.createGameVisualizer = function (canvas) {
 
             var center = adjustToCanvasCoordinates(terrainRectangle.center);
 
-            context.translate(center.x, center.y);
+            layer.context.translate(center.x, center.y);
 
             var angleInRadians = gosu.math.degreesToRadians(terrain.angle);
 
-            context.rotate(angleInRadians);
-            context.translate(-terrain.width / 2, -terrain.height / 2);
+            layer.context.rotate(angleInRadians);
+            layer.context.translate(-terrain.width / 2, -terrain.height / 2);
 
             var image = gosuArena.sprites.wallNorth;
 
@@ -102,19 +120,19 @@ gosuArena.factories.createGameVisualizer = function (canvas) {
             }
 
             for (var i = 0; i <= tileCount; i++) {
-                context.save();
+                layer.context.save();
 
                 // Translate to center of image to draw
-                context.translate(
+                layer.context.translate(
                     i * image.width + image.width / 2,
                     image.height / 2
                 );
 
                 // Rotate back to neutral since the images are
                 // already rotated
-                context.rotate(-angleInRadians);
+                layer.context.rotate(-angleInRadians);
 
-                context.drawImage(
+                layer.context.drawImage(
                     image,
                         -image.width / 2,
                         -image.height / 2,
@@ -122,27 +140,35 @@ gosuArena.factories.createGameVisualizer = function (canvas) {
                     image.height
                 );
 
-                context.restore();
+                layer.context.restore();
             }
 
             image = gosuArena.sprites.wallCornerLeft;
 
-            context.drawImage(image, 0, 0, image.width, image.height);
+            layer.context.drawImage(image, 0, 0, image.width, image.height);
 
             image = gosuArena.sprites.wallCornerRight;
 
-            context.drawImage(
+            layer.context.drawImage(
                 image, terrain.width - image.width, 0, image.width, image.height);
 
-            context.restore();
+            layer.context.restore();
         });
+
+    }
+
+    function drawTerrain(arenaState, layer) {
 
         // For some reason the fill of the last shape gets filled
         // with a different fill color if another shape is drawn later with
         // a different fill color. This is a workaround to fix that issue
         // by creating a zero size path
-        context.beginPath();
-        context.closePath();
+        layer.context.beginPath();
+        layer.context.closePath();
+
+        // draw complete terrain at once to context
+        context.drawImage(layer, 0, 0);
+
     }
 
     function drawBotName(bot) {
@@ -354,6 +380,29 @@ gosuArena.factories.createGameVisualizer = function (canvas) {
         context.restore();
     }
 
+    function createLayer() {
+
+        // create a canvas offscreen that functions as a layer to draw on
+        // this layer can then be drawn onto the visible canvas
+
+        var layer = document.createElement('canvas');
+        layer.width = canvasWidth;
+        layer.height = canvasHeight;
+        layer.context = layer.getContext('2d');
+
+        return layer;
+    }
+
+    function copyOffscreenCanvasToGameCanvas() {
+        // fixes weird smearing of bot health bars
+        // don't know why
+        context.beginPath();
+        context.closePath();
+
+        // copy offscreen canvas to visible canvas
+        canvasContext.drawImage(offscreenCanvas, 0, 0);
+    }
+
     function render(arenaState) {
 
         // No need to draw any more if the match is over and the result
@@ -366,13 +415,15 @@ gosuArena.factories.createGameVisualizer = function (canvas) {
 
         clearField();
 
-        drawTerrain(arenaState);
+        drawTerrain(arenaState, terrainLayer);
         drawBots(arenaState);
         drawBullets(arenaState);
 
         if (hasMatchEnded && !hasDrawnWinnerName) {
             drawWinnerName();
         }
+
+        copyOffscreenCanvasToGameCanvas();
 
         context.restore();
     }
