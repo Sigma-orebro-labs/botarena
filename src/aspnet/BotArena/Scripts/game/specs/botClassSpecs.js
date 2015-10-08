@@ -55,7 +55,7 @@ describe("Game", function () {
 
     describe("Bot", function() {
 
-        it("with default class has default properties", function() {
+        it("without default setup has default properties", function() {
             addBot({
                 botClass: "default"
             });
