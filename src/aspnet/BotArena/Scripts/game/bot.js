@@ -28,6 +28,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         actionsPerRound: options.actionsPerRound,
         health: options.initialHealthPoints * propertyMultipliers.initialHealthPointFactor,
         movementSpeed: options.initialMovementSpeed * propertyMultipliers.movementSpeedFactor,
+        damageReductionFactor: options.initialDamageReductionFactor * propertyMultipliers.damageReductionFactor,
         weapon: {
             width: options.weaponWidth,
             height: options.weaponHeight,
@@ -390,7 +391,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
 
     
     bot.hitBy = function (bullet) {
-        bot.health -= bullet.damage;
+        bot.health -= bullet.damage / bot.damageReductionFactor;
 
         raiseHitByBulletEvent(bullet);
 
