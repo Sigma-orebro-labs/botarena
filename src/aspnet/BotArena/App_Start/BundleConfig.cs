@@ -30,6 +30,7 @@ namespace GosuArena
                 "~/Scripts/lib/babylon.2.1.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/gosuarena").Include(
+                "~/Scripts/infrastructure/*.js",
                 "~/Scripts/gosu/math/*.js",
                 "~/Scripts/gosu/*.js",
                 "~/Scripts/game/augmentations/*.js",

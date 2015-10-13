@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
 
+    <script type="text/javascript">
+        var gosuArena = gosuArena || {};
+        gosuArena.url = gosuArena.url || {};
+        gosuArena.url.baseUrl = '@Url.Content("~/")';
+    </script>
+
     @RenderSection("styles", required: false)
 
     @Scripts.Render("~/bundles/jquery")

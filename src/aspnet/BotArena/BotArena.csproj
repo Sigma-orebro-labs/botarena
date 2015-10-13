@@ -15,7 +15,7 @@
     <AssemblyName>GosuArena</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -27,6 +27,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -237,6 +238,7 @@
     <Content Include="Scripts\game\modifiers\classes\tankClass.js" />
     <Content Include="Scripts\game\modifiers\defaultModifier.js" />
     <Content Include="Scripts\game\specs\botModifierSpecs.js" />
+    <Content Include="Scripts\infrastructure\url.js" />
     <Content Include="Scripts\Shaders\Water\bump.png" />
     <Content Include="Scripts\Shaders\Water\water.fragment.fx" />
     <Content Include="Scripts\Shaders\Water\water.vertex.fx" />
@@ -615,7 +617,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>0</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:62541/</IISUrl>
+          <IISUrl>http://localhost/BotArena</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
