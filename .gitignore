@@ -2,5 +2,6 @@
 [Oo]bj
 *.suo
 *.user
+.vs
 _ReSharper*
 Web.Production.config
