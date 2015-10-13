@@ -27,10 +27,12 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         arenaState.onBulletHitTerrain(onBulletRemoved);
         arenaState.onBotHitByBullet(onBotHitByBullet);
         arenaState.onShotFired(onShotFired);
-        arenaState.onTick(function() {
+        arenaState.onTick(function () {
             update(arenaState);
         });
-
+        arenaState.onClear(function () {
+            // clear
+        });
 
         engine = new BABYLON.Engine(canvas, true);
 
@@ -45,24 +47,17 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         setUpParticleExplosion();
         setUpLandscape(arenaState);
         setUpSkyBox();
-        
-
-       
-        
 
         engine.runRenderLoop(function () {
-
             scene.render();
         });
-        
+
     }
 
     function onShotFired(bot, bullet) {
         //canonSound.play();
 
-    }
-
-    
+    }   
 
     function setUpLandscape(arenaState) {
         BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "only_plane.babylon", scene, function(newMeshes, particleSystems) {

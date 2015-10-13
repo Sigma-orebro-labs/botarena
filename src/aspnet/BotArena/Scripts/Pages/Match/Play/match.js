@@ -2,6 +2,13 @@
 
     var gameClock = null;
     var isRunning = false;
+    var canvas = document.getElementById("gameCanvas");
+    var canvasBabylon = document.getElementById("3d-game-canvas-babylon");
+
+    gosuArena.visualizers = {
+        gameVisualizer2D: gosuArena.factories.createGameVisualizer(canvas),
+        gameVisualizer3D: gosuArena.factories.createGameVisualizerBabylon(canvasBabylon)
+    };
 
     gosuArena.events.matchEnded(function(result) {
         stopMatch();
@@ -16,18 +23,9 @@
 
         gameClock = gosuArena.gameClock.create();
 
-        var canvas = document.getElementById("gameCanvas");
-        var gameVisualizer = gosuArena.factories.createGameVisualizer(canvas);
-
-        /*var canvas3D = document.getElementById("3d-game-canvas");
-        var gameVisualizer3D = gosuArena.factories.createGameVisualizer3D(canvas3D);*/
-
-        var canvasBabylon = document.getElementById("3d-game-canvas-babylon");
-        var gameVisualizerBabylon = gosuArena.factories.createGameVisualizerBabylon(canvasBabylon);
-
         gosuArena.engine.start(gameClock, {
             isTraining: gosuArena.settings.isTraining(),
-            listeners: [gosuArena.matchViewModel, gameVisualizer, gameVisualizerBabylon]
+            listeners: [gosuArena.matchViewModel, gosuArena.visualizers.gameVisualizer2D, gosuArena.visualizers.gameVisualizer3D]
         });
 
         gosuArena.events.raiseGameStarting();
