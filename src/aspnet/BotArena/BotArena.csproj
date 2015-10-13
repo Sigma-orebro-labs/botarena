@@ -239,6 +239,12 @@
     <Content Include="Scripts\game\modifiers\defaultModifier.js" />
     <Content Include="Scripts\game\specs\botModifierSpecs.js" />
     <Content Include="Scripts\infrastructure\url.js" />
+    <Content Include="Scripts\lib\jasmine-2.3.4\boot.js" />
+    <Content Include="Scripts\lib\jasmine-2.3.4\console.js" />
+    <Content Include="Scripts\lib\jasmine-2.3.4\jasmine-html.js" />
+    <Content Include="Scripts\lib\jasmine-2.3.4\jasmine.css" />
+    <Content Include="Scripts\lib\jasmine-2.3.4\jasmine.js" />
+    <Content Include="Scripts\lib\jasmine-2.3.4\jasmine_favicon.png" />
     <Content Include="Scripts\Shaders\Water\bump.png" />
     <Content Include="Scripts\Shaders\Water\water.fragment.fx" />
     <Content Include="Scripts\Shaders\Water\water.vertex.fx" />

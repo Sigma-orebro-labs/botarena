@@ -1,6 +1,11 @@
 ///<reference path="~/Scripts/_references.js" />
 
 describe("math", function () {
+
+    beforeEach(function () {
+        jasmine.addMatchers(gosuArena.specs.matchers);
+    });
+
     describe("line", function () {
         describe("intersection", function () {
             it("line is considered to intersect itself", function () {

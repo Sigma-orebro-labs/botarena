@@ -23,6 +23,8 @@ describe("Game", function () {
 
     beforeEach(function () {
 
+        jasmine.addMatchers(gosuArena.specs.matchers);
+
         botOptions = gosuArena.factories.createSafeBotOptions({}, true);
 
         botWidth = botOptions.width;
@@ -827,13 +829,13 @@ describe("Game", function () {
                     tick: function (actionQueue, status) {
 
                         expect(status.seenEnemies.length).toEqual(3);
-                        expect(status.seenEnemies).toContainElementMatching(function(bot) { return bot.id = 1; });
-                        expect(status.seenEnemies).toContainElementMatching(function(bot) { return bot.id = 4; });
-                        expect(status.seenEnemies).toContainElementMatching(function(bot) { return bot.id = 5; });
+                        expect(status.seenEnemies).toContainElementMatching(function(bot) { return bot.id === 1; });
+                        expect(status.seenEnemies).toContainElementMatching(function(bot) { return bot.id === 4; });
+                        expect(status.seenEnemies).toContainElementMatching(function(bot) { return bot.id === 5; });
 
                         expect(status.seenAllies.length).toEqual(2);
-                        expect(status.seenAllies).toContainElementMatching(function (bot) { return bot.id = 2; });
-                        expect(status.seenAllies).toContainElementMatching(function (bot) { return bot.id = 3; });
+                        expect(status.seenAllies).toContainElementMatching(function (bot) { return bot.id === 2; });
+                        expect(status.seenAllies).toContainElementMatching(function (bot) { return bot.id === 3; });
 
                         wasTickCalled = true;
                     },

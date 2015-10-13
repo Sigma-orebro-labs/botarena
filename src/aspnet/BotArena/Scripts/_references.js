@@ -1,4 +1,4 @@
-﻿///<reference path="~/Scripts/lib/jasmine-1.3.0/jasmine.js" />
+﻿///<reference path="~/Scripts/lib/jasmine-2.3.4/jasmine.js" />
 ///<reference path="~/Scripts/gosu/math/math.js" />
 ///<reference path="~/Scripts/gosu/math/point.js" />
 ///<reference path="~/Scripts/gosu/math/vector.js" />

@@ -1,25 +1,64 @@
-beforeEach(function () {
-    this.addMatchers({
-        toBeDefinedFunction: function() {
-            var actualValue = this.actual;
-            return actualValue && typeof actualValue === 'function';
-        },
-        toBeEmpty: function () {
-            return this.actual.length <= 0;
-        },
-        matchesRegex: function (regex) {
-            return regex.test(this.actual);
-        },
-        toContainElementMatching: function(predicate) {
-            var itemsArray = this.actual;
+var gosuArena = gosuArena || {};
+gosuArena.specs = gosuArena.specs || {};
+gosuArena.specs.matchers = gosuArena.specs.matchers || {};
 
-            for (var i = 0; i < itemsArray.length; i++) {
-                if (predicate(itemsArray[i])) {
-                    return true;
-                }
+(function () {
+    gosuArena.specs.matchers.toBeDefinedFunction = function () {
+        return {
+            compare: function (actualValue) {
+
+                var result = {};
+
+                result.pass = actualValue && typeof actualValue === 'function';
+
+                return result;
             }
-
-            return false;
         }
-    });
-});
+    };
+
+    gosuArena.specs.matchers.toBeEmpty = function() {
+        return {
+            compare: function (actual) {
+
+                var result = {};
+
+                result.pass = actual.length <= 0;
+
+                return result;
+            }
+        }
+    };
+
+    gosuArena.specs.matchers.toContainElementMatching = function () {
+        return {
+            compare: function (itemsArray, predicate) {
+
+                var result = {
+                    pass: false
+                };
+
+                for (var i = 0; i < itemsArray.length; i++) {
+                    if (predicate(itemsArray[i])) {
+                        result.pass = true;
+                    }
+                }
+
+                return result;
+            }
+        }
+    };
+
+    gosuArena.specs.matchers.matchesRegex = function () {
+        return {
+            compare: function (actual, regex) {
+
+                var result = {};
+
+                result.pass = regex.test(actual);
+
+                return result;
+            }
+        }
+    };
+
+})();
