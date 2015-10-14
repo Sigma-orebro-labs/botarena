@@ -86,49 +86,12 @@
 }
 
 <script type="text/javascript">
-    
-    gosuArena.sprites = gosuArena.sprites || {};
-
-    var requestedResources = [];
-
-    function areAllSpritesLoaded() {
-        for (var i = 0; i < requestedResources.length; i++) {
-            var resourceName = requestedResources[i];
-            
-            // Make sure that all requested resources have been initialized
-            if (!gosuArena.sprites[resourceName]) {
-                return false;
-            }
-        }
-        
-        return true;
-    }
-
-    function loadSprite(name, url) {
-        
-        // Mark the resource as requested, to keep track of all resources are loaded
-        requestedResources.push(name);
-
-        var img = new Image();
-
-        img.onload = function () {
-            gosuArena.sprites[name] = img;
-            
-            if (areAllSpritesLoaded()) {
-                gosuArena.events.raiseResourcesLoaded();
-                gosuArena.sprites.isLoaded = true;
-            }
-        };
-
-        img.src = url;
-    }
-
-    loadSprite('background', '@Url.Content("~/Content/images/sprites/map.jpg")');
-    loadSprite('wallNorth', '@Url.Content("~/Content/images/sprites/wall_north.png")');
-    loadSprite('wallSouth', '@Url.Content("~/Content/images/sprites/wall_south.png")');
-    loadSprite('wallEast', '@Url.Content("~/Content/images/sprites/wall_east.png")');
-    loadSprite('wallWest', '@Url.Content("~/Content/images/sprites/wall_west.png")');
-    loadSprite('wallCornerLeft', '@Url.Content("~/Content/images/sprites/wall_corner_left.png")');
-    loadSprite('wallCornerRight', '@Url.Content("~/Content/images/sprites/wall_corner_right.png")');
-    loadSprite('bot', '@Url.Content("~/Content/images/sprites/mech2.png")');
+    gosuArena.resourceLoader.loadImage('background', '@Url.Content("~/Content/images/sprites/map.jpg")');
+    gosuArena.resourceLoader.loadImage('wallNorth', '@Url.Content("~/Content/images/sprites/wall_north.png")');
+    gosuArena.resourceLoader.loadImage('wallSouth', '@Url.Content("~/Content/images/sprites/wall_south.png")');
+    gosuArena.resourceLoader.loadImage('wallEast', '@Url.Content("~/Content/images/sprites/wall_east.png")');
+    gosuArena.resourceLoader.loadImage('wallWest', '@Url.Content("~/Content/images/sprites/wall_west.png")');
+    gosuArena.resourceLoader.loadImage('wallCornerLeft', '@Url.Content("~/Content/images/sprites/wall_corner_left.png")');
+    gosuArena.resourceLoader.loadImage('wallCornerRight', '@Url.Content("~/Content/images/sprites/wall_corner_right.png")');
+    gosuArena.resourceLoader.loadImage('bot', '@Url.Content("~/Content/images/sprites/mech2.png")');
 </script>

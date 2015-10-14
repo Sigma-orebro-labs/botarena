@@ -10,6 +10,14 @@
         gameVisualizer3D: gosuArena.factories.createGameVisualizerBabylon(canvasBabylon)
     };
 
+    function stopMatch() {
+        if (gameClock) {
+            gameClock.stop();
+        }
+
+        isRunning = false;
+    }
+
     gosuArena.events.matchEnded(function(result) {
         stopMatch();
     });
@@ -54,14 +62,6 @@
             $("#3d-game-canvas-babylon").show();
         }
     };
-
-    function stopMatch() {
-        if (gameClock) {
-            gameClock.stop();
-        }
-
-        isRunning = false;
-    }
 
     document.getElementById("restartMatch").onclick = restartMatch;
     document.getElementById("stopMatch").onclick = stopMatch;
