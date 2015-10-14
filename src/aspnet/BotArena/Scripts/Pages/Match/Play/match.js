@@ -33,7 +33,8 @@
 
         gosuArena.engine.start(gameClock, {
             isTraining: gosuArena.settings.isTraining(),
-            listeners: [gosuArena.matchViewModel, gosuArena.visualizers.gameVisualizer2D, gosuArena.visualizers.gameVisualizer3D]
+            listeners: [gosuArena.matchViewModel, gosuArena.visualizers.gameVisualizer2D, gosuArena.visualizers.gameVisualizer3D],
+            resourceLoaders: [gosuArena.resources.imageLoader]
         });
 
         gosuArena.events.raiseGameStarting();
@@ -70,17 +71,9 @@
     document.getElementById("3d-mode").onclick = setRenderingMode;
     document.getElementById("both-mode").onclick = setRenderingMode;
 
-    // Make sure the match is not started until all resources have been loaded
-    // that are needed for the game (e.g. sprites)
-    gosuArena.events.resourcesLoaded(function() {
-        restartMatch();
-    });
-
     $(function () {
         
-        if (gosuArena.sprites.isLoaded && !isRunning) {
-            restartMatch();
-        }
+        restartMatch();
 
         ko.applyBindings(gosuArena.matchViewModel); 
     });

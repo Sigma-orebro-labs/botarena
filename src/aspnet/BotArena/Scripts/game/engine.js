@@ -6,6 +6,7 @@ gosuArena.engine = (function () {
     var matchStartedCallbacks = [];
     var isTraining = null;
     var gameListeners = [];
+    var resourceLoaders = [];
 
     var arenaHeight = 550;
     var arenaWidth = 750;
@@ -182,10 +183,41 @@ gosuArena.engine = (function () {
         });
     }
 
+    function loadResources(onResourcesLoadedCallback) {
+
+        // Copy the loaders array, to keep track of which loaders have not
+        // yet finished loading their stuff
+        var remainingLoaders = resourceLoaders.slice();
+
+        function createMarkLoaderAsFinishedCallback(loader) {
+            return function() {
+                var index = remainingLoaders.indexOf(loader);
+
+                // Remove the loader from the array of remaining loaders, when it finishes
+                if (index >= 0) {
+                    remainingLoaders.splice(index, 1);
+                }
+
+                // If there are no loaders which still have not finished loading, 
+                // then everything is loaded and we can go on with the game
+                if (remainingLoaders.length <= 0) {
+                    onResourcesLoadedCallback();
+                }
+            };
+        }
+
+        for (var i = 0; i < resourceLoaders.length; i++) {
+            var loader = resourceLoaders[i];
+            loader.load(arenaState, createMarkLoaderAsFinishedCallback(loader));
+        }
+    }
+
     function restartMatch(gameClock, options) {
         options = options || {};
 
         gameListeners = options.listeners || [];
+        resourceLoaders = options.resourceLoaders || [];
+
         isTraining = options.isTraining;
 
         botRegistrar.setIsTraining(isTraining);
@@ -196,15 +228,19 @@ gosuArena.engine = (function () {
         gosuArena.arenaHeight = arenaHeight;
 
         initializeTerrain();
-        initializeGameListeners();
 
         raiseReadyEvent();
 
         fixStartPositionsToAvoidCollisions();
-        
-        startGameLoop(gameClock);
 
-        raiseMatchStartedEvent();
+        // Start the match when all resources have been loaded
+        loadResources(function() {
+
+            initializeGameListeners();
+
+            startGameLoop(gameClock);
+            raiseMatchStartedEvent();
+        });
     }
 
     function reset() {
