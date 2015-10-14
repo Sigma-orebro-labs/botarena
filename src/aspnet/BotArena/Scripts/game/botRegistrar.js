@@ -17,7 +17,7 @@ gosuArena.botRegistrar.create = function (collisionDetector, arenaState) {
         // registered during the execution of the bot script, so that
         // we can automatically initialize the bot with the name
         // given when creating the bot.
-        gosuArena.ready(function () {
+        gosuArena.readyForBotRegistration(function () {
 
             beginBotRegistration(options);
             

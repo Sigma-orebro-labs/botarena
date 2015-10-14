@@ -2,7 +2,7 @@
 
 gosuArena.engine = (function () {
     var arenaState = gosuArena.arenaState.create();
-    var readyCallbacks = [];
+    var readyForBotRegistrationCallbacks = [];
     var matchStartedCallbacks = [];
     var isTraining = null;
     var gameListeners = [];
@@ -19,8 +19,8 @@ gosuArena.engine = (function () {
     gosuArena.initiateBotRegistration = botRegistrar.initiateBotRegistration;
     gosuArena.register = botRegistrar.register;
 
-    gosuArena.ready = function(callback) {
-        readyCallbacks.push(callback);
+    gosuArena.readyForBotRegistration = function (callback) {
+        readyForBotRegistrationCallbacks.push(callback);
     };
 
     gosuArena.matchStarted = function (callback) {
@@ -168,8 +168,8 @@ gosuArena.engine = (function () {
         });
     }
 
-    function raiseReadyEvent() {
-        readyCallbacks.forEach(function (callback) {
+    function raiseReadyForBotRegistrationEvent() {
+        readyForBotRegistrationCallbacks.forEach(function (callback) {
 
             // Invoke the callback with an empty object as this
             // to reduce hacking opportunities
@@ -229,7 +229,9 @@ gosuArena.engine = (function () {
 
         initializeTerrain();
 
-        raiseReadyEvent();
+        // This triggers all bots to actually register to the bot registrar,
+        // so after this the bots have actually been registered with the game engine
+        raiseReadyForBotRegistrationEvent();
 
         fixStartPositionsToAvoidCollisions();
 
@@ -245,7 +247,7 @@ gosuArena.engine = (function () {
 
     function reset() {
         arenaState.clear();
-        readyCallbacks.length = 0;
+        readyForBotRegistrationCallbacks.length = 0;
     }
 
     return {
