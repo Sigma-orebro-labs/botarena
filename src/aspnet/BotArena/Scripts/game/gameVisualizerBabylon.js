@@ -15,6 +15,9 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     var landscape;
     var shadowGenerator;
     var ground;
+    var healthBarSpritesManager;
+    var nameBarSpritesManagers = [];
+    var explosionSpriteManager;
 
     var particleExplosion;
     var particleSmoke;
@@ -47,6 +50,11 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         setUpParticleExplosion();
         setUpLandscape(arenaState);
         setUpSkyBox();
+
+        // Create a sprite manager
+        healthBarSpritesManager = new BABYLON.SpriteManager("healthBarSpritesManager", "/Content/images/sprites/healthbar.png", 100, 64, scene);
+        explosionSpriteManager = new BABYLON.SpriteManager("explosions", "/Content/images/sprites/explosion17.png", 50, 64, scene);
+
 
         engine.runRenderLoop(function () {
             scene.render();
@@ -272,7 +280,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
                 var bot = arenaState.bots[i];
 
-
                 bot.babylonMesh = mesh.createInstance("bot" + i);
 
 
@@ -282,7 +289,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
                 bot.babylonMesh.scaling = new BABYLON.Vector3(10, 10, 10);
 
-                var healthBarMaterial = new BABYLON.StandardMaterial("healthBarMaterial" + i, scene);
+                /*var healthBarMaterial = new BABYLON.StandardMaterial("healthBarMaterial" + i, scene);
                 healthBarMaterial.diffuseColor = new BABYLON.Color3(0, 1, 0);
                 healthBarMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
                 
@@ -295,8 +302,23 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
                 bot.healthBarMesh.position.x = bot.y;
                 bot.healthBarMesh.position.y = shipAndBulletYvalue * 4;
                 bot.healthBarMesh.position.z = bot.x;
-                bot.healthBarMesh.rotation.y = Math.PI + gosu.math.degreesToRadians(bot.angle);
+                bot.healthBarMesh.rotation.y = Math.PI + gosu.math.degreesToRadians(bot.angle);*/
+
+                bot.healthBarSprite = new BABYLON.Sprite("healthbar_" + i, healthBarSpritesManager);
+                bot.healthBarSprite.color = new BABYLON.Color4(0, 1, 0.2, 1);
+                bot.healthBarSprite.position.x = bot.y;
+                bot.healthBarSprite.position.y = shipAndBulletYvalue * 4;
+                bot.healthBarSprite.position.z = bot.x;
+                bot.healthBarSprite.size = 45;
  
+                var nameBar = new BABYLON.SpriteManager("bot_" + i + "_name_bar", "/Content/images/sprites/dummyname.png", 100, 144, scene);
+                nameBarSpritesManagers[i] = nameBar;
+                bot.nameBar = new BABYLON.Sprite("namebar_" + i, nameBarSpritesManagers[i]);
+                bot.nameBar.position.x = bot.y;
+                bot.nameBar.position.y = shipAndBulletYvalue * 4;
+                bot.nameBar.position.z = bot.x;
+                bot.nameBar.size = 85;
+
                 shadowGenerator.getShadowMap().renderList.push(bot.babylonMesh);
 
             }
@@ -315,19 +337,42 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
                 bot.babylonMesh.position.z = bot.x;
                 bot.babylonMesh.rotation.y = Math.PI + gosu.math.degreesToRadians(bot.angle);
 
-                bot.healthBarMesh.position.x = bot.y;
+                /*bot.healthBarMesh.position.x = bot.y;
                 bot.healthBarMesh.position.z = bot.x;
-                bot.healthBarMesh.rotation.y = Math.PI + gosu.math.degreesToRadians(bot.angle);
+                bot.healthBarMesh.rotation.y = Math.PI + gosu.math.degreesToRadians(bot.angle);*/
+
+                bot.healthBarSprite.position.x = bot.y;
+                bot.healthBarSprite.position.z = bot.x;
+                
+                bot.nameBar.position.x = bot.y;
+                bot.nameBar.position.z = bot.x;
+
             }
         }
     }
 
     function onBotHitByBullet(bot) {
 
-        bot.healthBarMesh.scaling.z = bot.healthBarMesh.originalScaling * bot.healthPercentage();
+        /*bot.healthBarMesh.scaling.z = bot.healthBarMesh.originalScaling * bot.healthPercentage();
         bot.healthBarMesh.material.diffuseColor.r = 1 - bot.healthPercentage();
-        bot.healthBarMesh.material.diffuseColor.g = bot.healthPercentage();
+        bot.healthBarMesh.material.diffuseColor.g = bot.healthPercentage();*/
 
+        if (bot.healthPercentage() < 0.7) {
+            bot.healthBarSprite.color.r = 1;
+            bot.healthBarSprite.color.g = bot.healthPercentage();
+        }
+        bot.healthBarSprite.width = 64 * bot.healthPercentage();
+
+
+        // explosion
+        var explosion = new BABYLON.Sprite("explosion", explosionSpriteManager);
+        explosion.position.x = bot.y;
+        explosion.position.z = bot.x;
+        explosion.position.y = shipAndBulletYvalue * 2;
+        explosion.size = 20;
+        explosion.disposeWhenFinishedAnimating = true;
+        explosion.layerMask = 255;
+        explosion.playAnimation(0, 24, false, 8);
     }
 
     // a function to fake a sunset
@@ -397,10 +442,11 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         waterMaterial.reflectionTexture.renderList.pop(bot.babylonMesh);
         waterMaterial.reflectionTexture.renderList.pop(bot.healthBarMesh);
 
-        bot.healthBarMesh.dispose();
+        //bot.healthBarMesh.dispose();
+        bot.healthBarSprite.dispose();
+        bot.nameBar.dispose();
         bot.babylonMesh.dispose();
         shadowGenerator.getShadowMap().renderList.pop(bot.babylonMesh);
-
 
     }
 

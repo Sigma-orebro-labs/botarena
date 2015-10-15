@@ -208,6 +208,8 @@
     <Content Include="Content\angular\controllers\match-controller.js" />
     <Content Include="Content\angular\index.html" />
     <Content Include="Content\angular\templates\match.html" />
+    <Content Include="Content\images\sprites\dummyname.png" />
+    <Content Include="Content\images\sprites\healthbar.png" />
     <Content Include="Content\lib\bootstrap-notify\css\bootstrap-notify.css" />
     <Content Include="Content\lib\bootstrap-notify\js\bootstrap-notify.js" />
     <Content Include="Content\images\docs\bot_api_get_request.PNG" />
