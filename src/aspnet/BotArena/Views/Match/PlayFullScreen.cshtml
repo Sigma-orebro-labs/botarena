@@ -24,6 +24,14 @@
     <canvas id="3d-game-canvas-babylon"></canvas>
 </div>
 
+<ul id="botLegends" data-bind="foreach: botLegends">
+    <li data-bind="css: { killed: !isAlive() }">
+        <div class="color" data-bind='style: { backgroundColor : color }'></div>
+        <span class="name" data-bind="text: name"></span>
+        <div class="health"><span data-bind="text: roundedHealth"></span> hp</div>
+    </li>
+</ul>
+
 <form class="options">
     <label for="showBotNames">Show bot names</label>
     <input id="showBotNames" type="checkbox" name="showBotNames" checked="checked" />

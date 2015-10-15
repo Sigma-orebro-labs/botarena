@@ -7,6 +7,9 @@ gosuArena.factories.createBotViewModel = function (bot) {
     var isAlive = ko.observable();
     var name = ko.observable();
     var color = ko.observable();
+    var roundedHealth = ko.computed(function() {
+        return Math.ceil(health());
+    });
     
     function refresh() {
         health(bot.health);
@@ -20,6 +23,7 @@ gosuArena.factories.createBotViewModel = function (bot) {
         bot: bot,
         name: name,
         health: health,
+        roundedHealth,
         isAlive: isAlive,
         color: color,
         refresh: refresh
