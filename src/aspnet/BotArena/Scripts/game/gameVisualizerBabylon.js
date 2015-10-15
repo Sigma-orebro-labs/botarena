@@ -1,11 +1,11 @@
 ﻿var gosuArena = gosuArena || {};
 gosuArena.factories = gosuArena.factories || {};
+gosuArena.visualizers = gosuArena.visualizers || {};
 
 gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
 
     var scene;
-    var engine;
     var sun;
     var canonSound;
     var waterSound;
@@ -15,6 +15,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     var landscape;
     var shadowGenerator;
     var ground;
+    var engine;
 
     var particleExplosion;
     var particleSmoke;
@@ -34,7 +35,8 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             // clear
         });
 
-        engine = new BABYLON.Engine(canvas, true);
+        gosuArena.visualizers.babylonEngine = new BABYLON.Engine(canvas, true);
+        engine = gosuArena.visualizers.babylonEngine;
 
         scene = createScene(canvas);
         setUpLights();

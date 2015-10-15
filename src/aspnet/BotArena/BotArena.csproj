@@ -520,6 +520,7 @@
     <Content Include="Content\models\ship.babylon" />
     <Content Include="Content\models\newer_mountains.babylon" />
     <Content Include="Content\models\only_plane.babylon" />
+    <Content Include="Content\Pages\Match\World.less" />
     <None Include="Properties\PublishProfiles\botarena - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\botarena - Web Deploy.pubxml" />
     <None Include="Scripts\lib\jquery\jquery-2.0.0.intellisense.js" />
@@ -571,6 +572,8 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\SceneEditor\Index.cshtml" />
+    <Content Include="Views\Shared\_LayoutWorld.cshtml" />
+    <Content Include="Views\Match\PlayFullScreen.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
