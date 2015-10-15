@@ -1,19 +1,32 @@
 ﻿///<reference path="~/Scripts/_references.js" />
 
 describe("math", function () {
+
+    beforeEach(function () {
+        jasmine.addMatchers(gosuArena.specs.matchers);
+    });
+
     describe("rectangle", function () {
         var rectangle1 = null;
         var rectangle2 = null;
 
         beforeEach(function () {
-            this.addMatchers({
-                hasCorner: function (expectedCorner) {
-                    var actualRectangle = this.actual;
-                    var matchingCorners = actualRectangle.corners.filter(function (corner) {
-                        return gosu.math.areWithinDelta(corner.x, expectedCorner.x) &&
-                            gosu.math.areWithinDelta(corner.y, expectedCorner.y);
-                    });
-                    return matchingCorners.length > 0;
+            jasmine.addMatchers({
+                hasCorner: function () {
+                    return {
+                        compare: function(actualRectangle, expectedCorner) {
+                            var result = {};
+
+                            var matchingCorners = actualRectangle.corners.filter(function(corner) {
+                                return gosu.math.areWithinDelta(corner.x, expectedCorner.x) &&
+                                    gosu.math.areWithinDelta(corner.y, expectedCorner.y);
+                            });
+
+                            result.pass = matchingCorners.length > 0;
+
+                            return result;
+                        }
+                    };
                 }
             });
 

@@ -1,6 +1,11 @@
 ///<reference path="~/Scripts/_references.js" />
 
 describe("math", function () {
+
+    beforeEach(function () {
+        jasmine.addMatchers(gosuArena.specs.matchers);
+    });
+
     describe("angles", function () {
         it("0 radians is 0 degrees", function () {
             expect(gosu.math.radiansToDegrees(0)).toEqual(0);

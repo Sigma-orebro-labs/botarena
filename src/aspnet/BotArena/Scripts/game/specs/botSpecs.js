@@ -34,6 +34,9 @@ describe("bot", function () {
     }
 
     beforeEach(function () {
+
+        jasmine.addMatchers(gosuArena.specs.matchers);
+
         collisionDetector = {
             seenBots: function () {
                 return [];

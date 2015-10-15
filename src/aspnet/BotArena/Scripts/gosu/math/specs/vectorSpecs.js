@@ -2,17 +2,13 @@
 
 describe("math", function () {
     describe("vector", function () {
-        var vector1, vector2;
+        var vector0, vector1, vector2, vector3;
 
         beforeEach(function () {
-            this.addMatchers({
-                toBeCloseTo: function(expectedValue) {
-                    var actualValue = this.actual;
-                    return Math.abs(expectedValue - actualValue) < 0.00001;
-                }
-            });
 
-            vector0 = gosu.math.createVector(0, 0)
+            jasmine.addMatchers(gosuArena.specs.matchers);
+
+            vector0 = gosu.math.createVector(0, 0);
             vector1 = gosu.math.createVector(1, 0);
             vector2 = gosu.math.createVector(0, 1);
             vector3 = gosu.math.createVector(2, 2);
@@ -41,17 +37,17 @@ describe("math", function () {
         });
 
         describe("scalar product", function () {
-            it("is 0 for (0,0) and (0,0)", function () {
+            it("is 0 for (0,0) and (0,0)", function() {
                 expect(vector0.scalarProduct(vector0)).toEqual(0);
-            })
+            });
 
-            it("is 2 for (1,0) and (2,2)", function () {
+            it("is 2 for (1,0) and (2,2)", function() {
                 expect(vector1.scalarProduct(vector3)).toEqual(2);
-            })
+            });
 
-            it("is 8 for (2,2) and (2,2)", function () {
+            it("is 8 for (2,2) and (2,2)", function() {
                 expect(vector3.scalarProduct(vector3)).toEqual(8);
-            })
+            });
         });
 
         describe("angle", function () {
