@@ -71,8 +71,27 @@
     document.getElementById("3d-mode").onclick = setRenderingMode;
     document.getElementById("both-mode").onclick = setRenderingMode;
 
+    function adjustBabylonCanvasSize() {
+        var canvas = document.getElementById("3d-game-canvas-babylon");
+
+        var width = window.devicePixelRatio * window.innerWidth;
+        var height = window.devicePixelRatio * window.innerHeight;
+
+        if (gosuArena.visualizers.babylonEngine) {
+            gosuArena.visualizers.babylonEngine.setSize(width, height);
+            gosuArena.visualizers.babylonEngine.resize();
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+    }
+
+    $(window).on("resize", adjustBabylonCanvasSize);
+
     $(function () {
-        
+    
+        adjustBabylonCanvasSize();
+
         restartMatch();
 
         ko.applyBindings(gosuArena.matchViewModel); 

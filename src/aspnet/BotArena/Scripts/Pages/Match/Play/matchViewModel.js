@@ -26,11 +26,18 @@ gosuArena.factories.createMatchViewModel = function () {
 
     function initialize(arenaState) {
 
+        function addBot(bot) {
+            var viewModel = gosuArena.factories.createBotViewModel(bot);
+            botLegends.push(viewModel);
+        }
+
+        botLegends.removeAll();
+
         if (isFirstInitialization) {
-            arenaState.onBotAdded(function (bot) {
-                var viewModel = gosuArena.factories.createBotViewModel(bot);
-                botLegends.push(viewModel);
-            });
+
+            arenaState.bots.forEach(addBot);
+
+            arenaState.onBotAdded(addBot);
 
             arenaState.onBotKilled(function (bot) {
                 refresh();
@@ -40,8 +47,6 @@ gosuArena.factories.createMatchViewModel = function () {
                 refresh();
             });
         }
-
-        botLegends.removeAll();
 
         isFirstInitialization = false;
     }
