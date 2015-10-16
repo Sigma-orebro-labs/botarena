@@ -52,8 +52,8 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         setUpSkyBox();
 
         // Create a sprite manager
-        healthBarSpritesManager = new BABYLON.SpriteManager("healthBarSpritesManager", "/Content/images/sprites/healthbar.png", 100, 64, scene);
-        explosionSpriteManager = new BABYLON.SpriteManager("explosions", "/Content/images/sprites/explosion17.png", 50, 64, scene);
+        healthBarSpritesManager = new BABYLON.SpriteManager("healthBarSpritesManager", gosuArena.url.createAbsolute("/Content/images/sprites/healthbar.png"), 100, 64, scene);
+        explosionSpriteManager = new BABYLON.SpriteManager("explosions", gosuArena.url.createAbsolute("/Content/images/sprites/explosion17.png"), 50, 64, scene);
 
 
         engine.runRenderLoop(function () {
@@ -311,7 +311,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
                 bot.healthBarSprite.position.z = bot.x;
                 bot.healthBarSprite.size = 45;
  
-                var nameBar = new BABYLON.SpriteManager("bot_" + i + "_name_bar", "/Content/images/sprites/dummyname.png", 100, 144, scene);
+                var nameBar = new BABYLON.SpriteManager("bot_" + i + "_name_bar", gosuArena.url.createAbsolute("/Content/images/sprites/dummyname.png"), 100, 144, scene);
                 nameBarSpritesManagers[i] = nameBar;
                 bot.nameBar = new BABYLON.Sprite("namebar_" + i, nameBarSpritesManagers[i]);
                 bot.nameBar.position.x = bot.y;
