@@ -53,11 +53,12 @@ gosuArena.sprites = gosuArena.sprites || {};
         loadImage('wallCornerRight', gosuArena.url.createAbsolute('/Content/images/sprites/wall_corner_right.png'), allResourcesLoadedCallback);
         loadImage('bot', gosuArena.url.createAbsolute('/Content/images/sprites/mech2.png'), allResourcesLoadedCallback);
 
-        for (var i = 0; i < arenaState.bots.length; i++) {
-            var bot = arenaState.bots[i];
-            var url = gosuArena.url.createAbsolute('/api/botnameimage?name=' + encodeURIComponent(bot.name) + '&colorHexCode=' + encodeURIComponent(bot.color));
+        // Skip the bot name image loading for now. The images need to be loaded by babylon anyway
+        //for (var i = 0; i < arenaState.bots.length; i++) {
+        //    var bot = arenaState.bots[i];
+        //    var url = gosuArena.url.createAbsolute('/api/botnameimage?name=' + encodeURIComponent(bot.name) + '&colorHexCode=' + encodeURIComponent(bot.color));
 
-            loadImage(bot.name + 'NameImage', url, allResourcesLoadedCallback);
-        }
+        //    loadImage(bot.name + 'NameImage', url, allResourcesLoadedCallback);
+        //}
     };
 })();

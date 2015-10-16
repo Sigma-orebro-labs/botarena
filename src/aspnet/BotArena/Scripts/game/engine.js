@@ -185,6 +185,12 @@ gosuArena.engine = (function () {
 
     function loadResources(onResourcesLoadedCallback) {
 
+        // If there are no loaders, just continue on
+        if (resourceLoaders.length <= 0) {
+            onResourcesLoadedCallback();
+            return;
+        }
+
         // Copy the loaders array, to keep track of which loaders have not
         // yet finished loading their stuff
         var remainingLoaders = resourceLoaders.slice();
