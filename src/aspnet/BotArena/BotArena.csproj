@@ -243,6 +243,7 @@
     <Content Include="Scripts\game\modifiers\defaultModifier.js" />
     <Content Include="Scripts\game\specs\botModifierSpecs.js" />
     <Content Include="Scripts\infrastructure\imageLoader.js" />
+    <Content Include="Scripts\infrastructure\specs\urlSpecs.js" />
     <Content Include="Scripts\infrastructure\url.js" />
     <Content Include="Scripts\lib\jasmine-2.3.4\boot.js" />
     <Content Include="Scripts\lib\jasmine-2.3.4\console.js" />

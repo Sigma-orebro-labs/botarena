@@ -1331,6 +1331,64 @@ describe("Game", function () {
         expect(actualArenaState.livingBots()).not.toBeEmpty();
     });
 
+    it("raises BotRegistrationStarting event just before the bot registration has actually started, after the world has been initialized", function () {
+
+        addBot();
+
+        var wasEventFired = false;
+
+        gosuArena.events.botRegistrationStarting(function() {
+            wasEventFired = true;
+            expect(arenaState.bots).toBeEmpty();
+        });
+
+        gosuArena.engine.initializeWorld({
+            listeners: [arenaStateInterceptor]
+        });
+
+        expect(wasEventFired).toBe(false);
+
+        startGame();
+
+        expect(wasEventFired).toBe(true);
+        expect(arenaState.livingBots()).not.toBeEmpty();
+    });
+
+    it("raises gameStarting event after the bot registration has completed, but before bots begin receiving ticks", function () {
+
+        var wasEventFired = false,
+            wasTickCalled = false;
+
+        addBot({
+            tick: function () {
+                wasTickCalled = true;
+            }
+        });
+
+        gosuArena.events.gameStarting(function () {
+            wasEventFired = true;
+            expect(arenaState.bots).not.toBeEmpty();
+        });
+
+        gosuArena.engine.initializeWorld({
+            listeners: [arenaStateInterceptor]
+        });
+
+        expect(wasEventFired).toBe(false);
+
+        clock.doTick();
+
+        startGame();
+
+        expect(wasEventFired).toBe(true);
+        expect(wasTickCalled).toBe(false);
+
+        clock.doTick();
+
+        expect(wasEventFired).toBe(true);
+        expect(wasTickCalled).toBe(true);
+    });
+
     it("gives bots ids specified during registration", function () {
 
         gosuArena.initiateBotRegistration({

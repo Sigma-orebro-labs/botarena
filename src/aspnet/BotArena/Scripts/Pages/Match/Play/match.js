@@ -35,8 +35,6 @@
             isTraining: gosuArena.settings.isTraining()
         });
 
-        gosuArena.events.raiseGameStarting();
-
         gameClock.start();
         isRunning = true;
     };

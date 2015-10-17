@@ -3,7 +3,6 @@
 gosuArena.engine = (function () {
     var arenaState = gosuArena.arenaState.create();
     var readyForBotRegistrationCallbacks = [];
-    var matchStartedCallbacks = [];
     var isTraining = null;
     var gameListeners = [];
     var resourceLoaders = [];
@@ -22,10 +21,6 @@ gosuArena.engine = (function () {
     gosuArena.readyForBotRegistration = function (callback) {
         readyForBotRegistrationCallbacks.push(callback);
     };
-
-    gosuArena.matchStarted = function (callback) {
-        matchStartedCallbacks.push(callback);
-    }
 
     function initializeTerrain() {
 
@@ -177,12 +172,6 @@ gosuArena.engine = (function () {
         });
     }
 
-    function raiseMatchStartedEvent() {
-        matchStartedCallbacks.forEach(function(callback) {
-            callback.call({});
-        });
-    }
-
     function loadResources(onResourcesLoadedCallback) {
 
         // If there are no loaders, just continue on
@@ -255,7 +244,8 @@ gosuArena.engine = (function () {
         fixStartPositionsToAvoidCollisions();
 
         startGameLoop(gameClock);
-        raiseMatchStartedEvent();
+
+        gosuArena.events.raiseGameStarting();
     }
 
     function reset() {
