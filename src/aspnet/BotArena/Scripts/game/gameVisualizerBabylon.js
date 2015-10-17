@@ -41,6 +41,15 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     var botsCurrentlyInScene = [];
 
     function removeBotFromScene(bot) {
+
+        // It seems like the bot is added multiple times to the shadow map,
+        // so make sure that all instances are removed from the map, to ensure
+        // that no shadow is left in the scene after removing the bot
+        var shadowRenderList = shadowGenerator.getShadowMap().renderList;
+        while (shadowRenderList.indexOf(bot.babylonMesh) >= 0) {
+            shadowRenderList.pop(bot.babylonMesh);
+        }
+
         waterMaterial.reflectionTexture.renderList.pop(bot.babylonMesh);
         waterMaterial.reflectionTexture.renderList.pop(bot.healthBarMesh);
 
@@ -48,7 +57,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         bot.healthBarSprite.dispose();
         bot.nameBar.dispose();
         bot.babylonMesh.dispose();
-        shadowGenerator.getShadowMap().renderList.pop(bot.babylonMesh);
 
         var botIndex = botsCurrentlyInScene.indexOf(bot);
 
@@ -133,7 +141,8 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             bot.nameBar.position.z = bot.x;
             bot.nameBar.size = spriteSize;
 
-            shadowGenerator.getShadowMap().renderList.push(bot.babylonMesh);
+            shadowMap = shadowGenerator.getShadowMap();
+            shadowMap.renderList.push(bot.babylonMesh);
         }
     }
 
