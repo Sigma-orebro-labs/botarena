@@ -7,9 +7,17 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     var shipYValue = 6;
     var bulletYValue = 10;
     var healthBarYValue = 40;
-    var nameTagYValue = 40;
     var wallYValue = 10;
     var explosionYValue = 20;
+
+    // Since the name tag image sizes depend on the number of letters in the name currently
+    // (should probably be changed), we need to do some magic offsets to make things look
+    // kind of OK. This should be considered a temporary fix. We need to figure out a better solution.
+    var nameTagYValue = 67;
+    var botNameLetterWidth = 30;
+    var botNameLetterSizeFactorIncrease = 0.2;
+    var botNameLetterHeightReduction = 5.5;
+    var botNameSpriteBaseSize = 40;
 
     var scene;
     var sun;
@@ -110,13 +118,20 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             bot.healthBarSprite.position.z = bot.x;
             bot.healthBarSprite.size = 45;
 
-            var nameBar = new BABYLON.SpriteManager("bot_" + i + "_name_bar", gosuArena.url.createAbsolute("/Content/images/sprites/dummyname.png"), 100, 144, scene);
+            // Since the name tag image sizes depend on the number of letters in the name currently
+            // (should probably be changed), we need to do some magic offsets to make things look
+            // kind of OK. This should be considered a temporary fix. We need to figure out a better solution.
+            var nameImageUrl = gosuArena.url.createAbsolute("/api/botnameimage?name=" + encodeURIComponent(bot.name) + "&colorHexCode=" + encodeURIComponent(bot.color));
+            var estimatedImageWith = bot.name.length * botNameLetterWidth;
+            var spriteSize = botNameSpriteBaseSize * (1 + botNameLetterSizeFactorIncrease * bot.name.length);
+
+            var nameBar = new BABYLON.SpriteManager("bot_" + i + "_name_bar", nameImageUrl, 100, estimatedImageWith, scene);
             nameBarSpritesManagers[i] = nameBar;
             bot.nameBar = new BABYLON.Sprite("namebar_" + i, nameBarSpritesManagers[i]);
             bot.nameBar.position.x = bot.y;
-            bot.nameBar.position.y = nameTagYValue;
+            bot.nameBar.position.y = nameTagYValue - (botNameLetterHeightReduction * bot.name.length);
             bot.nameBar.position.z = bot.x;
-            bot.nameBar.size = 85;
+            bot.nameBar.size = spriteSize;
 
             shadowGenerator.getShadowMap().renderList.push(bot.babylonMesh);
         }
