@@ -118,10 +118,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             bot.healthBarSprite.position.z = bot.x;
             bot.healthBarSprite.size = 45;
 
-            // Since the name tag image sizes depend on the number of letters in the name currently
-            // (should probably be changed), we need to do some magic offsets to make things look
-            // kind of OK. This should be considered a temporary fix. We need to figure out a better solution.
-            var nameImageUrl = gosuArena.url.createAbsolute("/api/botnameimage?name=" + encodeURIComponent(bot.name) + "&colorHexCode=" + encodeURIComponent(bot.color));
+            var nameImageUrl = gosuArena.url.createAbsolute("/api/botnameimage", { name: bot.name, colorHexCode: bot.color });
 
             var nameBar = new BABYLON.SpriteManager("bot_" + i + "_name_bar", nameImageUrl, 100, 300, scene);
             nameBarSpritesManagers[i] = nameBar;

@@ -31,3 +31,4 @@
 ///<reference path="~/Scripts/gosu/math/specs/matchers.js" />
 ///<reference path="~/Scripts/game/specs/ticker.js" />
 ///<reference path="~/Scripts/game/specs/gameSpecsSetup.js" />
+///<reference path="~/Scripts/infrastructure/url.js" />
