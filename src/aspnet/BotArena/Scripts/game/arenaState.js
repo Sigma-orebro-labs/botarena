@@ -10,7 +10,8 @@ gosuArena.arenaState.create = function () {
     var bulletHitTerrainCallbacks = [];
     var shotFiredCallbacks = [];
     var tickCallbacks = [];
-    var clearCallbacks = [];
+    var clearedCallbacks = [];
+    var clearStartingCallbacks = [];
 
     var arenaState = {
         bots: [],
@@ -83,11 +84,13 @@ gosuArena.arenaState.create = function () {
 
     arenaState.clearGame = function () {
 
+        raiseOnClearStarting();
+
         // We leave the terrain since it doesn't change between games
         arenaState.bots.length = 0;
         arenaState.bullets.length = 0;
 
-        raiseOnClear();
+        raiseOnCleared();
     };
 
     function removeCallbacks() {
@@ -162,8 +165,12 @@ gosuArena.arenaState.create = function () {
         tickCallbacks.push(callback);
     };
 
-    arenaState.onClear = function (callback) {
-        clearCallbacks.push(callback);
+    arenaState.onClearStarting = function (callback) {
+        clearStartingCallbacks.push(callback);
+    };
+
+    arenaState.onCleared = function (callback) {
+        clearedCallbacks.push(callback);
     };
 
     function raiseOnBotKilled(bot) {
@@ -208,8 +215,14 @@ gosuArena.arenaState.create = function () {
         });
     }
 
-    function raiseOnClear() {
-        clearCallbacks.forEach(function (callback) {
+    function raiseOnCleared() {
+        clearedCallbacks.forEach(function (callback) {
+            callback();
+        });
+    }
+
+    function raiseOnClearStarting() {
+        clearStartingCallbacks.forEach(function (callback) {
             callback();
         });
     }

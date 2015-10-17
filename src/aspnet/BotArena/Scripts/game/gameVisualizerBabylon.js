@@ -165,7 +165,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         arenaState.onTick(function () {
             update(arenaState);
         });
-        arenaState.onClear(function () {
+        arenaState.onClearStarting(function () {
             removeAllBullets();
         });
 
