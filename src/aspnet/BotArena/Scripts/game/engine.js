@@ -244,6 +244,8 @@ gosuArena.engine = (function () {
 
         botRegistrar.setIsTraining(isTraining);
 
+        gosuArena.events.raiseBotRegistrationStarting();
+
         // This triggers all bots to actually register to the bot registrar,
         // so after this the bots have actually been registered with the game engine
         raiseReadyForBotRegistrationEvent();

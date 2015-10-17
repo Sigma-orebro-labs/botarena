@@ -34,6 +34,14 @@ gosuArena.events = (function () {
         gosu.eventAggregator.subscribe("worldInitialized", callback);
     }
 
+    function raiseBotRegistrationStarting() {
+        gosu.eventAggregator.publish("botRegistrationStarting");
+    }
+
+    function botRegistrationStarting(callback) {
+        gosu.eventAggregator.subscribe("botRegistrationStarting", callback);
+    }
+
     return {
         raiseMatchEnded: raiseMatchEnded,
         matchEnded: matchEnded,
@@ -42,7 +50,9 @@ gosuArena.events = (function () {
         raiseGameStarting: raiseGameStarting,
         gameStarting: gameStarting,
         raiseWorldInitialized: raiseWorldInitialized,
-        worldInitialized: worldInitialized
+        worldInitialized: worldInitialized,
+        botRegistrationStarting: botRegistrationStarting,
+        raiseBotRegistrationStarting: raiseBotRegistrationStarting
     };
 })();
 
