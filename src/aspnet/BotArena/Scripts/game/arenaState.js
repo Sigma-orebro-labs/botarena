@@ -81,14 +81,15 @@ gosuArena.arenaState.create = function () {
         arenaState.bullets.splice(index, 1);
     };
 
-    arenaState.clear = function () {
+    arenaState.clearGame = function () {
 
+        // We leave the terrain since it doesn't change between games
         arenaState.bots.length = 0;
-        arenaState.terrain.length = 0;
         arenaState.bullets.length = 0;
 
         removeCallbacks();
 
+        raiseOnClear();
     };
 
     function removeCallbacks() {

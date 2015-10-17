@@ -32,9 +32,7 @@
         gameClock = gosuArena.gameClock.create();
 
         gosuArena.engine.start(gameClock, {
-            isTraining: gosuArena.settings.isTraining(),
-            listeners: [gosuArena.matchViewModel, gosuArena.visualizers.gameVisualizer2D, gosuArena.visualizers.gameVisualizer3D],
-            resourceLoaders: [gosuArena.resources.imageLoader]
+            isTraining: gosuArena.settings.isTraining()
         });
 
         gosuArena.events.raiseGameStarting();
@@ -86,14 +84,21 @@
         canvas.height = height;
     }
 
+    gosuArena.events.worldInitialized(function () {
+        restartMatch();
+    });
+
     $(window).on("resize", adjustBabylonCanvasSize);
 
-    $(function () {
-    
+    $(function() {
+
         adjustBabylonCanvasSize();
 
-        restartMatch();
+        gosuArena.engine.initializeWorld({
+            listeners: [gosuArena.matchViewModel, gosuArena.visualizers.gameVisualizer2D, gosuArena.visualizers.gameVisualizer3D],
+            resourceLoaders: [gosuArena.resources.imageLoader]
+        });
 
-        ko.applyBindings(gosuArena.matchViewModel); 
+        ko.applyBindings(gosuArena.matchViewModel);
     });
 })();

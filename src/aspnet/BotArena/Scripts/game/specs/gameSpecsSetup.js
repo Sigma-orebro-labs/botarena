@@ -32,9 +32,14 @@ gosuArena.specs.game.cleanup = function() {
     gosuArena.engine.reset();
 };
 
-gosuArena.specs.game.startGame = function(clock, listeners) {
-    gosuArena.engine.start(clock, {
-        isTraining: true,
+gosuArena.specs.game.initializeWorld = function (listeners) {
+    gosuArena.engine.initializeWorld({
         listeners: listeners
+    });
+}
+
+gosuArena.specs.game.startGame = function (clock) {
+    gosuArena.engine.start(clock, {
+        isTraining: true
     });
 };

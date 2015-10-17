@@ -26,13 +26,23 @@ gosuArena.events = (function () {
         gosu.eventAggregator.subscribe("gameStarting", callback);
     }
 
+    function raiseWorldInitialized() {
+        gosu.eventAggregator.publish("worldInitialized");
+    }
+
+    function worldInitialized(callback) {
+        gosu.eventAggregator.subscribe("worldInitialized", callback);
+    }
+
     return {
         raiseMatchEnded: raiseMatchEnded,
         matchEnded: matchEnded,
         raiseResourcesLoaded: raiseResourcesLoaded,
         resourcesLoaded: resourcesLoaded,
         raiseGameStarting: raiseGameStarting,
-        gameStarting: gameStarting
+        gameStarting: gameStarting,
+        raiseWorldInitialized: raiseWorldInitialized,
+        worldInitialized: worldInitialized
     };
 })();
 

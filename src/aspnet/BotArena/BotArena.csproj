@@ -537,7 +537,6 @@
     <Content Include="Scripts\lib\knockout\knockout-3.0.0.js" />
     <Content Include="Scripts\lib\knockout\knockout.protected-observable.js" />
     <Content Include="Scripts\Pages\Match\Play\match.js" />
-    <Content Include="Scripts\gosu\math\collissions.js" />
     <Content Include="Scripts\gosu\math\specs\collissionsSpecs.js" />
     <Content Include="Scripts\gosu\math\line.js" />
     <Content Include="Scripts\gosu\math\specs\lineSpecs.js" />

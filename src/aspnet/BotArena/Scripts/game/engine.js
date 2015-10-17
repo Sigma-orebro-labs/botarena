@@ -218,22 +218,31 @@ gosuArena.engine = (function () {
         }
     }
 
-    function restartMatch(gameClock, options) {
+    function initializeWorld(options) {
         options = options || {};
 
         gameListeners = options.listeners || [];
         resourceLoaders = options.resourceLoaders || [];
 
-        isTraining = options.isTraining;
-
-        botRegistrar.setIsTraining(isTraining);
-
-        arenaState.clear();
-
         gosuArena.arenaWidth = arenaWidth;
         gosuArena.arenaHeight = arenaHeight;
 
         initializeTerrain();
+
+        // Make sure all resources have been loaded before initializing the game listeners
+        loadResources(function () {
+
+            initializeGameListeners();
+            gosuArena.events.raiseWorldInitialized();
+        });
+    }
+
+    function restartMatch(gameClock, options) {
+        options = options || {};
+
+        isTraining = options.isTraining;
+
+        botRegistrar.setIsTraining(isTraining);
 
         // This triggers all bots to actually register to the bot registrar,
         // so after this the bots have actually been registered with the game engine
@@ -241,23 +250,18 @@ gosuArena.engine = (function () {
 
         fixStartPositionsToAvoidCollisions();
 
-        // Start the match when all resources have been loaded
-        loadResources(function() {
-
-            initializeGameListeners();
-
-            startGameLoop(gameClock);
-            raiseMatchStartedEvent();
-        });
+        startGameLoop(gameClock);
+        raiseMatchStartedEvent();
     }
 
     function reset() {
-        arenaState.clear();
+        arenaState.clearGame();
         readyForBotRegistrationCallbacks.length = 0;
     }
 
     return {
         start: restartMatch,
-        reset: reset
+        reset: reset,
+        initializeWorld: initializeWorld
     };
 })();

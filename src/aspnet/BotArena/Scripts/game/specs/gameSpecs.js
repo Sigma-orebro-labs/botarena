@@ -16,7 +16,7 @@ describe("Game", function () {
     };
 
     function startGame() {
-        gosuArena.specs.game.startGame(clock, [arenaStateInterceptor]);
+        gosuArena.specs.game.startGame(clock);
     }
 
     var addBot = gosuArena.specs.game.addBot;
@@ -33,6 +33,8 @@ describe("Game", function () {
         clock = gosuArena.gameClock.createFake();
 
         gosuArena.specs.game.cleanup();
+
+        gosuArena.specs.game.initializeWorld([arenaStateInterceptor]);
     });
 
     describe("Bot", function () {
@@ -208,7 +210,7 @@ describe("Game", function () {
                     expect(status.canMoveRight()).toEqual(true);
 
                     wasTickCalled = true;
-                },
+                }
             });
 
             startGame();
@@ -1294,7 +1296,7 @@ describe("Game", function () {
         expect(hasMatchEnded).toEqual(true);
     });    
     
-    it("Initializes listeners before bot registration when the game starts", function () {
+    it("Initializes listeners when world is initialized, before bot registration when the game starts", function () {
         gosuArena.initiateBotRegistration({
             id: 1,
             name: "bot"
@@ -1315,12 +1317,17 @@ describe("Game", function () {
             }
         };
 
-        gosuArena.engine.start(clock, {
-            isTraining: true,
+        gosuArena.engine.initializeWorld({
             listeners: [listener]
         });
 
         expect(wasInitializeCalled).toBe(true);
+        expect(arenaState.livingBots()).toBeEmpty();
+
+        gosuArena.engine.start(clock, {
+            isTraining: true
+        });
+
         expect(actualArenaState.livingBots()).not.toBeEmpty();
     });
 
