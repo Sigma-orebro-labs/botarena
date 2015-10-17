@@ -43,6 +43,10 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         }
     }
 
+    function removeBulletFromScene(bullet) {
+        removeMeshFromScene(bullet.babylonMesh);
+    }
+
     function onBotRegistrationStarting() {
         var botsInScene = botsCurrentlyInScene.slice();
 
@@ -118,6 +122,12 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         addBotsToScene();
     }
 
+    function onMatchEnded() {
+        arenaState.bullets.forEach(function(bullet) {
+            removeBulletFromScene(bullet);
+        });
+    }
+
     function initialize(worldArenaState) {
         arenaState = worldArenaState;
 
@@ -136,6 +146,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
         gosuArena.events.botRegistrationStarting(onBotRegistrationStarting);
         gosuArena.events.gameStarting(onGameStarting);
+        gosuArena.events.matchEnded(onMatchEnded);
 
         gosuArena.visualizers.babylonEngine = new BABYLON.Engine(canvas, true);
         engine = gosuArena.visualizers.babylonEngine;
@@ -427,8 +438,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     }
 
     function onBulletRemoved(bullet) {
-
-        removeMeshFromScene(bullet.babylonMesh);
+        removeBulletFromScene(bullet);
     }
 
     function onBulletHitBot(bullet) {
@@ -449,7 +459,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         explosion.direction2 = vector2;
 
         explosion.start();
-        removeMeshFromScene(bullet.babylonMesh);
+        removeBulletFromScene(bullet);
     }
 
     function removeMeshFromScene(mesh) {
