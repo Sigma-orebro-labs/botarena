@@ -24,6 +24,45 @@
 
     gosuArena.matchViewModel = gosuArena.factories.createMatchViewModel();
 
+    function writeGameMessage(message, autoHideDelay) {
+        console.log(message);
+        var $messageElement = $(".game-message");
+        $messageElement.show();
+        $messageElement.text(message);
+
+        if (autoHideDelay) {
+            setTimeout(function() {
+                $messageElement.hide();
+            }, autoHideDelay);
+        }
+    }
+
+    function restartMatchWithCountDown(countDownsRemaining, delay, hasShownInitialMessage) {
+        countDownsRemaining = countDownsRemaining === undefined ? 3 : countDownsRemaining;
+        delay = delay || 1000;
+
+        if (!countDownsRemaining || countDownsRemaining <= 0) {
+
+            writeGameMessage("Fight!", 1000);
+
+            restartMatch();
+            return;
+        }
+
+        var newCountDownsRemaining = countDownsRemaining;
+
+        if (!hasShownInitialMessage) {
+            writeGameMessage("Game starting in...");
+        } else {
+            writeGameMessage(countDownsRemaining);
+            newCountDownsRemaining--;
+        }
+
+        setTimeout(function() {
+            restartMatchWithCountDown(newCountDownsRemaining, delay, true);
+        }, delay);
+    }
+
     function restartMatch() {
         if (gameClock) {
             gameClock.stop();
@@ -60,7 +99,9 @@
         }
     };
 
-    document.getElementById("restartMatch").onclick = restartMatch;
+    document.getElementById("restartMatch").onclick = function() {
+        restartMatchWithCountDown();
+    }
     document.getElementById("stopMatch").onclick = stopMatch;
 
     document.getElementById("2d-mode").onclick = setRenderingMode;
@@ -83,7 +124,17 @@
     }
 
     gosuArena.events.worldInitialized(function () {
-        restartMatch();
+
+        setTimeout(function() {
+            gosuArena.visualizers.gameVisualizer3D.moveCameraToDefaultGamePosition();
+            restartMatchWithCountDown();
+        }, 1000);
+    });
+
+    gosuArena.events.matchEnded(function(matchResult) {
+        var message = "The winner is " + matchResult.winner.name + "!";
+
+        writeGameMessage(message);
     });
 
     $(window).on("resize", adjustBabylonCanvasSize);

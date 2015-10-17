@@ -19,9 +19,13 @@
     <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/Match/Play/match.js")"> </script>
 }
 
-<div id="playing-field">
+<section id="playing-field">
     <canvas id="gameCanvas" class="hide-from-start" width="800" height="600"></canvas>
     <canvas id="3d-game-canvas-babylon"></canvas>
+</section>
+
+<div class="game-message-container">
+    <section class="game-message"></section>
 </div>
 
 <ul id="botLegends" data-bind="foreach: botLegends">

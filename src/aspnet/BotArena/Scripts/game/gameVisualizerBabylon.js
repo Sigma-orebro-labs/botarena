@@ -42,8 +42,8 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             shadowRenderList.pop(bot.babylonMesh);
         }
 
-        waterMaterial.reflectionTexture.renderList.pop(bot.babylonMesh);
-        waterMaterial.reflectionTexture.renderList.pop(bot.healthBarMesh);
+        //waterMaterial.reflectionTexture.renderList.pop(bot.babylonMesh);
+        //waterMaterial.reflectionTexture.renderList.pop(bot.healthBarMesh);
 
         //bot.healthBarMesh.dispose();
         bot.healthBarSprite.dispose();
@@ -196,6 +196,45 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         engine.runRenderLoop(function () {
             scene.render();
         });
+    }
+
+    function moveCameraToDefaultGamePosition() {
+        createAndStartAnimation("cameraZoomX", scene.activeCamera, "position.x", false, scene.activeCamera.position.x, 970);
+        createAndStartAnimation("cameraZoomY", scene.activeCamera, "position.y", false, scene.activeCamera.position.y, 400);
+        createAndStartAnimation("cameraZoomZ", scene.activeCamera, "position.z", false, scene.activeCamera.position.z, 400);
+    }
+
+    function createAndStartAnimation(name, obj, property, loop, startValue, endValue) {
+        var loopMode = loop ? BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE : BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT;
+
+        var animation = new BABYLON.Animation(name, property, 60, BABYLON.Animation.ANIMATIONTYPE_FLOAT, loopMode);
+
+        // An array with all animation keys
+        var keys = [];
+
+        //At the animation key 0, the value of scaling is "1"
+        keys.push({
+            frame: 0,
+            value: startValue
+        });
+
+        //At the animation key 100, the value of scaling is "1"
+        keys.push({
+            frame: 100,
+            value: endValue
+        });
+
+        animation.setKeys(keys);
+
+        var easingFunction = new BABYLON.CubicEase();
+
+        easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
+
+        animation.setEasingFunction(easingFunction);
+
+        obj.animations.push(animation);
+
+        scene.beginAnimation(obj, 0, 100);
     }
 
     function onShotFired(bot, bullet) {
@@ -623,6 +662,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     }
 
     return {
-        initialize: initialize
+        initialize: initialize,
+        moveCameraToDefaultGamePosition: moveCameraToDefaultGamePosition
     };
 }
