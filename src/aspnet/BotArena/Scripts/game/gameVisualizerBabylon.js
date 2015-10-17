@@ -4,12 +4,18 @@ gosuArena.visualizers = gosuArena.visualizers || {};
 
 gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
+    var shipYValue = 6;
+    var bulletYValue = 10;
+    var healthBarYValue = 40;
+    var nameTagYValue = 40;
+    var wallYValue = 10;
+    var explosionYValue = 20;
+
     var scene;
     var sun;
     var canonSound;
     var waterSound;
     var waterMaterial;
-    var shipAndBulletYvalue = 10;
     var skybox;
     var landscape;
     var shadowGenerator;
@@ -77,7 +83,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             bot.babylonMesh = botMesh.createInstance("bot" + i);
 
             bot.babylonMesh.position.x = bot.y;
-            bot.babylonMesh.position.y = shipAndBulletYvalue;
+            bot.babylonMesh.position.y = shipYValue;
             bot.babylonMesh.position.z = bot.x;
 
             bot.babylonMesh.scaling = new BABYLON.Vector3(10, 10, 10);
@@ -100,7 +106,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             bot.healthBarSprite = new BABYLON.Sprite("healthbar_" + i, healthBarSpritesManager);
             bot.healthBarSprite.color = new BABYLON.Color4(0, 1, 0.2, 1);
             bot.healthBarSprite.position.x = bot.y;
-            bot.healthBarSprite.position.y = shipAndBulletYvalue * 4;
+            bot.healthBarSprite.position.y = healthBarYValue;
             bot.healthBarSprite.position.z = bot.x;
             bot.healthBarSprite.size = 45;
 
@@ -108,7 +114,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             nameBarSpritesManagers[i] = nameBar;
             bot.nameBar = new BABYLON.Sprite("namebar_" + i, nameBarSpritesManagers[i]);
             bot.nameBar.position.x = bot.y;
-            bot.nameBar.position.y = shipAndBulletYvalue * 4;
+            bot.nameBar.position.y = nameTagYValue;
             bot.nameBar.position.z = bot.x;
             bot.nameBar.size = 85;
 
@@ -324,7 +330,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             var wallMesh = BABYLON.Mesh.CreateBox("wall_" + i, 1, scene);
 
             wallMesh.scaling = new BABYLON.Vector3(currentTerrain.width, currentTerrain.height, currentTerrain.height / 2);
-            wallMesh.position = new BABYLON.Vector3(terrainCenter.y, shipAndBulletYvalue, terrainCenter.x);
+            wallMesh.position = new BABYLON.Vector3(terrainCenter.y, wallYValue, terrainCenter.x);
 
 
             brickMaterial[i].diffuseTexture.vScale = 0.3;
@@ -424,7 +430,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         var explosion = new BABYLON.Sprite("explosion", explosionSpriteManager);
         explosion.position.x = bot.y;
         explosion.position.z = bot.x;
-        explosion.position.y = shipAndBulletYvalue * 2;
+        explosion.position.y = explosionYValue;
         explosion.size = 20;
         explosion.disposeWhenFinishedAnimating = true;
         explosion.layerMask = 255;
@@ -445,7 +451,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         
         var explosion = particleExplosion.clone();
 
-        explosion.emitter = new BABYLON.Vector3(bullet.y, shipAndBulletYvalue, bullet.x);
+        explosion.emitter = new BABYLON.Vector3(bullet.y, bulletYValue, bullet.x);
 
 
         var offsetAngle1 = gosu.math.degreesToRadians(bullet.angle + 20) + Math.PI / 2;
@@ -480,7 +486,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
                 bullet.babylonMesh = BABYLON.Mesh.CreateSphere("bullet", 5.0, 5.0, scene);
                 bullet.babylonMesh.color = new BABYLON.Color3.Black();
-                bullet.babylonMesh.position.y = shipAndBulletYvalue;
+                bullet.babylonMesh.position.y = bulletYValue;
                 shadowGenerator.getShadowMap().renderList.push(bullet.babylonMesh);
                 var smoke = particleSmoke.clone();
                 smoke.emitter = bullet.babylonMesh;
