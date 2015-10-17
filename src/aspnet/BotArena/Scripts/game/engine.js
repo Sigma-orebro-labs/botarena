@@ -240,6 +240,8 @@ gosuArena.engine = (function () {
     function restartMatch(gameClock, options) {
         options = options || {};
 
+        arenaState.clearGame();
+
         isTraining = options.isTraining;
 
         botRegistrar.setIsTraining(isTraining);

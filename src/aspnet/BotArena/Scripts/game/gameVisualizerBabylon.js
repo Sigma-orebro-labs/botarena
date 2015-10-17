@@ -4,7 +4,6 @@ gosuArena.visualizers = gosuArena.visualizers || {};
 
 gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
-
     var scene;
     var sun;
     var canonSound;
@@ -19,11 +18,108 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     var healthBarSpritesManager;
     var nameBarSpritesManagers = [];
     var explosionSpriteManager;
+    var arenaState;
+    var botMesh;
 
     var particleExplosion;
     var particleSmoke;
 
-    function initialize(arenaState) {
+    var botsCurrentlyInScene = [];
+
+    function removeBotFromScene(bot) {
+        waterMaterial.reflectionTexture.renderList.pop(bot.babylonMesh);
+        waterMaterial.reflectionTexture.renderList.pop(bot.healthBarMesh);
+
+        //bot.healthBarMesh.dispose();
+        bot.healthBarSprite.dispose();
+        bot.nameBar.dispose();
+        bot.babylonMesh.dispose();
+        shadowGenerator.getShadowMap().renderList.pop(bot.babylonMesh);
+
+        var botIndex = botsCurrentlyInScene.indexOf(bot);
+
+        if (botIndex >= 0) {
+            botsCurrentlyInScene.splice(botIndex, 1);
+        }
+    }
+
+    function onBotRegistrationStarting() {
+        var botsInScene = botsCurrentlyInScene.slice();
+
+        botsInScene.forEach(function(bot) {
+            removeBotFromScene(bot);
+        });
+    }
+
+    function addBotsToScene() {
+
+        if (!botMesh) {
+            // The bot mesh has not yet been loaded. The meshes will be added when the load is complete
+            return;
+        }
+
+        for (var i = 0; i < arenaState.bots.length; i++) {
+
+            var bot = arenaState.bots[i];
+
+            var isBotAlreadyAddedToScene = botsCurrentlyInScene.indexOf(bot) >= 0;
+
+            if (isBotAlreadyAddedToScene) {
+                return;
+            }
+
+            botsCurrentlyInScene.push(bot);
+
+            bot.babylonMesh = botMesh.createInstance("bot" + i);
+
+            bot.babylonMesh.position.x = bot.y;
+            bot.babylonMesh.position.y = shipAndBulletYvalue;
+            bot.babylonMesh.position.z = bot.x;
+
+            bot.babylonMesh.scaling = new BABYLON.Vector3(10, 10, 10);
+
+            /*var healthBarMaterial = new BABYLON.StandardMaterial("healthBarMaterial" + i, scene);
+            healthBarMaterial.diffuseColor = new BABYLON.Color3(0, 1, 0);
+            healthBarMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+            
+            bot.healthBarMesh = new BABYLON.Mesh.CreateBox("bot_" + i + "_health_bar", 10.0, scene);
+            bot.healthBarMesh.scaling = new BABYLON.Vector3(0.7, 0.7, 5);
+            bot.healthBarMesh.originalScaling = 5;
+            
+            bot.healthBarMesh.material = healthBarMaterial;
+            
+            bot.healthBarMesh.position.x = bot.y;
+            bot.healthBarMesh.position.y = shipAndBulletYvalue * 4;
+            bot.healthBarMesh.position.z = bot.x;
+            bot.healthBarMesh.rotation.y = Math.PI + gosu.math.degreesToRadians(bot.angle);*/
+
+            bot.healthBarSprite = new BABYLON.Sprite("healthbar_" + i, healthBarSpritesManager);
+            bot.healthBarSprite.color = new BABYLON.Color4(0, 1, 0.2, 1);
+            bot.healthBarSprite.position.x = bot.y;
+            bot.healthBarSprite.position.y = shipAndBulletYvalue * 4;
+            bot.healthBarSprite.position.z = bot.x;
+            bot.healthBarSprite.size = 45;
+
+            var nameBar = new BABYLON.SpriteManager("bot_" + i + "_name_bar", gosuArena.url.createAbsolute("/Content/images/sprites/dummyname.png"), 100, 144, scene);
+            nameBarSpritesManagers[i] = nameBar;
+            bot.nameBar = new BABYLON.Sprite("namebar_" + i, nameBarSpritesManagers[i]);
+            bot.nameBar.position.x = bot.y;
+            bot.nameBar.position.y = shipAndBulletYvalue * 4;
+            bot.nameBar.position.z = bot.x;
+            bot.nameBar.size = 85;
+
+            shadowGenerator.getShadowMap().renderList.push(bot.babylonMesh);
+        }
+    }
+
+    function onGameStarting() {
+        //mesh.convertToFlatShadedMesh();
+
+        addBotsToScene();
+    }
+
+    function initialize(worldArenaState) {
+        arenaState = worldArenaState;
 
         console.log(arenaState);
         arenaState.onBotKilled(onBotKilled);
@@ -38,6 +134,9 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             // clear
         });
 
+        gosuArena.events.botRegistrationStarting(onBotRegistrationStarting);
+        gosuArena.events.gameStarting(onGameStarting);
+
         gosuArena.visualizers.babylonEngine = new BABYLON.Engine(canvas, true);
         engine = gosuArena.visualizers.babylonEngine;
 
@@ -46,7 +145,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
         setUpSounds();
 
-        assignBotModels(arenaState);
         setUpTerrain(arenaState);
         setUpParticleSmoke();
         setUpParticleExplosion();
@@ -57,16 +155,15 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         healthBarSpritesManager = new BABYLON.SpriteManager("healthBarSpritesManager", gosuArena.url.createAbsolute("/Content/images/sprites/healthbar.png"), 100, 64, scene);
         explosionSpriteManager = new BABYLON.SpriteManager("explosions", gosuArena.url.createAbsolute("/Content/images/sprites/explosion17.png"), 50, 64, scene);
 
+        loadBotMesh();
 
         engine.runRenderLoop(function () {
             scene.render();
         });
-
     }
 
     function onShotFired(bot, bullet) {
         //canonSound.play();
-
     }   
 
     function setUpLandscape(arenaState) {
@@ -247,7 +344,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         
         waterMaterial = new gosu.WaterMaterial("water", scene, sun);
 
-        
         waterMaterial.refractionTexture.renderList.push(ground);
         waterMaterial.refractionTexture.renderList.push(landscape);
 
@@ -264,66 +360,13 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             waterMaterial.reflectionTexture.renderList.push(bot.healthBarMesh);
         }
 
-
-        
-
         waterSound.attachToMesh(water);
     }
 
-    function assignBotModels(arenaState) {
-
-
+    function loadBotMesh() {
         BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "ship.babylon", scene, function (newMeshes, particleSystems) {
-
-            var mesh = newMeshes[1];
-            //mesh.convertToFlatShadedMesh();
-
-            for (var i = 0; i < arenaState.bots.length; i++) {
-
-                var bot = arenaState.bots[i];
-
-                bot.babylonMesh = mesh.createInstance("bot" + i);
-
-
-                bot.babylonMesh.position.x = bot.y;
-                bot.babylonMesh.position.y = shipAndBulletYvalue;
-                bot.babylonMesh.position.z = bot.x;
-
-                bot.babylonMesh.scaling = new BABYLON.Vector3(10, 10, 10);
-
-                /*var healthBarMaterial = new BABYLON.StandardMaterial("healthBarMaterial" + i, scene);
-                healthBarMaterial.diffuseColor = new BABYLON.Color3(0, 1, 0);
-                healthBarMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-                
-                bot.healthBarMesh = new BABYLON.Mesh.CreateBox("bot_" + i + "_health_bar", 10.0, scene);
-                bot.healthBarMesh.scaling = new BABYLON.Vector3(0.7, 0.7, 5);
-                bot.healthBarMesh.originalScaling = 5;
-                
-                bot.healthBarMesh.material = healthBarMaterial;
-                
-                bot.healthBarMesh.position.x = bot.y;
-                bot.healthBarMesh.position.y = shipAndBulletYvalue * 4;
-                bot.healthBarMesh.position.z = bot.x;
-                bot.healthBarMesh.rotation.y = Math.PI + gosu.math.degreesToRadians(bot.angle);*/
-
-                bot.healthBarSprite = new BABYLON.Sprite("healthbar_" + i, healthBarSpritesManager);
-                bot.healthBarSprite.color = new BABYLON.Color4(0, 1, 0.2, 1);
-                bot.healthBarSprite.position.x = bot.y;
-                bot.healthBarSprite.position.y = shipAndBulletYvalue * 4;
-                bot.healthBarSprite.position.z = bot.x;
-                bot.healthBarSprite.size = 45;
- 
-                var nameBar = new BABYLON.SpriteManager("bot_" + i + "_name_bar", gosuArena.url.createAbsolute("/Content/images/sprites/dummyname.png"), 100, 144, scene);
-                nameBarSpritesManagers[i] = nameBar;
-                bot.nameBar = new BABYLON.Sprite("namebar_" + i, nameBarSpritesManagers[i]);
-                bot.nameBar.position.x = bot.y;
-                bot.nameBar.position.y = shipAndBulletYvalue * 4;
-                bot.nameBar.position.z = bot.x;
-                bot.nameBar.size = 85;
-
-                shadowGenerator.getShadowMap().renderList.push(bot.babylonMesh);
-
-            }
+            botMesh = newMeshes[1];
+            addBotsToScene();
         });
     }
 
@@ -440,16 +483,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     }
 
     function onBotKilled(bot) {
-
-        waterMaterial.reflectionTexture.renderList.pop(bot.babylonMesh);
-        waterMaterial.reflectionTexture.renderList.pop(bot.healthBarMesh);
-
-        //bot.healthBarMesh.dispose();
-        bot.healthBarSprite.dispose();
-        bot.nameBar.dispose();
-        bot.babylonMesh.dispose();
-        shadowGenerator.getShadowMap().renderList.pop(bot.babylonMesh);
-
+        removeBotFromScene(bot);
     }
 
     function setUpParticleExplosion() {

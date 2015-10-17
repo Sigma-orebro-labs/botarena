@@ -87,8 +87,6 @@ gosuArena.arenaState.create = function () {
         arenaState.bots.length = 0;
         arenaState.bullets.length = 0;
 
-        removeCallbacks();
-
         raiseOnClear();
     };
 
