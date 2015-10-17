@@ -69,6 +69,10 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         });
     }
 
+    function refreshHealthBarWidth(bot) {
+        bot.healthBarSprite.width = 64 * bot.healthPercentage();
+    }
+
     function addBotsToScene() {
 
         if (!botMesh) {
@@ -117,6 +121,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             bot.healthBarSprite.position.y = healthBarYValue;
             bot.healthBarSprite.position.z = bot.x;
             bot.healthBarSprite.size = 45;
+            refreshHealthBarWidth(bot);
 
             var nameImageUrl = gosuArena.url.createAbsolute("/api/botnameimage", { name: bot.name, colorHexCode: bot.color });
 
@@ -139,7 +144,11 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     }
 
     function onMatchEnded() {
-        arenaState.bullets.forEach(function(bullet) {
+        removeAllBullets();
+    }
+
+    function removeAllBullets() {
+        arenaState.bullets.forEach(function (bullet) {
             removeBulletFromScene(bullet);
         });
     }
@@ -157,7 +166,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             update(arenaState);
         });
         arenaState.onClear(function () {
-            // clear
+            removeAllBullets();
         });
 
         gosuArena.events.botRegistrationStarting(onBotRegistrationStarting);
@@ -433,8 +442,8 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             bot.healthBarSprite.color.r = 1;
             bot.healthBarSprite.color.g = bot.healthPercentage();
         }
-        bot.healthBarSprite.width = 64 * bot.healthPercentage();
 
+        refreshHealthBarWidth(bot);
 
         // explosion
         var explosion = new BABYLON.Sprite("explosion", explosionSpriteManager);
