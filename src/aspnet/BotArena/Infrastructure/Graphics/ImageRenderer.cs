@@ -10,17 +10,24 @@ namespace GosuArena.Infrastructure.Graphics
     {
         public void RenderNameImageToStream(string name, string colorHexCode, Stream stream)
         {
-            const int fontSize = 40;
+            const int desiredFontSize = 40;
             const int fontOutlineThickness = 4;
             const double outlineColorTweakFactor = 0.5;
             const double upperGradiantColorTweakFactor = 1.2;
             const double lowerGradiantColorTweakFactor = 0.6;
-             
-            var font = new Font("Verdana", fontSize, FontStyle.Regular);
+            const int imageWidth = 300;
+            const int imageHeight = 70;
+            const string fontFamily = "Verdana";
 
-            var requiredImageSize = MeasureRenderedSize(name, font);
+            if (!colorHexCode.StartsWith("#"))
+            {
+                colorHexCode = "#" + colorHexCode;
+            }
 
-            using (var bitMapImage = new Bitmap(requiredImageSize.Width, requiredImageSize.Height, PixelFormat.Format32bppArgb))
+            var actualFontSize = GetMaxFontSizeForString(name, fontFamily, desiredFontSize, imageWidth, imageHeight);
+            var font = new Font(fontFamily, actualFontSize);
+
+            using (var bitMapImage = new Bitmap(imageWidth, imageHeight, PixelFormat.Format32bppArgb))
             using (var graphics = System.Drawing.Graphics.FromImage(bitMapImage))
             {
                 var graphicsPath = new GraphicsPath();
@@ -28,7 +35,7 @@ namespace GosuArena.Infrastructure.Graphics
                 var stringFormat = new StringFormat(StringFormatFlags.NoClip)
                 {
                     Alignment = StringAlignment.Center,
-                    LineAlignment = StringAlignment.Center
+                    LineAlignment = StringAlignment.Far
                 };
 
                 var baseColor = ColorTranslator.FromHtml(colorHexCode);
@@ -47,7 +54,7 @@ namespace GosuArena.Infrastructure.Graphics
                     name,
                     font.FontFamily,
                     (int)font.Style,
-                    fontSize,
+                    actualFontSize,
                     new Rectangle(0, 0, bitMapImage.Width, bitMapImage.Height),
                     stringFormat);
 
@@ -58,6 +65,30 @@ namespace GosuArena.Infrastructure.Graphics
                 graphics.FillPath(gradientBrush, graphicsPath);
 
                 bitMapImage.Save(stream, ImageFormat.Png);
+            }
+        }
+
+        private int GetMaxFontSizeForString(string s, string fontFamily, int maxFontSize, int targetAreaWidth, int targetAreaHeight)
+        {
+            // Create a large bitmap area just to find out what would be the actual
+            // required size for the string to fit, using the given font
+            using (var bitMapImage = new Bitmap(800, 300, PixelFormat.Format32bppArgb))
+            using (var graphics = System.Drawing.Graphics.FromImage(bitMapImage))
+            {
+                const int minAllowedFontSize = 10;
+
+                for (var fontSize = maxFontSize; fontSize > minAllowedFontSize; fontSize--)
+                {
+                    var font = new Font(fontFamily, fontSize);
+                    var sizeF = graphics.MeasureString(s, font);
+
+                    if (sizeF.Width <= targetAreaWidth && sizeF.Height <= targetAreaHeight)
+                    {
+                        return fontSize;
+                    }
+                }
+
+                return minAllowedFontSize;
             }
         }
 
