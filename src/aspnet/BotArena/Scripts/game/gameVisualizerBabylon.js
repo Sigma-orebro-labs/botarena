@@ -26,6 +26,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     var explosionSpriteManager;
     var arenaState;
     var botMesh;
+    var materials = {};
 
     var particleExplosion;
     var particleSmoke;
@@ -265,6 +266,15 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
         skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
         skybox.material = skyboxMaterial;
+    }
+
+    function setUpMaterials() {
+
+        var material = new BABYLON.StandardMaterial("bullet", scene);
+        //material.specularPower(0);
+        material.diffuseColor = new BABYLON.Color3(0.3, 0.3, 0.3);
+
+        materials.bullet = material;
     }
 
     function update(arenaState) {
@@ -542,8 +552,9 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
             if (bullet.babylonMesh === undefined) {
 
-                bullet.babylonMesh = BABYLON.Mesh.CreateSphere("bullet", 5.0, 5.0, scene);
+                bullet.babylonMesh = BABYLON.Mesh.CreateSphere("bullet", 4.0, 4.0, scene);
                 bullet.babylonMesh.color = new BABYLON.Color3.Black();
+                bullet.babylonMesh.material = materials.bullet; // this grey appears completely white. Why?
                 bullet.babylonMesh.position.y = bulletYValue;
                 shadowGenerator.getShadowMap().renderList.push(bullet.babylonMesh);
                 var smoke = particleSmoke.clone();
@@ -618,27 +629,29 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         particleSmoke = new BABYLON.ParticleSystem("smoke", 4000, scene);
 
         //Texture of each particle
-        particleSmoke.particleTexture = new BABYLON.Texture(gosuArena.url.createAbsolute("/Content/images/sprites/Flare.jpg"), scene);
+        particleSmoke.particleTexture = new BABYLON.Texture(gosuArena.url.createAbsolute("/Content/images/sprites/flare_red.jpg"), scene);
 
 
         particleSmoke.minEmitBox = new BABYLON.Vector3(-1, -1, -1); // Starting all from
         particleSmoke.maxEmitBox = new BABYLON.Vector3(1, 1, 1); // To...
 
         // Colors of all particles
-        particleSmoke.color1 = new BABYLON.Color4.FromInts(100, 100, 100, 255);
-        particleSmoke.color2 = new BABYLON.Color4.FromInts(50, 50, 50, 255);
+        //particleSmoke.color1 = new BABYLON.Color4.FromInts(138, 49, 21, 255);
+        //particleSmoke.color2 = new BABYLON.Color4.FromInts(138, 123, 21, 255);
+        particleSmoke.color1 = new BABYLON.Color4.FromInts(138, 49, 21, 255);
+        particleSmoke.color2 = new BABYLON.Color4.FromInts(66, 66, 66, 255);
         particleSmoke.colorDead = new BABYLON.Color4(0, 0, 0, 0);
 
         // Size of each particle (random between...
-        particleSmoke.minSize = 2;
-        particleSmoke.maxSize = 3;
+        particleSmoke.minSize = 1;
+        particleSmoke.maxSize = 2;
 
         // Life time of each particle (random between...
-        particleSmoke.minLifeTime = 1;
-        particleSmoke.maxLifeTime = 2;
+        particleSmoke.minLifeTime = 0.1;
+        particleSmoke.maxLifeTime = 0.2;
 
         // Emission rate
-        particleSmoke.emitRate = 5000;
+        particleSmoke.emitRate = 4000;
 
         // Blend mode : BLENDMODE_ONEONE, or BLENDMODE_STANDARD
         particleSmoke.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
@@ -655,9 +668,9 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         particleSmoke.maxAngularSpeed = Math.PI;
 
         // Speed
-        particleSmoke.minEmitPower = 2;
-        particleSmoke.maxEmitPower = 4;
-        particleSmoke.updateSpeed = 0.001;
+        particleSmoke.minEmitPower = 20;
+        particleSmoke.maxEmitPower = 40;
+        particleSmoke.updateSpeed = 0.010;
 
     }
 
