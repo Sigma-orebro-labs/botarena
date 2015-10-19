@@ -186,7 +186,6 @@
     <Compile Include="Controllers\BotNameImageController.cs" />
     <Compile Include="Controllers\DocsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
-    <Compile Include="Controllers\SceneEditorController.cs" />
     <Compile Include="Controllers\MatchController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Extensions\AuthorizationExtensions.cs" />
@@ -261,9 +260,7 @@
     <Content Include="Content\textures\skybox\_pz.jpg" />
     <Content Include="Robots.txt" />
     <Content Include="Scripts\bots\waller.js" />
-    <Content Include="Scripts\editor\constants.js" />
     <Content Include="Scripts\game\botRegistrar.js" />
-    <Content Include="Scripts\game\gameVisualizer3D.js" />
     <Content Include="Scripts\game\gameVisualizerBabylon.js" />
     <Content Include="Scripts\game\specs\ticker.js" />
     <Content Include="Scripts\game\terrain.js" />
@@ -276,8 +273,6 @@
     <Content Include="Scripts\Pages\Match\Play\matchUI.js" />
     <Content Include="Scripts\Pages\Match\Play\matchViewModel.js" />
     <Content Include="Scripts\Pages\Match\Setup\rosterViewModel.js" />
-    <Content Include="Scripts\editor\sceneEditor.js" />
-    <Content Include="Scripts\Pages\SceneEditor\editor.js" />
     <Content Include="Scripts\Pages\User\profile.js" />
     <Content Include="Scripts\game\specs\gameSpecsSetup.js" />
     <Content Include="Scripts\game\modifiers\modifierCollection.js" />
@@ -531,7 +526,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Views\Web.config" />
-    <Content Include="Views\SceneEditor\Index.cshtml" />
     <Content Include="Views\Shared\_LayoutWorld.cshtml" />
     <Content Include="Views\Match\PlayFullScreen.cshtml" />
   </ItemGroup>
