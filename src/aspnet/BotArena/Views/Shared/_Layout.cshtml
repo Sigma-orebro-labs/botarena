@@ -1,7 +1,7 @@
 ﻿@using System.Web.Optimization
 @using GosuArena.Extensions
 <!DOCTYPE html>
-<html ng-app="botarena">
+<html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
@@ -15,9 +15,8 @@
     @RenderSection("styles", required: false)
 
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/angular")
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/threejs")
+    @Scripts.Render("~/bundles/babylon")
 </head>
 <body>
     <div class="container">

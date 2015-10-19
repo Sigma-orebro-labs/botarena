@@ -14,19 +14,10 @@ namespace GosuArena
                 "~/Scripts/lib/jquery/jquery.unobtrusive*",
                 "~/Scripts/lib/jquery/jquery.validate*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/angular").Include(
-                "~/Scripts/lib/angular/angular.min.js",
-                "~/Scripts/lib/angular/angular-route.min.js",
-                "~/Content/angular/app.js",
-                "~/Content/angular/controllers/*.js"));
-
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Content/lib/bootstrap-3.0.3/js/dropdown.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/threejs").Include(
-                "~/Scripts/lib/threejs/three.js",
-                "~/Scripts/lib/threejs/OrbitControls.js",
-                "~/Scripts/lib/threejs/loaders/*.js",
+            bundles.Add(new ScriptBundle("~/bundles/babylon").Include(
                 "~/Scripts/lib/babylon.2.1.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/gosuarena").Include(
