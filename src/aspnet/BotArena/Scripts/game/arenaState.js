@@ -10,6 +10,8 @@ gosuArena.arenaState.create = function () {
     var bulletHitTerrainCallbacks = [];
     var shotFiredCallbacks = [];
     var tickCallbacks = [];
+    var clearedCallbacks = [];
+    var clearStartingCallbacks = [];
 
     var arenaState = {
         bots: [],
@@ -80,11 +82,26 @@ gosuArena.arenaState.create = function () {
         arenaState.bullets.splice(index, 1);
     };
 
-    arenaState.clear = function () {
+    arenaState.clearGame = function () {
+
+        raiseOnClearStarting();
+
+        // We leave the terrain since it doesn't change between games
         arenaState.bots.length = 0;
-        arenaState.terrain.length = 0;
         arenaState.bullets.length = 0;
+
+        raiseOnCleared();
     };
+
+    function removeCallbacks() {
+        botKilledCallbacks = [];
+        botAddedCallbacks = [];
+        botHitByBulletCallbacks = [];
+        bulletHitBotCallbacks = [];
+        bulletHitTerrainCallbacks = [];
+        shotFiredCallbacks = [];
+        tickCallbacks = [];
+    }
 
     arenaState.addBot = function (bot) {
         bot.onKilled(handleOnBotKilled);
@@ -148,6 +165,14 @@ gosuArena.arenaState.create = function () {
         tickCallbacks.push(callback);
     };
 
+    arenaState.onClearStarting = function (callback) {
+        clearStartingCallbacks.push(callback);
+    };
+
+    arenaState.onCleared = function (callback) {
+        clearedCallbacks.push(callback);
+    };
+
     function raiseOnBotKilled(bot) {
         botKilledCallbacks.forEach(function (callback) {
             callback(bot);
@@ -186,6 +211,18 @@ gosuArena.arenaState.create = function () {
 
     function raiseOnTick() {
         tickCallbacks.forEach(function (callback) {
+            callback();
+        });
+    }
+
+    function raiseOnCleared() {
+        clearedCallbacks.forEach(function (callback) {
+            callback();
+        });
+    }
+
+    function raiseOnClearStarting() {
+        clearStartingCallbacks.forEach(function (callback) {
             callback();
         });
     }

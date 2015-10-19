@@ -15,7 +15,7 @@
     <AssemblyName>GosuArena</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -27,6 +27,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -182,6 +183,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BotApiControllerSpecs.cs" />
     <Compile Include="Controllers\BotController.cs" />
+    <Compile Include="Controllers\BotNameImageController.cs" />
     <Compile Include="Controllers\DocsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\SceneEditorController.cs" />
@@ -190,6 +192,7 @@
     <Compile Include="Extensions\AuthorizationExtensions.cs" />
     <Compile Include="Extensions\HtmlExtensions.cs" />
     <Compile Include="Infrastructure\Authorization\AdminAttribute.cs" />
+    <Compile Include="Infrastructure\Graphics\ImageRenderer.cs" />
     <Compile Include="Models\Controls\MatchSetupModel.cs" />
     <Compile Include="Models\Controls\NavigationMenuItemModel.cs" />
     <Compile Include="Global.asax.cs">
@@ -208,6 +211,8 @@
     <Content Include="Content\angular\controllers\match-controller.js" />
     <Content Include="Content\angular\index.html" />
     <Content Include="Content\angular\templates\match.html" />
+    <Content Include="Content\images\sprites\dummyname.png" />
+    <Content Include="Content\images\sprites\healthbar.png" />
     <Content Include="Content\lib\bootstrap-notify\css\bootstrap-notify.css" />
     <Content Include="Content\lib\bootstrap-notify\js\bootstrap-notify.js" />
     <Content Include="Content\images\docs\bot_api_get_request.PNG" />
@@ -237,6 +242,15 @@
     <Content Include="Scripts\game\modifiers\classes\tankClass.js" />
     <Content Include="Scripts\game\modifiers\defaultModifier.js" />
     <Content Include="Scripts\game\specs\botModifierSpecs.js" />
+    <Content Include="Scripts\infrastructure\imageLoader.js" />
+    <Content Include="Scripts\infrastructure\specs\urlSpecs.js" />
+    <Content Include="Scripts\infrastructure\url.js" />
+    <Content Include="Scripts\lib\jasmine-2.3.4\boot.js" />
+    <Content Include="Scripts\lib\jasmine-2.3.4\console.js" />
+    <Content Include="Scripts\lib\jasmine-2.3.4\jasmine-html.js" />
+    <Content Include="Scripts\lib\jasmine-2.3.4\jasmine.css" />
+    <Content Include="Scripts\lib\jasmine-2.3.4\jasmine.js" />
+    <Content Include="Scripts\lib\jasmine-2.3.4\jasmine_favicon.png" />
     <Content Include="Scripts\Shaders\Water\bump.png" />
     <Content Include="Scripts\Shaders\Water\water.fragment.fx" />
     <Content Include="Scripts\Shaders\Water\water.vertex.fx" />
@@ -509,6 +523,7 @@
     <Content Include="Content\models\ship.babylon" />
     <Content Include="Content\models\newer_mountains.babylon" />
     <Content Include="Content\models\only_plane.babylon" />
+    <Content Include="Content\Pages\Match\World.less" />
     <None Include="Properties\PublishProfiles\botarena - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\botarena - Web Deploy.pubxml" />
     <None Include="Scripts\lib\jquery\jquery-2.0.0.intellisense.js" />
@@ -523,7 +538,6 @@
     <Content Include="Scripts\lib\knockout\knockout-3.0.0.js" />
     <Content Include="Scripts\lib\knockout\knockout.protected-observable.js" />
     <Content Include="Scripts\Pages\Match\Play\match.js" />
-    <Content Include="Scripts\gosu\math\collissions.js" />
     <Content Include="Scripts\gosu\math\specs\collissionsSpecs.js" />
     <Content Include="Scripts\gosu\math\line.js" />
     <Content Include="Scripts\gosu\math\specs\lineSpecs.js" />
@@ -560,6 +574,8 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\SceneEditor\Index.cshtml" />
+    <Content Include="Views\Shared\_LayoutWorld.cshtml" />
+    <Content Include="Views\Match\PlayFullScreen.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -615,7 +631,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>0</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:62541/</IISUrl>
+          <IISUrl>http://localhost/BotArena</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

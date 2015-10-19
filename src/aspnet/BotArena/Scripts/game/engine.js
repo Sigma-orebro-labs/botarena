@@ -2,10 +2,10 @@
 
 gosuArena.engine = (function () {
     var arenaState = gosuArena.arenaState.create();
-    var readyCallbacks = [];
-    var matchStartedCallbacks = [];
+    var readyForBotRegistrationCallbacks = [];
     var isTraining = null;
     var gameListeners = [];
+    var resourceLoaders = [];
 
     var arenaHeight = 550;
     var arenaWidth = 750;
@@ -18,13 +18,9 @@ gosuArena.engine = (function () {
     gosuArena.initiateBotRegistration = botRegistrar.initiateBotRegistration;
     gosuArena.register = botRegistrar.register;
 
-    gosuArena.ready = function(callback) {
-        readyCallbacks.push(callback);
+    gosuArena.readyForBotRegistration = function (callback) {
+        readyForBotRegistrationCallbacks.push(callback);
     };
-
-    gosuArena.matchStarted = function (callback) {
-        matchStartedCallbacks.push(callback);
-    }
 
     function initializeTerrain() {
 
@@ -167,8 +163,8 @@ gosuArena.engine = (function () {
         });
     }
 
-    function raiseReadyEvent() {
-        readyCallbacks.forEach(function (callback) {
+    function raiseReadyForBotRegistrationEvent() {
+        readyForBotRegistrationCallbacks.forEach(function (callback) {
 
             // Invoke the callback with an empty object as this
             // to reduce hacking opportunities
@@ -176,44 +172,90 @@ gosuArena.engine = (function () {
         });
     }
 
-    function raiseMatchStartedEvent() {
-        matchStartedCallbacks.forEach(function(callback) {
-            callback.call({});
+    function loadResources(onResourcesLoadedCallback) {
+
+        // If there are no loaders, just continue on
+        if (resourceLoaders.length <= 0) {
+            onResourcesLoadedCallback();
+            return;
+        }
+
+        // Copy the loaders array, to keep track of which loaders have not
+        // yet finished loading their stuff
+        var remainingLoaders = resourceLoaders.slice();
+
+        function createMarkLoaderAsFinishedCallback(loader) {
+            return function() {
+                var index = remainingLoaders.indexOf(loader);
+
+                // Remove the loader from the array of remaining loaders, when it finishes
+                if (index >= 0) {
+                    remainingLoaders.splice(index, 1);
+                }
+
+                // If there are no loaders which still have not finished loading, 
+                // then everything is loaded and we can go on with the game
+                if (remainingLoaders.length <= 0) {
+                    onResourcesLoadedCallback();
+                }
+            };
+        }
+
+        for (var i = 0; i < resourceLoaders.length; i++) {
+            var loader = resourceLoaders[i];
+            loader.load(arenaState, createMarkLoaderAsFinishedCallback(loader));
+        }
+    }
+
+    function initializeWorld(options) {
+        options = options || {};
+
+        gameListeners = options.listeners || [];
+        resourceLoaders = options.resourceLoaders || [];
+
+        gosuArena.arenaWidth = arenaWidth;
+        gosuArena.arenaHeight = arenaHeight;
+
+        initializeTerrain();
+
+        // Make sure all resources have been loaded before initializing the game listeners
+        loadResources(function () {
+
+            initializeGameListeners();
+            gosuArena.events.raiseWorldInitialized();
         });
     }
 
     function restartMatch(gameClock, options) {
         options = options || {};
 
-        gameListeners = options.listeners || [];
+        arenaState.clearGame();
+
         isTraining = options.isTraining;
 
         botRegistrar.setIsTraining(isTraining);
 
-        arenaState.clear();
+        gosuArena.events.raiseBotRegistrationStarting();
 
-        gosuArena.arenaWidth = arenaWidth;
-        gosuArena.arenaHeight = arenaHeight;
-
-        initializeTerrain();
-        initializeGameListeners();
-
-        raiseReadyEvent();
+        // This triggers all bots to actually register to the bot registrar,
+        // so after this the bots have actually been registered with the game engine
+        raiseReadyForBotRegistrationEvent();
 
         fixStartPositionsToAvoidCollisions();
-        
+
         startGameLoop(gameClock);
 
-        raiseMatchStartedEvent();
+        gosuArena.events.raiseGameStarting();
     }
 
     function reset() {
-        arenaState.clear();
-        readyCallbacks.length = 0;
+        arenaState.clearGame();
+        readyForBotRegistrationCallbacks.length = 0;
     }
 
     return {
         start: restartMatch,
-        reset: reset
+        reset: reset,
+        initializeWorld: initializeWorld
     };
 })();

@@ -16,12 +16,14 @@ describe("Game", function () {
     };
 
     function startGame() {
-        gosuArena.specs.game.startGame(clock, [arenaStateInterceptor]);
+        gosuArena.specs.game.startGame(clock);
     }
 
     var addBot = gosuArena.specs.game.addBot;
 
     beforeEach(function () {
+
+        jasmine.addMatchers(gosuArena.specs.matchers);
 
         botOptions = gosuArena.factories.createSafeBotOptions({}, true);
 
@@ -31,6 +33,8 @@ describe("Game", function () {
         clock = gosuArena.gameClock.createFake();
 
         gosuArena.specs.game.cleanup();
+
+        gosuArena.specs.game.initializeWorld([arenaStateInterceptor]);
     });
 
     describe("Bot", function () {
@@ -206,7 +210,7 @@ describe("Game", function () {
                     expect(status.canMoveRight()).toEqual(true);
 
                     wasTickCalled = true;
-                },
+                }
             });
 
             startGame();
@@ -368,6 +372,9 @@ describe("Game", function () {
         });
 
         it("can move back, east and south when facing west in north west corner", function () {
+
+            var wasTickCalled = false;
+
             gosuArena.initiateBotRegistration({
                 id: 1,
                 name: "bot"
@@ -382,6 +389,8 @@ describe("Game", function () {
                         expect(status.canMoveSouth()).toEqual(true);
                         expect(status.canMoveLeft()).toEqual(true);
                         expect(status.canMoveRight()).toEqual(false);
+
+                        wasTickCalled = true;
                     },
                     options: {
                         startPosition: {
@@ -393,10 +402,16 @@ describe("Game", function () {
                 });
             });
 
+            startGame();
             clock.doTick();
+
+            expect(wasTickCalled).toBe(true);
         });
 
         it("can move forward, west and north when facing north in south east corner", function () {
+
+            var wasTickCalled = false;
+
             gosuArena.initiateBotRegistration({
                 id: 1,
                 name: "bot"
@@ -411,6 +426,8 @@ describe("Game", function () {
                         expect(status.canMoveSouth()).toEqual(false);
                         expect(status.canMoveLeft()).toEqual(true);
                         expect(status.canMoveRight()).toEqual(false);
+
+                        wasTickCalled = true;
                     },
                     options: {
                         startPosition: {
@@ -422,10 +439,16 @@ describe("Game", function () {
                 });
             });
 
+            startGame();
             clock.doTick();
+
+            expect(wasTickCalled).toBe(true);
         });
 
         it("can turn both ways when in the middle of the field", function () {
+
+            var wasTickCalled = false;
+
             gosuArena.initiateBotRegistration({
                 id: 1,
                 name: "bot"
@@ -434,6 +457,8 @@ describe("Game", function () {
                     tick: function (actionQueue, status) {
                         expect(status.canTurnLeft()).toEqual(true);
                         expect(status.canTurnRight()).toEqual(true);
+
+                        wasTickCalled = true;
                     },
                     options: {
                         startPosition: {
@@ -445,10 +470,16 @@ describe("Game", function () {
                 });
             });
 
+            startGame();
             clock.doTick();
+
+            expect(wasTickCalled).toBe(true);
         });
 
         it("can not turn at all when in a corner", function () {
+
+            var wasTickCalled = false;
+
             gosuArena.initiateBotRegistration({
                 id: 1,
                 name: "bot"
@@ -457,6 +488,8 @@ describe("Game", function () {
                     tick: function (actionQueue, status) {
                         expect(status.canTurnLeft()).toEqual(false);
                         expect(status.canTurnRight()).toEqual(false);
+
+                        wasTickCalled = true;
                     },
                     options: {
                         startPosition: {
@@ -468,7 +501,10 @@ describe("Game", function () {
                 });
             });
 
+            startGame();
             clock.doTick();
+
+            expect(wasTickCalled).toBe(true);
         });
 
         it("receives a tick for each tick of the game", function () {
@@ -827,13 +863,13 @@ describe("Game", function () {
                     tick: function (actionQueue, status) {
 
                         expect(status.seenEnemies.length).toEqual(3);
-                        expect(status.seenEnemies).toContainElementMatching(function(bot) { return bot.id = 1; });
-                        expect(status.seenEnemies).toContainElementMatching(function(bot) { return bot.id = 4; });
-                        expect(status.seenEnemies).toContainElementMatching(function(bot) { return bot.id = 5; });
+                        expect(status.seenEnemies).toContainElementMatching(function(bot) { return bot.id === 1; });
+                        expect(status.seenEnemies).toContainElementMatching(function(bot) { return bot.id === 4; });
+                        expect(status.seenEnemies).toContainElementMatching(function(bot) { return bot.id === 5; });
 
                         expect(status.seenAllies.length).toEqual(2);
-                        expect(status.seenAllies).toContainElementMatching(function (bot) { return bot.id = 2; });
-                        expect(status.seenAllies).toContainElementMatching(function (bot) { return bot.id = 3; });
+                        expect(status.seenAllies).toContainElementMatching(function (bot) { return bot.id === 2; });
+                        expect(status.seenAllies).toContainElementMatching(function (bot) { return bot.id === 3; });
 
                         wasTickCalled = true;
                     },
@@ -1260,7 +1296,7 @@ describe("Game", function () {
         expect(hasMatchEnded).toEqual(true);
     });    
     
-    it("Initializes listeners before bot registration when the game starts", function () {
+    it("Initializes listeners when world is initialized, before bot registration when the game starts", function () {
         gosuArena.initiateBotRegistration({
             id: 1,
             name: "bot"
@@ -1281,13 +1317,76 @@ describe("Game", function () {
             }
         };
 
-        gosuArena.engine.start(clock, {
-            isTraining: true,
+        gosuArena.engine.initializeWorld({
             listeners: [listener]
         });
 
         expect(wasInitializeCalled).toBe(true);
+        expect(arenaState.livingBots()).toBeEmpty();
+
+        gosuArena.engine.start(clock, {
+            isTraining: true
+        });
+
         expect(actualArenaState.livingBots()).not.toBeEmpty();
+    });
+
+    it("raises BotRegistrationStarting event just before the bot registration has actually started, after the world has been initialized", function () {
+
+        addBot();
+
+        var wasEventFired = false;
+
+        gosuArena.events.botRegistrationStarting(function() {
+            wasEventFired = true;
+            expect(arenaState.bots).toBeEmpty();
+        });
+
+        gosuArena.engine.initializeWorld({
+            listeners: [arenaStateInterceptor]
+        });
+
+        expect(wasEventFired).toBe(false);
+
+        startGame();
+
+        expect(wasEventFired).toBe(true);
+        expect(arenaState.livingBots()).not.toBeEmpty();
+    });
+
+    it("raises gameStarting event after the bot registration has completed, but before bots begin receiving ticks", function () {
+
+        var wasEventFired = false,
+            wasTickCalled = false;
+
+        addBot({
+            tick: function () {
+                wasTickCalled = true;
+            }
+        });
+
+        gosuArena.events.gameStarting(function () {
+            wasEventFired = true;
+            expect(arenaState.bots).not.toBeEmpty();
+        });
+
+        gosuArena.engine.initializeWorld({
+            listeners: [arenaStateInterceptor]
+        });
+
+        expect(wasEventFired).toBe(false);
+
+        clock.doTick();
+
+        startGame();
+
+        expect(wasEventFired).toBe(true);
+        expect(wasTickCalled).toBe(false);
+
+        clock.doTick();
+
+        expect(wasEventFired).toBe(true);
+        expect(wasTickCalled).toBe(true);
     });
 
     it("gives bots ids specified during registration", function () {

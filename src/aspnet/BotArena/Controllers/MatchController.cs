@@ -112,7 +112,7 @@ namespace GosuArena.Controllers
 
         private ActionResult PlayMatch(IList<BotModel> botModels)
         {
-            return View("Play", botModels);
+            return View("PlayFullScreen", botModels);
         }
 
         private List<Bot> GetBotsInMatch(string names)

@@ -2,12 +2,66 @@
 
     var gameClock = null;
     var isRunning = false;
+    var canvas = document.getElementById("gameCanvas");
+    var canvasBabylon = document.getElementById("3d-game-canvas-babylon");
+
+    gosuArena.visualizers = {
+        gameVisualizer2D: gosuArena.factories.createGameVisualizer(canvas),
+        gameVisualizer3D: gosuArena.factories.createGameVisualizerBabylon(canvasBabylon)
+    };
+
+    function stopMatch() {
+        if (gameClock) {
+            gameClock.stop();
+        }
+
+        isRunning = false;
+    }
 
     gosuArena.events.matchEnded(function(result) {
         stopMatch();
     });
 
     gosuArena.matchViewModel = gosuArena.factories.createMatchViewModel();
+
+    function writeGameMessage(message, autoHideDelay) {
+        console.log(message);
+        var $messageElement = $(".game-message");
+        $messageElement.show();
+        $messageElement.text(message);
+
+        if (autoHideDelay) {
+            setTimeout(function() {
+                $messageElement.hide();
+            }, autoHideDelay);
+        }
+    }
+
+    function restartMatchWithCountDown(countDownsRemaining, delay, hasShownInitialMessage) {
+        countDownsRemaining = countDownsRemaining === undefined ? 3 : countDownsRemaining;
+        delay = delay || 1000;
+
+        if (!countDownsRemaining || countDownsRemaining <= 0) {
+
+            writeGameMessage("Fight!", 1000);
+
+            restartMatch();
+            return;
+        }
+
+        var newCountDownsRemaining = countDownsRemaining;
+
+        if (!hasShownInitialMessage) {
+            writeGameMessage("Game starting in...");
+        } else {
+            writeGameMessage(countDownsRemaining);
+            newCountDownsRemaining--;
+        }
+
+        setTimeout(function() {
+            restartMatchWithCountDown(newCountDownsRemaining, delay, true);
+        }, delay);
+    }
 
     function restartMatch() {
         if (gameClock) {
@@ -16,21 +70,9 @@
 
         gameClock = gosuArena.gameClock.create();
 
-        var canvas = document.getElementById("gameCanvas");
-        var gameVisualizer = gosuArena.factories.createGameVisualizer(canvas);
-
-        /*var canvas3D = document.getElementById("3d-game-canvas");
-        var gameVisualizer3D = gosuArena.factories.createGameVisualizer3D(canvas3D);*/
-
-        var canvasBabylon = document.getElementById("3d-game-canvas-babylon");
-        var gameVisualizerBabylon = gosuArena.factories.createGameVisualizerBabylon(canvasBabylon);
-
         gosuArena.engine.start(gameClock, {
-            isTraining: gosuArena.settings.isTraining(),
-            listeners: [gosuArena.matchViewModel, gameVisualizer, gameVisualizerBabylon]
+            isTraining: gosuArena.settings.isTraining()
         });
-
-        gosuArena.events.raiseGameStarting();
 
         gameClock.start();
         isRunning = true;
@@ -57,33 +99,55 @@
         }
     };
 
-    function stopMatch() {
-        if (gameClock) {
-            gameClock.stop();
-        }
-
-        isRunning = false;
+    document.getElementById("restartMatch").onclick = function() {
+        restartMatchWithCountDown();
     }
-
-    document.getElementById("restartMatch").onclick = restartMatch;
     document.getElementById("stopMatch").onclick = stopMatch;
 
     document.getElementById("2d-mode").onclick = setRenderingMode;
     document.getElementById("3d-mode").onclick = setRenderingMode;
     document.getElementById("both-mode").onclick = setRenderingMode;
 
-    // Make sure the match is not started until all resources have been loaded
-    // that are needed for the game (e.g. sprites)
-    gosuArena.events.resourcesLoaded(function() {
-        restartMatch();
-    });
+    function adjustBabylonCanvasSize() {
+        var canvas = document.getElementById("3d-game-canvas-babylon");
 
-    $(function () {
-        
-        if (gosuArena.sprites.isLoaded && !isRunning) {
-            restartMatch();
+        var width = window.devicePixelRatio * window.innerWidth;
+        var height = window.devicePixelRatio * window.innerHeight;
+
+        if (gosuArena.visualizers.babylonEngine) {
+            gosuArena.visualizers.babylonEngine.setSize(width, height);
+            gosuArena.visualizers.babylonEngine.resize();
         }
 
-        ko.applyBindings(gosuArena.matchViewModel); 
+        canvas.width = width;
+        canvas.height = height;
+    }
+
+    gosuArena.events.worldInitialized(function () {
+
+        setTimeout(function() {
+            gosuArena.visualizers.gameVisualizer3D.moveCameraToDefaultGamePosition();
+            restartMatchWithCountDown();
+        }, 1000);
+    });
+
+    gosuArena.events.matchEnded(function(matchResult) {
+        var message = "The winner is " + matchResult.winner.name + "!";
+
+        writeGameMessage(message);
+    });
+
+    $(window).on("resize", adjustBabylonCanvasSize);
+
+    $(function() {
+
+        adjustBabylonCanvasSize();
+
+        gosuArena.engine.initializeWorld({
+            listeners: [gosuArena.matchViewModel, gosuArena.visualizers.gameVisualizer2D, gosuArena.visualizers.gameVisualizer3D],
+            resourceLoaders: [gosuArena.resources.imageLoader]
+        });
+
+        ko.applyBindings(gosuArena.matchViewModel);
     });
 })();

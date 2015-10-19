@@ -18,6 +18,9 @@ CREATE LOGIN [arenauser] WITH PASSWORD = N'arenauser', CHECK_POLICY = OFF
 GO
 CREATE USER [arenauser] FOR LOGIN [arenauser] WITH DEFAULT_SCHEMA=[dbo]
 GO
+EXEC sp_addrolemember N'db_datareader', N'arenauser'
+EXEC sp_addrolemember N'db_datawriter', N'arenauser'
+GO
 CREATE TABLE [dbo].[Users](
 	[Id] [int] IDENTITY(1,1) NOT NULL PRIMARY KEY,
 	[Username] [nvarchar](255) NOT NULL,

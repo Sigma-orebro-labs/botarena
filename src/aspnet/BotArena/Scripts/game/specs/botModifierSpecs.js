@@ -46,6 +46,8 @@ describe("Game", function () {
         tankClassOptions = gosuArena.factories.modifiers.classes.tank.create(defaultClassOptions);
 
         clock = gosuArena.gameClock.createFake();
+
+        gosuArena.specs.game.initializeWorld([arenaStateInterceptor]);
     });
 
     afterEach(function() {
@@ -55,7 +57,7 @@ describe("Game", function () {
 
     describe("Bot", function() {
 
-        it("without default setup has default properties", function() {
+        it("with default setup has default properties", function() {
             addBot({
                 botClass: "default"
             });

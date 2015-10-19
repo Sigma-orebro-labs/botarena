@@ -2,7 +2,8 @@
 gosuArena.specs = gosuArena.specs || {};
 gosuArena.specs.game = gosuArena.specs.game || {};
 
-gosuArena.specs.game.addBot = function(options) {
+gosuArena.specs.game.addBot = function (options) {
+    options = options || {};
     options.startPosition = options.startPosition || {};
     options.startPosition.x = options.startPosition.x || 0;
     options.startPosition.y = options.startPosition.y || 0;
@@ -29,12 +30,22 @@ gosuArena.specs.game.addBot = function(options) {
 
 gosuArena.specs.game.cleanup = function() {
     gosu.eventAggregator.unsubscribeAll("matchEnded");
+    gosu.eventAggregator.unsubscribeAll("botRegistrationStarting");
+    gosu.eventAggregator.unsubscribeAll("gameStarting");
+    gosu.eventAggregator.unsubscribeAll("worldInitialized");
+    gosu.eventAggregator.unsubscribeAll("resourcesLoaded");
+
     gosuArena.engine.reset();
 };
 
-gosuArena.specs.game.startGame = function(clock, listeners) {
-    gosuArena.engine.start(clock, {
-        isTraining: true,
+gosuArena.specs.game.initializeWorld = function (listeners) {
+    gosuArena.engine.initializeWorld({
         listeners: listeners
+    });
+}
+
+gosuArena.specs.game.startGame = function (clock) {
+    gosuArena.engine.start(clock, {
+        isTraining: true
     });
 };

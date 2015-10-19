@@ -3,12 +3,12 @@
 @model IList<GosuArena.Models.Match.BotModel>
 
 @{
+    Layout = "~/Views/Shared/_LayoutWorld.cshtml";
     ViewBag.Title = "Play match!";
 }
 
 @section styles
 {
-    <link rel="stylesheet" href="@Url.Content("~/Content/Pages/Match/Play.less")" />
 }
 
 @section scripts {
@@ -19,39 +19,38 @@
     <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/Match/Play/match.js")"> </script>
 }
 
-<div id="playing-field">
-    <div class="row">
-        <div class="col-md-11">
-            <canvas id="gameCanvas" class="hide-from-start" width="800" height="600"></canvas>
-            <!-- <canvas id="3d-game-canvas" width="800" height="600"></canvas>-->
-            <canvas id="3d-game-canvas-babylon" width="1200" height="800"></canvas>
-        </div>
-        <div class="col-md-1">
-            <ul id="botLegends" data-bind="foreach: botLegends">
-                <li data-bind="css: { killed: !isAlive() }">
-                    <div class="health" data-bind="style: { height: health() + '%' }"></div>
-                    <div class="color" data-bind='style: { backgroundColor : color }'></div>
-                    <span class="name" data-bind="text: name"></span>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <form class="options">
-        <label for="showBotNames">Show bot names</label>
-        <input id="showBotNames" type="checkbox" name="showBotNames" checked="checked" />
-    
-        <label for="showBotSights">Show bot sights</label>
-        <input id="showBotSights" type="checkbox" name="showBotSights" />
-    </form>
-    
-    <menu class="actions">
-        <button id="2d-mode" class="btn btn-default">2D</button>
-        <button id="3d-mode" class="btn btn-default">3D</button>
-        <button id="both-mode" class="btn btn-default">2D & 3D</button>
-        <button id="restartMatch" class="btn btn-primary">Start match</button>
-        <button id="stopMatch">Stop match</button>
-    </menu>
+<section id="playing-field">
+    <canvas id="gameCanvas" class="hide-from-start" width="800" height="600"></canvas>
+    <canvas id="3d-game-canvas-babylon"></canvas>
+</section>
+
+<div class="game-message-container">
+    <section class="game-message"></section>
 </div>
+
+<ul id="botLegends" data-bind="foreach: botLegends">
+    <li data-bind="css: { killed: !isAlive() }">
+        <div class="color" data-bind='style: { backgroundColor : color }'></div>
+        <span class="name" data-bind="text: name"></span>
+        <div class="health"><span data-bind="text: roundedHealth"></span> hp</div>
+    </li>
+</ul>
+
+<form class="options">
+    <label for="showBotNames">Show bot names</label>
+    <input id="showBotNames" type="checkbox" name="showBotNames" checked="checked" />
+
+    <label for="showBotSights">Show bot sights</label>
+    <input id="showBotSights" type="checkbox" name="showBotSights" />
+</form>
+
+<menu class="actions">
+    <button id="2d-mode" class="btn btn-default">2D</button>
+    <button id="3d-mode" class="btn btn-default">3D</button>
+    <button id="both-mode" class="btn btn-default">2D & 3D</button>
+    <button id="restartMatch" class="btn btn-primary">Start match</button>
+    <button id="stopMatch">Stop match</button>
+</menu>
 
 @Scripts.Render("~/bundles/gosuarena")
 

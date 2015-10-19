@@ -5,6 +5,7 @@ gosuArena.factories.createMatchViewModel = function () {
 
     var isFirstInitialization = true;
     var botLegends = ko.observableArray();
+    var arenaState;
 
     function sortLegendsByHealth() {
         botLegends.sort(function (a, b) {
@@ -24,26 +25,30 @@ gosuArena.factories.createMatchViewModel = function () {
         sortLegendsByHealth();
     }
 
-    function initialize(arenaState) {
-
-        if (isFirstInitialization) {
-            arenaState.onBotAdded(function (bot) {
-                var viewModel = gosuArena.factories.createBotViewModel(bot);
-                botLegends.push(viewModel);
-            });
-
-            arenaState.onBotKilled(function (bot) {
-                refresh();
-            });
-
-            arenaState.onBotHitByBullet(function (bot) {
-                refresh();
-            });
-        }
-
+    function onBotRegistrationStarting() {
         botLegends.removeAll();
+    }
 
-        isFirstInitialization = false;
+    function addBot(bot) {
+        var viewModel = gosuArena.factories.createBotViewModel(bot);
+        botLegends.push(viewModel);
+    }
+
+    function initialize(worldArenaState) {
+
+        arenaState = worldArenaState;
+
+        gosuArena.events.botRegistrationStarting(onBotRegistrationStarting);
+
+        arenaState.onBotAdded(addBot);
+
+        arenaState.onBotKilled(function (bot) {
+            refresh();
+        });
+
+        arenaState.onBotHitByBullet(function (bot) {
+            refresh();
+        });
     }
 
     return {
