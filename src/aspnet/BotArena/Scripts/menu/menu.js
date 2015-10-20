@@ -24,11 +24,18 @@ gosuArena.factories.createMenu = function () {
 
         var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,1,0), scene);
 
-        var sphere = new BABYLON.Mesh.CreateSphere('sphere1', 16, 2, scene);
+        BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "ship.babylon", scene, function (meshes) {
+            var meshe = meshes[1];
+            
+            var mesheInstance = meshe.createInstance("meshe");
 
-        sphere.position.y = 1;
+            mesheInstance.position.x = 0;
+            mesheInstance.position.y = 0;
+            mesheInstance.position.z = 0;
 
-        var ground = new BABYLON.Mesh.CreateGround('ground1', 6, 6, 2, scene);
+            mesheInstance.scaling = new BABYLON.Vector3(2, 2, 2);
+
+        });
 
 
         engine.runRenderLoop(function () {
