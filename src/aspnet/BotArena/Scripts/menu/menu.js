@@ -25,15 +25,15 @@ gosuArena.factories.createMenu = function () {
         var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,1,0), scene);
 
         BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "ship.babylon", scene, function (meshes) {
-            var meshe = meshes[1];
+            var mesh = meshes[1];
             
-            var mesheInstance = meshe.createInstance("meshe");
+            var meshInstance = mesh.createInstance("meshe");
 
-            mesheInstance.position.x = 0;
-            mesheInstance.position.y = 0;
-            mesheInstance.position.z = 0;
+            meshInstance.position.x = 0;
+            meshInstance.position.y = 0;
+            meshInstance.position.z = 0;
 
-            mesheInstance.scaling = new BABYLON.Vector3(2, 2, 2);
+            meshInstance.scaling = new BABYLON.Vector3(2, 2, 2);
 
         });
 
@@ -45,10 +45,25 @@ gosuArena.factories.createMenu = function () {
         $("#main-menu-btn").click(function () {
             slideInLeft($("#container-1"));
         });
+
+        $("#close-menu").click(function () {
+            slideOutLeft($("#container-1"));
+        });
     }
 
     function slideInLeft(element) {
-        $(element).addClass("slide-in-left");
+        clearTransitions(element);
+        element.addClass("slide-in-left");
+    }
+
+    function slideOutLeft(element) {
+        clearTransitions(element);
+        element.addClass("slide-out-left");
+    }
+
+    function clearTransitions(element) {
+        element.removeClass("slide-in-left");
+        element.removeClass("slide-out-left");
     }
 
     return {
