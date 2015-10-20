@@ -10,14 +10,15 @@
         var gameHub = $.connection.gameHub;
 
         function initialize() {
-            gameHub.server.subscribe("123");
+            gameHub.server.getOpenGameRooms().done(function(gameRooms) {
+                console.log("Available game rooms:");
+                gameRooms.forEach(function(r) {
+                    console.log(r);
+                });
+            });
         }
 
         gosuArena.realtime.connect(initialize);
-
-        gameHub.client.foo = function () {
-            console.log("foo");
-        };
 
         $("#foo-button").click(function () {
             gameHub.server.foo("foo");

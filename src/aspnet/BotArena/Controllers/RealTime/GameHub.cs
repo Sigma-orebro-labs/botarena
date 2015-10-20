@@ -13,6 +13,11 @@ namespace GosuArena.Controllers.RealTime
             Groups.Add(Context.ConnectionId, gameId);
         }
 
+        public string[] GetOpenGameRooms()
+        {
+            return _games.ToArray();
+        }
+
         public void Unsubscribe(string gameId)
         {
             Groups.Remove(Context.ConnectionId, gameId);

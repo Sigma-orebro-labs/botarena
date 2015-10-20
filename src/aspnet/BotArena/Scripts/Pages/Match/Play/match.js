@@ -141,6 +141,13 @@
 
     $(function() {
 
+        gosuArena.realtime.connect(function() {
+            var gameHub = $.connection.gameHub;
+            gameHub.server.createGameRoom().done(function(roomName) {
+                console.log("Started game room: " + roomName + "...");
+            });
+        });
+
         adjustBabylonCanvasSize();
 
         gosuArena.engine.initializeWorld({
