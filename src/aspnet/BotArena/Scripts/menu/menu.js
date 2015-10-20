@@ -57,7 +57,7 @@ gosuArena.factories.createMenu = function () {
             slideOutLeft($("#container-1"));
         });
 
-        t();
+        initializeCube();
     }
 
     function slideInLeft(element) {
@@ -75,7 +75,7 @@ gosuArena.factories.createMenu = function () {
         element.removeClass("slide-out-left");
     }
 
-    function t() {
+    function initializeCube() {
         var stage = 1;
         $("#cube-rotate-btn").click(function () {
             if (stage == 1) {

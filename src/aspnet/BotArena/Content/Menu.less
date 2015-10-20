@@ -7,18 +7,18 @@
 
 #close-menu {
     position: absolute;
-    right: 3px;
-    top: 3px;
+    top: 10px;
+    left: 60px;
+    z-index: 9999;
 }
 
 .menu-container {
     position: absolute;
-    width: 800px;
+    width: 600px;
     height: 1000px;
-    /*left: -800px;*/
-    left: 50%;
-    margin-left: -400px;
+    left: -600px;
     top: 50px;
+    transform: translateZ(0);
     transition: all 0.5s ease-in-out;
 
     p {
@@ -30,11 +30,11 @@
 
 .menu-container.slide-in-left {
     left: 50%;
-    margin-left: -400px;
+    margin-left: -300px;
 }
 
 .menu-container.slide-out-left {
-    left: -800px;
+    left: -600px;
     margin-left: 0;
 }
 
@@ -49,10 +49,11 @@
 /* Cube */
 
 #cube-rotate-btn {
-    position: relative;
-    top: 0;
-    left: 0;
+    position: absolute;
+    top: 10px;
+    left: 10px;
     margin-bottom: 5px;
+    z-index: 9999;
 }
 
 #cube-container {
