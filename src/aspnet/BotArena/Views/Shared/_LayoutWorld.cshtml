@@ -17,9 +17,9 @@
     @RenderSection("styles", required: false)
 
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/menu")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/babylon")
+    @Scripts.Render("~/bundles/menu")
 
     <link rel="stylesheet" href="@Url.Content("~/Content/Menu.less")" />
 
@@ -80,7 +80,8 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        gosuArena.menu.initialize();
+        var menu = gosuArena.factories.createMenu();
+        menu.initialize();
     });
 </script>
 

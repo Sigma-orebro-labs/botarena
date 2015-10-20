@@ -157,7 +157,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     function initialize(worldArenaState) {
         arenaState = worldArenaState;
 
-        console.log(arenaState);
         arenaState.onBotKilled(onBotKilled);
         arenaState.onBulletHitBot(onBulletHitBot);
         arenaState.onBulletHitTerrain(onBulletRemoved);
