@@ -31,11 +31,15 @@ namespace GosuArena
                 "~/Scripts/game/*.js",
                 "~/Scripts/Shaders/Water/waterMaterial.js"));
 
-//#if DEBUG
-//            BundleTable.EnableOptimizations = false;
-//#else
-//            BundleTable.EnableOptimizations = true;
-//#endif
+            bundles.Add(new ScriptBundle("~/bundles/menu").Include(
+                "~/Scripts/menu/botWizard.js",
+                "~/Scripts/menu/menu.js"));
+
+            //#if DEBUG
+            //            BundleTable.EnableOptimizations = false;
+            //#else
+            //            BundleTable.EnableOptimizations = true;
+            //#endif
 
             BundleTable.EnableOptimizations = false;
         }

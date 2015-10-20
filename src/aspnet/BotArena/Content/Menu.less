@@ -1,0 +1,33 @@
+﻿#main-menu-btn {
+    position: fixed;
+    left: 10px;
+    top: 10px;
+    z-index: 9999;
+}
+
+.menu-container {
+    position: absolute;
+    left: -800px;
+    top: 100px;
+    width: 800px;
+    height: 800px;
+    background:rgba(0,0,0,0.8);
+    opacity: 0.8;
+    transition: all 1.0s ease-in-out;
+
+    p {
+        font-size: large;
+        text-align: center;
+        color: white;
+    }
+}
+
+.menu-container.slide-in-left {
+    left: 50%;
+    margin-left: -400px;
+}
+
+.menu-container.slide-out-right {
+    left: 100%;
+    margin-left: 0;
+}

@@ -17,12 +17,18 @@
     @RenderSection("styles", required: false)
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/menu")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/babylon")
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/Menu.less")" />
+
 </head>
 <body>
-
+    <button id="main-menu-btn"class="btn">Menu</button>
     @RenderBody()
+
+    @Html.Partial("Menu")
 
 <aside id="menu">
     <nav>
@@ -70,5 +76,13 @@
 <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/changetracking.js")"> </script>
 
 @RenderSection("scripts", required: false)
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        gosuArena.menu.initialize();
+    });
+</script>
+
 </body>
 </html>
