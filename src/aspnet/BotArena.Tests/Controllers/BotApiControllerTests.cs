@@ -2,11 +2,12 @@
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using GosuArena.Controllers;
 using GosuArena.Entities;
 using NUnit.Framework;
 using WeenyMapper;
 
-namespace GosuArena.Controllers
+namespace BotArena.Tests.Controllers
 {
     [TestFixture]
     public class BotApiControllerSpecs

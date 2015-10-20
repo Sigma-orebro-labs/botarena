@@ -8,7 +8,8 @@ namespace GosuArena
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                "~/Scripts/lib/jquery/jquery-{version}.js"));
+                "~/Scripts/lib/jquery/jquery-{version}.js",
+                "~/Scripts/lib/signalR/jquery.signalR-2.2.0.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryvalidation").Include(
                 "~/Scripts/lib/jquery/jquery.unobtrusive*",

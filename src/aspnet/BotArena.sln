@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotArena", "BotArena\BotArena.csproj", "{986224D9-ACD7-4BD0-AB76-EAC474259DFA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotArena.Tests", "BotArena.Tests\BotArena.Tests.csproj", "{4A400EB7-5BD0-4507-AC8A-025ACCAC3336}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,14 @@ Global
 		{986224D9-ACD7-4BD0-AB76-EAC474259DFA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{986224D9-ACD7-4BD0-AB76-EAC474259DFA}.SQLEDebug|Any CPU.ActiveCfg = SQLEDebug|Any CPU
 		{986224D9-ACD7-4BD0-AB76-EAC474259DFA}.SQLEDebug|Any CPU.Build.0 = SQLEDebug|Any CPU
+		{4A400EB7-5BD0-4507-AC8A-025ACCAC3336}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A400EB7-5BD0-4507-AC8A-025ACCAC3336}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A400EB7-5BD0-4507-AC8A-025ACCAC3336}.Production|Any CPU.ActiveCfg = Release|Any CPU
+		{4A400EB7-5BD0-4507-AC8A-025ACCAC3336}.Production|Any CPU.Build.0 = Release|Any CPU
+		{4A400EB7-5BD0-4507-AC8A-025ACCAC3336}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A400EB7-5BD0-4507-AC8A-025ACCAC3336}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A400EB7-5BD0-4507-AC8A-025ACCAC3336}.SQLEDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A400EB7-5BD0-4507-AC8A-025ACCAC3336}.SQLEDebug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -90,17 +90,29 @@
     <Reference Include="JavaScriptEngineSwitcher.Core">
       <HintPath>..\packages\JavaScriptEngineSwitcher.Core.0.9.5\lib\net40\JavaScriptEngineSwitcher.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.0\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.2.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Security, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
@@ -200,13 +212,12 @@
     <Compile Include="Controllers\ActionResults\HttpForbiddenResult.cs" />
     <Compile Include="Controllers\BotApiController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\BotApiControllerSpecs.cs" />
     <Compile Include="Controllers\BotController.cs" />
     <Compile Include="Controllers\BotNameImageController.cs" />
     <Compile Include="Controllers\DocsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\MatchController.cs" />
-    <Compile Include="Controllers\RealTime\BoardHub.cs" />
+    <Compile Include="Controllers\RealTime\GameHub.cs" />
     <Compile Include="Controllers\RealTime\ConnectionManagerExtensions.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Extensions\AuthorizationExtensions.cs" />
@@ -227,7 +238,9 @@
     <Compile Include="Entities\User.cs" />
     <Compile Include="Models\Match\BotModel.cs" />
     <Compile Include="Models\Match\MatchSetupModel.cs" />
+    <Compile Include="Models\RealTime\EventTriggerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\NameGenerator.cs" />
     <Compile Include="Startup.cs" />
     <Content Include="Content\images\sprites\dummyname.png" />
     <Content Include="Content\images\sprites\healthbar.png" />
@@ -261,6 +274,7 @@
     <Content Include="Scripts\game\modifiers\defaultModifier.js" />
     <Content Include="Scripts\game\specs\botModifierSpecs.js" />
     <Content Include="Scripts\infrastructure\imageLoader.js" />
+    <Content Include="Scripts\infrastructure\realtime.js" />
     <Content Include="Scripts\infrastructure\specs\urlSpecs.js" />
     <Content Include="Scripts\infrastructure\url.js" />
     <Content Include="Scripts\lib\jasmine-2.3.4\boot.js" />
@@ -269,6 +283,8 @@
     <Content Include="Scripts\lib\jasmine-2.3.4\jasmine.css" />
     <Content Include="Scripts\lib\jasmine-2.3.4\jasmine.js" />
     <Content Include="Scripts\lib\jasmine-2.3.4\jasmine_favicon.png" />
+    <Content Include="Scripts\lib\signalR\jquery.signalR-2.2.0.js" />
+    <Content Include="Scripts\lib\signalR\jquery.signalR-2.2.0.min.js" />
     <Content Include="Scripts\Shaders\Water\bump.png" />
     <Content Include="Scripts\Shaders\Water\water.fragment.fx" />
     <Content Include="Scripts\Shaders\Water\water.vertex.fx" />
@@ -550,6 +566,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Shared\_LayoutWorld.cshtml" />
     <Content Include="Views\Match\PlayFullScreen.cshtml" />
+    <None Include="Views\Match\General.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

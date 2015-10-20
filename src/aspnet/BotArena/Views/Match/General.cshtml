@@ -1,0 +1,30 @@
+﻿@using System.Web.Optimization
+
+@Scripts.Render("~/bundles/gosuarena")
+
+<script type="text/javascript" src='@Url.Content("~/signalr/hubs")'></script>
+
+<script type="text/javascript">
+
+    $(function () {
+        var gameHub = $.connection.gameHub;
+
+        function initialize() {
+            gameHub.server.subscribe("123");
+        }
+
+        gosuArena.realtime.connect(initialize);
+
+        gameHub.client.foo = function () {
+            console.log("foo");
+        };
+
+        $("#foo-button").click(function () {
+            gameHub.server.foo("foo");
+            return false;
+        });
+    });
+    
+</script>
+
+<a href="#" id="foo-button">send foo</a>
