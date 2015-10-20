@@ -2,15 +2,58 @@
     Layout = null;
 }
 
+<style type="text/css">
+
+
+</style>
+
+<style type="text/css">
+
+
+
+</style>
+
 <div class="menu-container" id="container-1">
     <button id="close-menu" class="btn">Close</button>
     <canvas id="menu-canvas"></canvas>
-</div>
+    <div id="cube-container">
+        <button id="cube-rotate-btn">Rotate</button>
+        <div id="cube-container" class="cube">
+            <div class="front-face">1</div>
+            <div class="right-face">2</div>
+            <div class="back-face">3</div>
+            <div class="left-face">4</div>
+        </div>
+    </div>
 
-<div class="menu-container" id="container-2">
-    <p>Container 2</p>
-</div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                //var stage = 1;
+                //$("#cube-rotate-btn").click(function () {
+                //    if (stage == 1) {
+                //        $(".cube").addClass("rotate-90");
+                //    }
+                //    else if (stage == 2) {
+                //        $(".cube").addClass("rotate-180");
+                //    }
+                //    else if (stage == 3) {
+                //        $(".cube").addClass("rotate-270");
+                //    }
+                //    if (stage == 4) {
+                //        $(".cube").removeClass("rotate-270");
+                //    }
+                //    else if (stage == 5) {
+                //        $(".cube").removeClass("rotate-180");
+                //    }
+                //    else if (stage == 6) {
+                //        $(".cube").removeClass("rotate-90");
+                //    }
+                //    stage++;
+                //    if (stage == 7) {
+                //        stage = 1;
+                //    }
+                //});
+            });
+        </script>
+    </div>
 
-<div class="menu-container" id="container-3">
-    <p>Container 3</p>
-</div>

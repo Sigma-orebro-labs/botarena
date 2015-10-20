@@ -56,6 +56,8 @@ gosuArena.factories.createMenu = function () {
         $("#close-menu").click(function () {
             slideOutLeft($("#container-1"));
         });
+
+        t();
     }
 
     function slideInLeft(element) {
@@ -71,6 +73,34 @@ gosuArena.factories.createMenu = function () {
     function clearTransitions(element) {
         element.removeClass("slide-in-left");
         element.removeClass("slide-out-left");
+    }
+
+    function t() {
+        var stage = 1;
+        $("#cube-rotate-btn").click(function () {
+            if (stage == 1) {
+                $(".cube").addClass("rotate-90");
+            }
+            else if (stage == 2) {
+                $(".cube").addClass("rotate-180");
+            }
+            else if (stage == 3) {
+                $(".cube").addClass("rotate-270");
+            }
+            if (stage == 4) {
+                $(".cube").removeClass("rotate-270");
+            }
+            else if (stage == 5) {
+                $(".cube").removeClass("rotate-180");
+            }
+            else if (stage == 6) {
+                $(".cube").removeClass("rotate-90");
+            }
+            stage++;
+            if (stage == 7) {
+                stage = 1;
+            }
+        });
     }
 
     return {
