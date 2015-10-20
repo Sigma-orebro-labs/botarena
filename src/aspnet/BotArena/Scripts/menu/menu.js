@@ -8,6 +8,8 @@ gosuArena.factories.createMenu = function () {
     var canvas;
     var scene;
     var camera;
+    var meshInstance;
+    var rotation = 0.0;
 
     function initialize() {
         canvas = document.getElementById("menu-canvas");
@@ -27,7 +29,7 @@ gosuArena.factories.createMenu = function () {
         BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "ship.babylon", scene, function (meshes) {
             var mesh = meshes[1];
             
-            var meshInstance = mesh.createInstance("meshe");
+            meshInstance = mesh.createInstance("meshe");
 
             meshInstance.position.x = 0;
             meshInstance.position.y = 0;
@@ -39,6 +41,11 @@ gosuArena.factories.createMenu = function () {
 
 
         engine.runRenderLoop(function () {
+            if (meshInstance) {
+                rotation += 0.01;
+                meshInstance.rotation = new BABYLON.Vector3(0, rotation, 0);
+            }
+
             scene.render();
         });
 
