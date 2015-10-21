@@ -1,7 +1,7 @@
 ﻿@using System.Web.Optimization
 @using GosuArena.Extensions
 <!DOCTYPE html>
-<html ng-app="botarena">
+<html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
@@ -17,13 +17,19 @@
     @RenderSection("styles", required: false)
 
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/angular")
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/threejs")
+    @Scripts.Render("~/bundles/babylon")
+    @Scripts.Render("~/bundles/menu")
+    <script type="text/javascript" src='@Url.Content("~/signalr/hubs")'></script>
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/Menu.less")" />
+
 </head>
 <body>
-
+    <button id="main-menu-btn"class="btn">Menu</button>
     @RenderBody()
+
+    @Html.Partial("Menu")
 
 <aside id="menu">
     <nav>
@@ -37,7 +43,6 @@
 
             <li>@Html.NavigationMenuItem("Index", "Match", "Gosu Bot Arena")</li>
             <li>@Html.NavigationMenuItem("Index", "Docs", "Documentation")</li>
-            <li>@Html.NavigationMenuItem("Index", "SceneEditor", "Scene editor")</li>
             <li>@Html.NavigationMenuItem("News", "Docs", "What's new?")</li>
 
             @if (User.IsAdmin())
@@ -72,5 +77,14 @@
 <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/changetracking.js")"> </script>
 
 @RenderSection("scripts", required: false)
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var menu = gosuArena.factories.createMenu();
+        menu.initialize();
+    });
+</script>
+
 </body>
 </html>

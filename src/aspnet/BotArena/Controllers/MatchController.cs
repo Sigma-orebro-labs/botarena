@@ -76,6 +76,12 @@ namespace GosuArena.Controllers
             return PlayMatch(botsInMatch);
         }
 
+        [Authorize]
+        public ActionResult General()
+        {
+            return View();
+        }
+
         private static IEnumerable<BotModel> GetTeamBotModels(IList<string> teams, int i, IEnumerable<Bot> bots)
         {
             var botNamesInTeam = GetBotNames(teams[i]);

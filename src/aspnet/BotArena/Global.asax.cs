@@ -25,7 +25,13 @@ namespace GosuArena
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
+
+#if (SQLE)
+            Repository.DefaultConnectionString = ConfigurationManager.ConnectionStrings["GosuArenaExpress"].ConnectionString;
+#else
             Repository.DefaultConnectionString = ConfigurationManager.ConnectionStrings["GosuArena"].ConnectionString;
+#endif
+
             Repository.DefaultConvention = new DatabaseConvention();
         }
     }

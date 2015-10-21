@@ -8,25 +8,17 @@ namespace GosuArena
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                "~/Scripts/lib/jquery/jquery-{version}.js"));
+                "~/Scripts/lib/jquery/jquery-{version}.js",
+                "~/Scripts/lib/signalR/jquery.signalR-2.2.0.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryvalidation").Include(
                 "~/Scripts/lib/jquery/jquery.unobtrusive*",
                 "~/Scripts/lib/jquery/jquery.validate*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/angular").Include(
-                "~/Scripts/lib/angular/angular.min.js",
-                "~/Scripts/lib/angular/angular-route.min.js",
-                "~/Content/angular/app.js",
-                "~/Content/angular/controllers/*.js"));
-
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Content/lib/bootstrap-3.0.3/js/dropdown.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/threejs").Include(
-                "~/Scripts/lib/threejs/three.js",
-                "~/Scripts/lib/threejs/OrbitControls.js",
-                "~/Scripts/lib/threejs/loaders/*.js",
+            bundles.Add(new ScriptBundle("~/bundles/babylon").Include(
                 "~/Scripts/lib/babylon.2.1.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/gosuarena").Include(
@@ -40,11 +32,15 @@ namespace GosuArena
                 "~/Scripts/game/*.js",
                 "~/Scripts/Shaders/Water/waterMaterial.js"));
 
-//#if DEBUG
-//            BundleTable.EnableOptimizations = false;
-//#else
-//            BundleTable.EnableOptimizations = true;
-//#endif
+            bundles.Add(new ScriptBundle("~/bundles/menu").Include(
+                "~/Scripts/menu/botWizard.js",
+                "~/Scripts/menu/menu.js"));
+
+            //#if DEBUG
+            //            BundleTable.EnableOptimizations = false;
+            //#else
+            //            BundleTable.EnableOptimizations = true;
+            //#endif
 
             BundleTable.EnableOptimizations = false;
         }
