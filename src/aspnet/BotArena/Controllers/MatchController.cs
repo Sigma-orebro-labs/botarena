@@ -77,7 +77,7 @@ namespace GosuArena.Controllers
         }
 
         [Authorize]
-        public ActionResult General()
+        public ActionResult Commander()
         {
             return View();
         }

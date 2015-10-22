@@ -52,8 +52,6 @@
     <button id="stopMatch">Stop match</button>
 </menu>
 
-@Scripts.Render("~/bundles/gosuarena")
-
 @foreach (var bot in Model.Where(x => !string.IsNullOrWhiteSpace(x.Script)))
 {
     <script type="text/javascript">

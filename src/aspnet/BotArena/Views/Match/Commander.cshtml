@@ -1,0 +1,30 @@
+﻿@using System.Web.Optimization
+
+@{
+    Layout = null;
+}
+
+<html>
+<head>
+    <script type="text/javascript">
+        var gosuArena = gosuArena || {};
+        gosuArena.pageData = gosuArena.pageData || {};
+        gosuArena.pageData.gameRoomListUrl = '@Url.Content("~/Content/Pages/Commander/GameRoomList.html")';
+        gosuArena.pageData.gameRoomUrl = '@Url.Content("~/Content/Pages/Commander/GameRoom.html")';
+        gosuArena.pageData.botCommanderUrl = '@Url.Content("~/Content/Pages/Commander/BotCommander.html")';
+    </script>
+</head>
+<body ng-app="commander" ng-controller="gameRoomListController">
+
+<section ng-view>
+    
+</section>
+
+@Scripts.Render("~/bundles/commanderlibs")
+
+    <script type="text/javascript" src="~/signalr/hubs"></script>
+
+    @Scripts.Render("~/bundles/commander")
+
+</body>
+</html>

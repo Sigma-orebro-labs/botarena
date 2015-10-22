@@ -53,8 +53,6 @@
     </menu>
 </div>
 
-@Scripts.Render("~/bundles/gosuarena")
-
 @foreach (var bot in Model.Where(x => !string.IsNullOrWhiteSpace(x.Script)))
 {
     <script type="text/javascript">
