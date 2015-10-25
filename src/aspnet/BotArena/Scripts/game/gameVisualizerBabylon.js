@@ -27,6 +27,8 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     var arenaState;
     var botMesh;
     var materials = {};
+    var textures = {};
+    var assetsManager;
 
     var particleExplosion;
     var particleSmoke;
@@ -101,21 +103,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
             bot.babylonMesh.scaling = new BABYLON.Vector3(10, 10, 10);
 
-            /*var healthBarMaterial = new BABYLON.StandardMaterial("healthBarMaterial" + i, scene);
-            healthBarMaterial.diffuseColor = new BABYLON.Color3(0, 1, 0);
-            healthBarMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-            
-            bot.healthBarMesh = new BABYLON.Mesh.CreateBox("bot_" + i + "_health_bar", 10.0, scene);
-            bot.healthBarMesh.scaling = new BABYLON.Vector3(0.7, 0.7, 5);
-            bot.healthBarMesh.originalScaling = 5;
-            
-            bot.healthBarMesh.material = healthBarMaterial;
-            
-            bot.healthBarMesh.position.x = bot.y;
-            bot.healthBarMesh.position.y = shipAndBulletYvalue * 4;
-            bot.healthBarMesh.position.z = bot.x;
-            bot.healthBarMesh.rotation.y = Math.PI + gosu.math.degreesToRadians(bot.angle);*/
-
             bot.healthBarSprite = new BABYLON.Sprite("healthbar_" + i, healthBarSpritesManager);
             bot.healthBarSprite.color = new BABYLON.Color4(0, 1, 0.2, 1);
             bot.healthBarSprite.position.x = bot.y;
@@ -126,7 +113,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
             var nameImageUrl = gosuArena.url.createAbsolute("/api/botnameimage", { name: bot.name, colorHexCode: bot.color });
 
-            var nameBar = new BABYLON.SpriteManager("bot_" + i + "_name_bar", nameImageUrl, 100, 300, scene);
+            var nameBar = new BABYLON.SpriteManager("bot_" + i + "_name_bar", nameImageUrl, 100, 300, scene);   // TAG
             nameBarSpritesManagers[i] = nameBar;
             bot.nameBar = new BABYLON.Sprite("namebar_" + i, nameBarSpritesManagers[i]);
             bot.nameBar.position.x = bot.y;
@@ -139,8 +126,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     }
 
     function onGameStarting() {
-        //mesh.convertToFlatShadedMesh();
-
         addBotsToScene();
     }
 
@@ -155,6 +140,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     }
 
     function initialize(worldArenaState) {
+
         arenaState = worldArenaState;
 
         arenaState.onBotKilled(onBotKilled);
@@ -162,9 +148,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         arenaState.onBulletHitTerrain(onBulletRemoved);
         arenaState.onBotHitByBullet(onBotHitByBullet);
         arenaState.onShotFired(onShotFired);
-        arenaState.onTick(function () {
-            update(arenaState);
-        });
         arenaState.onClearStarting(function () {
             removeAllBullets();
         });
@@ -177,25 +160,92 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         engine = gosuArena.visualizers.babylonEngine;
 
         scene = createScene(canvas);
+
+        // Resources to preload
+        var resources = [{
+            name: 'arenaTexture',
+            type: 'texture',
+            url: '/Content/textures/Brick_Wall_03.jpg'
+        }, {
+            name: 'sky_nx',
+            type: 'texture',
+            url: '/Content/textures/skybox/TropicalSunnyDay_nx.jpg'
+        }, {
+            name: 'sky_ny',
+            type: 'texture',
+            url: '/Content/textures/skybox/TropicalSunnyDay_ny.jpg'
+        }, {
+            name: 'sky_nz',
+            type: 'texture',
+            url: '/Content/textures/skybox/TropicalSunnyDay_nz.jpg'
+        }, {
+            name: 'sky_px',
+            type: 'texture',
+            url: '/Content/textures/skybox/TropicalSunnyDay_px.jpg'
+        }, {
+            name: 'sky_py',
+            type: 'texture',
+            url: '/Content/textures/skybox/TropicalSunnyDay_py.jpg'
+        }, {
+            name: 'sky_pz',
+            type: 'texture',
+            url: '/Content/textures/skybox/TropicalSunnyDay_pz.jpg'
+        }, {
+            name: 'waterSound',
+            type: 'binary',
+            url: '/Content/sounds/water_sound.wav',
+            callback: function (task) {
+                waterSound = new BABYLON.Sound("WaterSound", task.data, scene, null, { loop: true, autoplay: true, volume: 0.01 });
+                waterSound.maxDistance = 3000;
+            }
+        }, {
+            name: 'canonSound',
+            type: 'binary',
+            url: '/Content/sounds/cork.wav',
+            callback: function (task) {
+                canonSound = new BABYLON.Sound("CanonSound", task.data, scene, null, { loop: false, autoplay: false, volume: 0.005 });
+                canonSound.maxDistance = 7000;
+            }
+        }, {
+            name: 'Plane',
+            type: 'mesh',
+            meshes: '',
+            url: '/Content/models/',
+            filename: 'only_plane.babylon'
+        }];
+
+        var preloader = gosuArena.preloader.create(scene);
+        preloader.load(resources, onPreloadFinished);
+
+    }
+
+    function onPreloadFinished(tasks) {
+
         setUpLights();
-
-        setUpSounds();
-
+        setUpSkyBox();
         setUpTerrain(arenaState);
         setUpParticleSmoke();
         setUpParticleExplosion();
         setUpLandscape(arenaState);
-        setUpSkyBox();
 
         // Create a sprite manager
-        healthBarSpritesManager = new BABYLON.SpriteManager("healthBarSpritesManager", gosuArena.url.createAbsolute("/Content/images/sprites/healthbar.png"), 100, 64, scene);
-        explosionSpriteManager = new BABYLON.SpriteManager("explosions", gosuArena.url.createAbsolute("/Content/images/sprites/explosion17.png"), 50, 64, scene);
+        healthBarSpritesManager = new BABYLON.SpriteManager("healthBarSpritesManager", gosuArena.url.createAbsolute("/Content/images/sprites/healthbar.png"), 100, 64, scene); // TAG
+        explosionSpriteManager = new BABYLON.SpriteManager("explosions", gosuArena.url.createAbsolute("/Content/images/sprites/explosion17.png"), 50, 64, scene);   // TAG
 
         loadBotMesh();
+
+        arenaState.onTick(function () {
+            update(arenaState);
+        });
+
+        // TODO TODO TODO
+        //
+        // notify game engine to start match here
 
         engine.runRenderLoop(function () {
             scene.render();
         });
+
     }
 
     function moveCameraToDefaultGamePosition() {
@@ -241,21 +291,19 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         //canonSound.play();
     }   
 
-    function setUpLandscape(arenaState) {
-        BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "only_plane.babylon", scene, function(newMeshes, particleSystems) {
-            landscape = newMeshes[0];
-            landscape.convertToFlatShadedMesh();
-            landscape.scaling = new BABYLON.Vector3(100, 100, 100);
-            landscape.position.y = -50;
-            landscape.receiveShadows = true;
- 
-            setUpWater(arenaState);
+    function setUpLandscape(arenaState, task) {
 
-        });
+        landscape = scene.getMeshByName('Plane');
+        landscape.convertToFlatShadedMesh();
+        landscape.scaling = new BABYLON.Vector3(100, 100, 100);
+        landscape.position.y = -50;
+        landscape.receiveShadows = true;
+ 
+        setUpWater(arenaState);
+
     }
 
     function setUpSkyBox() {
-
 
         skybox = BABYLON.Mesh.CreateBox("skyBox", 10000.0, scene);
         var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
@@ -329,23 +377,11 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         return newScene;
     };
 
-    function setUpSounds() {
-        
-        waterSound = new BABYLON.Sound("WaterSound", gosuArena.url.createAbsolute("/Content/sounds/water_sound.wav"), scene, null, { loop: true, autoplay: true, volume: 0.01 });
-        waterSound.maxDistance = 3000;
-
-        canonSound = new BABYLON.Sound("CanonSound", gosuArena.url.createAbsolute("/Content/sounds/cork.wav"), scene, null, {loop: false, autoplay: false, volume: 0.005});
-        canonSound.maxDistance = 7000;
-    };
-
-
     function setUpLights() {
 
        // sun = new BABYLON.PointLight("Omni0", new BABYLON.Vector3(-1000, 1000, 0.1), scene);
-
        // var sun2 = new BABYLON.PointLight("Omni1", new BABYLON.Vector3(2000, 4000, -8000), scene);
-      //  var sun3 = new BABYLON.PointLight("Omni2", new BABYLON.Vector3(-2000, 4000, -8000), scene);
-        
+       //  var sun3 = new BABYLON.PointLight("Omni2", new BABYLON.Vector3(-2000, 4000, -8000), scene);
 
         sun = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(-1, -2, -1), scene);
         sun.position = new BABYLON.Vector3(1000, 10000, 1000);
@@ -357,33 +393,16 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     
    
     function setUpTerrain(arenaState) {
-
         
         //set up material for the walls
         var brickMaterial = [];
         brickMaterial[0] = new BABYLON.StandardMaterial("bricks", scene);
-        brickMaterial[0].diffuseTexture = new BABYLON.Texture(gosuArena.url.createAbsolute("/Content/textures/Brick_Wall_03.jpg"), scene);
+        brickMaterial[0].diffuseTexture = getTextureByName(gosuArena.url.createAbsolute('/Content/textures/Brick_Wall_03.jpg'), scene); // get preloaded texture from scene object
         brickMaterial[0].specularColor = new BABYLON.Color3(0, 0, 0);
 
         brickMaterial[1] = brickMaterial[0].clone();
         brickMaterial[2] = brickMaterial[0].clone();
         brickMaterial[3] = brickMaterial[0].clone();
-
-        
-
-        //var box = new BABYLON.Mesh.CreateBox("testbox", 100, scene);
-        //box.material = new BABYLON.StandardMaterial("1", scene);
-        //box.position = new BABYLON.Vector3(-1000, 250, 0);
-        //box.receiveShadows = true;
-        
-
-
-        //var box2 = new BABYLON.Mesh.CreateBox("testbox2", 100, scene);
-        //box2.scaling = new BABYLON.Vector3(10, 0.1, 10);
-        //box2.position = new BABYLON.Vector3(-1000, 150, 0);
-        //box2.material = new BABYLON.StandardMaterial("2", scene);
-        //box2.receiveShadows = true;
-
         
         //shadowGenerator.getShadowMap().renderList.push(box);
         //shadowGenerator.getShadowMap().renderList.push(box2);
@@ -418,11 +437,12 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
     function setUpWater(arenaState) {
 
-        ground = BABYLON.Mesh.CreateGround("ground", 10000, 10000, 1, scene);
+        // shadow receiver plane below water
+        /*ground = BABYLON.Mesh.CreateGround("ground", 10000, 10000, 1, scene);
         ground.material = new BABYLON.StandardMaterial("ground", scene);
         ground.material.diffuseColor = BABYLON.Color3.FromInts(193, 181, 151);
         ground.material.specularColor = BABYLON.Color3.Black();
-        ground.receiveShadows = true;
+        ground.receiveShadows = true;*/
     
         var water = BABYLON.Mesh.CreateGround("water", 10000, 10000, 1, scene, false);
         
@@ -444,7 +464,19 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             waterMaterial.reflectionTexture.renderList.push(bot.healthBarMesh);
         }
 
-        waterSound.attachToMesh(water);
+        //waterSound.attachToMesh(water);
+    }
+
+
+    // retrieve a texture stored in the scene object
+    function getTextureByName(name, scene) {
+        for (var i = 0; i < scene.textures.length; i++) {
+            if(scene.textures[i].name == name) {
+                return scene.textures[i];
+            }
+        }
+
+        return null;    // texture not found
     }
 
     function loadBotMesh() {
@@ -466,10 +498,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
                 bot.babylonMesh.position.z = bot.x;
                 bot.babylonMesh.rotation.y = Math.PI + gosu.math.degreesToRadians(bot.angle);
 
-                /*bot.healthBarMesh.position.x = bot.y;
-                bot.healthBarMesh.position.z = bot.x;
-                bot.healthBarMesh.rotation.y = Math.PI + gosu.math.degreesToRadians(bot.angle);*/
-
                 bot.healthBarSprite.position.x = bot.y;
                 bot.healthBarSprite.position.z = bot.x;
                 
@@ -481,10 +509,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     }
 
     function onBotHitByBullet(bot) {
-
-        /*bot.healthBarMesh.scaling.z = bot.healthBarMesh.originalScaling * bot.healthPercentage();
-        bot.healthBarMesh.material.diffuseColor.r = 1 - bot.healthPercentage();
-        bot.healthBarMesh.material.diffuseColor.g = bot.healthPercentage();*/
 
         if (bot.healthPercentage() < 0.7) {
             bot.healthBarSprite.color.r = 1;

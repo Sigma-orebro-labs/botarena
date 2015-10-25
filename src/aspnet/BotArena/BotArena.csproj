@@ -244,6 +244,9 @@
     <Compile Include="Services\NameGenerator.cs" />
     <Compile Include="Startup.cs" />
     <Content Include="Content\images\sprites\dummyname.png" />
+    <Content Include="Content\images\sprites\explosion17.PNG" />
+    <Content Include="Content\images\sprites\Flare.jpg" />
+    <Content Include="Content\images\sprites\flare_red.jpg" />
     <Content Include="Content\images\sprites\healthbar.png" />
     <Content Include="Content\lib\bootstrap-notify\css\bootstrap-notify.css" />
     <Content Include="Content\lib\bootstrap-notify\js\bootstrap-notify.js" />
@@ -273,6 +276,7 @@
     <Content Include="Scripts\game\modifiers\modifierFactory.js" />
     <Content Include="Scripts\game\modifiers\classes\tankClass.js" />
     <Content Include="Scripts\game\modifiers\defaultModifier.js" />
+    <Content Include="Scripts\game\preloader.js" />
     <Content Include="Scripts\game\specs\botModifierSpecs.js" />
     <Content Include="Scripts\infrastructure\imageLoader.js" />
     <Content Include="Scripts\infrastructure\realtime.js" />
@@ -519,6 +523,7 @@
     <Content Include="Content\models\only_plane.babylon" />
     <Content Include="Content\Pages\Match\World.less" />
     <Content Include="Content\Menu.less" />
+    <Content Include="Content\models\ship.babylon.manifest" />
     <None Include="Properties\PublishProfiles\botarena - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\botarena - Web Deploy.pubxml" />
     <None Include="Scripts\lib\jquery\jquery-2.0.0.intellisense.js" />
