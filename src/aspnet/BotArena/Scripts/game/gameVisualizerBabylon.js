@@ -406,7 +406,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         newScene.fogColor = new BABYLON.Color3(1, 1, 1);*/
 
         // var camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(1500, 650, 400), newScene);
-        var camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0, Math.PI / 4, 1000, new BABYLON.Vector3(200, 0, 350), newScene);
+        var camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0, Math.PI / 4, 1000, new BABYLON.Vector3(300, 0, 400), newScene);
         newScene.activeCamera = camera;
         camera.attachControl(canvas, false);
         camera.upperBetaLimit = Math.PI / 2.05;

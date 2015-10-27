@@ -240,9 +240,13 @@
     <Compile Include="Models\Match\MatchSetupModel.cs" />
     <Compile Include="Models\RealTime\EventTriggerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Scripts\Pages\Commander\Services\gameHubService.js" />
     <Compile Include="Services\NameGenerator.cs" />
     <Compile Include="Startup.cs" />
     <Content Include="Content\images\sprites\dummyname.png" />
+    <Content Include="Content\images\sprites\explosion17.PNG" />
+    <Content Include="Content\images\sprites\Flare.jpg" />
+    <Content Include="Content\images\sprites\flare_red.jpg" />
     <Content Include="Content\images\sprites\healthbar.png" />
     <Content Include="Content\lib\bootstrap-notify\css\bootstrap-notify.css" />
     <Content Include="Content\lib\bootstrap-notify\js\bootstrap-notify.js" />
@@ -272,11 +276,14 @@
     <Content Include="Scripts\game\modifiers\modifierFactory.js" />
     <Content Include="Scripts\game\modifiers\classes\tankClass.js" />
     <Content Include="Scripts\game\modifiers\defaultModifier.js" />
+    <Content Include="Scripts\game\preloader.js" />
     <Content Include="Scripts\game\specs\botModifierSpecs.js" />
     <Content Include="Scripts\infrastructure\imageLoader.js" />
     <Content Include="Scripts\infrastructure\realtime.js" />
     <Content Include="Scripts\infrastructure\specs\urlSpecs.js" />
     <Content Include="Scripts\infrastructure\url.js" />
+    <Content Include="Scripts\lib\angular\angular-route.js" />
+    <Content Include="Scripts\lib\angular\angular.min.js" />
     <Content Include="Scripts\lib\jasmine-2.3.4\boot.js" />
     <Content Include="Scripts\lib\jasmine-2.3.4\console.js" />
     <Content Include="Scripts\lib\jasmine-2.3.4\jasmine-html.js" />
@@ -287,6 +294,8 @@
     <Content Include="Scripts\menu\menu.js" />
     <Content Include="Scripts\lib\signalR\jquery.signalR-2.2.0.js" />
     <Content Include="Scripts\lib\signalR\jquery.signalR-2.2.0.min.js" />
+    <Content Include="Scripts\Pages\Commander\commander.js" />
+    <Content Include="Scripts\Pages\Commander\Controllers\gameRoomListController.js" />
     <Content Include="Scripts\Shaders\Water\bump.png" />
     <Content Include="Scripts\Shaders\Water\water.fragment.fx" />
     <Content Include="Scripts\Shaders\Water\water.vertex.fx" />
@@ -434,9 +443,6 @@
     <Content Include="Scripts\game\gameVisualizer.js" />
     <Content Include="Scripts\gosu\eventAggregator.js" />
     <Content Include="Scripts\gosu\specs\jasmineMatchers.js" />
-    <Content Include="Scripts\lib\jasmine-1.3.0\jasmine-html.js" />
-    <Content Include="Scripts\lib\jasmine-1.3.0\jasmine.css" />
-    <Content Include="Scripts\lib\jasmine-1.3.0\jasmine.js" />
     <Content Include="Scripts\gosu\snapshot.js" />
     <Content Include="Scripts\gosu\specs\snapshotSpecs.js" />
     <Content Include="Content\lib\bootstrap-3.0.3\fonts\glyphicons-halflings-regular.eot" />
@@ -517,6 +523,7 @@
     <Content Include="Content\models\only_plane.babylon" />
     <Content Include="Content\Pages\Match\World.less" />
     <Content Include="Content\Menu.less" />
+    <Content Include="Content\models\ship.babylon.manifest" />
     <None Include="Properties\PublishProfiles\botarena - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\botarena - Web Deploy.pubxml" />
     <None Include="Scripts\lib\jquery\jquery-2.0.0.intellisense.js" />
@@ -556,6 +563,7 @@
     <Content Include="Scripts\SpecRunner.html" />
     <Content Include="Scripts\game\userActionQueue.js" />
     <None Include="Scripts\_references.js" />
+    <Content Include="Content\Pages\Commander\GameRoomList.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -568,7 +576,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Shared\_LayoutWorld.cshtml" />
     <Content Include="Views\Match\PlayFullScreen.cshtml" />
-    <None Include="Views\Match\General.cshtml" />
+    <None Include="Views\Match\Commander.cshtml" />
     <Content Include="Views\Shared\Menu.cshtml" />
   </ItemGroup>
   <ItemGroup>
