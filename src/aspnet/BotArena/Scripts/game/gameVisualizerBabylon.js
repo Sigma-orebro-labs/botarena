@@ -49,13 +49,64 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         //bot.healthBarMesh.dispose();
         bot.healthBarSprite.dispose();
         bot.nameBar.dispose();
-        bot.babylonMesh.dispose();
+        // bot.babylonMesh.dispose();
+        animateRotationOfDeadBotMesh(bot.babylonMesh);
 
-        var botIndex = botsCurrentlyInScene.indexOf(bot);
+       /* var botIndex = botsCurrentlyInScene.indexOf(bot);
 
         if (botIndex >= 0) {
             botsCurrentlyInScene.splice(botIndex, 1);
-        }
+        }*/
+    }
+
+    function animateRotationOfDeadBotMesh(mesh) {
+
+        var rotationAnim = new BABYLON.Animation("dead_boat", "rotation.x", 100, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+
+        var keys = [];
+
+        keys.push({
+            frame: 0,
+            value: 0
+        });
+
+        keys.push({
+            frame: 50,
+            value: Math.PI / 4
+        });
+
+        keys.push({
+            frame: 100,
+            value: Math.PI
+        });
+
+        rotationAnim.setKeys(keys);
+
+        var sinkAnim = new BABYLON.Animation("dead_boat", "position.y", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+
+        keys = [];
+
+        keys.push({
+            frame: 0,
+            value: mesh.position.y
+        });
+
+        keys.push({
+            frame: 50,
+            value: mesh.position.y
+        });
+
+        keys.push({
+            frame: 100,
+            value: mesh.position.y - 15
+        });
+
+        sinkAnim.setKeys(keys);
+
+        mesh.animations.push(sinkAnim);
+        mesh.animations.push(rotationAnim);
+        scene.beginAnimation(mesh, 0, 100, false);
+
     }
 
     function removeBulletFromScene(bullet) {
@@ -101,21 +152,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
             bot.babylonMesh.scaling = new BABYLON.Vector3(10, 10, 10);
 
-            /*var healthBarMaterial = new BABYLON.StandardMaterial("healthBarMaterial" + i, scene);
-            healthBarMaterial.diffuseColor = new BABYLON.Color3(0, 1, 0);
-            healthBarMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-            
-            bot.healthBarMesh = new BABYLON.Mesh.CreateBox("bot_" + i + "_health_bar", 10.0, scene);
-            bot.healthBarMesh.scaling = new BABYLON.Vector3(0.7, 0.7, 5);
-            bot.healthBarMesh.originalScaling = 5;
-            
-            bot.healthBarMesh.material = healthBarMaterial;
-            
-            bot.healthBarMesh.position.x = bot.y;
-            bot.healthBarMesh.position.y = shipAndBulletYvalue * 4;
-            bot.healthBarMesh.position.z = bot.x;
-            bot.healthBarMesh.rotation.y = Math.PI + gosu.math.degreesToRadians(bot.angle);*/
-
             bot.healthBarSprite = new BABYLON.Sprite("healthbar_" + i, healthBarSpritesManager);
             bot.healthBarSprite.color = new BABYLON.Color4(0, 1, 0.2, 1);
             bot.healthBarSprite.position.x = bot.y;
@@ -135,6 +171,8 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             bot.nameBar.size = 150;
 
             shadowGenerator.getShadowMap().renderList.push(bot.babylonMesh);
+            waterMaterial.reflectionTexture.renderList.push(bot.babylonMesh);
+            waterMaterial.refractionTexture.renderList.push(bot.babylonMesh);
         }
     }
 
@@ -188,14 +226,14 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         setUpSkyBox();
        
 
+
         // Create a sprite manager
         healthBarSpritesManager = new BABYLON.SpriteManager("healthBarSpritesManager", gosuArena.url.createAbsolute("/Content/images/sprites/healthbar.png"), 100, 64, scene);
-        explosionSpriteManager = new BABYLON.SpriteManager("explosions", gosuArena.url.createAbsolute("/Content/images/sprites/explosion17.png"), 50, 64, scene);
+        //explosionSpriteManager = new BABYLON.SpriteManager("explosions", gosuArena.url.createAbsolute("/Content/images/sprites/explosion17.png"), 50, 64, scene);
+        explosionSpriteManager = new BABYLON.SpriteManager("explosions", gosuArena.url.createAbsolute("/Content/images/sprites/explosion_test_sheet.png"), 100, 64, scene);
         $(window).on("resize", function () {
 
-            //var width = window.devicePixelRatio * window.innerWidth;
             var width = window.innerWidth;
-            //var height = window.devicePixelRatio * window.innerHeight;
             var height = window.innerHeight;
             engine.setSize(width, height);
             engine.resize();
@@ -213,10 +251,71 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     }
 
     function moveCameraToDefaultGamePosition() {
-        createAndStartAnimation("cameraZoomX", scene.activeCamera, "position.x", false, scene.activeCamera.position.x, 970);
-        createAndStartAnimation("cameraZoomY", scene.activeCamera, "position.y", false, scene.activeCamera.position.y, 400);
-        createAndStartAnimation("cameraZoomZ", scene.activeCamera, "position.z", false, scene.activeCamera.position.z, 400);
+       // createAndStartAnimation("cameraZoomX", scene.activeCamera, "position.x", false, scene.activeCamera.position.x, 970);
+        //createAndStartAnimation("cameraZoomY", scene.activeCamera, "position.y", false, scene.activeCamera.position.y, 400);
+        //createAndStartAnimation("cameraZoomZ", scene.activeCamera, "position.z", false, scene.activeCamera.position.z, 400);
     }
+
+    function animateArcRotateCamera(toAlpha, toBeta, toRadius, camera) {
+
+        var animCamAlpha = new BABYLON.Animation("animCam", "alpha", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+
+        var keysAlpha = [];
+
+        keysAlpha.push({
+            frame: 0,
+            value: camera.alpha
+        });
+
+        keysAlpha.push({
+            fram: 100,
+            value: toAlpha
+        });
+
+
+        var animCamBeta = new BABYLON.Animation("animCam", "beta", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+
+        var keysBeta = [];
+
+        keysBeta.push({
+            frame: 0,
+            value: camera.beta
+        });
+
+        keysBeta.push({
+            frame: 100,
+            value: toBeta
+        });
+
+        var animCamRadius = new BABYLON.Animation("animCam", "radius", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+
+        var keysRadius = [];
+
+        keysRadius.push({
+            frame: 0,
+            value: camera.radius
+        });
+
+        keysRadius.push({
+            frame: 100,
+            value: toRadius
+        });
+
+        animCamAlpha.setKeys(keysAlpha);
+        animCameraBeta.setKeys(keysBeta);
+        animCamRadius.setKeys(keysRadius);
+        camera.animations.push(animCamAlpha);
+        camera.animations.push(animCamBeta);
+        camera.animations.push(animCamRadius);
+
+    }
+
+
+
+
+
+
+
 
     function createAndStartAnimation(name, obj, property, loop, startValue, endValue) {
         var loopMode = loop ? BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE : BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT;
@@ -306,12 +405,18 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         //newScene.fogColor = new BABYLON.Color3(0.8, 0.83, 0.8);
         newScene.fogColor = new BABYLON.Color3(1, 1, 1);*/
 
-        var camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(1500, 650, 400), newScene);
+        // var camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(1500, 650, 400), newScene);
+        var camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0, Math.PI / 4, 1000, new BABYLON.Vector3(200, 0, 350), newScene);
         newScene.activeCamera = camera;
         camera.attachControl(canvas, false);
-        camera.rotation = new BABYLON.Vector3(Math.PI / 7, -Math.PI / 2, 0);
-        camera.rotation.z = -Math.PI / 4;
-        camera.speed = 40;        
+        camera.upperBetaLimit = Math.PI / 2.05;
+        camera.lowerRadiusLimit = 10;
+        camera.upperRadiusLimit = 2000;
+        camera.inertia = 0.1;
+        camera.inertialRadiusOffset = 10;
+//        camera.rotation = new BABYLON.Vector3(Math.PI / 7, -Math.PI / 2, 0);
+//        camera.rotation.z = -Math.PI / 4;
+//        camera.speed = 40;        
         
         
 
@@ -382,7 +487,8 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         brickMaterial[1] = brickMaterial[0].clone();
         brickMaterial[2] = brickMaterial[0].clone();
         brickMaterial[3] = brickMaterial[0].clone();
-
+        //BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "ship.babylon", scene, function (newMeshes, particleSystems)
+       
         
 
         //var box = new BABYLON.Mesh.CreateBox("testbox", 100, scene);
@@ -401,7 +507,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         
         //shadowGenerator.getShadowMap().renderList.push(box);
         //shadowGenerator.getShadowMap().renderList.push(box2);
-
         for (var i = 0; i < arenaState.terrain.length; i++) {
 
             var currentTerrain = arenaState.terrain[i];
@@ -411,7 +516,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             var wallMesh = BABYLON.Mesh.CreateBox("wall_" + i, 1, scene);
 
             wallMesh.scaling = new BABYLON.Vector3(currentTerrain.width, currentTerrain.height, currentTerrain.height / 2);
-            wallMesh.position = new BABYLON.Vector3(terrainCenter.y, wallYValue, terrainCenter.x);
+            wallMesh.position = new BABYLON.Vector3(terrainCenter.y, -15, terrainCenter.x);
 
 
             brickMaterial[i].diffuseTexture.vScale = 0.3;
@@ -513,7 +618,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         explosion.size = 20;
         explosion.disposeWhenFinishedAnimating = true;
         explosion.layerMask = 255;
-        explosion.playAnimation(0, 24, false, 8);
+        explosion.playAnimation(0, 24, false, 16);
     }
 
     // a function to fake a sunset
@@ -684,6 +789,8 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         particleSmoke.updateSpeed = 0.010;
 
     }
+
+
 
     return {
         initialize: initialize,
