@@ -92,11 +92,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         });
 
         keys.push({
-            frame: 50,
-            value: mesh.position.y
-        });
-
-        keys.push({
             frame: 100,
             value: mesh.position.y - 15
         });
@@ -229,8 +224,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
         // Create a sprite manager
         healthBarSpritesManager = new BABYLON.SpriteManager("healthBarSpritesManager", gosuArena.url.createAbsolute("/Content/images/sprites/healthbar.png"), 100, 64, scene);
-        //explosionSpriteManager = new BABYLON.SpriteManager("explosions", gosuArena.url.createAbsolute("/Content/images/sprites/explosion17.png"), 50, 64, scene);
-        explosionSpriteManager = new BABYLON.SpriteManager("explosions", gosuArena.url.createAbsolute("/Content/images/sprites/explosion_test_sheet.png"), 100, 64, scene);
+        explosionSpriteManager = new BABYLON.SpriteManager("explosions", gosuArena.url.createAbsolute("/Content/images/sprites/explosion17.png"), 50, 64, scene);
         $(window).on("resize", function () {
 
             var width = window.innerWidth;
@@ -254,24 +248,10 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
        // createAndStartAnimation("cameraZoomX", scene.activeCamera, "position.x", false, scene.activeCamera.position.x, 970);
         //createAndStartAnimation("cameraZoomY", scene.activeCamera, "position.y", false, scene.activeCamera.position.y, 400);
         //createAndStartAnimation("cameraZoomZ", scene.activeCamera, "position.z", false, scene.activeCamera.position.z, 400);
+        animateArcRotateCamera(Math.PI / 4, 1000, scene.activeCamera);
     }
 
-    function animateArcRotateCamera(toAlpha, toBeta, toRadius, camera) {
-
-        var animCamAlpha = new BABYLON.Animation("animCam", "alpha", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-
-        var keysAlpha = [];
-
-        keysAlpha.push({
-            frame: 0,
-            value: camera.alpha
-        });
-
-        keysAlpha.push({
-            fram: 100,
-            value: toAlpha
-        });
-
+    function animateArcRotateCamera(toBeta, toRadius, camera) {
 
         var animCamBeta = new BABYLON.Animation("animCam", "beta", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
 
@@ -301,12 +281,12 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             value: toRadius
         });
 
-        animCamAlpha.setKeys(keysAlpha);
-        animCameraBeta.setKeys(keysBeta);
+        animCamBeta.setKeys(keysBeta);
         animCamRadius.setKeys(keysRadius);
-        camera.animations.push(animCamAlpha);
         camera.animations.push(animCamBeta);
         camera.animations.push(animCamRadius);
+
+        scene.beginAnimation(camera, 0, 100, false);
 
     }
 
@@ -406,7 +386,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         newScene.fogColor = new BABYLON.Color3(1, 1, 1);*/
 
         // var camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(1500, 650, 400), newScene);
-        var camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0, Math.PI / 4, 1000, new BABYLON.Vector3(300, 0, 400), newScene);
+        var camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0, Math.PI / 2.5, 2000, new BABYLON.Vector3(300, 0, 400), newScene);
         newScene.activeCamera = camera;
         camera.attachControl(canvas, false);
         camera.upperBetaLimit = Math.PI / 2.05;
@@ -632,23 +612,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     }
 
     function onBulletHitBot(bullet) {
-        
-        var explosion = particleExplosion.clone();
-
-        explosion.emitter = new BABYLON.Vector3(bullet.y, bulletYValue, bullet.x);
-
-
-        var offsetAngle1 = gosu.math.degreesToRadians(bullet.angle + 20) + Math.PI / 2;
-        var offsetAngle2 = gosu.math.degreesToRadians(bullet.angle - 20) + Math.PI / 2;
-
-        var vector1 = new BABYLON.Vector3(Math.sin(offsetAngle1) * 3, 1, Math.cos(offsetAngle1) * 3);
-        var vector2 = new BABYLON.Vector3(Math.sin(offsetAngle2) * 3, -1, Math.cos(offsetAngle2) * 3);
-
-
-        explosion.direction1 = vector1;
-        explosion.direction2 = vector2;
-
-        explosion.start();
         removeBulletFromScene(bullet);
     }
 
