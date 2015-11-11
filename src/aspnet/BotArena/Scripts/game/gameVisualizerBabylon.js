@@ -139,7 +139,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
             botsCurrentlyInScene.push(bot);
 
-            bot.babylonMesh = botMesh.createInstance("bot" + i);
+            bot.babylonMesh = cloneBotMeshAndMaterials(i);
 
             bot.babylonMesh.position.x = bot.y;
             bot.babylonMesh.position.y = shipYValue;
@@ -171,6 +171,17 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         }
     }
 
+    function cloneBotMeshAndMaterials(index) {
+        var newMesh = botMesh.clone("bot" + i);
+        newMesh.material = botMesh.material.clone();
+
+        for (var i = 0; i < botMesh.material.subMaterials.length; i++) {
+            newMesh.material.subMaterials[i] = botMesh.material.subMaterials[i].clone();
+        }
+
+        return newMesh;
+    }
+
     function onGameStarting() {
         //mesh.convertToFlatShadedMesh();
 
@@ -187,9 +198,20 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         });
     }
 
+    function cameraTargetBot(botId) {
+        var bots = arenaState.bots;
+
+        for (var i = 0; i < bots.length; i++) {
+            if (bots[i].id === botId) {
+                scene.activeCamera.target = bots[i].babylonMesh;
+
+                animateArcRotateCamera(Math.PI / 2.5, 300, 100, scene.activeCamera);
+            }
+        }
+    }
+
     function initialize(worldArenaState) {
         arenaState = worldArenaState;
-
         arenaState.onBotKilled(onBotKilled);
         arenaState.onBulletHitBot(onBulletHitBot);
         arenaState.onBulletHitTerrain(onBulletRemoved);
@@ -248,12 +270,12 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
        // createAndStartAnimation("cameraZoomX", scene.activeCamera, "position.x", false, scene.activeCamera.position.x, 970);
         //createAndStartAnimation("cameraZoomY", scene.activeCamera, "position.y", false, scene.activeCamera.position.y, 400);
         //createAndStartAnimation("cameraZoomZ", scene.activeCamera, "position.z", false, scene.activeCamera.position.z, 400);
-        animateArcRotateCamera(Math.PI / 4, 1000, scene.activeCamera);
+        animateArcRotateCamera(Math.PI / 4, 1000, 30, scene.activeCamera);
     }
 
-    function animateArcRotateCamera(toBeta, toRadius, camera) {
+    function animateArcRotateCamera(toBeta, toRadius, animationSpeed,camera) {
 
-        var animCamBeta = new BABYLON.Animation("animCam", "beta", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+        var animCamBeta = new BABYLON.Animation("animCam", "beta", animationSpeed, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
 
         var keysBeta = [];
 
@@ -267,7 +289,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             value: toBeta
         });
 
-        var animCamRadius = new BABYLON.Animation("animCam", "radius", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+        var animCamRadius = new BABYLON.Animation("animCam", "radius", animationSpeed, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
 
         var keysRadius = [];
 
@@ -289,10 +311,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         scene.beginAnimation(camera, 0, 100, false);
 
     }
-
-
-
-
 
 
 
@@ -556,7 +574,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         for (var i = 0; i < arenaState.bots.length; i++) {
 
             var bot = arenaState.bots[i];
-
+            
             if (bot.babylonMesh !== undefined) {
 
                 bot.babylonMesh.position.x = bot.y;
@@ -572,8 +590,19 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
                 
                 bot.nameBar.position.x = bot.y;
                 bot.nameBar.position.z = bot.x;
-
+                
+                if (bot.isVisible()) {
+                    setBotTransparency(bot.babylonMesh.material, 1);
+                } else {
+                    setBotTransparency(bot.babylonMesh.material, 0.1);
+                }
             }
+        }
+    }
+
+    function setBotTransparency(material, value) {
+        for (var j = 0; j < material.subMaterials.length; j++) {
+            material.subMaterials[j].alpha = value;
         }
     }
 
@@ -757,6 +786,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
     return {
         initialize: initialize,
-        moveCameraToDefaultGamePosition: moveCameraToDefaultGamePosition
+        moveCameraToDefaultGamePosition: moveCameraToDefaultGamePosition,
+        cameraTargetBot: cameraTargetBot
     };
 }

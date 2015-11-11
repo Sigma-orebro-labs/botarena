@@ -33,6 +33,7 @@
         <div class="color" data-bind='style: { backgroundColor : color }'></div>
         <span class="name" data-bind="text: name"></span>
         <div class="health"><span data-bind="text: roundedHealth"></span> hp</div>
+        <button data-bind="click: $parent.targetBotWithCamera.bind(bot) ">Follow bot</button>
     </li>
 </ul>
 

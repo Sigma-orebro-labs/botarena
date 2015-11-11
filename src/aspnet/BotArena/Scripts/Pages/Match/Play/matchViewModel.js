@@ -34,6 +34,10 @@ gosuArena.factories.createMatchViewModel = function () {
         botLegends.push(viewModel);
     }
 
+    function cameraTargetBot(bot) {
+        gosuArena.visualizers.gameVisualizer3D.cameraTargetBot(bot.id);
+    }
+
     function initialize(worldArenaState) {
 
         arenaState = worldArenaState;
@@ -53,6 +57,7 @@ gosuArena.factories.createMatchViewModel = function () {
 
     return {
         botLegends: botLegends,
+        targetBotWithCamera: cameraTargetBot,
         initialize: initialize
     };
 };
