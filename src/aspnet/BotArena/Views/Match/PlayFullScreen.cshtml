@@ -21,7 +21,7 @@
 
 <section id="playing-field">
     <canvas id="gameCanvas" class="hide-from-start" width="800" height="600"></canvas>
-    <canvas id="3d-game-canvas-babylon"></canvas>
+    <canvas id="3d-game-canvas-babylon" class="fullscreen-canvas"></canvas>
 </section>
 
 <div class="game-message-container">
@@ -37,7 +37,7 @@
     </li>
 </ul>
 
-<form class="options">
+<form class="options overlay-bottom-left">
     <label for="showBotNames">Show bot names</label>
     <input id="showBotNames" type="checkbox" name="showBotNames" checked="checked" />
 
@@ -45,7 +45,7 @@
     <input id="showBotSights" type="checkbox" name="showBotSights" />
 </form>
 
-<menu class="actions">
+<menu class="actions overlay-bottom-right">
     <button id="2d-mode" class="btn btn-default">2D</button>
     <button id="3d-mode" class="btn btn-default">3D</button>
     <button id="both-mode" class="btn btn-default">2D & 3D</button>
