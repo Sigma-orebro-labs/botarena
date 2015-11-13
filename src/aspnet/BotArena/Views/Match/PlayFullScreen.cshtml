@@ -27,7 +27,7 @@
 </section>
 <section ng-app="menuApp">
     <div class="menu-system" ng-controller="MainController">
-        <ul>
+        <ul class="main-menu" ng-keypress="toggleMenu($event)" ng-hide="menuSystemVisible">
             <li ng-repeat="(key, value) in menuItems">
                 {{ value.label }}
             </li>
