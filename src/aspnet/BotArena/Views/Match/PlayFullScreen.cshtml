@@ -7,11 +7,13 @@
     ViewBag.Title = "Play match!";
 }
 
-@section styles
-{
+@section styles {
 }
 
 @section scripts {
+    <script type="text/javascript" src="@Url.Content("~/Scripts/lib/angular/angular.min.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/menuApp.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/controllers/mainController.js")"> </script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/lib/knockout/knockout-3.0.0.js")"> </script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/Match/Play/botViewModel.js")"> </script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/Match/Play/matchViewModel.js")"> </script>
@@ -22,6 +24,15 @@
 <section id="playing-field">
     <canvas id="gameCanvas" class="hide-from-start" width="800" height="600"></canvas>
     <canvas id="3d-game-canvas-babylon" class="fullscreen-canvas"></canvas>
+</section>
+<section ng-app="menuApp">
+    <div class="menu-system" ng-controller="MainController">
+        <ul>
+            <li ng-repeat="(key, value) in menuItems">
+                {{ value.label }}
+            </li>
+        </ul>
+    </div>
 </section>
 
 <div class="game-message-container">

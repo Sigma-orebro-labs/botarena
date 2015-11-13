@@ -240,6 +240,8 @@
     <Compile Include="Models\Match\MatchSetupModel.cs" />
     <Compile Include="Models\RealTime\EventTriggerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Scripts\angular\controllers\MainController.js" />
+    <Content Include="Scripts\angular\menuApp.js" />
     <Content Include="Scripts\Pages\Commander\Services\gameHubService.js" />
     <Compile Include="Services\NameGenerator.cs" />
     <Compile Include="Startup.cs" />
