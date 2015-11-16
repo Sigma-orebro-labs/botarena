@@ -42,6 +42,30 @@ gosuArena.events = (function () {
         gosu.eventAggregator.subscribe("botRegistrationStarting", callback);
     }
 
+    function raiseTargetCameraOnBot(bot) {
+        gosu.eventAggregator.publish("targetCameraOnBot", bot);
+    }
+
+    function targetCameraOnBot(callback) {
+        gosu.eventAggregator.subscribe("targetCameraOnBot", callback);
+    }
+
+    function turnBotTransparent(callback) {
+        gosu.eventAggregator.subscribe("turnBotTransparent", callback);
+    }
+
+    function raiseTurnBotTransparent(botId) {
+        gosu.eventAggregator.publish("turnBotTransparent", botId);
+    }
+
+    function turnBotSolid(callback) {
+        gosu.eventAggregator.subscribe("turnBotSolid", callback);
+    }
+
+    function raiseTurnBotSolid(botId) {
+        gosu.eventAggregator.publish("turnBotSolid", botId);
+    }
+
     return {
         raiseMatchEnded: raiseMatchEnded,
         matchEnded: matchEnded,
@@ -52,7 +76,13 @@ gosuArena.events = (function () {
         raiseWorldInitialized: raiseWorldInitialized,
         worldInitialized: worldInitialized,
         botRegistrationStarting: botRegistrationStarting,
-        raiseBotRegistrationStarting: raiseBotRegistrationStarting
+        raiseBotRegistrationStarting: raiseBotRegistrationStarting,
+        raiseTargetCameraOnBot: raiseTargetCameraOnBot,
+        targetCameraOnBot: targetCameraOnBot,
+        turnBotTransparent: turnBotTransparent,
+        raiseTurnBotTransparent: raiseTurnBotTransparent,
+        turnBotSolid: turnBotSolid,
+        raiseTurnBotSolid: raiseTurnBotSolid
     };
 })();
 

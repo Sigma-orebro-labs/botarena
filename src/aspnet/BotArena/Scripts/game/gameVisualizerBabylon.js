@@ -139,7 +139,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
             botsCurrentlyInScene.push(bot);
 
-            bot.babylonMesh = cloneBotMeshAndMaterials(i);
+            bot.babylonMesh = cloneBotMeshAndMaterials(i); // i is passed along just to give the bot mesh a "unique" id
 
             bot.babylonMesh.position.x = bot.y;
             bot.babylonMesh.position.y = shipYValue;
@@ -172,7 +172,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     }
 
     function cloneBotMeshAndMaterials(index) {
-        var newMesh = botMesh.clone("bot" + i);
+        var newMesh = botMesh.clone("bot" + index);
         newMesh.material = botMesh.material.clone();
 
         for (var i = 0; i < botMesh.material.subMaterials.length; i++) {
@@ -183,13 +183,12 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     }
 
     function onGameStarting() {
-        //mesh.convertToFlatShadedMesh();
-
         addBotsToScene();
     }
 
     function onMatchEnded() {
         removeAllBullets();
+        moveCameraToDefaultGamePosition();
     }
 
     function removeAllBullets() {
@@ -198,11 +197,11 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         });
     }
 
-    function cameraTargetBot(botId) {
+    function cameraTargetBot(bot) {
         var bots = arenaState.bots;
 
         for (var i = 0; i < bots.length; i++) {
-            if (bots[i].id === botId) {
+            if (bots[i].id === bot.id) {
                 scene.activeCamera.target = bots[i].babylonMesh;
 
                 animateArcRotateCamera(Math.PI / 2.5, 300, 100, scene.activeCamera);
@@ -227,6 +226,9 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         gosuArena.events.botRegistrationStarting(onBotRegistrationStarting);
         gosuArena.events.gameStarting(onGameStarting);
         gosuArena.events.matchEnded(onMatchEnded);
+        gosuArena.events.targetCameraOnBot(cameraTargetBot);
+        gosuArena.events.turnBotTransparent(turnBotTransparent);
+        gosuArena.events.turnBotSolid(turnBotSolid);
 
         gosuArena.visualizers.babylonEngine = new BABYLON.Engine(canvas, true);
         engine = gosuArena.visualizers.babylonEngine;
@@ -238,7 +240,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
         
         setUpParticleSmoke();
-        setUpParticleExplosion();
+        //setUpParticleExplosion();
         setUpLandscape(arenaState);
         setUpSkyBox();
        
@@ -378,30 +380,14 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         skybox.material = skyboxMaterial;
     }
 
-    function setUpMaterials() {
-
-        var material = new BABYLON.StandardMaterial("bullet", scene);
-        //material.specularPower(0);
-        material.diffuseColor = new BABYLON.Color3(0.3, 0.3, 0.3);
-
-        materials.bullet = material;
-    }
-
     function update(arenaState) {
         updateBots(arenaState);
-       // updateSunLight();
-       // skybox.rotation.y -= 0.0001 * scene.getAnimationRatio();
         updateBullets(arenaState);
     }
 
     var createScene = function (canvas) {
        
         var newScene = new BABYLON.Scene(engine);
-
-        /*newScene.fogMode = BABYLON.Scene.FOGMODE_EXP2;
-        newScene.fogDensity = 0.00015;
-        //newScene.fogColor = new BABYLON.Color3(0.8, 0.83, 0.8);
-        newScene.fogColor = new BABYLON.Color3(1, 1, 1);*/
 
         // var camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(1500, 650, 400), newScene);
         var camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0, Math.PI / 2.5, 2000, new BABYLON.Vector3(300, 0, 400), newScene);
@@ -412,10 +398,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         camera.upperRadiusLimit = 2000;
         camera.inertia = 0.7;
         camera.wheelPrecision = 0.03;
-//        camera.rotation = new BABYLON.Vector3(Math.PI / 7, -Math.PI / 2, 0);
-//        camera.rotation.z = -Math.PI / 4;
-//        camera.speed = 40;        
-        
         
 
         // create a line for each axis, just for orientation aid. 
@@ -458,12 +440,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
     function setUpLights() {
 
-       // sun = new BABYLON.PointLight("Omni0", new BABYLON.Vector3(-1000, 1000, 0.1), scene);
-
-       // var sun2 = new BABYLON.PointLight("Omni1", new BABYLON.Vector3(2000, 4000, -8000), scene);
-      //  var sun3 = new BABYLON.PointLight("Omni2", new BABYLON.Vector3(-2000, 4000, -8000), scene);
-        
-
         sun = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(-1, -2, -1), scene);
         sun.position = new BABYLON.Vector3(1000, 10000, 1000);
         sun.intensity = 2;
@@ -485,26 +461,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         brickMaterial[1] = brickMaterial[0].clone();
         brickMaterial[2] = brickMaterial[0].clone();
         brickMaterial[3] = brickMaterial[0].clone();
-        //BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "ship.babylon", scene, function (newMeshes, particleSystems)
-       
-        
 
-        //var box = new BABYLON.Mesh.CreateBox("testbox", 100, scene);
-        //box.material = new BABYLON.StandardMaterial("1", scene);
-        //box.position = new BABYLON.Vector3(-1000, 250, 0);
-        //box.receiveShadows = true;
-        
-
-
-        //var box2 = new BABYLON.Mesh.CreateBox("testbox2", 100, scene);
-        //box2.scaling = new BABYLON.Vector3(10, 0.1, 10);
-        //box2.position = new BABYLON.Vector3(-1000, 150, 0);
-        //box2.material = new BABYLON.StandardMaterial("2", scene);
-        //box2.receiveShadows = true;
-
-        
-        //shadowGenerator.getShadowMap().renderList.push(box);
-        //shadowGenerator.getShadowMap().renderList.push(box2);
         for (var i = 0; i < arenaState.terrain.length; i++) {
 
             var currentTerrain = arenaState.terrain[i];
@@ -529,11 +486,8 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             waterMaterial.reflectionTexture.renderList.push(wallMesh);
             shadowGenerator.getShadowMap().renderList.push(wallMesh);
         }
-        
     };       
     
-
-
     function setUpWater(arenaState) {
 
     
@@ -581,21 +535,39 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
                 bot.babylonMesh.position.z = bot.x;
                 bot.babylonMesh.rotation.y = gosu.math.degreesToRadians(bot.angle);
 
-                /*bot.healthBarMesh.position.x = bot.y;
-                bot.healthBarMesh.position.z = bot.x;
-                bot.healthBarMesh.rotation.y = Math.PI + gosu.math.degreesToRadians(bot.angle);*/
-
                 bot.healthBarSprite.position.x = bot.y;
                 bot.healthBarSprite.position.z = bot.x;
                 
                 bot.nameBar.position.x = bot.y;
                 bot.nameBar.position.z = bot.x;
                 
-                if (bot.isVisible()) {
+               /* if (bot.isVisible()) {
                     setBotTransparency(bot.babylonMesh.material, 1);
                 } else {
                     setBotTransparency(bot.babylonMesh.material, 0.1);
-                }
+                }*/
+            }
+        }
+    }
+
+    function turnBotTransparent(botId) {
+        var bot = findBotById(botId);
+
+        setBotTransparency(bot.babylonMesh.material, 0.1);
+    }
+
+    function turnBotSolid(botId) {
+        var bot = findBotById(botId);
+
+        setBotTransparency(bot.babylonMesh.material, 1);
+    }
+
+    function findBotById(botId){
+        var bots = arenaState.bots;
+
+        for (var i = 0; i < bots.length; i++) {
+            if (bots[i].id === botId) {
+                return bots[i];
             }
         }
     }
@@ -607,10 +579,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     }
 
     function onBotHitByBullet(bot) {
-
-        /*bot.healthBarMesh.scaling.z = bot.healthBarMesh.originalScaling * bot.healthPercentage();
-        bot.healthBarMesh.material.diffuseColor.r = 1 - bot.healthPercentage();
-        bot.healthBarMesh.material.diffuseColor.g = bot.healthPercentage();*/
 
         if (bot.healthPercentage() < 0.7) {
             bot.healthBarSprite.color.r = 1;
@@ -628,12 +596,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         explosion.disposeWhenFinishedAnimating = true;
         explosion.layerMask = 255;
         explosion.playAnimation(0, 24, false, 16);
-    }
-
-    // a function to fake a sunset
-    function updateSunLight() {
-        sun.direction.x -= 0.01;
-        sun.direction.y += 0.01;
     }
 
     function onBulletRemoved(bullet) {
@@ -677,59 +639,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
     function onBotKilled(bot) {
         removeBotFromScene(bot);
-    }
-
-    function setUpParticleExplosion() {
-
-        particleExplosion = new BABYLON.ParticleSystem("explosion", 3000, scene);
-
-
-        //Texture of each particle
-        particleExplosion.particleTexture = new BABYLON.Texture(gosuArena.url.createAbsolute("/Content/images/sprites/Flare.jpg"), scene);
-
-
-        // Where the particles come from
-        //particleExplosion.emitter = fountain; // the starting object, the emitter
-        particleExplosion.minEmitBox = new BABYLON.Vector3(-1, -1, -1); // Starting all from
-        particleExplosion.maxEmitBox = new BABYLON.Vector3(1, 1, 1); // To...
-
-        // Colors of all particles
-        particleExplosion.color1 = new BABYLON.Color4(1, 1, 0, 1.0);
-        particleExplosion.color2 = new BABYLON.Color4(1, 0, 0, 1.0);
-        particleExplosion.colorDead = new BABYLON.Color4(0.5, 0, 0, 0.0);
-
-        // Size of each particle (random between...
-        particleExplosion.minSize = 0.5;
-        particleExplosion.maxSize = 1;
-
-        // Life time of each particle (random between...
-        particleExplosion.minLifeTime = 0.2;
-        particleExplosion.maxLifeTime = 0.5;
-
-        // Emission rate
-        particleExplosion.emitRate = 5000;
-
-        // Blend mode : BLENDMODE_ONEONE, or BLENDMODE_STANDARD
-        particleExplosion.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
-
-        // Set the gravity of all particles
-        particleExplosion.gravity = new BABYLON.Vector3(0, -100, 0);
-
-        // Direction of each particle after it has been emitted
-        particleExplosion.direction1 = new BABYLON.Vector3(-1, 0.5, 1);
-        particleExplosion.direction2 = new BABYLON.Vector3(1, -0.5, 1);
-
-        // Angular speed, in radians
-        particleExplosion.minAngularSpeed = 0;
-        particleExplosion.maxAngularSpeed = Math.PI;
-
-        particleExplosion.targetStopDuration = 1;
-        particleExplosion.disposeOnStop = true;
-
-        // Speed
-        particleExplosion.minEmitPower = 40;
-        particleExplosion.maxEmitPower = 60;
-        particleExplosion.updateSpeed = 0.05;
     }
 
     function setUpParticleSmoke() {

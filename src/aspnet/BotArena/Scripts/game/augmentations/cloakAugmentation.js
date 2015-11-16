@@ -22,6 +22,10 @@ gosuArena.factories.augmentations.createCloak = function(botProperties) {
             botProperties.isVisible = true;
         } else if (augmentationProperties.isActive) {
             augmentationProperties.roundsRemaining -= 1;
+
+            if (augmentationProperties.roundsRemaining <= 0) {
+                gosuArena.events.raiseTurnBotSolid(botProperties.id); // raise event only when roundsRemaining "runs out"
+            }
         }
     }
 
@@ -29,6 +33,7 @@ gosuArena.factories.augmentations.createCloak = function(botProperties) {
         if (getRoundsRemaining() > 0) {
             augmentationProperties.isActive = true;
             botProperties.isVisible = false;
+            gosuArena.events.raiseTurnBotTransparent(botProperties.id);
         }
     }
 

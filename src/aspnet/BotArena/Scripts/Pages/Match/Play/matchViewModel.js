@@ -35,7 +35,7 @@ gosuArena.factories.createMatchViewModel = function () {
     }
 
     function cameraTargetBot(bot) {
-        gosuArena.visualizers.gameVisualizer3D.cameraTargetBot(bot.id);
+        gosuArena.events.raiseTargetCameraOnBot(bot);
     }
 
     function initialize(worldArenaState) {
