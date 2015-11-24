@@ -12,8 +12,15 @@
 
 @section scripts {
     <script type="text/javascript" src="@Url.Content("~/Scripts/lib/angular/angular.min.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/lib/angular/angular-ui-router.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/angular/menuApp.js")"> </script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/controllers/mainController.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/main-menu/mainController.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/bot-wizard/botWizardCtrl.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/bot-wizard/chooseClassCtrl.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/bot-wizard/chooseEquipmentCtrl.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/bot-wizard/chooseColorCtrl.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/bot-wizard/enterBotNameCtrl.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/bot-wizard/enterEmailCtrl.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/lib/knockout/knockout-3.0.0.js")"> </script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/Match/Play/botViewModel.js")"> </script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/Match/Play/matchViewModel.js")"> </script>
@@ -25,13 +32,10 @@
     <canvas id="gameCanvas" class="hide-from-start" width="800" height="600"></canvas>
     <canvas id="3d-game-canvas-babylon" class="fullscreen-canvas"></canvas>
 </section>
+
 <section ng-app="menuApp">
     <div class="menu-system" ng-controller="MainController">
-        <ul class="main-menu" ng-keypress="toggleMenu($event)" ng-hide="menuSystemVisible">
-            <li ng-repeat="(key, value) in menuItems">
-                {{ value.label }}
-            </li>
-        </ul>
+        <div ui-view ng-esc="toggleMenu()" tabindex="0"></div>
     </div>
 </section>
 

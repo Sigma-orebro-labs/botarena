@@ -1,0 +1,9 @@
+﻿<div style="background-color:aqua">
+    <h1>Pick equipment</h1>
+    <select name="equipmentSelect" id="equipmentSelect" ng-model="bot.equipment">
+        <option ng-repeat="option in equipmentSelect.availableEquipment" value="{{option.name}}">{{option.name}}</option>
+    </select>
+    <a ui-sref="bot-wizard.choose-color">Go to paint shop</a>
+</div>
+
+

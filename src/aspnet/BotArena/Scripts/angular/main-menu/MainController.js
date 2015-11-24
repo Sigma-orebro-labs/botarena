@@ -1,5 +1,8 @@
-﻿menuApp.controller('MainController', ['$scope', function ($scope) {
+﻿angular.module('menuApp').controller('MainController', ['$scope', function ($scope) {
     $scope.menuItems = [{
+        label: 'Create bot',
+        someprop: 19
+    },{
         label: 'Play FFA Match'
     }, {
         label: 'Play Team Match',
@@ -22,12 +25,11 @@
     }];
     $scope.menuSystemVisible = false;
 
-    $scope.toggleMenu = function (e) {
+    $scope.toggleMenu = function () {
         //e = e || window.event;
-        console.log('keyCode: '+e.which);
-        if (e.which === 121) {
-            $scope.menuSystemVisible = !$scope.menuSystemVisible();
-        }
+       // if (e.which === 121) {
+            $scope.menuSystemVisible = !$scope.menuSystemVisible;
+        //}
     };
 
 }]);

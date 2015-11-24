@@ -240,8 +240,22 @@
     <Compile Include="Models\Match\MatchSetupModel.cs" />
     <Compile Include="Models\RealTime\EventTriggerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="Scripts\angular\controllers\MainController.js" />
+    <Content Include="Scripts\angular\bot-wizard\BotWizardLayout.html" />
+    <Content Include="Scripts\angular\bot-wizard\botWizardCtrl.js" />
+    <Content Include="Scripts\angular\bot-wizard\ChooseClass.html" />
+    <Content Include="Scripts\angular\bot-wizard\chooseClassCtrl.js" />
+    <Content Include="Scripts\angular\bot-wizard\ChooseColor.html" />
+    <Content Include="Scripts\angular\bot-wizard\chooseColorCtrl.js" />
+    <Content Include="Scripts\angular\bot-wizard\ChooseEquipment.html" />
+    <Content Include="Scripts\angular\bot-wizard\chooseEquipmentCtrl.js" />
+    <Content Include="Scripts\angular\bot-wizard\EnterBotName.html" />
+    <Content Include="Scripts\angular\bot-wizard\enterBotNameCtrl.js" />
+    <Content Include="Scripts\angular\bot-wizard\EnterEmail.html" />
+    <Content Include="Scripts\angular\bot-wizard\enterEmailCtrl.js" />
+    <Content Include="Scripts\angular\main-menu\main-menu.html" />
+    <Content Include="Scripts\angular\main-menu\MainController.js" />
     <Content Include="Scripts\angular\menuApp.js" />
+    <Content Include="Scripts\lib\angular\angular-ui-router.js" />
     <Content Include="Scripts\Pages\Commander\Services\gameHubService.js" />
     <Compile Include="Services\NameGenerator.cs" />
     <Compile Include="Startup.cs" />
@@ -270,7 +284,6 @@
     <Content Include="Content\images\sprites\wall_north.png" />
     <Content Include="Content\images\sprites\wall_south.png" />
     <Content Include="Content\images\sprites\wall_west.png" />
-    <Content Include="Content\models\jeep1.jpg" />
     <Content Include="Content\sounds\cork.wav" />
     <Content Include="Content\sounds\water_sound.wav" />
     <Content Include="Scripts\game\augmentations\cloakAugmentation.js" />
@@ -517,15 +530,14 @@
     <Content Include="Content\Pages\Match\SetupMatch.less" />
     <Content Include="Content\Pages\Match\SetupTrainingMatch.less" />
     <Content Include="Content\Pages\Account\List.less" />
-    <Content Include="Content\models\mountain_landscape_with_background.dae" />
-    <Content Include="Content\models\jeep.assimp.json" />
-    <Content Include="Content\models\m_plane.babylon" />
     <Content Include="Content\models\ship.babylon" />
-    <Content Include="Content\models\newer_mountains.babylon" />
     <Content Include="Content\models\only_plane.babylon" />
     <Content Include="Content\Pages\Match\World.less" />
     <Content Include="Content\Menu.less" />
     <Content Include="Content\models\ship.babylon.manifest" />
+    <Content Include="Content\models\magnus_skepp.babylon" />
+    <Content Include="Content\models\iceWorld.babylon" />
+    <Content Include="Content\models\iceWorld.log" />
     <None Include="Properties\PublishProfiles\botarena - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\botarena - Web Deploy.pubxml" />
     <None Include="Scripts\lib\jquery\jquery-2.0.0.intellisense.js" />
@@ -583,6 +595,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Scripts\angular\controllers\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

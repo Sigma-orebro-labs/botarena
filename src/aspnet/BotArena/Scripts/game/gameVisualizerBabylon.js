@@ -43,20 +43,10 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             shadowRenderList.pop(bot.babylonMesh);
         }
 
-        //waterMaterial.reflectionTexture.renderList.pop(bot.babylonMesh);
-        //waterMaterial.reflectionTexture.renderList.pop(bot.healthBarMesh);
-
-        //bot.healthBarMesh.dispose();
         bot.healthBarSprite.dispose();
         bot.nameBar.dispose();
-        // bot.babylonMesh.dispose();
+
         animateRotationOfDeadBotMesh(bot.babylonMesh);
-
-       /* var botIndex = botsCurrentlyInScene.indexOf(bot);
-
-        if (botIndex >= 0) {
-            botsCurrentlyInScene.splice(botIndex, 1);
-        }*/
     }
 
     function animateRotationOfDeadBotMesh(mesh) {
@@ -240,7 +230,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
         
         setUpParticleSmoke();
-        //setUpParticleExplosion();
         setUpLandscape(arenaState);
         setUpSkyBox();
        
@@ -355,11 +344,13 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     }   
 
     function setUpLandscape(arenaState) {
-        BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "only_plane.babylon", scene, function(newMeshes, particleSystems) {
+        BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "iceWorld.babylon", scene, function (newMeshes, particleSystems) {
             landscape = newMeshes[0];
-            landscape.convertToFlatShadedMesh();
-            landscape.scaling = new BABYLON.Vector3(100, 100, 100);
-            landscape.position.y = -50;
+           landscape.convertToFlatShadedMesh();
+            landscape.scaling = new BABYLON.Vector3(3000, 3000, 3000);
+            landscape.rotation.y = Math.PI;
+            landscape.position = new BABYLON.Vector3(-2000, -200, 500);
+            
             landscape.receiveShadows = true;
  
             setUpWater(arenaState);
@@ -389,7 +380,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
        
         var newScene = new BABYLON.Scene(engine);
 
-        // var camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(1500, 650, 400), newScene);
         var camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0, Math.PI / 2.5, 2000, new BABYLON.Vector3(300, 0, 400), newScene);
         newScene.activeCamera = camera;
         camera.attachControl(canvas, false);
@@ -398,32 +388,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         camera.upperRadiusLimit = 2000;
         camera.inertia = 0.7;
         camera.wheelPrecision = 0.03;
-        
-
-        // create a line for each axis, just for orientation aid. 
-        var lineY = BABYLON.Mesh.CreateLines("Y", [
-           new BABYLON.Vector3(0, 0, 0),
-           new BABYLON.Vector3(0, 400, 0)
-        ], newScene);
-
-        lineY.color = new BABYLON.Color3(0, 254, 0);
-
-        var lineX = BABYLON.Mesh.CreateLines("X", [
-            new BABYLON.Vector3(0, 0, 0),
-            new BABYLON.Vector3(400, 0, 0)
-        ], newScene);
-
-        lineX.color = new BABYLON.Color3(0, 0, 254);
-
-        var lineZ = BABYLON.Mesh.CreateLines("Z", [
-            new BABYLON.Vector3(0, 0, 0),
-            new BABYLON.Vector3(0, 0, 400)
-        ], newScene);
-
-        lineZ.color = new BABYLON.Color3(254, 0, 0);
-
-
-
+        camera.maxZ = 20000;
 
         return newScene;
     };
@@ -440,7 +405,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
     function setUpLights() {
 
-        sun = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(-1, -2, -1), scene);
+        sun = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(-10, -2, -1), scene);
         sun.position = new BABYLON.Vector3(1000, 10000, 1000);
         sun.intensity = 2;
         shadowGenerator = new BABYLON.ShadowGenerator(2000, sun);
@@ -506,7 +471,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         for (var i = 0; i < arenaState.bots.length; i++) {
             var bot = arenaState.bots[i];
             waterMaterial.reflectionTexture.renderList.push(bot.babylonMesh);
-            waterMaterial.reflectionTexture.renderList.push(bot.healthBarMesh);
         }
 
         water.receiveShadows = true;
@@ -540,12 +504,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
                 
                 bot.nameBar.position.x = bot.y;
                 bot.nameBar.position.z = bot.x;
-                
-               /* if (bot.isVisible()) {
-                    setBotTransparency(bot.babylonMesh.material, 1);
-                } else {
-                    setBotTransparency(bot.babylonMesh.material, 0.1);
-                }*/
             }
         }
     }

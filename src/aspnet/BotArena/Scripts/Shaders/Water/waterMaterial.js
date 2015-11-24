@@ -1,7 +1,7 @@
 ﻿var gosu = gosu || {};
 
 (function () {
-    gosu.WaterMaterial = function (name, scene, light) {
+    gosu.WaterMaterial = function (name, scene, light, waveLength, waveHeight) {
         BABYLON.Material.call(this, name, scene);
         this.light = light;
 
@@ -29,13 +29,16 @@
         this.reflectionLevel = 0.6;
         this.refractionLevel = 0.8;
         
-        //this.waveLength = 0.1;
-        //this.waveHeight = 0.15;
-        this.waveLength = 0.005;
-        this.waveHeight = 0.06;
-
-        //this.waterDirection = new BABYLON.Vector2(0, 1.0);
-        this.waterDirection = new BABYLON.Vector2(0, 0.5);
+        // manual default argument value check
+        if (waveLength && waveHeight) {
+            this.waveLength = waveLength;
+            this.waveHeight = waveHeight;
+            this.waterDirection = new BABYLON.Vector2(0, 1.5);
+        } else {
+            this.waveLength = 0.005;
+            this.waveHeight = 0.06;
+            this.waterDirection = new BABYLON.Vector2(0, 0.5);
+        }
 
         this._time = 0;
     };
