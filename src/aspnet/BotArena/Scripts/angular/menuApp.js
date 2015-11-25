@@ -10,6 +10,16 @@
                 controller: 'MainController',
                 controllerAs: 'main'
             })
+            .state('log-in', {
+                url: '/login',
+                templateUrl: 'Scripts/angular/account/Login.html',
+                controller: 'loginCtrl'
+            })
+            .state('register', {
+                url: '/register',
+                templateUrl: 'Scripts/angular/account/Register.html',
+                controller: 'registerCtrl'
+            })
             .state('bot-wizard', {
                 url: '/bot-wizard',
                 abstract: true,

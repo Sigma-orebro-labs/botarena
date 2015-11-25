@@ -97,23 +97,9 @@
 
         $scope.setUpWater = function (scene, sun) {
 
-            var sandPlane = BABYLON.Mesh.CreatePlane("sand", 100.0, scene);
-            sandPlane.position.y = -10;
-            sandPlane.rotation.x = Math.PI / 2;
-
-            var sandMaterial = new BABYLON.StandardMaterial("sandMaterial", scene);
-            sandMaterial.diffuseColor = new BABYLON.Color3(0.6, 0.6, 0);
-            sandMaterial.specularColor = new BABYLON.Color3(0.6, 0.6, 0);
-            sandMaterial.specularPower = 1;
-
-            sandPlane.material = sandMaterial;
-
             var water = BABYLON.Mesh.CreateGround("water", 100, 100, 1, scene, false);
 
             var waterMaterial = new gosu.WaterMaterial("water", scene, sun, 0.2, 0.4);
-
-            waterMaterial.refractionTexture.renderList.push(sandPlane);
-            waterMaterial.reflectionTexture.renderList.push(sandPlane);
 
             for (var i = 0; i < $scope.allMeshes.length; i++) {
                 waterMaterial.reflectionTexture.renderList.push($scope.allMeshes[i]);

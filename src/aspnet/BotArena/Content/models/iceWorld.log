@@ -2,14 +2,14 @@
 ========= Conversion from Blender to Babylon.js =========
 	Python World class constructor completed
 	WARNING: No active camera has been assigned, or is not in a currently selected Blender layer
-	processing begun of material:  islandWithSandyBeachFlippedNormals.Material
+	processing begun of material:  iceWorld.Material
 	processing begun of mesh:  Landscape
-		num positions      :  1640
-		num normals        :  1640
+		num positions      :  2657
+		num normals        :  2657
 		num uvs            :  0
 		num uvs2           :  0
 		num colors         :  0
-		num indices        :  9591
+		num indices        :  15222
 ========= Writing of scene file started =========
 ========= Writing of scene file completed =========
 ========= end of processing =========

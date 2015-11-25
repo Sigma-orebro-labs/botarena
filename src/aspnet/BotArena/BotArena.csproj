@@ -240,6 +240,8 @@
     <Compile Include="Models\Match\MatchSetupModel.cs" />
     <Compile Include="Models\RealTime\EventTriggerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Scripts\angular\account\Register.html" />
+    <Content Include="Scripts\angular\account\registerCtrl.js" />
     <Content Include="Scripts\angular\bot-wizard\BotWizardLayout.html" />
     <Content Include="Scripts\angular\bot-wizard\botWizardCtrl.js" />
     <Content Include="Scripts\angular\bot-wizard\ChooseClass.html" />
@@ -252,6 +254,8 @@
     <Content Include="Scripts\angular\bot-wizard\enterBotNameCtrl.js" />
     <Content Include="Scripts\angular\bot-wizard\EnterEmail.html" />
     <Content Include="Scripts\angular\bot-wizard\enterEmailCtrl.js" />
+    <Content Include="Scripts\angular\account\Login.html" />
+    <Content Include="Scripts\angular\account\loginCtrl.js" />
     <Content Include="Scripts\angular\main-menu\main-menu.html" />
     <Content Include="Scripts\angular\main-menu\MainController.js" />
     <Content Include="Scripts\angular\menuApp.js" />
