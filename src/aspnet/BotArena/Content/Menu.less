@@ -114,12 +114,26 @@
 
 
 /* NG menu */
-.menu-system {
+.menu-button {
     position: absolute;
+    top: 10px;
+    left: 10px;    
+}
+
+.menu-system {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.menu-wrapper {
     width: 700px;
-    top: 100px;
+    /*top: 100px;
     left: 50%;
-    margin-left: -350px;
+    margin-left: -350px; */
+    margin: 100px auto;       
 }
 
 .main-menu {
@@ -154,10 +168,9 @@
     }
 
     .bot-wizard-canvas {
-        width: 100%;
-        height: 100%;
+        width: 320px !important; //100%;
+        height: 320px !important; //100%;
     }
-
 }
 
 .log-in{
