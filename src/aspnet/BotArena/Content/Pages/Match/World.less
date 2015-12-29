@@ -43,6 +43,9 @@ button {
 
     .health {
         display: inline-block;
+        min-width: 55px;
+        margin-right: 10px;
+        text-align: right;
     }
 
     .color {
@@ -71,7 +74,18 @@ button {
         font-size: 16px;
         height: 14px;
 
+        button {
+            padding: 1px 8px;
+
+            icon {
+                margin-right: 3px;
+            }
+        }
+
         &.killed {
+
+            opacity: 0.5;
+
             .name {
                 color: #cecece;
             }
@@ -80,7 +94,10 @@ button {
                 visibility: hidden;
             }
 
-            opacity: 0.5;
+            button {
+                display: none;
+            }
+
         }
     }
 }

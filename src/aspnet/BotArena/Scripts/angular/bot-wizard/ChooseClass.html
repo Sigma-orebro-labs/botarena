@@ -1,8 +1,7 @@
 ﻿<div class="step-choose-class">
-    <h1>Choose class</h1>
-    <input type="text" placeholder="Enter class name" ng-model="bot.Class"/>
-
-    <button ng-click="tankClass()">Tank</button>
-    <button ng-click="ninjaClass()">Ninja</button>
-    <a ui-sref="bot-wizard.choose-equipment">Go to RnD</a>
+    <h1>Choose Class</h1>
+    <!--<input type="text" placeholder="Enter class name" ng-model="bot.Class"/>-->
+    <button class="btn-lg" ng-click="tankClass()">Tank</button>
+    <button class="btn-lg" ng-click="ninjaClass()">Ninja</button>
+    <a class="btn-next" ui-sref="bot-wizard.choose-equipment">Next <i class="fa fa-arrow-right"></i></a>
 </div>
