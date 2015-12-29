@@ -1,4 +1,4 @@
-﻿angular.module('menuApp').controller('MainController', ['$scope', function ($scope) {
+﻿angular.module('menuApp').controller('MainController', ['$scope', '$state', function ($scope, $state) {
     $scope.menuItems = [{
         label: 'Create bot',
         someprop: 19
@@ -23,13 +23,13 @@
         label: 'Users (ADMIN ONLY)',
         someprop: 19
     }];
-    $scope.menuSystemVisible = false;
 
     $scope.toggleMenu = function () {
-        //e = e || window.event;
-       // if (e.which === 121) {
-            $scope.menuSystemVisible = !$scope.menuSystemVisible;
-        //}
-    };
 
+        if ($state.is("none")) {
+            $state.go("main-menu");
+        } else {
+            $state.go("none");
+        }
+    };
 }]);
