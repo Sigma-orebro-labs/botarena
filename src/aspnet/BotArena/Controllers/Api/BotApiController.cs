@@ -16,7 +16,7 @@ namespace GosuArena.Controllers
         public BotApiController() : this(new Repository()) { }
 
         public BotApiController(Repository repository)
-        {
+        {   
             _repository = repository;
         }
 

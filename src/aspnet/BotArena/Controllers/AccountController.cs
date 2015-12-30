@@ -6,11 +6,14 @@ using GosuArena.Entities;
 using GosuArena.Infrastructure.Authorization;
 using GosuArena.Models;
 using GosuArena.Models.Account;
+using GosuArena.Services;
 
 namespace GosuArena.Controllers
 {
     public class AccountController : BaseController
     {
+        private readonly AuthService _authService = new AuthService();
+
         public ActionResult Login()
         {
             return View(new LogOnModel());
@@ -21,15 +24,10 @@ namespace GosuArena.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (IsValid(model.UserName, model.Password))
+                var wasLoggedIn = _authService.TryLogin(model.UserName, model.Password, model.RememberMe);
+
+                if (wasLoggedIn)
                 {
-                    FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
-
-                    Repository.Update<User>()
-                        .Set(x => x.LastLoginDate, DateTime.Now)
-                        .Where(x => x.Username == model.UserName)
-                        .Execute();
-
                     return RedirectToReturnUrl(returnUrl);
                 }
 
@@ -85,23 +83,9 @@ namespace GosuArena.Controllers
             return RedirectToAction("Index", "Match");
         }
 
-        private bool IsValid(string username, string password)
-        {
-            var user = Repository.Find<User>()
-                .Where(x => x.Username == username)
-                .ExecuteList()
-                .FirstOrDefault();
-
-            if (user == null)
-                return false;
-
-            return user.IsPasswordValid(password);
-        }
-
         public ActionResult LogOff()
         {
-            FormsAuthentication.SignOut();
-
+            _authService.LogOff();
             return RedirectToAction("Index", "Match");
         }
 

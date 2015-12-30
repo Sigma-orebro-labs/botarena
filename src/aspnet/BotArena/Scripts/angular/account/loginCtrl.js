@@ -10,10 +10,17 @@
                 console.log("loginMethod");
                 $http({
                     method: 'POST',
-                    url: 'http://localhost/BotArena/Account/Login',
-                    data: { model: $scope.model, returnUrl: 'http://google.se/' }
-                }).success(function loginSuccessCallback() {
+                    url: gosuArena.url.createAbsolute('/api/AuthSession/'),
+                    data: $scope.model
+                }).then(function () {
                     console.log("login was successful");
+                }, function (e) {
+
+                    if (e.status === 401) {
+                        alert("Username and/or password was incorrect");
+                    }
+
+                    console.log(JSON.stringify(e));
                 });
             };
         }
