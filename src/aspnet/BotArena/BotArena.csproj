@@ -261,6 +261,7 @@
     <Content Include="Scripts\angular\main-menu\main-menu.html" />
     <Content Include="Scripts\angular\main-menu\MainController.js" />
     <Content Include="Scripts\angular\menuApp.js" />
+    <Content Include="Scripts\angular\services\authService.js" />
     <Content Include="Scripts\lib\angular\angular-ui-router.js" />
     <Content Include="Scripts\Pages\Commander\Services\gameHubService.js" />
     <Compile Include="Services\AuthService.cs" />

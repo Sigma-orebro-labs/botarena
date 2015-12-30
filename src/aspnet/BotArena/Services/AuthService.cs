@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Http;
+using System.Security.Principal;
+using System.Web;
 using System.Web.Security;
 using GosuArena.Entities;
 using WeenyMapper;
@@ -43,6 +46,14 @@ namespace GosuArena.Services
                 return false;
 
             return user.IsPasswordValid(password);
+        }
+
+        public User GetUser(string username)
+        {
+            return _repository
+                .Find<User>()
+                .Where(x => x.Username == username)
+                .Execute();
         }
     }
 }

@@ -1,36 +1,25 @@
-﻿angular.module('menuApp').controller('loginCtrl', ['$scope','$http', '$state', function ($scope, $http, $state) {
-
-            $scope.model = {
-                UserName: "",
-                Password: "",
-                RememberMe: false
-            };
+﻿angular.module('menuApp').controller('loginCtrl', ['$scope','$http', '$state', 'authService', function ($scope, $http, $state, authService) {
 
             $scope.isProcessingLoginRequest = false;
-            $scope.hasLoginFailed = false;
+            $scope.invalidCredentials = false;
 
             $scope.login = function () {
 
-                $scope.isProcessingLoginRequest = true;
+                authService.login($scope.username, $scope.password, $scope.rememberMe)
+                    .then(function(user) {
+                        console.log("login successful");
 
-                console.log("loginMethod");
-                $http({
-                    method: "POST",
-                    url: gosuArena.url.createAbsolute("/api/AuthSession/"),
-                    data: $scope.model
-                }).then(function() {
-                    $state.go("none");
-                    console.log("login was successful");
-
-                    $scope.isProcessingLoginRequest = false;
-                }, function(e) {
-                    if (e.status === 401) {
-                        alert("Username and/or password was incorrect");
-                    }
-
-                    $scope.hasLoginFailed = true;
-                    $scope.isProcessingLoginRequest = false;
-                });
+                        $state.go("none");
+                        $scope.currentUser = user;
+                    }, function(e) {
+                        if (e.invalidCredentials) {
+                            $scope.invalidCredentials = true;
+                        } else {
+                            // unexpected error
+                        }
+                    }).finally(function() {
+                        $scope.isProcessingLoginRequest = false;
+                    });
             };
         }
     ]

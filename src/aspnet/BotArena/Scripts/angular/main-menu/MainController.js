@@ -1,4 +1,14 @@
-﻿angular.module('menuApp').controller('MainController', ['$scope', '$state', function ($scope, $state) {
+﻿angular.module('menuApp').controller('MainController', ['$scope', '$state', 'authService', function ($scope, $state, authService) {
+
+    $scope.logOff = function () {
+        authService.logOff()
+            .then(function() {
+                $state.go("none");
+            }, function() {
+                // Unexpected error
+            });
+    };
+
     $scope.menuItems = [{
         label: 'Create bot',
         someprop: 19
@@ -32,4 +42,8 @@
             $state.go("none");
         }
     };
+
+    $scope.isLoggedIn = function () {
+        return authService.isLoggedIn();
+    }
 }]);
