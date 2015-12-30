@@ -1,4 +1,4 @@
-﻿<div class="log-in">
+﻿<form class="log-in" ng-submit="login()">
     <div>
         <label>Username</label>
         <input name="Username" type="text" placeholder="Username" ng-model="model.UserName" /> {{user.name}}
@@ -14,5 +14,9 @@
         <input type="checkbox" ng-model="model.RememberMe"/> {{user.rememberMe}}
     </div>
 
-    <button ng-click="login()">Logga in</button>
-</div>
+    <div class="error" ng-show="hasLoginFailed">
+        Username or password was incorrect.
+    </div>
+
+    <input type="submit" value="Logga in" ng-disabled="isProcessingLoginRequest" />
+</form>
