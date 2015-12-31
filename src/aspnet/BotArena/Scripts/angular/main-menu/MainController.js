@@ -46,4 +46,6 @@
     $scope.isLoggedIn = function () {
         return authService.isLoggedIn();
     }
+
+    $scope.docsUrl = gosuArena.url.createAbsolute("/docs");
 }]);
