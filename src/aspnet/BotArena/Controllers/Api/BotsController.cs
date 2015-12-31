@@ -1,21 +1,23 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Management;
 using GosuArena.Entities;
+using GosuArena.Models.Match;
 using WeenyMapper;
 
-namespace GosuArena.Controllers
+namespace GosuArena.Controllers.Api
 {
-    public class BotApiController : ApiController
+    public class BotsController : ApiController
     {
         private const string AuthSchemeName = "GosuArenaApiKey";
 
         readonly Repository _repository;
 
-        public BotApiController() : this(new Repository()) { }
+        public BotsController() : this(new Repository()) { }
 
-        public BotApiController(Repository repository)
+        public BotsController(Repository repository)
         {   
             _repository = repository;
         }
@@ -35,6 +37,27 @@ namespace GosuArena.Controllers
             ValidateRequest(bot);
 
             return bot.Script;
+        }
+
+        public IEnumerable<BotModel> Get([FromUri]bool includeScript = false)
+        {
+            var bots = _repository.Find<Bot>()
+                .Where(x => !x.IsDemoBot && x.IsPublic)
+                .Join(x => x.User)
+                .OrderBy(x => x.Name)
+                .ExecuteList();
+
+            var botModels = bots.Select(x => new BotModel(x)).ToList();
+
+            if (includeScript != true)
+            {
+                foreach (var botModel in botModels)
+                {
+                    botModel.Script = null;
+                }
+            }
+
+            return botModels;
         }
 
         public void Put(int id)

@@ -1,0 +1,39 @@
+﻿<section class="match-setup">
+    <h2>Which bots should face each other in combat?</h2>
+
+    <div class="row">
+        <div id="info">
+            <p id="info-message" class="alert alert-info">
+                Can't find the droids you are looking for? Make sure they have been made public by their authors
+            </p>
+        </div>
+
+        <ul>
+            <li ></li>
+        </ul>
+
+        <section id="bot-lists-container">
+            <div id="available-bots-container">
+                <ul id="bots">
+                    <li class="bot well" ng-click="addBot(bot)" ng-repeat="bot in bots">
+                        <span class="name">{{bot.name}}</span>
+                        <span class="author">{{bot.authorUsername}}</span>
+                    </li>
+                </ul>
+                <span id="result-filtered-message" ng-show="isResultLimited()">Result has been limited due to too many matches</span>
+            </div>
+
+            <div id="selected-bots-container">
+                <span class="no-selection-message well" ng-show="isSelectionEmpty()">No bots have been selected</span>
+                <ul id="selected-bots">
+                    <li class="bot well" ng-click="removeBot(bot)" ng-repeat="bot in selectedBots track by $index">
+                        <span class="name">{{bot.name}}</span>
+                        <span class="author">{{bot.authorUsername}}</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <a ng-href="{{startMatchUrl()}}" id="play-button" class="btn btn-lg btn-primary">Play!</a>
+    </div>
+</section>

@@ -8,46 +8,50 @@
                 url: "/"
             })
             .state('main-menu', {
-                templateUrl: 'Scripts/angular/main-menu/main-menu.html',
+                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/main-menu/main-menu.html'),
                 controller: 'MainController',
                 controllerAs: 'main'
             })
             .state('log-in', {
-                templateUrl: 'Scripts/angular/account/Login.html',
+                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/account/Login.html'),
                 controller: 'loginCtrl'
             })
             .state('register', {
-                templateUrl: 'Scripts/angular/account/Register.html',
+                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/account/Register.html'),
                 controller: 'registerCtrl'
+            })
+            .state('ffasetup', {
+                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/match-setup/ffa.html'),
+                controller: 'matchSetupCtrl'
             })
             .state('bot-wizard', {
                 abstract: true,
-                templateUrl: 'Scripts/angular/bot-wizard/BotWizardLayout.html',
+                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/BotWizardLayout.html'),
                 controller: 'botWizardCtrl',
                 controllerAs: 'wizard'
             })
             .state('bot-wizard.choose-class', {
-                templateUrl: 'Scripts/angular/bot-wizard/ChooseClass.html',
+                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/ChooseClass.html'),
                 controller: 'chooseClassCtrl',
                 controllerAs: 'class'
             })
             .state('bot-wizard.choose-equipment', {
-                templateUrl: 'Scripts/angular/bot-wizard/ChooseEquipment.html',
+                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/ChooseEquipment.html'),
                 controller: 'chooseEquipmentCtrl',
                 controllerAs: 'equipment'
             })
             .state('bot-wizard.choose-color', {
-                templateUrl: 'Scripts/angular/bot-wizard/ChooseColor.html',
+                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/ChooseColor.html'),
                 controller: 'chooseColorCtrl',
                 controllerAs: 'color'
             })
             .state('bot-wizard.enter-bot-name', {
-                templateUrl: 'Scripts/angular/bot-wizard/EnterBotName.html',
+                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/EnterBotName.html'),
                 controller: 'enterBotNameCtrl',
                 controllerAs: 'enterName'
             })
             .state('bot-wizard.enter-email', {
-                templateUrl: 'Scripts/angular/bot-wizard/EnterEmail.html',
+                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/EnterEmail.html'),
                 controller: 'enterEmailCtrl',
                 controllerAs: 'enterEmail'
             });

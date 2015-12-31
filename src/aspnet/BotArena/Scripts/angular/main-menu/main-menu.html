@@ -8,10 +8,14 @@
     <li ng-hide="isLoggedIn()">
         <a ui-sref="log-in">Sign in</a>
     </li>
+    <li ng-hide="isLoggedIn()">
+        <a ui-sref="register">Register</a>
+    </li>
+    <li ng-show="isLoggedIn()">
+        <a ui-sref="ffasetup">FFA match</a>
+    </li>
     <li ng-show="isLoggedIn()">
         <a ng-click="logOff()">Sign out</a>
     </li>
-    <li>
-        <a ui-sref="register">Register</a>
-    </li>
+    
 </ul>

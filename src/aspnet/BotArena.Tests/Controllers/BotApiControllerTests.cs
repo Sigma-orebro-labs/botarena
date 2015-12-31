@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using GosuArena.Controllers;
+using GosuArena.Controllers.Api;
 using GosuArena.Entities;
 using NUnit.Framework;
 using WeenyMapper;
@@ -12,7 +13,7 @@ namespace BotArena.Tests.Controllers
     [TestFixture]
     public class BotApiControllerSpecs
     {
-        private BotApiController _controller;
+        private BotsController _controller;
         private InMemoryRepository _repository;
         private User _user;
         private Bot _bot;
@@ -25,7 +26,7 @@ namespace BotArena.Tests.Controllers
 
             _request = new HttpRequestMessage();
             
-            _controller = new BotApiController(_repository)
+            _controller = new BotsController(_repository)
             {
                 Request = _request, 
                 Configuration = new HttpConfiguration()

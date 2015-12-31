@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Web.Http;
 using GosuArena.Models.Account;
 
-namespace GosuArena.Controllers
+namespace GosuArena.Controllers.Api
 {
     public class AccountApiController : ApiController
     {

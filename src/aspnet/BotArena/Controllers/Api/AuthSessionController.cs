@@ -1,11 +1,10 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using GosuArena.Entities;
 using GosuArena.Models.Account;
 using GosuArena.Services;
 
-namespace GosuArena.Controllers
+namespace GosuArena.Controllers.Api
 {
     public class AuthSessionController : ApiController
     {
