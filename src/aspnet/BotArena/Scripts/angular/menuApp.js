@@ -1,4 +1,4 @@
-﻿angular.module('menuApp', ['ui.router'])
+﻿angular.module('menuApp', ['ui.router', 'toaster'])
     .config(function($stateProvider, $urlRouterProvider) {
 
         $urlRouterProvider.otherwise('/'); // default route when no other matching url is found

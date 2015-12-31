@@ -1,11 +1,12 @@
-﻿angular.module('menuApp').controller('MainController', ['$scope', '$state', 'authService', function ($scope, $state, authService) {
+﻿angular.module('menuApp').controller('MainController', ['$scope', '$state', 'authService', 'notificationService', function ($scope, $state, authService, notificationService) {
 
     $scope.logOff = function () {
         authService.logOff()
-            .then(function() {
+            .then(function () {
+                notificationService.showSuccessMessage("Signed out", "You have been signed out");
                 $state.go("none");
-            }, function() {
-                // Unexpected error
+            }, function(e) {
+                notificationService.showUnexpectedErrorMessage(e);
             });
     };
 

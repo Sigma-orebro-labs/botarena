@@ -242,6 +242,10 @@
     <Compile Include="Models\Match\MatchSetupModel.cs" />
     <Compile Include="Models\RealTime\EventTriggerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Content\lib\ng-toaster\toaster.css" />
+    <Content Include="Content\lib\ng-toaster\toaster.js" />
+    <Content Include="Content\lib\ng-toaster\toaster.min.css" />
+    <Content Include="Content\lib\ng-toaster\toaster.min.js" />
     <Content Include="Scripts\angular\account\Register.html" />
     <Content Include="Scripts\angular\account\registerCtrl.js" />
     <Content Include="Scripts\angular\bot-wizard\BotWizardLayout.html" />
@@ -261,8 +265,12 @@
     <Content Include="Scripts\angular\main-menu\main-menu.html" />
     <Content Include="Scripts\angular\main-menu\MainController.js" />
     <Content Include="Scripts\angular\menuApp.js" />
+    <Content Include="Scripts\angular\services\notificationService.js" />
     <Content Include="Scripts\angular\services\authService.js" />
+    <Content Include="Scripts\lib\angular\angular-animate.js" />
+    <Content Include="Scripts\lib\angular\angular-animate.min.js" />
     <Content Include="Scripts\lib\angular\angular-ui-router.js" />
+    <Content Include="Scripts\lib\angular\angular.min.1.4.7.js" />
     <Content Include="Scripts\Pages\Commander\Services\gameHubService.js" />
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\NameGenerator.cs" />
@@ -548,6 +556,7 @@
     <Content Include="Content\models\iceWorld.log" />
     <None Include="Properties\PublishProfiles\botarena - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\botarena - Web Deploy.pubxml" />
+    <Content Include="Scripts\lib\angular\angular-animate.min.js.map" />
     <None Include="Scripts\lib\jquery\jquery-2.0.0.intellisense.js" />
     <Content Include="Scripts\lib\jquery\jquery-2.0.0.js" />
     <Content Include="Scripts\lib\jquery\jquery-2.0.0.min.js" />
