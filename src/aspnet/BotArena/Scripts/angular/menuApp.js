@@ -21,7 +21,11 @@
                 controller: 'registerCtrl'
             })
             .state('ffasetup', {
-                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/match-setup/ffa.html'),
+                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/match-setup/setup.html'),
+                controller: 'matchSetupCtrl'
+            })
+            .state('teamsetup', {
+                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/match-setup/setup.html'),
                 controller: 'matchSetupCtrl'
             })
             .state('bot-wizard', {

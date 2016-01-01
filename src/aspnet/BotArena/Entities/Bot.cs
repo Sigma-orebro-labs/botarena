@@ -53,5 +53,10 @@ namespace GosuArena.Entities
         {
             return User.IsAuthorized(apiKey);
         }
+
+        public bool MatchesName(string botName)
+        {
+            return string.Equals(Name, botName, StringComparison.InvariantCultureIgnoreCase);
+        }
     }
 }

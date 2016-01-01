@@ -51,7 +51,7 @@ namespace GosuArena.Controllers
             if (!isTeam)
                 return PlayFFA(rosters[0]);
 
-            var botNames = rosters.SelectMany(GetBotNames).Distinct();
+            var botNames = rosters.SelectMany(GetBotNames).ToList();
 
             var bots = GetBots(botNames);
 
@@ -85,15 +85,19 @@ namespace GosuArena.Controllers
         private static IEnumerable<BotModel> GetTeamBotModels(IList<string> teams, int i, IEnumerable<Bot> bots)
         {
             var botNamesInTeam = GetBotNames(teams[i]);
+            var botList = bots.ToList();
+            var botModelsInTeam = new List<BotModel>();
 
-            var botsInTeam = bots.Where(x => botNamesInTeam.Contains(x.Name));
-            var botModelsInTeam = botsInTeam.Select(x => new BotModel(x)).ToList();
-
-            foreach (var botModel in botModelsInTeam)
+            foreach (var botName in botNamesInTeam)
             {
+                var bot = botList.First(x => x.MatchesName(botName));
+                var model = new BotModel(bot);
+                
                 // Use a one based team id to avoid confusion with unassigned team id (0) 
                 // if that would ever be useful
-                botModel.TeamId = i + 1;
+                model.TeamId = i + 1;
+
+                botModelsInTeam.Add(model);
             }
 
             return botModelsInTeam;
@@ -141,10 +145,11 @@ namespace GosuArena.Controllers
 
         private IList<Bot> GetBots(IEnumerable<string> botNames)
         {
+            var distinctNames = botNames.Distinct().ToList();
             var currentUserId = GetCurrentUserId();
 
             return Repository.Find<Bot>()
-                .Where(x => botNames.Contains(x.Name) && (x.IsPublic || x.UserId == currentUserId))
+                .Where(x => distinctNames.Contains(x.Name) && (x.IsPublic || x.UserId == currentUserId))
                 .Join<User, Bot>(x => x.Bots, x => x.User)
                 .ExecuteList();
         }

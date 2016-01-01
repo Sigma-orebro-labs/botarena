@@ -1,4 +1,4 @@
-﻿<section class="match-setup">
+﻿<section class="match-setup menu-page">
     <h2>Which bots should face each other in combat?</h2>
 
     <div class="row">
@@ -7,9 +7,12 @@
                 Can't find the droids you are looking for? Make sure they have been made public by their authors
             </p>
         </div>
-
-        <ul>
-            <li ></li>
+    </div>
+    <div class="row">
+        <ul id="team-menu" class="nav nav-tabs" ng-show="isTeamSetup">
+            <li ng-repeat="roster in rosters" ng-class="roster.isActive ? 'active' : 'inactive'">
+                <a href="#" ng-click="setCurrentRoster(roster)">{{roster.name}}</a>
+            </li>
         </ul>
 
         <section id="bot-lists-container">
@@ -26,7 +29,7 @@
             <div id="selected-bots-container">
                 <span class="no-selection-message well" ng-show="isSelectionEmpty()">No bots have been selected</span>
                 <ul id="selected-bots">
-                    <li class="bot well" ng-click="removeBot(bot)" ng-repeat="bot in selectedBots track by $index">
+                    <li class="bot well" ng-click="removeBot(bot)" ng-repeat="bot in rosterSelectedBots() track by $index">
                         <span class="name">{{bot.name}}</span>
                         <span class="author">{{bot.authorUsername}}</span>
                     </li>

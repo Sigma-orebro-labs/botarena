@@ -1,10 +1,43 @@
-﻿angular.module('menuApp').controller('matchSetupCtrl', ['$scope', '$http', 'notificationService', function($scope, $http, notificationService) {
+﻿angular.module('menuApp').controller('matchSetupCtrl', ['$scope', '$state', '$http', 'notificationService', function($scope, $state, $http, notificationService) {
+
+        $scope.isTeamSetup = $state.is("teamsetup");
 
         $scope.bots = [];
-        $scope.selectedBots = [];
+        $scope.rosters = [];
+
+        var maxTeamCount = 4;
+
+        for (var i = 1; i <= maxTeamCount; i++) {
+            $scope.rosters.push({
+                selectedBots: [],
+                isActive: i === 1, // Set the first tab as active by default
+                identifier: 'team' + i,
+                name: 'Team ' + i
+            });
+        }
+
+        $scope.getCurrentRoster = function() {
+            for (var j = 0; j < $scope.rosters.length; j++) {
+                if ($scope.rosters[j].isActive) {
+                    return $scope.rosters[j];
+                }
+            }
+
+            return null;
+        };
+
+        $scope.setCurrentRoster = function(selectedRoster) {
+            $scope.rosters.forEach(function(roster) {
+                roster.isActive = roster === selectedRoster;
+            });
+        }
+
+        $scope.rosterSelectedBots = function() {
+            return $scope.getCurrentRoster().selectedBots;
+        };
 
         $scope.isSelectionEmpty = function() {
-            return $scope.selectedBots.length === 0;
+            return $scope.getCurrentRoster().selectedBots.length === 0;
         };
 
         $scope.isResultLimited = function() {
@@ -12,21 +45,40 @@
         };
 
         $scope.addBot = function(bot) {
-            $scope.selectedBots.push(bot);
+            $scope.getCurrentRoster().selectedBots.push(bot);
             notificationService.showSuccessMessage("Bot added", bot.name + " was added to the match");
-        }
+        };
 
-        $scope.removeBot = function (bot) {
+        $scope.removeBot = function(bot) {
             notificationService.showSuccessMessage("Bot removed", bot.name + " was removed from the match");
 
-            var index = $scope.selectedBots.indexOf(bot);
+            var index = $scope.getCurrentRoster().selectedBots.indexOf(bot);
             $scope.selectedBots.splice(index, 1);
-        }
+        };
 
         $scope.startMatchUrl = function () {
-            var selectedBotNames = $scope.selectedBots.map(function (bot) { return bot.name });
-            var rosterList = selectedBotNames.join(',');
-            return gosuArena.url.createAbsolute("/Match/Play?rosters[0]=" + encodeURIComponent(rosterList) + "&isTeam=false");
+
+            var rosterQueryValues = [];
+
+            for (var j = 0; j < $scope.rosters.length; j++) {
+
+                if ($scope.rosters[j].selectedBots.length === 0) {
+                    continue;
+                }
+
+                var selectedBotNames = $scope.rosters[j].selectedBots.map(function (bot) { return bot.name });
+                var rosterList = selectedBotNames.join(",");
+
+                var rosterQueryValue = encodeURIComponent("rosters[" + j + "]") + "=" + encodeURIComponent(rosterList);
+
+                rosterQueryValues.push(rosterQueryValue);
+            }
+
+            var rosterQueryString = rosterQueryValues.join("&");
+
+            var isTeamValue = $scope.isTeamSetup ? "true" : "false";
+
+            return gosuArena.url.createAbsolute("/Match/Play?" + rosterQueryString + "&isTeam=" + isTeamValue);
         };
 
         $http({
