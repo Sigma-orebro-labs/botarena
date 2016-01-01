@@ -262,6 +262,8 @@
     <Content Include="Scripts\angular\bot-wizard\enterEmailCtrl.js" />
     <Content Include="Scripts\angular\account\Login.html" />
     <Content Include="Scripts\angular\account\loginCtrl.js" />
+    <Content Include="Scripts\angular\bots\List.html" />
+    <Content Include="Scripts\angular\bots\botListCtrl.js" />
     <Content Include="Scripts\angular\main-menu\main-menu.html" />
     <Content Include="Scripts\angular\main-menu\MainController.js" />
     <Content Include="Scripts\angular\match-setup\setup.html" />
@@ -614,7 +616,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Scripts\angular\controllers\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

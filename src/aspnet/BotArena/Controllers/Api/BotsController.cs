@@ -6,6 +6,7 @@ using System.Web.Http;
 using GosuArena.Entities;
 using GosuArena.Models.Match;
 using WeenyMapper;
+using WeenyMapper.QueryBuilding;
 
 namespace GosuArena.Controllers.Api
 {
@@ -39,11 +40,29 @@ namespace GosuArena.Controllers.Api
             return bot.Script;
         }
 
-        public IEnumerable<BotModel> Get([FromUri]bool includeScript = false)
+        public IEnumerable<BotModel> Get([FromUri]bool includeScript = false, [FromUri]bool currentUser = false)
         {
-            var bots = _repository.Find<Bot>()
+            var query = _repository.Find<Bot>()
                 .Where(x => !x.IsDemoBot && x.IsPublic)
-                .Join(x => x.User)
+                .Join(x => x.User);
+
+            if (currentUser && !User.Identity.IsAuthenticated)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Cannot show bots for current user without an active auth session"));
+            }
+
+            if (currentUser)
+            {
+                var userId = _repository
+                    .Find<User>()
+                    .Select(x => x.Id)
+                    .Where(x => x.Username == User.Identity.Name)
+                    .ExecuteScalar<int>();
+
+                query = query.AndWhere(x => x.UserId == userId && !x.IsTrainer);
+            }
+
+            var bots = query
                 .OrderBy(x => x.Name)
                 .ExecuteList();
 

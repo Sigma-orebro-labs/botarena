@@ -1,0 +1,18 @@
+﻿<div class="menu-page">
+    <h2>Profile for @Model.Username</h2>
+
+    <h3 id="bot-heading">Bots</h3>
+    <ul id="bots">
+        <li class="well" ng-repeat="bot in bots | orderBy : '-name'">
+            <a ng-href="{{createEditUrl(bot)}}">
+                <span class="name">{{bot.name}}</span>
+                <span class="created-date">Created {{bot.createdDate}}</span>
+            </a>
+
+            <div class="actions">
+                <a ng-href="{{createEditUrl(bot)}})" class="edit-bot">Edit</a>
+                <!--<a ng-href="{{createDeleteUrl(bot)}})" class="edit-bot">Edit</a>-->
+            </div>
+        </li>
+    </ul>
+</div>

@@ -28,6 +28,10 @@
                 templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/match-setup/setup.html'),
                 controller: 'matchSetupCtrl'
             })
+            .state('mybots', {
+                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bots/list.html'),
+                controller: 'botListCtrl'
+            })
             .state('bot-wizard', {
                 abstract: true,
                 templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/BotWizardLayout.html'),
