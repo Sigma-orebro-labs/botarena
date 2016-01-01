@@ -42,7 +42,7 @@ namespace GosuArena.Controllers.Api
         public IEnumerable<ApiBotModel> Get([FromUri]bool includeScript = false, [FromUri]bool currentUser = false)
         {
             var query = _repository.Find<Bot>()
-                .Where(x => !x.IsDemoBot && x.IsPublic)
+                .Where(x => !x.IsDemoBot)
                 .Join(x => x.User);
 
             if (currentUser && !User.Identity.IsAuthenticated)
@@ -58,7 +58,11 @@ namespace GosuArena.Controllers.Api
                     .Where(x => x.Username == User.Identity.Name)
                     .ExecuteScalar<int>();
 
-                query = query.AndWhere(x => x.UserId == userId && !x.IsTrainer);
+                query = query.AndWhere(x => (x.UserId == userId || x.IsPublic) && !x.IsTrainer);
+            }
+            else
+            {
+                query.AndWhere(x => x.IsPublic);
             }
 
             var bots = query

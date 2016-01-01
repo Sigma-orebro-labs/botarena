@@ -4,15 +4,16 @@
 
     <div class="row">
 
-        <form id="script-editor-form" name="editorForm" method="POST" ng-submit="save()" role="form" class="discard-changes-warning col-md-9 col-sm-9 col-xs-9">
+        <section class="col-md-9 col-sm-9 col-xs-9">
+            <form id="script-editor-form" name="editorForm" method="POST" ng-submit="save()" role="form" class="discard-changes-warning">
 
-            <fieldset>
-                <legend>Edit bot</legend>
+                <fieldset>
+                    <legend>Edit bot</legend>
 
-                <input type="hidden" name="Id" value="{{bot.id}}"/>
+                    <input type="hidden" name="Id" value="{{bot.id}}"/>
 
-                <label for="editor">JavaScript for the bot</label>
-                <textarea id="editor" name="Script" ng-model="bot.script" ui-codemirror='{
+                    <label for="editor">JavaScript for the bot</label>
+                    <textarea id="editor" name="Script" ng-model="bot.script" ui-codemirror='{
       extraKeys: {"Ctrl-Space": "autocomplete"},
       mode: {name: "javascript", globalVars: true},
       lineWrapping: true,
@@ -23,16 +24,18 @@
       styleActiveLine: true
     }'></textarea>
 
-                <label>
-                    <input type="checkbox" ng-model="bot.isPublic"/>
-                    Make bot avaible for playing with bots written by other players
-                </label>
+                    <label>
+                        <input type="checkbox" ng-model="bot.isPublic"/>
+                        Make bot avaible for playing with bots written by other players
+                    </label>
 
-                <input type="submit" class="main-submit clear-dirty-flags" value="Save"/>
-            </fieldset>
-
-
-        </form>
+                    <input type="submit" class="main-submit clear-dirty-flags" value="Save"/>
+                </fieldset>
+            </form>
+            <p>
+                Tip: Press Ctrl+Space for auto complete.
+            </p>
+        </section>
 
         <aside id="editor-match-setup" class="col-md-3 col-sm-3 col-xs-3">
 
@@ -41,7 +44,7 @@
             <section id="editor-bot-lists-container">
                 <div id="editor-available-bots-container">
                     <ul id="bots">
-                        <li class="bot well" ng-repeat="trainingBot in trainingBots" ng-click="toggleSelection(bot)" ng-class="bot.isSelected ? 'selected' : ''">
+                        <li class="bot well" ng-repeat="trainingBot in trainingBots" ng-click="toggleSelection(trainingBot)" ng-class="trainingBot.isSelected ? 'selected' : ''">
                             <span class="name">{{trainingBot.name}}</span>
                             <span class="author">{{trainingBot.authorUsername}}</span>
                         </li>
@@ -49,12 +52,7 @@
                 </div>
             </section>
 
-            <form id="editor-start-match" method="GET" action="" target="_blank">
-                <input type="hidden" name="rosters[0]" id="names" data-bind="value: selectedBotNames"/>
-                <input type="hidden" name="training" value="true"/>
-
-                <button type="submit" id="play-button" class="btn btn-lg btn-primary">Play!</button>
-            </form>
+            <a id="play-button" ng-href="{{createStartMatchUrl()}}" target="_blank" class="btn btn-primary">Play!</a>
 
         </aside>
     </div>

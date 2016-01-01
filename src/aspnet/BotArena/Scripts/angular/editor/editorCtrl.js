@@ -1,6 +1,29 @@
 ﻿angular.module('menuApp').controller('editorCtrl',
-    ['$scope', '$stateParams', '$http', 'notificationService',
-        function ($scope, $stateParams, $http, notificationService) {
+    ['$scope', '$stateParams', '$http', 'notificationService', 'matchSetupService',
+        function ($scope, $stateParams, $http, notificationService, matchSetupService) {
+
+            $scope.trainingBots = [];
+
+            $scope.createStartMatchUrl = function () {
+
+                var selectedBots = $scope.trainingBots.filter(function(bot) {
+                    return bot.isSelected;
+                });
+
+                if ($scope.bot) {
+                    selectedBots.push($scope.bot);
+                }
+
+                return matchSetupService.createStartMatchUrl(
+                    [ selectedBots ], {
+                        isTeamSetup: false,
+                        isTraining: true
+                    });
+            };
+
+            $scope.toggleSelection = function(bot) {
+                bot.isSelected = !bot.isSelected;
+            };
 
             $http({
                     method: "GET",

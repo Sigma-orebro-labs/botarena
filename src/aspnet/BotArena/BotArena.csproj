@@ -597,6 +597,7 @@
     <Content Include="Scripts\angular\match-setup\setup.html" />
     <Content Include="Scripts\angular\match-setup\matchSetupCtrl.js" />
     <Content Include="Scripts\angular\menuApp.js" />
+    <Content Include="Scripts\angular\services\matchSetupService.js" />
     <Content Include="Scripts\angular\services\notificationService.js" />
     <Content Include="Scripts\angular\services\authService.js" />
     <Content Include="Scripts\lib\angular\angular-animate.js" />
