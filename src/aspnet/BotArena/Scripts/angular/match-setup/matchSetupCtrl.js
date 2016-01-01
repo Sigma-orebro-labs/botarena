@@ -1,4 +1,6 @@
-﻿angular.module('menuApp').controller('matchSetupCtrl', ['$scope', '$state', '$http', 'notificationService', function($scope, $state, $http, notificationService) {
+﻿angular.module('menuApp').controller('matchSetupCtrl',
+    ['$scope', '$state', '$http', 'notificationService', 'matchSetupService',
+        function ($scope, $state, $http, notificationService, matchSetupService) {
 
         $scope.isTeamSetup = $state.is("teamsetup");
 
@@ -58,27 +60,15 @@
 
         $scope.startMatchUrl = function () {
 
-            var rosterQueryValues = [];
+            var rosters = $scope.rosters.map(function(roster) {
+                return roster.selectedBots;
+            });
 
-            for (var j = 0; j < $scope.rosters.length; j++) {
-
-                if ($scope.rosters[j].selectedBots.length === 0) {
-                    continue;
-                }
-
-                var selectedBotNames = $scope.rosters[j].selectedBots.map(function (bot) { return bot.name });
-                var rosterList = selectedBotNames.join(",");
-
-                var rosterQueryValue = encodeURIComponent("rosters[" + j + "]") + "=" + encodeURIComponent(rosterList);
-
-                rosterQueryValues.push(rosterQueryValue);
-            }
-
-            var rosterQueryString = rosterQueryValues.join("&");
-
-            var isTeamValue = $scope.isTeamSetup ? "true" : "false";
-
-            return gosuArena.url.createAbsolute("/Match/Play?" + rosterQueryString + "&isTeam=" + isTeamValue);
+            return matchSetupService.createStartMatchUrl(
+                    rosters, {
+                        isTeamSetup: $scope.isTeamSetup,
+                        isTraining: false
+                    });
         };
 
         $http({
