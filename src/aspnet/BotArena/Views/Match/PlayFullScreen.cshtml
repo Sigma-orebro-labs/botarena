@@ -6,12 +6,18 @@
 }
 
 @section styles {
+    <link rel="stylesheet" href="@Url.Content("~/Content/lib/codemirror-5.10/lib/codemirror.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/lib/codemirror-5.10/addon/hint/show-hint.css")"/>
+    <link rel="stylesheet" href="@Url.Content("~/Content/lib/codemirror-5.10/addon/lint/lint.css")"/>
+
     <link rel="stylesheet" href="@Url.Content("~/Content/Pages/Match/SetupMatch.less")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/Pages/Bot/Edit.less")" />
 }
 
 @section scripts {
     <script type="text/javascript" src="@Url.Content("~/Scripts/lib/angular/angular.min.js")"> </script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/lib/angular/angular-ui-router.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/lib/angular/ui-codemirror.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/lib/angular/angular-animate.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/lib/ng-toaster/toaster.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/angular/menuApp.js")"> </script>
@@ -19,6 +25,7 @@
     <script type="text/javascript" src="@Url.Content("~/Scripts/angular/services/authService.js")"> </script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/angular/services/notificationService.js")"> </script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/angular/match-setup/matchSetupCtrl.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/editor/editorCtrl.js")"> </script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/angular/bots/botListCtrl.js")"> </script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/angular/bot-wizard/botWizardCtrl.js")"> </script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/angular/bot-wizard/chooseClassCtrl.js")"> </script>
@@ -33,6 +40,14 @@
     <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/Match/Play/matchViewModel.js")"> </script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/Match/Play/matchUI.js")"> </script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/Match/Play/match.js")"> </script>
+
+    <script type="text/javascript" src="@Url.Content("~/Content/lib/codemirror-5.10/lib/codemirror.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/lib/jshint.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/lib/codemirror-5.10/addon/hint/show-hint.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/lib/codemirror-5.10/addon/hint/javascript-hint.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/lib/codemirror-5.10/addon/lint/lint.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/lib/codemirror-5.10/addon/lint/javascript-lint.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/lib/codemirror-5.10/mode/javascript/javascript.js")"></script>
 }
 
 <section id="playing-field">

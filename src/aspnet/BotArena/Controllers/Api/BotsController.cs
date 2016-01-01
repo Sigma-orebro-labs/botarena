@@ -6,7 +6,6 @@ using System.Web.Http;
 using GosuArena.Entities;
 using GosuArena.Models.Match;
 using WeenyMapper;
-using WeenyMapper.QueryBuilding;
 
 namespace GosuArena.Controllers.Api
 {
@@ -31,16 +30,16 @@ namespace GosuArena.Controllers.Api
             Authorization: GosuArenaApiKey 12345
          
          */
-        public string Get(int id)
+        public ApiBotModel Get(int id)
         {
             var bot = GetBotWithUser(id);
 
             ValidateRequest(bot);
 
-            return bot.Script;
+            return new ApiBotModel(bot);
         }
 
-        public IEnumerable<BotModel> Get([FromUri]bool includeScript = false, [FromUri]bool currentUser = false)
+        public IEnumerable<ApiBotModel> Get([FromUri]bool includeScript = false, [FromUri]bool currentUser = false)
         {
             var query = _repository.Find<Bot>()
                 .Where(x => !x.IsDemoBot && x.IsPublic)
@@ -66,17 +65,41 @@ namespace GosuArena.Controllers.Api
                 .OrderBy(x => x.Name)
                 .ExecuteList();
 
-            var botModels = bots.Select(x => new BotModel(x)).ToList();
+            return CreateModels(bots, includeScript);
+        }
 
-            if (includeScript != true)
+        [Route("api/bots/{botId}/trainingbots")]
+        public IEnumerable<ApiBotModel> GetTrainingBots(int botId, [FromUri] bool includeScript = false)
+        {
+            if (!User.Identity.IsAuthenticated)
             {
-                foreach (var botModel in botModels)
-                {
-                    botModel.Script = null;
-                }
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Not logged in"));
             }
 
-            return botModels;
+            var userId = _repository
+                .Find<User>()
+                .Select(x => x.Id)
+                .Where(x => x.Username == User.Identity.Name)
+                .ExecuteScalar<int>();
+
+            var botAuthorId = _repository
+                .Find<Bot>()
+                .Select(x => x.UserId)
+                .Where(x => x.Id == botId)
+                .ExecuteScalar<int>();
+
+            if (userId != botAuthorId)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "You do not own the requested bot"));
+            }
+
+            var trainingBots = _repository.Find<Bot>()
+                .Where(x => !x.IsDemoBot && (x.IsTrainer || x.UserId == userId))
+                .Join(x => x.User)
+                .OrderBy(x => x.Name)
+                .ExecuteList();
+
+            return CreateModels(trainingBots, includeScript);
         }
 
         public void Put(int id)
@@ -97,6 +120,26 @@ namespace GosuArena.Controllers.Api
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
+            if (User.Identity.IsAuthenticated)
+            {
+                ValidateAuthenticatedCall(bot);
+            }
+            else
+            {
+                ValidateExternalApiCall(bot);
+            }
+        }
+
+        private void ValidateAuthenticatedCall(Bot bot)
+        {
+            if (!bot.IsUserAuthorized(User.Identity.Name))
+            {
+                ThrowUnauthorizedException();
+            }
+        }
+
+        private void ValidateExternalApiCall(Bot bot)
+        {
             IncrementApiCallCount(bot.User);
 
             if (Request.Headers.Authorization == null)
@@ -136,6 +179,21 @@ namespace GosuArena.Controllers.Api
                 .Where(x => x.Id == id)
                 .Join(x => x.User)
                 .Execute();
+        }
+
+        private static List<ApiBotModel> CreateModels(IEnumerable<Bot> bots, bool includeScript)
+        {
+            var botModels = bots.Select(x => new ApiBotModel(x)).ToList();
+
+            if (includeScript != true)
+            {
+                foreach (var botModel in botModels)
+                {
+                    botModel.Script = null;
+                }
+            }
+
+            return botModels;
         }
     }
 }

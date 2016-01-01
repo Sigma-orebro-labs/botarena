@@ -30,7 +30,6 @@ namespace GosuArena.Controllers
         }   
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Edit(Bot bot)
         {
             var existingBot = GetBotWithUser(bot.Id);

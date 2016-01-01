@@ -97,7 +97,9 @@ namespace BotArena.Tests.Controllers
         {
             _controller.Request.Headers.Add("Authorization", "GosuArenaApiKey 12345");
 
-            Assert.AreEqual("Original script", _controller.Get(_bot.Id));
+            var actual = _controller.Get(_bot.Id);
+
+            Assert.AreEqual("Original script", actual.Script);
         }
 
         [Test]

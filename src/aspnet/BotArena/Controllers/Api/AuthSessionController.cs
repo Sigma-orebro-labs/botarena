@@ -11,7 +11,7 @@ namespace GosuArena.Controllers.Api
         private readonly AuthService _authService = new AuthService();
 
         // Check if the current user has an auth session
-        [Route("/api/AuthSession/Current")]
+        [Route("api/AuthSession/Current")]
         public HttpResponseMessage GetCurrent()
         {
             if (User.Identity.IsAuthenticated)
@@ -36,7 +36,7 @@ namespace GosuArena.Controllers.Api
         }
 
         // Delete the current auth session (log off)
-        [Route("/api/AuthSession/Current")]
+        [Route("api/AuthSession/Current")]
         public void DeleteCurrent()
         {
             _authService.LogOff();

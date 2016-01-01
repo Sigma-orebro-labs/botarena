@@ -1,4 +1,4 @@
-﻿angular.module('menuApp', ['ui.router', 'toaster'])
+﻿angular.module('menuApp', ['ui.router', 'toaster', 'ui.codemirror'])
     .config(function($stateProvider, $urlRouterProvider) {
 
         $urlRouterProvider.otherwise('/'); // default route when no other matching url is found
@@ -31,6 +31,11 @@
             .state('mybots', {
                 templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bots/list.html'),
                 controller: 'botListCtrl'
+            })
+            .state('editbot', {
+                url: '/edit/:botId',
+                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/editor/editor.html'),
+                controller: 'editorCtrl'
             })
             .state('bot-wizard', {
                 abstract: true,

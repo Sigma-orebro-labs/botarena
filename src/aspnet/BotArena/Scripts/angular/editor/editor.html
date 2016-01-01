@@ -1,0 +1,62 @@
+﻿<section class="editor menu-page">
+
+    <h1>{{bot.name}}</h1>
+
+    <div class="row">
+
+        <form id="script-editor-form" method="POST" action="" role="form" class="change-tracked col-md-9 col-sm-9 col-xs-9">
+
+            <fieldset>
+                <legend>Edit bot</legend>
+
+                <input type="hidden" name="Id" value="{{bot.id}}"/>
+
+                <label for="editor">JavaScript for the bot</label>
+                <textarea id="editor" name="Script" ui-codemirror='{
+      extraKeys: {"Ctrl-Space": "autocomplete"},
+      mode: {name: "javascript", globalVars: true},
+      lineWrapping: true,
+      gutters: ["CodeMirror-lint-markers"],
+      lint: true,
+      lineNumbers: true,
+      matchBrackets: true,
+      styleActiveLine: true
+    }'></textarea>
+
+                <label>
+                    <input type="checkbox" ng-model="bot.isPublic"/>
+                    Make bot avaible for playing with bots written by other players
+                </label>
+
+                <button type="submit" class="main-submit clear-dirty-flags">Save</button>
+            </fieldset>
+
+
+        </form>
+
+        <aside id="editor-match-setup" class="col-md-3 col-sm-3 col-xs-3">
+
+            <h2>Play training match</h2>
+
+            <section id="editor-bot-lists-container">
+                <div id="editor-available-bots-container">
+                    <ul id="bots">
+                        <li class="bot well" ng-repeat="trainingBot in trainingBots" ng-click="toggleSelection(bot)" ng-class="bot.isSelected ? 'selected' : ''">
+                            <span class="name">{{trainingBot.name}}</span>
+                            <span class="author">{{trainingBot.authorUsername}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <form id="editor-start-match" method="GET" action="" target="_blank">
+                <input type="hidden" name="rosters[0]" id="names" data-bind="value: selectedBotNames"/>
+                <input type="hidden" name="training" value="true"/>
+
+                <button type="submit" id="play-button" class="btn btn-lg btn-primary">Play!</button>
+            </form>
+
+        </aside>
+    </div>
+
+</section>
