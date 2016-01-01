@@ -5,6 +5,7 @@ using System.Web.Http;
 using GosuArena.Controllers;
 using GosuArena.Controllers.Api;
 using GosuArena.Entities;
+using GosuArena.Models.Match;
 using NUnit.Framework;
 using WeenyMapper;
 
@@ -61,7 +62,7 @@ namespace BotArena.Tests.Controllers
         [Test]
         public void Putting_non_existing_bot_returns_404()
         {
-            ShouldThrow(HttpStatusCode.NotFound, () => _controller.Put(9999));
+            ShouldThrow(HttpStatusCode.NotFound, () => _controller.Put(new ApiBotModel { Id = 9999 }));
         }
 
         [Test]
@@ -77,19 +78,19 @@ namespace BotArena.Tests.Controllers
         {
             _controller.Request.Headers.Add("Authorization", "GosuArenaApiKey 000000");
 
-            ShouldThrow(HttpStatusCode.Unauthorized, () => _controller.Put(_bot.Id));
+            ShouldThrow(HttpStatusCode.Unauthorized, () => _controller.Put(new ApiBotModel { Id = _bot.Id }));
         }
 
         [Test]
         public void Getting_without_supplying_auth_header_returns_401()
         {
-            ShouldThrow(HttpStatusCode.Unauthorized, () => _controller.Get(_bot.Id));            
+            ShouldThrow(HttpStatusCode.Unauthorized, () => _controller.Get(_bot.Id));
         }
         
         [Test]
         public void Putting_without_supplying_auth_header_returns_401()
         {
-            ShouldThrow(HttpStatusCode.Unauthorized, () => _controller.Put(_bot.Id));            
+            ShouldThrow(HttpStatusCode.Unauthorized, () => _controller.Put(new ApiBotModel { Id = _bot.Id }));
         }
 
         [Test]
@@ -109,7 +110,7 @@ namespace BotArena.Tests.Controllers
 
             try
             {
-                _controller.Put(_bot.Id);
+                _controller.Put(new ApiBotModel { Id = _bot.Id });
             }
             catch (Exception)
             {
@@ -139,9 +140,7 @@ namespace BotArena.Tests.Controllers
         {
             _controller.Request.Headers.Add("Authorization", "GosuArenaApiKey 12345");
 
-            _request.Content = new StringContent("new script");
-
-            _controller.Put(_bot.Id);
+            _controller.Put(new ApiBotModel{ Id = _bot.Id, Script = "new script"});
 
             var actualScript = _repository.Find<Bot>()
                 .Where(x => x.Id == _bot.Id)

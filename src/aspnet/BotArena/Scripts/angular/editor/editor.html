@@ -4,7 +4,7 @@
 
     <div class="row">
 
-        <form id="script-editor-form" method="POST" action="" role="form" class="change-tracked col-md-9 col-sm-9 col-xs-9">
+        <form id="script-editor-form" name="editorForm" method="POST" ng-submit="save()" role="form" class="discard-changes-warning col-md-9 col-sm-9 col-xs-9">
 
             <fieldset>
                 <legend>Edit bot</legend>
@@ -12,7 +12,7 @@
                 <input type="hidden" name="Id" value="{{bot.id}}"/>
 
                 <label for="editor">JavaScript for the bot</label>
-                <textarea id="editor" name="Script" ui-codemirror='{
+                <textarea id="editor" name="Script" ng-model="bot.script" ui-codemirror='{
       extraKeys: {"Ctrl-Space": "autocomplete"},
       mode: {name: "javascript", globalVars: true},
       lineWrapping: true,
@@ -28,7 +28,7 @@
                     Make bot avaible for playing with bots written by other players
                 </label>
 
-                <button type="submit" class="main-submit clear-dirty-flags">Save</button>
+                <input type="submit" class="main-submit clear-dirty-flags" value="Save"/>
             </fieldset>
 
 

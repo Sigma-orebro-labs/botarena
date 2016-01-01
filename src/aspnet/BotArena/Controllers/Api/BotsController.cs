@@ -102,13 +102,14 @@ namespace GosuArena.Controllers.Api
             return CreateModels(trainingBots, includeScript);
         }
 
-        public void Put(int id)
+        public void Put(ApiBotModel postedBot)
         {
-            var bot = GetBotWithUser(id);
+            var bot = GetBotWithUser(postedBot.Id);
 
             ValidateRequest(bot);
 
-            bot.Script = Request.Content.ReadAsStringAsync().Result;
+            bot.Script = postedBot.Script;
+            bot.IsPublic = postedBot.IsPublic;
 
             _repository.Update(bot);
         }

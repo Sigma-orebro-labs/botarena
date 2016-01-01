@@ -4,6 +4,10 @@ namespace GosuArena.Models.Match
 {
     public class ApiBotModel
     {
+        public ApiBotModel()
+        {
+        }
+
         public ApiBotModel(Bot bot)
         {
             Id = bot.Id;

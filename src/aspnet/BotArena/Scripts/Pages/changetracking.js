@@ -36,7 +36,8 @@ $(function () {
     });
     
     gosuArena.changeTracking.hasChangedElements = function() {
-        return $(".change-tracked").has("[data-changed]").length > 0;
+        return $(".change-tracked").has("[data-changed]").length > 0 ||
+            $(".discard-changes-warning.ng-dirty").length > 0;
     };
 
     window.onbeforeunload = function () {
