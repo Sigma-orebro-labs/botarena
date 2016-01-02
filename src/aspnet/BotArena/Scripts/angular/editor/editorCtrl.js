@@ -1,10 +1,14 @@
 ﻿angular.module('menuApp').controller('editorCtrl',
-    ['$scope', '$stateParams', '$http', 'notificationService', 'matchSetupService',
-        function ($scope, $stateParams, $http, notificationService, matchSetupService) {
+    ['$scope', '$stateParams', '$http', '$window', 'notificationService', 'matchSetupService',
+        function ($scope, $stateParams, $http, $window, notificationService, matchSetupService) {
 
             $scope.trainingBots = [];
+            
+            function hasUnsavedEditorChanges() {
+                return $scope.editorForm.$dirty;
+            }
 
-            $scope.createStartMatchUrl = function () {
+            function createStartMatchUrl() {
 
                 var selectedBots = $scope.trainingBots.filter(function(bot) {
                     return bot.isSelected;
@@ -19,6 +23,34 @@
                         isTeamSetup: false,
                         isTraining: true
                     });
+            };
+
+            function startMatch() {
+                $window.open(createStartMatchUrl());
+            }
+
+            $scope.startTrainingMatch = function () {
+
+                if (hasUnsavedEditorChanges()) {
+                    notificationService.showConfirmationDialog({
+                        title: "Save changes?",
+                        text: "Do you want to save the changes you have made to your bot before starting the training match?",
+                        confirmButtonText: "Save and start!",
+                        cancelButtonText: "Start without saving"
+                    }).then(function (shouldSaveChanges) {
+
+                        if (shouldSaveChanges) {
+                            saveChanges(function() {
+                                notificationService.showSuccessMessage("Bot saved", "Your bot has been saved!");
+                                startMatch();
+                            });
+                        } else {
+                            startMatch();
+                        }
+                    });
+                } else {
+                    startMatch(false);
+                }
             };
 
             $scope.toggleSelection = function(bot) {
@@ -45,17 +77,23 @@
                     notificationService.showUnexpectedErrorMessage(e);
                 });
 
-            $scope.save = function() {
+            function saveChanges(success) {
                 $http({
-                    method: "PUT",
-                    url: gosuArena.url.createAbsolute("/api/bots/" + $stateParams.botId),
-                    data: $scope.bot
-                })
-                .then(function () {
-                    notificationService.showSuccessMessage("Your changes have been saved");
+                        method: "PUT",
+                        url: gosuArena.url.createAbsolute("/api/bots/" + $stateParams.botId),
+                        data: $scope.bot
+                    })
+                    .then(function() {
                         $scope.editorForm.$setPristine();
-                    }, function (e) {
-                    notificationService.showUnexpectedErrorMessage(e);
+                        success();
+                    }, function(e) {
+                        notificationService.showUnexpectedErrorMessage(e);
+                    });
+            }
+
+            $scope.save = function () {
+                saveChanges(function() {
+                    notificationService.showSuccessMessage("Your changes have been saved");
                 });
             };
         }

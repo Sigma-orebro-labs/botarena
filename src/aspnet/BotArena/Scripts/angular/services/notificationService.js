@@ -1,6 +1,6 @@
 ﻿var app = angular.module('menuApp');
 
-app.factory('notificationService', ['toaster', function (toaster) {
+app.factory('notificationService', ['toaster', 'SweetAlert', '$q', function (toaster, SweetAlert, $q) {
 
     // Samples of the available toaster types: http://plnkr.co/edit/HKTC1a?p=preview
     // GitHub repo: https://github.com/jirikavi/AngularJS-Toaster
@@ -20,9 +20,28 @@ app.factory('notificationService', ['toaster', function (toaster) {
         console.error("Unexpected error: " + JSON.stringify(error));
     }
 
+    function showConfirmationDialog(options) {
+        return $q(function(resolve, reject) {
+            SweetAlert.swal({
+                title: options.title,
+                text: options.text,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: options.confirmButtonText,
+                cancelButtonText: options.cancelButtonText || "Cancel",
+                closeOnConfirm: true
+            },
+            function (isConfirm) {
+                resolve(isConfirm);
+            });
+        });
+    }
+
     return {
         showSuccessMessage: showSuccessMessage,
         showUnexpectedErrorMessage: showUnexpectedErrorMessage,
-        showErrorMessage: showErrorMessage
+        showErrorMessage: showErrorMessage,
+        showConfirmationDialog: showConfirmationDialog
     };
 }]);

@@ -572,6 +572,8 @@
     <Content Include="Content\lib\ng-toaster\toaster.js" />
     <Content Include="Content\lib\ng-toaster\toaster.min.css" />
     <Content Include="Content\lib\ng-toaster\toaster.min.js" />
+    <Content Include="Content\lib\sweetalert\sweetalert.css" />
+    <Content Include="Content\lib\sweetalert\sweetalert.min.js" />
     <Content Include="Scripts\angular\account\Register.html" />
     <Content Include="Scripts\angular\account\registerCtrl.js" />
     <Content Include="Scripts\angular\bot-wizard\BotWizardLayout.html" />
@@ -604,6 +606,7 @@
     <Content Include="Scripts\lib\angular\angular-animate.min.js" />
     <Content Include="Scripts\lib\angular\angular-ui-router.js" />
     <Content Include="Scripts\lib\angular\angular.min.1.4.7.js" />
+    <Content Include="Scripts\lib\angular\SweetAlert.min.js" />
     <Content Include="Scripts\lib\angular\ui-codemirror.js" />
     <Content Include="Scripts\lib\jshint.js" />
     <Content Include="Scripts\Pages\Commander\Services\gameHubService.js" />
