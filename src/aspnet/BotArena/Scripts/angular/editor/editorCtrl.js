@@ -2,6 +2,20 @@
     ['$scope', '$stateParams', '$http', '$window', 'notificationService', 'matchSetupService',
         function ($scope, $stateParams, $http, $window, notificationService, matchSetupService) {
 
+            function saveChanges(success) {
+                $http({
+                    method: "PUT",
+                    url: gosuArena.url.createAbsolute("/api/bots/" + $stateParams.botId),
+                    data: $scope.bot
+                })
+                    .then(function () {
+                        $scope.editorForm.$setPristine();
+                        success();
+                    }, function (e) {
+                        notificationService.showUnexpectedErrorMessage(e);
+                    });
+            }
+
             $scope.trainingBots = [];
             
             function hasUnsavedEditorChanges() {
@@ -76,20 +90,6 @@
                 }, function(e) {
                     notificationService.showUnexpectedErrorMessage(e);
                 });
-
-            function saveChanges(success) {
-                $http({
-                        method: "PUT",
-                        url: gosuArena.url.createAbsolute("/api/bots/" + $stateParams.botId),
-                        data: $scope.bot
-                    })
-                    .then(function() {
-                        $scope.editorForm.$setPristine();
-                        success();
-                    }, function(e) {
-                        notificationService.showUnexpectedErrorMessage(e);
-                    });
-            }
 
             $scope.save = function () {
                 saveChanges(function() {

@@ -20,6 +20,10 @@
                 templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/account/Register.html'),
                 controller: 'registerCtrl'
             })
+            .state('changepassword', {
+                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/account/ChangePassword.html'),
+                controller: 'changePasswordCtrl'
+            })
             .state('ffasetup', {
                 templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/match-setup/setup.html'),
                 controller: 'matchSetupCtrl'

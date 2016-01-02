@@ -208,7 +208,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
-    <Compile Include="Controllers\Api\AccountController.cs" />
+    <Compile Include="Controllers\Api\AccountsController.cs" />
     <Compile Include="Controllers\Api\AuthSessionController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActionResults\HttpForbiddenResult.cs" />
@@ -574,7 +574,9 @@
     <Content Include="Content\lib\ng-toaster\toaster.min.js" />
     <Content Include="Content\lib\sweetalert\sweetalert.css" />
     <Content Include="Content\lib\sweetalert\sweetalert.min.js" />
+    <Content Include="Scripts\angular\account\ChangePassword.html" />
     <Content Include="Scripts\angular\account\Register.html" />
+    <Content Include="Scripts\angular\account\changePasswordCtrl.js" />
     <Content Include="Scripts\angular\account\registerCtrl.js" />
     <Content Include="Scripts\angular\bot-wizard\BotWizardLayout.html" />
     <Content Include="Scripts\angular\bot-wizard\botWizardCtrl.js" />
