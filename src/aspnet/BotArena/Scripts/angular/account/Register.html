@@ -1,15 +1,17 @@
-﻿<div class="register">
-    <label>E-mail</label>
-    <input type="email" ng-model="model.Email" placeholder="e-mail" />
-    <br/>
-    <label>Username</label>
-    <input type="text" ng-model="model.UserName" placeholder="Username"/>
-    <br />
-    <label>Password</label>
-    <input type="password" ng-model="model.Password" placeholder="Lösenord"/>
-    <br/>
-    <label>Confirm password</label>
-    <input type="password" ng-model="model.ConfirmPassword" placeholder="Lösenord"/>
-    <br />
-    <button ng-click="register()">Registrera</button>
+﻿<div class="register menu-page">
+    <form ng-submit="register()">
+        <label>E-mail</label>
+        <input type="email" required ng-model="model.email" placeholder="E-mail" />
+        <br />
+        <label>Username</label>
+        <input type="text" required ng-model="model.username" placeholder="Username" />
+        <br />
+        <label>Password</label>
+        <input type="password" required ng-model="model.password" placeholder="Password" />
+        <br />
+        <label>Confirm password</label>
+        <input type="password" required ng-model="model.confirmPassword" placeholder="Confirm password" />
+        <br />
+        <input type="submit" value="Register" />
+    </form>
 </div>

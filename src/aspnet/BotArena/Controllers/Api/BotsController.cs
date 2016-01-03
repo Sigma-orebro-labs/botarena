@@ -58,7 +58,7 @@ namespace GosuArena.Controllers.Api
                     .Where(x => x.Username == User.Identity.Name)
                     .ExecuteScalar<int>();
 
-                query = query.AndWhere(x => (x.UserId == userId || x.IsPublic) && !x.IsTrainer);
+                query = query.AndWhere(x => x.UserId == userId && !x.IsTrainer);
             }
             else
             {

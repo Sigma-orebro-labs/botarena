@@ -17,7 +17,7 @@
                         if (e.invalidCredentials) {
                             $scope.invalidCredentials = true;
 
-                            notificationService.showSuccessMessage("Sign in failed", "The username/password was incorrect");
+                            notificationService.showErrorMessage("Sign in failed", "The username/password was incorrect");
                         } else {
                             notificationService.showUnexpectedErrorMessage(e);
                         }
