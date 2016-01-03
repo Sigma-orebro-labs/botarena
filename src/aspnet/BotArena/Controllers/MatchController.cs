@@ -20,29 +20,6 @@ namespace GosuArena.Controllers
         }
 
         [Authorize]
-        public ActionResult Setup()
-        {
-            var bots = LoadBots();
-
-            var model = new MatchSetupModel(bots);
-
-            return View(model);
-        }
-
-        [Authorize]
-        public ActionResult TeamSetup()
-        {
-            var bots = LoadBots();
-
-            var model = new MatchSetupModel(bots)
-            {
-                MaxRosterCount = 4
-            };
-
-            return View("Setup", model);
-        }
-
-        [Authorize]
         public ActionResult Play(IList<string> rosters, bool isTeam = false)
         {
             if (rosters == null || rosters.IsEmpty())
@@ -101,16 +78,6 @@ namespace GosuArena.Controllers
             }
 
             return botModelsInTeam;
-        }
-
-        private IList<Bot> LoadBots()
-        {
-            var bots = Repository.Find<Bot>()
-                .Where(x => !x.IsDemoBot && x.IsPublic)
-                .Join(x => x.User)
-                .OrderBy(x => x.Name)
-                .ExecuteList();
-            return bots;
         }
 
         private ActionResult PlayMatch(IEnumerable<Bot> bots)

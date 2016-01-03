@@ -31,41 +31,6 @@
 
     @Html.Partial("Menu")
 
-<aside id="menu">
-    <nav>
-        <ul>
-            @if (User.Identity.IsAuthenticated)
-            {
-                <li>@Html.NavigationMenuItem("Setup", "Match", "Play FFA match!")</li>
-                <li>@Html.NavigationMenuItem("TeamSetup", "Match", "Play team match!")</li>
-                <li>@Html.NavigationMenuItem("MyProfile", "User", "Profile")</li>
-            }
-
-            <li>@Html.NavigationMenuItem("Index", "Match", "Gosu Bot Arena")</li>
-            <li>@Html.NavigationMenuItem("Index", "Docs", "Documentation")</li>
-            <li>@Html.NavigationMenuItem("News", "Docs", "What's new?")</li>
-
-            @if (User.IsAdmin())
-            {
-                <li>@Html.NavigationMenuItem("List", "Account", "Users")</li>
-            }
-        </ul>
-    </nav>
-
-    <menu id="account">
-        @if (User.Identity.IsAuthenticated)
-        {
-            <span class="username">Logged in as @User.Identity.Name</span>
-            @Html.NavigationMenuItem("LogOff", "Account", "Log out")
-        }
-        else
-        {
-            @Html.NavigationMenuItem("Login", "Account", "Login")
-            @Html.NavigationMenuItem("Register", "Account", "Sign up")
-        }
-    </menu>
-</aside>
-
 <aside id="notificationContainer" class="notifications"></aside>
 
 <script type="text/javascript" src="@Url.Content("~/Scripts/lib/underscore-min.js")"> </script>

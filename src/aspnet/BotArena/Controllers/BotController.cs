@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using GosuArena.Controllers.ActionResults;
 using GosuArena.Entities;
 using GosuArena.Infrastructure.Authorization;
 using GosuArena.Services;
@@ -10,45 +9,6 @@ namespace GosuArena.Controllers
 {
     public class BotController : BaseController
     {
-        public ActionResult Edit(int id)
-        {
-            var bot = GetBotWithUser(id);
-
-            if (bot == null)
-                return new HttpNotFoundResult();
-            if (!IsBotOwnedByCurrentUser(bot))
-                return new HttpUnauthorizedResult();
-
-            var trainingBots = Repository.Find<Bot>()
-                .Where(x => !x.IsDemoBot && (x.IsTrainer || x.UserId == bot.UserId))
-                .Join(x => x.User)
-                .ExecuteList();
-
-            ViewBag.TrainingBots = trainingBots;
-
-            return View(bot);
-        }   
-
-        [HttpPost]
-        public ActionResult Edit(Bot bot)
-        {
-            var existingBot = GetBotWithUser(bot.Id);
-
-            if (existingBot == null)
-                return new HttpNotFoundResult();
-            if (!IsBotOwnedByCurrentUser(existingBot))
-                return new HttpUnauthorizedResult();
-            if (existingBot.IsTrainer)
-                return new HttpForbiddenResult("Training bots cannot be edited via the web UI");
-
-            existingBot.Script = bot.Script;
-            existingBot.IsPublic = bot.IsPublic;
-
-            Repository.Update(existingBot);
-
-            return RedirectToAction("Edit", new { id = bot.Id });
-        }
-
         private Bot GetBotWithUser(int id)
         {
             return Repository
