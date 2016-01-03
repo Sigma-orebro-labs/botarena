@@ -1,10 +1,16 @@
-﻿@{
-    ViewBag.Title = "Documentation";
-}
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Documentation - BotArena</title>
 
-@section styles {
-    <link rel="stylesheet" href="@Url.Content("~/Content/Pages/Docs/Index.less")" />
-}
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</head>
+<body>
+
+<link rel="stylesheet" href="@Url.Content("~/Content/Pages/Docs/Index.less")"/>
 
 <h2>Documentation</h2>
 
@@ -53,7 +59,6 @@
         tick: function (actionQueue, status) {
     
             // Here is where your code goes...
-
             // For example, here is a super simple bot which just stands in the same spot, turns and shoots
             actionQueue.fire();
             actionQueue.turn(1);
@@ -73,7 +78,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 
 <p>
     The tick event is the thing that drives the whole shebang. Each bot receives a tick callback once each round of the game.
-    In this event you will do the main part of the work. However, note that you are in no way constrained to keep all your code 
+    In this event you will do the main part of the work. However, note that you are in no way constrained to keep all your code
     inside this one single function! As soon as you start implementing something more complex than hello world you should most likely
     start breaking out code into helper functions, modules or what ever floats your boat. See the section
     <a href="#technical-details">Technical Details</a> for more info on that.
@@ -154,7 +159,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 <p>
     You might be missing some event which you feel would make your life much better. One of those might be something along the lines of
     onEnemySpotted. There is currently no such event since you can get information about all bots which your bot can currently see through
-    the seenEnemies and seenAllies properties of the <a href="#bot-status">status</a> object in the existing events. However, that event 
+    the seenEnemies and seenAllies properties of the <a href="#bot-status">status</a> object in the existing events. However, that event
     might be added later if people feel strongly about it.
 </p>
 
@@ -166,7 +171,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 <h3 id="bot-status">Bot Status</h3>
 
 <p>
-    To make your bot do something smart you need information about your bot, such as where it is and what it is looking at. 
+    To make your bot do something smart you need information about your bot, such as where it is and what it is looking at.
     This information is represented by a status object. The status object is passed to all bot events.
 </p>
 
@@ -175,16 +180,13 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 <pre class="prettyprint">
     {
         id, // The identifier for your bot
-
         // The identifier of your bot's team, if you are playing a team match.
         teamId, 
-
         position: {
             x,
             y,
             width,
             height,
-
             // The following properties are true if the bot is within 1 unit from
             // the corresponding wall
             isAtSouthWall,
@@ -197,7 +199,6 @@ Your bot interacts with gosuArena through a couple of different events, and thos
             height // The height of the playing field
         }
         angle, // The angle of your bot. A value between 0 and 360 degrees where 0 degrees is south.
-
         // The direction of the bot is a vector which indicate which direction the bot moved during its
         // latest round. So, if the bot moved one unit north during the latest round the vector will be { x: 0, y: -1 },
         // since the positive direction of the y axis is from the top to the bottom of the screen.
@@ -210,32 +211,26 @@ Your bot interacts with gosuArena through a couple of different events, and thos
             x,
             y
         },
-
         // Remaining health (hit points) for the bot. The bot hass 100 hp when the match starts.
         // At 0 hp the bot is killed
         health,
-
         // The number of actions that the bot can take during one round. For example, forward(1) would
         // be one action. forward(2) would be 2 actions, and forward(1) followed by turn(1) would be 
         // two actions in total.
         actionsPerRound,
-
         // An array of <a href="#bot-status">bot status</a> objects representing the enemy bots your bot currently can see.
         // In an FFA match, all other bots are considered enemies. In a team match, all bots on other teams are considered
         // enemies.
         // The line of sight of the bot is a thin, straight line from the sight and forward so you can only see bots
         // on which your bot has aimed its gun.
         seenEnemies, 
-
         // An array of <a href="#bot-status">bot status</a> objects representing the allied bots your bot currently can see.
         // This property is only used during team matches. Bots on the same team as the current bot are considered allies.
         // The line of sight of the bot is a thin, straight line from the sight and forward so you can only see bots
         // on which your bot has aimed its gun.
         seenAllies,
-
         canFire: function () { ... },  // True if the weapon is ready for firing, false if the weapon is still cooling down
         roundsUntilWeaponIsReady, // The number of rounds remaining until the weapon is ready to fire
-
         // The following functions return true if the bot is able to perform the
         // corresponding movement action. If they return false that means that the bot
         // is blocked by something, such as another bot or a wall.
@@ -245,7 +240,6 @@ Your bot interacts with gosuArena through a couple of different events, and thos
         canMoveSouth: function () { ... },
         canMoveEast: function () { ... },
         canMoveWest: function () { ... },
-
         // Note that since the bot is rectangular and turns around its own center
         // it is unable to turn if it is very close to any of the walls.
         // You need to get a few units of space around the bot to ensure that is
@@ -253,14 +247,13 @@ Your bot interacts with gosuArena through a couple of different events, and thos
         canTurnLeft,
         canTurnRight,
     }
-
 </pre>
 
 <h4>Seen Enemies / Allies</h4>
 
 <p>
-    As mentioned above, as a part of the <a href="#bot-status">bot status</a> object there 
-    are two arrays containing the bots that your own bot currently can see. The objects in the 
+    As mentioned above, as a part of the <a href="#bot-status">bot status</a> object there
+    are two arrays containing the bots that your own bot currently can see. The objects in the
     seenEnemies/seenAllies array are themselves bot status objects, so you can get quite a lot of information
     about the bots you can see, which can help your bot make intelligent decisions. For example,
     your bot can look at the position and direction of the bot to guess where the bot will be in
@@ -276,20 +269,20 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 </p>
 
 <p class="alert alert-warning">
-    <i class="fa fa-warning"></i>    
+    <i class="fa fa-warning"></i>
     Since actions are added to a queue the bot will not automatically perform the actions
     you added to the queue during, for example, the tick event, since there might be other
     actions on the queue already which will be performed first.
 
-    <br />
-    <br />
-    
+    <br/>
+    <br/>
+
     If you want to do something as soon as possible, for example if you want to move sideways
     when receiving the OnHitByBullet event without first performing the actions already on the
     queue you have to clear the queue first.
-    
-    <br />
-    <br />
+
+    <br/>
+    <br/>
 
     To clear the queue you simply call the clear method of the action queue.
 </p>
@@ -334,14 +327,14 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 <p>
     The coordinate system of the playing field is such that the point (0, 0) is located in the upper left hand
     corner of the field. The x asis is positive going from left to right, which means greater x value the further
-    o the right your bot moves. The y axis is positive going from the top to the bottom, so greater y value the further 
+    o the right your bot moves. The y axis is positive going from the top to the bottom, so greater y value the further
     towards the bottom the bot moves.
 </p>
 
 <p>
     When your bot has the angle 0 degrees it is facing along the positive y axis, i.e. down/south. 90 degrees
     is left/west, 180 degrees is up/north and 270 degrees is right/east. Your bot can have any angle
-    between 0 and 360 degrees (or actually between 0 and 359.999999..., but you get the picture). 
+    between 0 and 360 degrees (or actually between 0 and 359.999999..., but you get the picture).
     If you turn by -1 degree when at 0 degrees you will end up at 359 degrees.
     On the same note, if you rotate 1 degree when at 359 degrees you will end up at 0 degrees.
 </p>
@@ -359,14 +352,14 @@ Your bot interacts with gosuArena through a couple of different events, and thos
     Look for a script block with a comment including the name of your bot to find your code.
 </p>
 
-<img src="@Url.Content("~/Content/images/docs/chrome_devtools_debug_find_bot.png")" alt="The code for your bot is embedded in the main page and can be found by using the source tab of your dev tools and searching for the name of your bot" />
+<img src="@Url.Content("~/Content/images/docs/chrome_devtools_debug_find_bot.png")" alt="The code for your bot is embedded in the main page and can be found by using the source tab of your dev tools and searching for the name of your bot"/>
 
 <p>
     When you have found the code for your bot you can go ahead and set breakpoints just like you would for any
     other JavaScript code.
 </p>
 
-<img src="@Url.Content("~/Content/images/docs/chrome_devtools_debug_breakpoints.png")" alt="The code for your bot is embedded in the main page and can be found by using the source tab of your dev tools and searching for the name of your bot" />
+<img src="@Url.Content("~/Content/images/docs/chrome_devtools_debug_breakpoints.png")" alt="The code for your bot is embedded in the main page and can be found by using the source tab of your dev tools and searching for the name of your bot"/>
 
 <p>
     However, keep in mind that your function is called many times per second, so you have to be a bit creative
@@ -409,7 +402,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 <p>
     Bot arena has two major game modes, 1v1 and team games. In a team game you can set up
     up to four separate teams with a number of bots in each team. It is then up to you to
-    keep track of which bots are friends and which are enemies (see the 
+    keep track of which bots are friends and which are enemies (see the
     <a href="#bot-status">bot status</a> section for more info).
 </p>
 
@@ -431,7 +424,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 <h4>Globals and Scoping</h4>
 
 <p>
-    GosuArena has redefined a couple of globals in the context where your script is executed. Window, 
+    GosuArena has redefined a couple of globals in the context where your script is executed. Window,
     document and alert are redefined to be empty JavaScript objects to avoid some of the worst nastiness.
 </p>
 
@@ -442,7 +435,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 </p>
 
 <p>
-    GosuArena is structured so that you are free to organize the code within your script in what ever way 
+    GosuArena is structured so that you are free to organize the code within your script in what ever way
     you feel is best, as long as you call gosuArena.register and pass in an object with a tick property.
 </p>
 
@@ -452,7 +445,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
     At times you might want to keep you friends from seeing your bot, such as just before a tournament.
     This can be done by making your bot private. No other user can see your private bots so they will
     not be able to study your bot by playing matches against it. On the flip side, you will not be able
-    to play bots written by other users. You will, however, be able to play matches agains the trainer 
+    to play bots written by other users. You will, however, be able to play matches agains the trainer
     bots as well as your own bots.
 </p>
 
@@ -462,14 +455,14 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 </p>
 
 <p>
-    To make a bot private go to the edit page for the bot. Above the code editor there is a checkbox 
+    To make a bot private go to the edit page for the bot. Above the code editor there is a checkbox
     labeled "Make bot avaible for playing with bots written by other players". Uncheck this checkbox
     and save your bot.
 </p>
 
 <p>
-    To make your bot public again, go to the edit page once again, check the checkbox again and save 
-    the bot. Your bot will now appear in the bot list and you will be able to play matches against 
+    To make your bot public again, go to the edit page once again, check the checkbox again and save
+    the bot. Your bot will now appear in the bot list and you will be able to play matches against
     any other public bot.
 </p>
 
@@ -479,22 +472,22 @@ Your bot interacts with gosuArena through a couple of different events, and thos
     If the match appears sluggish when watching the bots duke it you can open the developer tools
     of you browser (F12) and check the logged FPS there. You should ideally be at 60 FPS. If you are
     running at ~30 FPS and you are running under Windows 7, you might consider checking if your
-    computer running on battery and/or if it is using the "Balanced" power plan. If so, plugging in 
+    computer running on battery and/or if it is using the "Balanced" power plan. If so, plugging in
     the power supply or switching to the "High performance" power plan could improve your game
     performance significantly.
 </p>
-    
+
 <p>
     You can change your power plan settings by clicking the battery icon in the lower right corner
     of your screen, or typing "Power options" into the start menu.
 </p>
 
-<img src="@Url.Content("~/Content/images/docs/high_performance.png")" alt="High performance power plan under Windows 7 can improve game performance" />
+<img src="@Url.Content("~/Content/images/docs/high_performance.png")" alt="High performance power plan under Windows 7 can improve game performance"/>
 
 <h3 id="api">API Access</h3>
 
 <p>
-    If you want to write some tool to improve your bot development workflow you can access the 
+    If you want to write some tool to improve your bot development workflow you can access the
     scripts of your bots through a simple REST API.
 </p>
 
@@ -507,13 +500,13 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 
 <p>The first thing you have to do to enable API access to your bots is to go to your profile and click the Enable button in the Api Access section.</p>
 
-<img src="@Url.Content("~/Content/images/docs/profile_enable_api_access.png")" alt="Enabling API access on your user profile" />
+<img src="@Url.Content("~/Content/images/docs/profile_enable_api_access.png")" alt="Enabling API access on your user profile"/>
 
 <p>You then need to generate an API key, by clicking the "Regenerate key" button. You can then click the "show" link to show the generated key</p>
 
-<img src="@Url.Content("~/Content/images/docs/profile_show_api_key.png")" alt="Showing your API key on your user profile" />
+<img src="@Url.Content("~/Content/images/docs/profile_show_api_key.png")" alt="Showing your API key on your user profile"/>
 
-<img src="@Url.Content("~/Content/images/docs/profile_after_show_api_key.png")" alt="Showing your API key on your user profile" />
+<img src="@Url.Content("~/Content/images/docs/profile_after_show_api_key.png")" alt="Showing your API key on your user profile"/>
 
 <p>
     To make sure your requests are accepted you need to include an Authorization request header. The value of the header must be the string
@@ -531,7 +524,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
     Here is an example of how it could look in Fiddler:
 </p>
 
-<img src="@Url.Content("~/Content/images/docs/bot_api_get_request.png")" alt="Example of a GET request to dowload the script of a bot through the REST API" />
+<img src="@Url.Content("~/Content/images/docs/bot_api_get_request.png")" alt="Example of a GET request to dowload the script of a bot through the REST API"/>
 
 <h4>Uploading a New Version of a Script</h4>
 
@@ -540,7 +533,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
     Here is an example:
 </p>
 
-<img src="@Url.Content("~/Content/images/docs/bot_api_put_request.png")" alt="Example of a PUT request to upload a new script for a bot through the REST API" />
+<img src="@Url.Content("~/Content/images/docs/bot_api_put_request.png")" alt="Example of a PUT request to upload a new script for a bot through the REST API"/>
 
 <h4>Troubleshooting</h4>
 
@@ -555,3 +548,5 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 </p>
 
 <script src="@Url.Content("~/Content/lib/google-code-prettify/run_prettify.js")"></script>
+</body>
+</html>
