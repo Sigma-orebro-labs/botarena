@@ -1,5 +1,9 @@
 ﻿<div>
     <h1>Choose Color</h1>
-    <input type="text" placeholder="Enter color" ng-model="bot.color"/>
-    <a class="btn-next" ui-sref="bot-wizard.enter-bot-name">Next <i class="fa fa-arrow-right"></i></a>
+    <input type="text" placeholder="Color hex code (#XXXXX)" ng-model="bot.colorHexCode"/>
+
+    <nav>
+        <a class="btn-previous" ui-sref="bot-wizard.choose-equipment"><i class="fa fa-arrow-left" /> Previous</a>
+        <a class="btn-next" ui-sref="bot-wizard.enter-bot-name">Next <i class="fa fa-arrow-right" /></a>
+    </nav>
 </div>

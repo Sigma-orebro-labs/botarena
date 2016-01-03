@@ -1,5 +1,13 @@
 ﻿<div>
     <h1>Enter Your Email</h1>
-    <input type="text" placeholder="Email" ng-model="user.email" />
+    <input type="text" placeholder="Email" ng-model="user.email"/>
+
+    <menu>
+        <a ng-click="createBot()" class="btn btn-lg btn-primary">Create!</a>
+    </menu>
+
+    <nav>
+        <a class="btn-previous" ui-sref="bot-wizard.enter-bot-name"><i class="fa fa-arrow-left" /> Previous</a>
+    </nav>
 </div>
 

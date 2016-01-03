@@ -1,9 +1,9 @@
-﻿angular.module('menuApp').controller('botWizardCtrl', ['$scope', function($scope) {
+﻿angular.module('menuApp').controller('botWizardCtrl', ['$scope', '$http', '$state', 'notificationService', function($scope, $http, $state, notificationService) {
 
         $scope.bot = {
-            Class: "", 
+            className: "", 
             equipment: null,
-            color: "",
+            colorHexCode: "",
             name: ""
         };
 
@@ -15,7 +15,6 @@
         $scope.allMeshes = [];
 
         $scope.init = function () {
-           
             
             var rotation = 0.0;
 
@@ -31,8 +30,6 @@
 
             var light = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(-1, -2, -1), scene);
 
-           
-
             BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "ship.babylon", scene, function (meshes1) {
                 var mesh = meshes1[1];
                 $scope.allMeshes.push(mesh);
@@ -46,7 +43,9 @@
                 $scope.setMeshTransparancy(mesh, 0);
 
                 // load next mesh in this callback to force some sort of synchronized load of models since the order of the bots in the $scope.allMeshes matter
-                BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "magnus_skepp.babylon", scene, function (meshes) {
+                // TODO: Go back to using Magnus ship model here. I had to change to ship.babylon since magnus_skepp.babylon is not properly
+                //       committed to the version control. It is included in the project, but is missing on disk.
+                BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "ship.babylon", scene, function (meshes) {
                     var tempMaterial = new BABYLON.StandardMaterial("tempMaterial", scene);
                     tempMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.7, 0.1);
 
@@ -61,8 +60,6 @@
                     $scope.setUpWater(scene, light);
                 });
             });
-
-            
 
             engine.runRenderLoop(function () {
                 if ($scope.currentMesh) {
@@ -83,13 +80,13 @@
             }
         }
 
-        $scope.tankClass = function () {
+        $scope.showTankModel = function () {
             $scope.currentMesh = $scope.allMeshes[1];
             $scope.setMeshTransparancy($scope.allMeshes[1], 1);
             $scope.setMeshTransparancy($scope.allMeshes[0], 0);
         }
 
-        $scope.ninjaClass = function () {
+        $scope.showNinjaModel = function () {
             $scope.currentMesh = $scope.allMeshes[0];
             $scope.setMeshTransparancy($scope.allMeshes[1], 0);
             $scope.setMeshTransparancy($scope.allMeshes[0], 1);
@@ -109,11 +106,28 @@
             water.isPickable = false;
             water.material = waterMaterial;
 
-
             water.receiveShadows = true;
-
-
         }
 
+        $scope.createBot = function() {
+            $http({
+                method: "POST",
+                url: gosuArena.url.createAbsolute('api/bots'),
+                data: $scope.bot
+            }).then(function (response) {
+                notificationService.showSuccessMessage("Bot created", "Your bot has been created, let's write some code!");
+
+                var bot = response.data;
+
+                $state.go("editbot", { botId: bot.id });
+
+            }, function (e) {
+                if (e.status === 409) {
+                    notificationService.showErrorMessage("Bot name taken", "The bot name is already taken, please try another name.");
+                } else {
+                    notificationService.showUnexpectedErrorMessage(e);
+                }
+            });
+        };
     }
 ]);

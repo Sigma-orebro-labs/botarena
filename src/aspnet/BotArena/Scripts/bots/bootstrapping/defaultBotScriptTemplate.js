@@ -20,6 +20,6 @@ gosuArena.register({
 
     },
     options: {
-        color: "#71d40e"
+        color: "%COLOR_HEX_CODE%"
     }
 });

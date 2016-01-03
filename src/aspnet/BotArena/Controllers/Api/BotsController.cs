@@ -2,8 +2,10 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using GosuArena.Entities;
+using GosuArena.Extensions;
 using GosuArena.Models.Match;
 using WeenyMapper;
 
@@ -80,11 +82,7 @@ namespace GosuArena.Controllers.Api
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Not logged in"));
             }
 
-            var userId = _repository
-                .Find<User>()
-                .Select(x => x.Id)
-                .Where(x => x.Username == User.Identity.Name)
-                .ExecuteScalar<int>();
+            var userId = _repository.GetUserId(User.Identity.Name);
 
             var botAuthorId = _repository
                 .Find<Bot>()
@@ -116,6 +114,50 @@ namespace GosuArena.Controllers.Api
             bot.IsPublic = postedBot.IsPublic;
 
             _repository.Update(bot);
+        }
+
+        [Authorize]
+        public HttpResponseMessage Post(ApiBotCreateModel model)
+        {
+            if (model == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Data was not recieved in the expected format");
+            }
+
+            var existingBotCount = _repository
+                   .Count<Bot>()
+                   .Where(x => x.Name == model.Name)
+                   .Execute();
+
+            if (existingBotCount > 0)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Conflict, "The specified bot name is already in use");
+            }
+
+            if (!model.ColorHexCode.IsValidHexColorCode())
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid color code");
+            }
+
+            if (string.IsNullOrWhiteSpace(model.Name))
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid bot name");
+            }
+
+            var userId = _repository.GetUserId(User.Identity.Name);
+            var defaultScript = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath("~/Scripts/bots/bootstrapping/defaultBotScriptTemplate.js"))
+                .Replace("%COLOR_HEX_CODE%", model.ColorHexCode);
+
+            var bot = new Bot
+            {
+                Name = model.Name,
+                Script = defaultScript,
+                UserId = userId
+            };
+
+            _repository.Insert(bot);
+
+            return Request.CreateResponse(HttpStatusCode.Created, new ApiBotModel(bot));
         }
 
         private void ValidateRequest(Bot bot)

@@ -225,6 +225,8 @@
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Extensions\AuthorizationExtensions.cs" />
     <Compile Include="Extensions\HtmlExtensions.cs" />
+    <Compile Include="Extensions\RepositoryExtensions.cs" />
+    <Compile Include="Extensions\ValidationExtensions.cs" />
     <Compile Include="Infrastructure\Authorization\AdminAttribute.cs" />
     <Compile Include="Infrastructure\Graphics\ImageRenderer.cs" />
     <Compile Include="Models\Account\ApiUserModel.cs" />
@@ -239,6 +241,7 @@
     <Compile Include="Entities\Bot.cs" />
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Models\Match\ApiBotCreateModel.cs" />
     <Compile Include="Models\Match\ApiBotModel.cs" />
     <Compile Include="Models\Match\BotModel.cs" />
     <Compile Include="Models\Match\MatchSetupModel.cs" />
@@ -778,7 +781,7 @@
     <Content Include="Scripts\game\bot.js" />
     <Content Include="Scripts\game\botOptions.js" />
     <Content Include="Scripts\game\specs\botSpecs.js" />
-    <Content Include="Scripts\bots\bootstrapping\defaultBotScript.js" />
+    <Content Include="Scripts\bots\bootstrapping\defaultBotScriptTemplate.js" />
     <Content Include="Scripts\bots\randomizer.js" />
     <Content Include="Scripts\bots\demo.bot2.js" />
     <Content Include="Scripts\bots\demo.bot3.js" />
@@ -943,7 +946,6 @@
     <Content Include="Scripts\lib\jquery\jquery.min.map" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\User\Profile.cshtml" />
-    <Content Include="Views\Bot\Create.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Docs\Index.cshtml" />
     <Content Include="Views\Docs\News.cshtml" />
