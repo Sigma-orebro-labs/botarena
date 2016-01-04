@@ -51,7 +51,7 @@ namespace GosuArena.Controllers
                 transaction.Commit();
             }
 
-            return RedirectToAction("Profile", "User", new { username = "GosuArenaTrainer" });
+            return RedirectToAction("Index", "Match");
         }
     }
 }
