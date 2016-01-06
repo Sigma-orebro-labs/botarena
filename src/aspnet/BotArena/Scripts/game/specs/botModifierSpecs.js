@@ -31,8 +31,6 @@ describe("Game", function () {
         jasmine.addMatchers(gosuArena.specs.matchers);
 
         defaultBotOptions = gosuArena.factories.createSafeBotOptions();
-        defaultClassOptions = gosuArena.factories.modifiers.default.create();
-        tankClassOptions = gosuArena.factories.modifiers.classes.tank.create(defaultClassOptions);
 
         clock = gosuArena.gameClock.createFake();
 

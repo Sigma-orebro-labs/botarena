@@ -609,12 +609,6 @@
     <Content Include="Scripts\angular\services\notificationService.js" />
     <Content Include="Scripts\angular\services\authService.js" />
     <None Include="Scripts\game\modifiers\modifierConfig.json" />
-    <Content Include="Scripts\game\modifiers\equipment\speedRounds.js" />
-    <Content Include="Scripts\game\modifiers\equipment\armorPiercingRounds.js" />
-    <Content Include="Scripts\game\modifiers\equipment\heavyArmor.js" />
-    <Content Include="Scripts\game\modifiers\equipment\standardCannon.js" />
-    <Content Include="Scripts\game\modifiers\equipment\speedCannon.js" />
-    <Content Include="Scripts\game\modifiers\equipment\heavyCannon.js" />
     <Content Include="Scripts\lib\angular\angular-animate.js" />
     <Content Include="Scripts\lib\angular\angular-animate.min.js" />
     <Content Include="Scripts\lib\angular\angular-ui-router.js" />
@@ -654,9 +648,7 @@
     <Content Include="Content\sounds\cork.wav" />
     <Content Include="Content\sounds\water_sound.wav" />
     <Content Include="Scripts\game\augmentations\cloakAugmentation.js" />
-    <Content Include="Scripts\game\modifiers\equipment\boosters.js" />
     <Content Include="Scripts\game\modifiers\modifierFactory.js" />
-    <Content Include="Scripts\game\modifiers\classes\tankClass.js" />
     <Content Include="Scripts\game\modifiers\defaultModifier.js" />
     <Content Include="Scripts\game\preloader.js" />
     <Content Include="Scripts\game\specs\botModifierSpecs.js" />
