@@ -212,8 +212,10 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
     <Compile Include="Controllers\Api\AccountsController.cs" />
+    <Compile Include="Controllers\Api\ApiControllerBase.cs" />
     <Compile Include="Controllers\Api\AuthSessionController.cs" />
     <Compile Include="Controllers\Api\BotsController.cs" />
+    <Compile Include="Controllers\Api\ModifiersController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BotController.cs" />
     <Compile Include="Controllers\Api\BotNameImageController.cs" />
@@ -609,6 +611,7 @@
     <Content Include="Scripts\angular\services\notificationService.js" />
     <Content Include="Scripts\angular\services\authService.js" />
     <None Include="Scripts\game\modifiers\modifierConfig.json" />
+    <Content Include="Scripts\infrastructure\modifierConfigLoader.js" />
     <Content Include="Scripts\lib\angular\angular-animate.js" />
     <Content Include="Scripts\lib\angular\angular-animate.min.js" />
     <Content Include="Scripts\lib\angular\angular-ui-router.js" />

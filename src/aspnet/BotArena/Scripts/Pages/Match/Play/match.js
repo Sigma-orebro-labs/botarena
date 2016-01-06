@@ -152,7 +152,7 @@
 
         gosuArena.engine.initializeWorld({
             listeners: [gosuArena.matchViewModel, gosuArena.visualizers.gameVisualizer2D, gosuArena.visualizers.gameVisualizer3D],
-            resourceLoaders: [gosuArena.resources.imageLoader]
+            resourceLoaders: [gosuArena.resources.imageLoader, gosuArena.resources.modifierConfigLoader]
         });
 
         ko.applyBindings(gosuArena.matchViewModel);

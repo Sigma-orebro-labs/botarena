@@ -1,5 +1,4 @@
-﻿// See defualtModifier.js for listing of available properties to tweak
-[
+﻿[
   {
     "type": "weapon",
     "id": "heavyCannon",
@@ -32,7 +31,7 @@
   },
   {
     "type": "class",
-    "id": "ninjaClass",
+    "id": "ninja",
     "name": "Corvette",
     "description": "A highly maneuverable, lightly armed warship.",
     "modifiers": {
@@ -47,7 +46,7 @@
   },
   {
     "type": "class",
-    "id": "tankClass",
+    "id": "tank",
     "name": "Battleship",
     "description": "A slower but heavily armored and heavily gunned warship.",
     "modifiers": {

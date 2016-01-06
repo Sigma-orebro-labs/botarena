@@ -1,5 +1,5 @@
 var gosuArena = gosuArena || {};
-gosuArena.facories = gosuArena.facories || {};
+gosuArena.factories = gosuArena.factories || {};
 
 gosuArena.factories.createBotViewModel = function (bot) {
 
