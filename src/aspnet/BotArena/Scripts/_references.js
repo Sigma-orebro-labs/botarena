@@ -11,7 +11,6 @@
 ///<reference path="~/Scripts/game/modifiers/modifierCollection.js" />
 ///<reference path="~/Scripts/game/modifiers/modifierFactory.js" />
 ///<reference path="~/Scripts/game/modifiers/defaultModifier.js" />
-///<reference path="~/Scripts/game/modifiers/classes/tankClass.js" />
 ///<reference path="~/Scripts/game/actionQueue.js" />
 ///<reference path="~/Scripts/game/userActionQueue.js" />
 ///<reference path="~/Scripts/game/rectangleCache.js" />
