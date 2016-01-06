@@ -8,24 +8,26 @@ gosuArena.factories.modifiers.createModifierCollection = function (modifiers) {
         var baseFactor = 1;
 
         for (var i = 0; i < modifiers.length; i++) {
-            baseFactor += propertyGetter(modifiers[i]) - 1;
+            var safeModifierValue = propertyGetter(modifiers[i]) || 1;
+            baseFactor += safeModifierValue - 1;
         }
 
         return baseFactor;
     }
 
     return {
+        modifiers: modifiers,
         calculateHealthPointFactor: function() {
-            return calculateFactor(function(x) { return x.initialHealthPointFactor; });
+            return calculateFactor(function(x) { return x.modifiers.initialHealthPointFactor; });
         },
         calculateMovementSpeedFactor: function () {
-            return calculateFactor(function (x) { return x.movementSpeedFactor; });
+            return calculateFactor(function (x) { return x.modifiers.movementSpeedFactor; });
         },
         calculateDamageReductionFactor: function () {
-            return calculateFactor(function (x) { return x.damageReductionFactor; });
+            return calculateFactor(function (x) { return x.modifiers.damageReductionFactor; });
         },
         calculateWeaponDamageFactor: function () {
-            return calculateFactor(function (x) { return x.weaponDamageFactor; });
+            return calculateFactor(function (x) { return x.modifiers.weaponDamageFactor; });
         }
     };
 };

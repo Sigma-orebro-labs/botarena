@@ -1,7 +1,6 @@
 ///<reference path="~/Scripts/_references.js" />
 
 describe("Game", function () {
-    var originalModifierFactory = gosuArena.factories.modifiers.create;
     var clock = null;
 
     var defaultBotOptions;
@@ -20,26 +19,16 @@ describe("Game", function () {
         gosuArena.specs.game.startGame(clock, [arenaStateInterceptor]);
     }
 
-    function stubClassFactory(overrides) {
+    function initializeModifiers(modifierConfig) {
 
-        gosuArena.factories.modifiers.create = function(botClassName) {
-
-            var override = overrides[botClassName];
-
-            if (!override) {
-                return originalModifierFactory(botClassName);
-            }
-
-            var defaultClass = gosuArena.factories.modifiers.default.create();
-
-            return override(defaultClass);
-        };
-
+        gosuArena.factories.modifiers.initialize(modifierConfig);
     }
 
     var addBot = gosuArena.specs.game.addBot;
 
     beforeEach(function () {
+
+        jasmine.addMatchers(gosuArena.specs.matchers);
 
         defaultBotOptions = gosuArena.factories.createSafeBotOptions();
         defaultClassOptions = gosuArena.factories.modifiers.default.create();
@@ -51,15 +40,14 @@ describe("Game", function () {
     });
 
     afterEach(function() {
-        gosuArena.factories.modifiers.create = originalModifierFactory;
         gosuArena.specs.game.cleanup();
     });
 
     describe("Bot", function() {
 
-        it("with default setup has default properties", function() {
+        it("with invalid class name has default properties", function() {
             addBot({
-                botClass: "default"
+                botClass: "invalidClassName"
             });
 
             startGame();
@@ -71,63 +59,18 @@ describe("Game", function () {
             expect(bot.damageReductionFactor).toBe(defaultBotOptions.initialDamageReductionFactor);
         });
 
-        it("with tank class is configured according to the tank class factors", function() {
-            addBot({
-                botClass: "tank"
-            });
+        it("with increased damage reduction takes less damage", function () {
 
-            startGame();
-
-            var bot = arenaState.bots[0];
-
-            expect(bot.health).toBe(defaultBotOptions.initialHealthPoints * tankClassOptions.initialHealthPointFactor);
-            expect(bot.movementSpeed).toBe(defaultBotOptions.initialMovementSpeed * tankClassOptions.movementSpeedFactor);
-            expect(bot.damageReductionFactor).toBe(defaultBotOptions.initialDamageReductionFactor * tankClassOptions.damageReductionFactor);
-        });
-
-        it("with increased movement speed from class moves faster", function () {
-
-            stubClassFactory({
-                fast: function (factors) {
-                    factors.movementSpeedFactor = 2;
-                    return factors;
+            initializeModifiers([
+                {
+                    "type": "class",
+                    "id": "armored",
+                    "name": "Armor name",
+                    "modifiers": {
+                        "damageReductionFactor": 2
+                    }
                 }
-            });
-
-            addBot({
-                startPosition: { x: 0, y: 0, angle: 270 }, // aiming west
-                tick: function (actionQueue) {
-                    actionQueue.forward();
-                },
-                botClass: "fast"
-            });
-
-            addBot({
-                startPosition: { x: 0, y: 100, angle: 270 }, // aiming west
-                tick: function (actionQueue, status) {
-                    actionQueue.forward();
-                }
-            });
-
-            startGame();
-
-            var fastBot = arenaState.bots[0];
-            var normalBot = arenaState.bots[1];
-
-            clock.doTick();
-
-            expect(fastBot.position().x).toBeGreaterThan(0);
-            expect(fastBot.position().x).toBe(normalBot.position().x * 2);
-        });
-
-        it("with increased damage reduction from class takes less damage", function () {
-
-            stubClassFactory({
-                armored: function (factors) {
-                    factors.damageReductionFactor = 2;
-                    return factors;
-                }
-            });
+            ]);
 
             var hasNormalBotFired = false,
                 hasArmoredBotFired = false,
@@ -193,12 +136,16 @@ describe("Game", function () {
 
         it("with increased weapon damage output deals more damage", function() {
 
-            stubClassFactory({
-                highDamage: function(factors) {
-                    factors.weaponDamageFactor = 2;
-                    return factors;
+            initializeModifiers([
+                {
+                    "type": "class",
+                    "id": "highDamage",
+                    "name": "Speed bosters",
+                    "modifiers": {
+                        "weaponDamageFactor": 2
+                    }
                 }
-            });
+            ]);
 
             var hasNormalBotFired = false,
                 hasHighDamageBotFired = false,
@@ -262,14 +209,16 @@ describe("Game", function () {
             expect(normalBotDamageTaken).toBe(highDamageBotDamageTaken * 2);
         });
 
-        it("equipped with speed booster equipment moves faster", function() {
+        it("with increased movement speed moves faster", function() {
 
-            stubClassFactory({
-                boosters: function(factors) {
-                    factors.movementSpeedFactor = 2;
-                    return factors;
+            initializeModifiers([ {
+                "type": "bonusEquipment",
+                "id": "boosters",
+                "name": "Speed bosters",
+                "modifiers": {
+                    "movementSpeedFactor": 2
                 }
-            });
+            }]);
 
             addBot({
                 startPosition: { x: 0, y: 0, angle: 270 }, // aiming west
@@ -295,6 +244,65 @@ describe("Game", function () {
 
             expect(fastBot.position().x).toBeGreaterThan(0);
             expect(fastBot.position().x).toBe(normalBot.position().x * 2);
+        });
+
+        it("is assigned modifiers accordng to the specified class and equipment", function() {
+            initializeModifiers([{
+                "type": "class",
+                "id": "tank",
+                "name": "tank class name",
+                "modifiers": {
+                    "movementSpeedFactor": 0.5,
+                    "damageReductionFactor": 2,
+                    "weaponDamageFactor": 2
+                }
+            }, {
+                "type": "class",
+                "id": "ninja",
+                "name": "ninja class name",
+                "modifiers": {
+                    "movementSpeedFactor": 2,
+                    "damageReductionFactor": 0.5,
+                    "weaponDamageFactor": 1
+                }
+            }, {
+                "type": "bonusEquipment",
+                "id": "boosters",
+                "name": "Speed bosters",
+                "modifiers": {
+                    "movementSpeedFactor": 2
+                }
+            }, {
+                "type": "bonusEquipment",
+                "id": "armor",
+                "name": "Armor name",
+                "modifiers": {
+                    "damageReductionFactor": 2
+                }
+            }, {
+                "type": "weapon",
+                "id": "superCannons",
+                "name": "Super cannons",
+                "modifiers": {
+                    "weaponDamageFactor": 2
+                }
+            }]);
+
+            var options = gosuArena.factories.createSafeBotOptions({
+                botClass: "tank",
+                equipment: ["boosters", "armor"]
+            });
+
+            expect(options.staticModifiers.modifiers.length).toBe(3);
+            expect(options.staticModifiers.modifiers).toContainElementMatching(function (m) {
+                return m.id === "tank";
+            });
+            expect(options.staticModifiers.modifiers).toContainElementMatching(function (m) {
+                return m.id === "boosters";
+            });
+            expect(options.staticModifiers.modifiers).toContainElementMatching(function (m) {
+                return m.id === "armor";
+            });
         });
     });
 });

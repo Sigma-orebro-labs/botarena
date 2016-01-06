@@ -608,6 +608,13 @@
     <Content Include="Scripts\angular\services\matchSetupService.js" />
     <Content Include="Scripts\angular\services\notificationService.js" />
     <Content Include="Scripts\angular\services\authService.js" />
+    <None Include="Scripts\game\modifiers\modifierConfig.json" />
+    <Content Include="Scripts\game\modifiers\equipment\speedRounds.js" />
+    <Content Include="Scripts\game\modifiers\equipment\armorPiercingRounds.js" />
+    <Content Include="Scripts\game\modifiers\equipment\heavyArmor.js" />
+    <Content Include="Scripts\game\modifiers\equipment\standardCannon.js" />
+    <Content Include="Scripts\game\modifiers\equipment\speedCannon.js" />
+    <Content Include="Scripts\game\modifiers\equipment\heavyCannon.js" />
     <Content Include="Scripts\lib\angular\angular-animate.js" />
     <Content Include="Scripts\lib\angular\angular-animate.min.js" />
     <Content Include="Scripts\lib\angular\angular-ui-router.js" />
