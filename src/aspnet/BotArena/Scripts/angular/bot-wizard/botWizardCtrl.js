@@ -7,6 +7,58 @@
             name: ""
         };
 
+        $scope.botInitialStats = {
+            hp: 100,
+            armor: 1,
+            damage: 10,
+            firingspeed: 25,
+            speed: 1
+        }
+
+        $scope.barWidths = function () {
+
+            var baseFactor = 50; // percent
+
+            return {
+                hp: baseFactor * $scope.botStatsMultiplier().hp,
+                armor: baseFactor * $scope.botStatsMultiplier().armor,
+                damage: baseFactor * $scope.botStatsMultiplier().damage,
+                firingspeed: baseFactor * $scope.botStatsMultiplier().firingspeed,
+                speed: baseFactor * $scope.botStatsMultiplier().speed
+            }
+        }
+
+        $scope.botStatsMultiplier = function() {
+
+            var currentMultipliers = {};
+
+            if ($scope.bot.className === 'Tank') {
+                currentMultipliers.hp = 1.5;
+                currentMultipliers.armor = 1.5;
+                currentMultipliers.damage = 2;
+                currentMultipliers.firingspeed = 2;
+                currentMultipliers.speed = 0.5;
+            } else {
+                currentMultipliers.hp = 1;
+                currentMultipliers.armor = 1;
+                currentMultipliers.damage = 1;
+                currentMultipliers.firingspeed = 1;
+                currentMultipliers.speed = 1;
+            }
+
+            return currentMultipliers;
+        }
+
+        $scope.botStats = function() {
+            return {
+                hp: $scope.botInitialStats.hp * $scope.botStatsMultiplier().hp,
+                armor: $scope.botInitialStats.armor * $scope.botStatsMultiplier().armor,
+                damage: $scope.botInitialStats.damage * $scope.botStatsMultiplier().damage,
+                firingspeed: $scope.botInitialStats.firingspeed * $scope.botStatsMultiplier().firingspeed,
+                speed: $scope.botInitialStats.speed * $scope.botStatsMultiplier().speed
+            }
+        }
+
         $scope.user = {
             email: ""
         }

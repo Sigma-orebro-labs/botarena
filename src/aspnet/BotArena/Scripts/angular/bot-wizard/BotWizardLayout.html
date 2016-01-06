@@ -2,11 +2,27 @@
     <div class="col-md-6 full-height">
         <div class="step-wrapper menu-pane" ui-view></div>
         <div class="bot-wizard-stats menu-pane">
-            <span> Class: {{bot.className }} </span><br />
-            <span> Equipment: {{bot.equipment}}</span> <br />
-            <span> Color: {{ bot.color }}</span><br />
-            <span> Name: {{ bot.name }}</span><br />
-            <span> Email: {{user.email}}</span><br />
+            <!--<span> Class: {{bot.className }} </span><br/>
+            <span> Equipment: {{bot.equipment}}</span> <br/>
+            <span> Color: {{ bot.color }}</span><br/>
+            <span> Name: {{ bot.name }}</span><br/>
+            <span> Email: {{user.email}}</span><br/>-->
+            <div class="row">
+                <div class="col-md-4 stats-labels">
+                    <label>HP</label>
+                    <label>Armor</label>
+                    <label>Damage</label>
+                    <label>Firing speed</label>
+                    <label>Speed</label>
+                </div>
+                <div class="col-md-8">
+                    <div class="stats-bar" style="width: {{barWidths().hp}}%"></div>
+                    <div class="stats-bar" style="width: {{barWidths().armor}}%"></div>
+                    <div class="stats-bar" style="width: {{barWidths().damage}}%"></div>
+                    <div class="stats-bar" style="width: {{barWidths().firingspeed}}%"></div>
+                    <div class="stats-bar" style="width: {{barWidths().speed}}%"></div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-md-6 full-height">
