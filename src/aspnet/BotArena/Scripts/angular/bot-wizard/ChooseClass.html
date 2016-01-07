@@ -1,10 +1,14 @@
 ﻿<div class="step-choose-class">
     <h1>Choose Class</h1>
-    <button class="btn-lg" ng-click="tank()">Tank</button>
-    <button class="btn-lg" ng-click="ninja()">Ninja</button>
-    <button class="btn-lg" ng-click="normal()">Normal</button>
+
+    <ul class="modifier-list">
+        <li ng-repeat="botClass in botClasses" ng-click="selectClass(botClass)" ng-class="isSelected(botClass) ? 'selected' : ''">
+            <span class="title">{{botClass.name}}</span>
+            <span class="description">{{botClass.description}}</span>
+        </li>
+    </ul>
 
     <nav>
-        <a class="btn-next" ui-sref="bot-wizard.choose-equipment">Next <i class="fa fa-arrow-right"></i></a>
+        <a class="btn-next" ui-sref="bot-wizard.choose-weapon">Next <i class="fa fa-arrow-right"></i></a>
     </nav>
 </div>

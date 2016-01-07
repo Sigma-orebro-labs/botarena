@@ -108,7 +108,7 @@
     "type": "bonusGear",
     "id": "highDamageAmmo",
     "name": "Armor piercing rounds",
-    "description": "Sails sewn together with the triple-stich method are stronger, and generate more speed than normal sails.",
+    "description": "Cannon amunition made to penetrate the armor of enemy ships and cause massive damage.",
     "modifiers": {
       "weaponDamageFactor": 1.5
     }

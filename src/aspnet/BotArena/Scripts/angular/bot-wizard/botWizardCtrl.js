@@ -28,23 +28,25 @@
             }
         }
 
-        $scope.botStatsMultiplier = function() {
+        $scope.botStatsMultiplier = function () {
 
-            var currentMultipliers = {};
+            var userOptions = {
+                botClass: $scope.bot.className,
+                equipment: [
+                    $scope.bot.weapon,
+                    $scope.bot.equipment
+                ]
+            };
 
-            if ($scope.bot.className === 'Tank') {
-                currentMultipliers.hp = 1.5;
-                currentMultipliers.armor = 1.5;
-                currentMultipliers.damage = 2;
-                currentMultipliers.firingspeed = 2;
-                currentMultipliers.speed = 0.5;
-            } else {
-                currentMultipliers.hp = 1;
-                currentMultipliers.armor = 1;
-                currentMultipliers.damage = 1;
-                currentMultipliers.firingspeed = 1;
-                currentMultipliers.speed = 1;
-            }
+            var botOptions = gosuArena.factories.createSafeBotOptions(userOptions);
+
+            var currentMultipliers = {
+                hp: botOptions.staticModifiers.calculateHealthPointFactor(),
+                armor: botOptions.staticModifiers.calculateDamageReductionFactor(),
+                damage: botOptions.staticModifiers.calculateWeaponDamageFactor(),
+                firingspeed: 1, // TODO: implement modifier support for weapon cooldown
+                speed: botOptions.staticModifiers.calculateMovementSpeedFactor()
+            };
 
             return currentMultipliers;
         }

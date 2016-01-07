@@ -12,6 +12,10 @@ gosuArena.factories.modifiers = gosuArena.factories.modifiers || {};
         sharedState.config = config;
     }
 
+    gosuArena.factories.modifiers.getCurrentConfig = function() {
+        return gosuArena.util.deepCopy(sharedState.config);
+    };
+
     gosuArena.factories.modifiers.create = function(modifierId) {
         var modifiers = sharedState.config;
 

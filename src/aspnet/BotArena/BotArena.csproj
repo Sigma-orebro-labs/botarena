@@ -590,7 +590,9 @@
     <Content Include="Scripts\angular\bot-wizard\chooseClassCtrl.js" />
     <Content Include="Scripts\angular\bot-wizard\ChooseColor.html" />
     <Content Include="Scripts\angular\bot-wizard\chooseColorCtrl.js" />
+    <Content Include="Scripts\angular\bot-wizard\ChooseWeapon.html" />
     <Content Include="Scripts\angular\bot-wizard\ChooseEquipment.html" />
+    <Content Include="Scripts\angular\bot-wizard\chooseWeaponCtrl.js" />
     <Content Include="Scripts\angular\bot-wizard\chooseEquipmentCtrl.js" />
     <Content Include="Scripts\angular\bot-wizard\EnterBotName.html" />
     <Content Include="Scripts\angular\bot-wizard\enterBotNameCtrl.js" />
@@ -611,6 +613,7 @@
     <Content Include="Scripts\angular\services\notificationService.js" />
     <Content Include="Scripts\angular\services\authService.js" />
     <None Include="Scripts\game\modifiers\modifierConfig.json" />
+    <Content Include="Scripts\infrastructure\util.js" />
     <Content Include="Scripts\infrastructure\modifierConfigLoader.js" />
     <Content Include="Scripts\lib\angular\angular-animate.js" />
     <Content Include="Scripts\lib\angular\angular-animate.min.js" />

@@ -1,0 +1,17 @@
+﻿<div>
+    <h1>Pick Weapon</h1>
+
+    <ul class="modifier-list">
+        <li ng-repeat="weapon in availableWeapons" ng-click="selectWeapon(weapon)" ng-class="isSelected(weapon) ? 'selected' : ''">
+            <span class="title">{{weapon.name}}</span>
+            <span class="description">{{weapon.description}}</span>
+        </li>
+    </ul>
+
+    <nav>
+        <a class="btn-previous" ui-sref="bot-wizard.choose-class"><i class="fa fa-arrow-left"/> Previous</a>
+        <a class="btn-next" ui-sref="bot-wizard.choose-equipment">Next <i class="fa fa-arrow-right"/></a>
+    </nav>
+</div>
+
+

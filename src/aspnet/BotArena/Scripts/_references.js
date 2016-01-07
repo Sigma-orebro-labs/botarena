@@ -1,4 +1,5 @@
 ﻿///<reference path="~/Scripts/lib/jasmine-2.3.4/jasmine.js" />
+///<reference path="~/Scripts/lib/jquery/jquery-2.0.0.min.js" />
 ///<reference path="~/Scripts/gosu/math/math.js" />
 ///<reference path="~/Scripts/gosu/math/point.js" />
 ///<reference path="~/Scripts/gosu/math/vector.js" />
@@ -31,3 +32,4 @@
 ///<reference path="~/Scripts/game/specs/ticker.js" />
 ///<reference path="~/Scripts/game/specs/gameSpecsSetup.js" />
 ///<reference path="~/Scripts/infrastructure/url.js" />
+///<reference path="~/Scripts/infrastructure/util.js" />

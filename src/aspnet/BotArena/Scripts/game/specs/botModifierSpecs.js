@@ -4,8 +4,6 @@ describe("Game", function () {
     var clock = null;
 
     var defaultBotOptions;
-    var defaultClassOptions;
-    var tankClassOptions;
 
     var arenaState = null;
 
@@ -301,6 +299,43 @@ describe("Game", function () {
             expect(options.staticModifiers.modifiers).toContainElementMatching(function (m) {
                 return m.id === "armor";
             });
+        });
+
+        it("changing modifier collection retieved from the modifier factory does not change the orignal config", function () {
+
+            var originalConfig = [
+                {
+                    "type": "class",
+                    "id": "tank",
+                    "name": "tank class name",
+                    "modifiers": {
+                        "movementSpeedFactor": 0.5,
+                        "damageReductionFactor": 2,
+                        "weaponDamageFactor": 2
+                    }
+                }, {
+                    "type": "class",
+                    "id": "ninja",
+                    "name": "ninja class name",
+                    "modifiers": {
+                        "movementSpeedFactor": 2,
+                        "damageReductionFactor": 0.5,
+                        "weaponDamageFactor": 1
+                    }
+                }
+            ];
+
+            initializeModifiers(originalConfig);
+
+            var modifierConfig = gosuArena.factories.modifiers.getCurrentConfig();
+
+            expect(modifierConfig.length).toBe(2);
+
+            modifierConfig[0].type = "some other type";
+            modifierConfig[0].modifiers.movementSpeedFactor = 100;
+
+            expect(originalConfig[0].type).toBe("class");
+            expect(originalConfig[0].modifiers.movementSpeedFactor).toBe(0.5);
         });
     });
 });

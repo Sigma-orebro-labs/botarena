@@ -1,11 +1,15 @@
 ﻿<div>
     <h1>Pick Equipment</h1>
-    <select name="equipmentSelect" id="equipmentSelect" ng-model="bot.equipment">
-        <option ng-repeat="option in equipmentSelect.availableEquipment" value="{{option.name}}">{{option.name}}</option>
-    </select>
+
+    <ul class="modifier-list">
+        <li ng-repeat="equipment in availableEquipment" ng-click="selectEquipment(equipment)" ng-class="isSelected(equipment) ? 'selected' : ''">
+            <span class="title">{{equipment.name}}</span>
+            <span class="description">{{equipment.description}}</span>
+        </li>
+    </ul>
 
     <nav>
-        <a class="btn-previous" ui-sref="bot-wizard.choose-class"><i class="fa fa-arrow-left"/> Previous</a>
+        <a class="btn-previous" ui-sref="bot-wizard.choose-weapon"><i class="fa fa-arrow-left"/> Previous</a>
         <a class="btn-next" ui-sref="bot-wizard.choose-color">Next <i class="fa fa-arrow-right"/></a>
     </nav>
 </div>
