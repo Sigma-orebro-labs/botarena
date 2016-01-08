@@ -12,7 +12,8 @@
             armor: 1,
             damage: 10,
             firingspeed: 25,
-            speed: 1
+            speed: 1,
+            rotationSpeed: 1
         }
 
         $scope.barWidths = function () {
@@ -24,7 +25,8 @@
                 armor: baseFactor * $scope.botStatsMultiplier().armor,
                 damage: baseFactor * $scope.botStatsMultiplier().damage,
                 firingspeed: baseFactor * $scope.botStatsMultiplier().firingspeed,
-                speed: baseFactor * $scope.botStatsMultiplier().speed
+                speed: baseFactor * $scope.botStatsMultiplier().speed,
+                rotationSpeed: baseFactor * $scope.botStatsMultiplier().rotationSpeed
             }
         }
 
@@ -45,7 +47,8 @@
                 armor: botOptions.staticModifiers.calculateDamageReductionFactor(),
                 damage: botOptions.staticModifiers.calculateWeaponDamageFactor(),
                 firingspeed: 1 / botOptions.staticModifiers.calculateWeaponCooldownTimeFactor(), // Invert the value to go from cooldown time to firing speed
-                speed: botOptions.staticModifiers.calculateMovementSpeedFactor()
+                speed: botOptions.staticModifiers.calculateMovementSpeedFactor(),
+                rotationSpeed: botOptions.staticModifiers.canculateRotationSpeedFactor()
             };
 
             return currentMultipliers;
@@ -57,7 +60,8 @@
                 armor: $scope.botInitialStats.armor * $scope.botStatsMultiplier().armor,
                 damage: $scope.botInitialStats.damage * $scope.botStatsMultiplier().damage,
                 firingspeed: $scope.botInitialStats.firingspeed * $scope.botStatsMultiplier().firingspeed,
-                speed: $scope.botInitialStats.speed * $scope.botStatsMultiplier().speed
+                speed: $scope.botInitialStats.speed * $scope.botStatsMultiplier().speed,
+                rotationSpeed: $scope.botInitialStats.rotationSpeed * $scope.botStatsMultiplier().rotationSpeed
             }
         }
 
