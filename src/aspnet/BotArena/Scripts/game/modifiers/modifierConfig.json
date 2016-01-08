@@ -41,7 +41,8 @@
       "weaponCooldownTimeFactor": 1,
       "bulletSpeedFactor": 1,
       "movementSpeedFactor": 1.5,
-      "actionsPerRoundFactor": 1
+      "actionsPerRoundFactor": 1,
+      "rotationSpeedFactor":  2
     }
   },
   {
@@ -56,7 +57,8 @@
       "weaponCooldownTimeFactor": 2,
       "bulletSpeedFactor": 1,
       "movementSpeedFactor": 0.5,
-      "actionsPerRoundFactor": 1
+      "actionsPerRoundFactor": 1,
+      "rotationSpeedFactor": 0.5
     }
   },
   {

@@ -1,96 +1,9 @@
 ﻿var gosuArena = gosuArena || {};
 gosuArena.factories = gosuArena.factories || {};
 
-gosuArena.factories.createActionQueue = function (collisionDetector) {
+gosuArena.factories.createActionQueue = function (collisionDetector, bot) {
 
     var actions = [];
-
-    function north(count) {
-        enqueueAction(function (bot) {
-            changePosition(bot, function (b) {
-                b.moveNorth();
-            });
-        }, count);
-    }
-
-    function south(count) {
-        enqueueAction(function (bot) {
-            changePosition(bot, function (b) {
-                b.moveSouth();
-            });
-        }, count);
-    }
-
-    function west(count) {
-        enqueueAction(function (bot) {
-            changePosition(bot, function (b) {
-                b.moveWest();
-            });
-        }, count);
-    }
-
-    function east(count) {
-        enqueueAction(function(bot) {
-            changePosition(bot, function (b) {
-                b.moveEast();
-            });
-        }, count);
-    }
-
-    function turn(degrees) {
-        var increment = degrees >= 0 ? 1 : -1;
-        var iterationCount = Math.abs(degrees);
-
-        enqueueAction(function (bot) {
-            changePosition(bot, function(b) {
-                b.turn(increment);
-            });
-        }, iterationCount);
-    }
-
-    function forward(count) {
-        enqueueAction(function (bot) {
-            changePosition(bot, function(b) {
-                b.moveForward();
-            });
-        }, count);
-    }
-
-    function back(count) {
-        enqueueAction(function (bot) {
-            changePosition(bot, function(b) {
-                b.moveBack();
-            });
-        }, count);
-    }
-
-    function left(count) {
-        enqueueAction(function (bot) {
-            changePosition(bot, function(b) {
-                b.moveLeft();
-            });
-        }, count);
-    }
-
-    function right(count) {
-        enqueueAction(function (bot) {
-            changePosition(bot, function(b) {
-                b.moveRight();
-            });
-        }, count);
-    }
-
-    function isEmpty() {
-        return actions.length <= 0;
-    }
-
-    function length() {
-        return actions.length;
-    }
-
-    function clear() {
-        actions.length = 0;
-    }
 
     function dequeueAction() {
         return actions.shift();
@@ -104,16 +17,7 @@ gosuArena.factories.createActionQueue = function (collisionDetector) {
         }
     }
 
-    function performNext(bot) {
-        if (isEmpty()) {
-            return;
-        }
-
-        var nextAction = dequeueAction();
-        nextAction(bot);
-    }
-
-    function changePosition(bot, modifierFunction) {
+    function changePosition(modifierFunction) {
 
         bot.snapshotPosition();
 
@@ -135,7 +39,103 @@ gosuArena.factories.createActionQueue = function (collisionDetector) {
         }
     }
 
-    function fire(bot) {
+    function north(count) {
+        enqueueAction(function () {
+            changePosition(function (b) {
+                b.moveNorth();
+            });
+        }, count);
+    }
+
+    function south(count) {
+        enqueueAction(function () {
+            changePosition(function (b) {
+                b.moveSouth();
+            });
+        }, count);
+    }
+
+    function west(count) {
+        enqueueAction(function () {
+            changePosition(function (b) {
+                b.moveWest();
+            });
+        }, count);
+    }
+
+    function east(count) {
+        enqueueAction(function() {
+            changePosition(function (b) {
+                b.moveEast();
+            });
+        }, count);
+    }
+
+    function turn(degrees) {
+        var increment = degrees >= 0 ? bot.rotationSpeedInDegrees : -bot.rotationSpeedInDegrees;
+        var iterationCount = Math.abs(degrees);
+
+        enqueueAction(function () {
+            changePosition(function(b) {
+                b.turn(increment);
+            });
+        }, iterationCount);
+    }
+
+    function forward(count) {
+        enqueueAction(function () {
+            changePosition(function(b) {
+                b.moveForward();
+            });
+        }, count);
+    }
+
+    function back(count) {
+        enqueueAction(function () {
+            changePosition(function(b) {
+                b.moveBack();
+            });
+        }, count);
+    }
+
+    function left(count) {
+        enqueueAction(function () {
+            changePosition(function(b) {
+                b.moveLeft();
+            });
+        }, count);
+    }
+
+    function right(count) {
+        enqueueAction(function () {
+            changePosition(function(b) {
+                b.moveRight();
+            });
+        }, count);
+    }
+
+    function isEmpty() {
+        return actions.length <= 0;
+    }
+
+    function length() {
+        return actions.length;
+    }
+
+    function clear() {
+        actions.length = 0;
+    }
+
+    function performNext() {
+        if (isEmpty()) {
+            return;
+        }
+
+        var nextAction = dequeueAction();
+        nextAction(bot);
+    }
+
+    function fire() {
         enqueueAction(function (b) {
             b.fire();
         });

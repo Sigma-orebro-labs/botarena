@@ -12,6 +12,7 @@ gosuArena.factories.modifiers.default.create = function () {
         bulletSpeedFactor: 1,
         actionsPerRoundFactor: 1,
         movementSpeedFactor: 1,
-        sizeFactor: 1
+        sizeFactor: 1,
+        rotationSpeedFactor: 1
     };
 };

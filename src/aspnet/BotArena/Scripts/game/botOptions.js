@@ -18,7 +18,7 @@ gosuArena.factories.createSafeBotOptions = function (userOptions, isTraining) {
     var actionsPerRound = 2;
     var movementSpeed = 1;
     var initialDamageReductionFactor = 1;
-    var weaponCooldownTimeFactor = 1;
+    var rotationSpeedInDegrees = 1;
 
     function isValidColor(value) {
         return value && /^#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/.test(value);
@@ -92,6 +92,7 @@ gosuArena.factories.createSafeBotOptions = function (userOptions, isTraining) {
         initialHealthPoints: initialHealthPoints,
         initialMovementSpeed: movementSpeed,
         initialDamageReductionFactor: initialDamageReductionFactor,
+        rotationSpeedInDegrees: rotationSpeedInDegrees,
         botClass: userOptions.botClass,
         staticModifiers: staticModifiers
     };

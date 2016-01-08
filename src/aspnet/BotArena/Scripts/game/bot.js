@@ -7,8 +7,6 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
     var killedCallbacks = [];
     var collisionCallbacks = [];
     var hitByBulletCallbacks = [];
-    var actionQueue = gosuArena.factories.createActionQueue(collisionDetector);
-    var userActionQueue = gosuArena.factories.createUserActionQueue(actionQueue);
 
     var staticModifiers = options.staticModifiers;
 
@@ -42,6 +40,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         health: options.initialHealthPoints * staticModifiers.calculateHealthPointFactor(),
         movementSpeed: options.initialMovementSpeed * staticModifiers.calculateMovementSpeedFactor(),
         damageReductionFactor: options.initialDamageReductionFactor * staticModifiers.calculateDamageReductionFactor(),
+        rotationSpeedInDegrees: options.rotationSpeedInDegrees * staticModifiers.canculateRotationSpeedFactor(),
         weapon: weapon,
         sight: {
             width: options.sightWidth,
@@ -50,6 +49,9 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
     };
 
     var bot = gosuArena.worldObject.create(properties);
+
+    var actionQueue = gosuArena.factories.createActionQueue(collisionDetector, bot);
+    var userActionQueue = gosuArena.factories.createUserActionQueue(actionQueue);
 
     var augmentations = {
         cloak: gosuArena.factories.augmentations.createCloak(properties)

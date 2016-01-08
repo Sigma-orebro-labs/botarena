@@ -310,6 +310,82 @@ describe("Game", function () {
             expect(normalBotHitCount <= rapidFireBotHitCount * 2).toBeTruthy();
         });
 
+        it("with increased rotation speed rotates more in one round (when rotating a positive angle)", function() {
+
+            initializeModifiers([
+                {
+                    "type": "class",
+                    "id": "fastRotation",
+                    "name": "class name",
+                    "modifiers": {
+                        "rotationSpeedFactor": 2
+                    }
+                }
+            ]);
+
+            addBot({
+                startPosition: { x: 25, y: 25, angle: 0 },
+                tick: function(actionQueue, status) {
+                    actionQueue.turn(100);
+                }
+            });
+
+            addBot({
+                startPosition: { x: 100, y: 100, angle: 0 },
+                tick: function(actionQueue, status) {
+                    actionQueue.turn(100);
+                },
+                botClass: "fastRotation"
+            });
+
+            startGame();
+
+            var normalBot = arenaState.bots[0];
+            var rotationBot = arenaState.bots[1];
+
+            clock.doTick();
+
+            expect(rotationBot.angle).toBeGreaterThan(normalBot.angle);
+        });
+
+        it("with increased rotation speed rotates more in one round (when rotating a negative angle)", function () {
+
+            initializeModifiers([
+                {
+                    "type": "class",
+                    "id": "fastRotation",
+                    "name": "class name",
+                    "modifiers": {
+                        "rotationSpeedFactor": 2
+                    }
+                }
+            ]);
+
+            addBot({
+                startPosition: { x: 25, y: 25, angle: 90 },
+                tick: function (actionQueue, status) {
+                    actionQueue.turn(-100);
+                }
+            });
+
+            addBot({
+                startPosition: { x: 100, y: 100, angle: 90 },
+                tick: function (actionQueue, status) {
+                    actionQueue.turn(-100);
+                },
+                botClass: "fastRotation"
+            });
+
+            startGame();
+
+            var normalBot = arenaState.bots[0];
+            var rotationBot = arenaState.bots[1];
+
+            clock.doTick();
+
+            expect(rotationBot.angle).toBeLessThan(normalBot.angle);
+        });
+
         it("is assigned modifiers accordng to the specified class and equipment", function() {
             initializeModifiers([{
                 "type": "class",
