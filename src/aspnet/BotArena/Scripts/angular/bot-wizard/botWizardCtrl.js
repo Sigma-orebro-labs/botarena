@@ -44,7 +44,7 @@
                 hp: botOptions.staticModifiers.calculateHealthPointFactor(),
                 armor: botOptions.staticModifiers.calculateDamageReductionFactor(),
                 damage: botOptions.staticModifiers.calculateWeaponDamageFactor(),
-                firingspeed: 1, // TODO: implement modifier support for weapon cooldown
+                firingspeed: 1 / botOptions.staticModifiers.calculateWeaponCooldownTimeFactor(), // Invert the value to go from cooldown time to firing speed
                 speed: botOptions.staticModifiers.calculateMovementSpeedFactor()
             };
 
