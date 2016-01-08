@@ -15,7 +15,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
     var weapon = {
         width: options.weaponWidth,
         height: options.weaponHeight,
-        cooldownTime: options.weaponCooldownTime,
+        cooldownTime: options.weaponCooldownTime * staticModifiers.calculateWeaponCooldownTimeFactor(),
         cooldownTimeLeft: 0,
         baseDamage: options.weaponDamage,
         offsetDistanceFromCenter: options.weaponOffsetDistanceFromCenter

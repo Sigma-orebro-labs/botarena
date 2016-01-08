@@ -28,6 +28,7 @@ describe("bot", function () {
             calculateMovementSpeedFactor: function () { return 1; },
             calculateDamageReductionFactor: function () { return 1; },
             calculateWeaponDamageFactor: function () { return 1; },
+            calculateWeaponCooldownTimeFactor: function () { return 1; }
         };
 
         return options;

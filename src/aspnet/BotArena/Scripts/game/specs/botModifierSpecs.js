@@ -242,6 +242,74 @@ describe("Game", function () {
             expect(fastBot.position().x).toBe(normalBot.position().x * 2);
         });
 
+        it("with reduced weapon cooldown fires more often", function() {
+
+            initializeModifiers([
+                {
+                    "type": "weapon",
+                    "id": "rapidFireCannons",
+                    "name": "Rapid fire cannons",
+                    "modifiers": {
+                        "weaponCooldownTimeFactor": 0.5
+                    }
+                }
+            ]);
+
+            var normalBotHitCount = 0,
+                rapidFireBotHitCount = 0,
+                normalBotFiredBulletCount = 0,
+                rapidFireBotFiredBulletCount = 0;
+
+            // Let the two bots fire until the fast bot has fired 6 times. The slow one should have fired 3 times by then.
+
+            addBot({
+                startPosition: { x: 0, y: 0, angle: 270 }, // aiming east
+                tick: function(actionQueue, status) {
+
+                    if (status.canFire()) {
+                        actionQueue.fire();
+                        normalBotFiredBulletCount++;
+                    }
+                },
+                onHitByBullet: function (actionQueue, status) {
+                    normalBotHitCount++;
+                }
+            });
+
+            addBot({
+                startPosition: { x: 100, y: 0, angle: 90 }, // aiming west
+                tick: function(actionQueue, status) {
+
+                    if (status.canFire()) {
+                        actionQueue.fire();
+                        rapidFireBotFiredBulletCount++;
+                    }
+                },
+                onHitByBullet: function (actionQueue, status) {
+                    rapidFireBotHitCount++;
+                },
+                botClass: "rapidFireCannons"
+            });
+
+            startGame();
+
+            // Add a max of 1000 rounds to avoid infinite loops if the code breaks
+            for (var i = 0; i < 1000 && rapidFireBotFiredBulletCount < 8; i++) {
+                clock.doTick();
+            }
+
+            expect(normalBotFiredBulletCount).toBe(4);
+            expect(rapidFireBotFiredBulletCount).toBe(8);
+
+            // Since the rapid fire bot has fired twice as many bullets, more bullets 
+            // should have hit the normal bot
+            expect(rapidFireBotHitCount).toBeGreaterThan(0);
+
+            // One bullet will not have reached the normal bot since we break when the last bullet was just fired
+            expect(normalBotHitCount >= (rapidFireBotHitCount * 2) - 1).toBeTruthy();
+            expect(normalBotHitCount <= rapidFireBotHitCount * 2).toBeTruthy();
+        });
+
         it("is assigned modifiers accordng to the specified class and equipment", function() {
             initializeModifiers([{
                 "type": "class",

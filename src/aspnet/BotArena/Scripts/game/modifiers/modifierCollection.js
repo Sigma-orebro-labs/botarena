@@ -28,6 +28,9 @@ gosuArena.factories.modifiers.createModifierCollection = function (modifiers) {
         },
         calculateWeaponDamageFactor: function () {
             return calculateFactor(function (x) { return x.modifiers.weaponDamageFactor; });
+        },
+        calculateWeaponCooldownTimeFactor: function () {
+            return calculateFactor(function (x) { return x.modifiers.weaponCooldownTimeFactor; });
         }
     };
 };

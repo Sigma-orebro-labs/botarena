@@ -1070,19 +1070,7 @@ describe("Game", function () {
             });
         });
 
-        // Wrap the creation of bot options so that we can modify the default
-        // values without messing directly with the internal state of the engine
-        // and without having to reimplement the whole createSafeBotOptions
-        var defaultCreateSafeBotOptions = gosuArena.factories.createSafeBotOptions;
-
-        gosuArena.factories.createSafeBotOptions = function (userOptions, isTraining) {
-            var options = defaultCreateSafeBotOptions(userOptions, isTraining);
-
-            options.weaponDamage = 50;
-            options.weaponCooldownTime = 1;
-
-            return options;
-        }; // This bot spawns aiming directly at the two other bots, which are
+        // This bot spawns aiming directly at the two other bots, which are
         // in a straight westward line.
         gosuArena.initiateBotRegistration({
             id: 3,
@@ -1162,19 +1150,7 @@ describe("Game", function () {
             });
         });
 
-        // Wrap the creation of bot options so that we can modify the default
-        // values without messing directly with the internal state of the engine
-        // and without having to reimplement the whole createSafeBotOptions
-        var defaultCreateSafeBotOptions = gosuArena.factories.createSafeBotOptions;
-
-        gosuArena.factories.createSafeBotOptions = function (userOptions, isTraining) {
-            var options = defaultCreateSafeBotOptions(userOptions, isTraining);
-
-            options.weaponDamage = 50;
-            options.weaponCooldownTime = 1;
-
-            return options;
-        }; // This bot spawns aiming directly at the two other bots, which are
+        // This bot spawns aiming directly at the two other bots, which are
         // in a straight westward line.
         gosuArena.initiateBotRegistration({
             id: 3,
@@ -1238,19 +1214,7 @@ describe("Game", function () {
             });
         });
 
-        // Wrap the creation of bot options so that we can modify the default
-        // values without messing directly with the internal state of the engine
-        // and without having to reimplement the whole createSafeBotOptions
-        var defaultCreateSafeBotOptions = gosuArena.factories.createSafeBotOptions;
-
-        gosuArena.factories.createSafeBotOptions = function (userOptions, isTraining) {
-            var options = defaultCreateSafeBotOptions(userOptions, isTraining);
-
-            options.weaponDamage = 50;
-            options.weaponCooldownTime = 1;
-
-            return options;
-        }; // This bot spawns aiming directly at the two other bots, which are
+        // This bot spawns aiming directly at the two other bots, which are
         // in a straight westward line.
         gosuArena.initiateBotRegistration({
             id: 3,
