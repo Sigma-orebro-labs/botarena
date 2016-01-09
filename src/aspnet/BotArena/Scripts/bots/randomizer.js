@@ -1,5 +1,5 @@
 ﻿gosuArena.register({
-    tick: function(actionQueue) {
+    tick: function (actionQueue) {
         var random = Math.random();
 
         if (actionQueue.length() > 2) {

@@ -16,6 +16,11 @@ gosuArena.factories.augmentations = gosuArena.factories.augmentations || {};
                 name: "Mirage",
                 description: "Using the optical illusions of the sea, the crew can temporarily make the ship undetectable to others.",
                 create: gosuArena.factories.augmentations.createCloak
+            }, {
+                id: "repair",
+                name: "Repair",
+                description: "With a crew trained to do mid-fight ship repairs, the ship can be partially restored when damaged.",
+                create: gosuArena.factories.augmentations.createRepair
             }
         ];
     }

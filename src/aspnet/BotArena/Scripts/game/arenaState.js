@@ -3,6 +3,7 @@ gosuArena.arenaState = gosuArena.arenaState || {};
 
 gosuArena.arenaState.create = function () {
 
+    var botHealthChangedCallbacks = [];
     var botKilledCallbacks = [];
     var botAddedCallbacks = [];
     var botHitByBulletCallbacks = [];
@@ -115,6 +116,10 @@ gosuArena.arenaState.create = function () {
             raiseOnBotHitByBullet(bot);
         });
 
+        bot.onHealthChanged(function () {
+            raiseBotHealthChanged(bot);
+        });
+
         bot.onShotFired(onShotFiredByBot);
 
         arenaState.bots.push(bot);
@@ -139,6 +144,10 @@ gosuArena.arenaState.create = function () {
 
     arenaState.onBotAdded = function (callback) {
         botAddedCallbacks.push(callback);
+    };
+
+    arenaState.onBotHealthChanged = function (callback) {
+        botHealthChangedCallbacks.push(callback);
     };
 
     arenaState.onBotKilled = function (callback) {
@@ -172,6 +181,12 @@ gosuArena.arenaState.create = function () {
     arenaState.onCleared = function (callback) {
         clearedCallbacks.push(callback);
     };
+
+    function raiseBotHealthChanged(bot) {
+        botHealthChangedCallbacks.forEach(function (callback) {
+            callback(bot);
+        });
+    }
 
     function raiseOnBotKilled(bot) {
         botKilledCallbacks.forEach(function (callback) {

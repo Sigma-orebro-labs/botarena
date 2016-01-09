@@ -7,6 +7,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
     var killedCallbacks = [];
     var collisionCallbacks = [];
     var hitByBulletCallbacks = [];
+    var healthChangedCallbacks = [];
 
     var staticModifiers = options.staticModifiers;
 
@@ -22,6 +23,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
     weapon.calculateDamage = function() {
         return weapon.baseDamage * staticModifiers.calculateWeaponDamageFactor();
     };
+    var initialHealthPoints = options.initialHealthPoints * staticModifiers.calculateHealthPointFactor();
 
     var properties = {
         id: options.id,
@@ -37,7 +39,8 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         isVisible: true,
         name: options.name,
         actionsPerRound: options.actionsPerRound,
-        health: options.initialHealthPoints * staticModifiers.calculateHealthPointFactor(),
+        maxHealth: initialHealthPoints,
+        health: initialHealthPoints,
         movementSpeed: options.initialMovementSpeed * staticModifiers.calculateMovementSpeedFactor(),
         damageReductionFactor: options.initialDamageReductionFactor * staticModifiers.calculateDamageReductionFactor(),
         rotationSpeedInDegrees: options.rotationSpeedInDegrees * staticModifiers.canculateRotationSpeedFactor(),
@@ -48,12 +51,21 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         }
     };
 
+    function setHealth(value) {
+        properties.health = value;
+        raiseHealthChanged();
+    }
+
+    var augmentationExposedMethods = {
+        setHealth: setHealth
+    };
+
     var bot = gosuArena.worldObject.create(properties);
 
     var actionQueue = gosuArena.factories.createActionQueue(collisionDetector, bot);
     var userActionQueue = gosuArena.factories.createUserActionQueue(actionQueue);
 
-    var augmentations = gosuArena.factories.augmentations.createAugmentationCollection(options.augmentations, properties);
+    var augmentations = gosuArena.factories.augmentations.createAugmentationCollection(options.augmentations, properties, augmentationExposedMethods);
 
     bot.augmentations = function() {
         return augmentations;
@@ -80,11 +92,15 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
     };
 
     bot.isAlive = function () {
-        return bot.health > 0;
+        return properties.health > 0;
+    }
+
+    bot.health = function() {
+        return properties.health;
     }
 
     bot.healthPercentage = function () {
-        return bot.health / options.initialHealthPoints;
+        return properties.health / options.maxHealth;
     };
 
     bot.weapon.mountingPoint = function() {
@@ -187,6 +203,10 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         killedCallbacks.push(callback);
     }
 
+    bot.onHealthChanged = function(callback) {
+        healthChangedCallbacks.push(callback);
+    }
+
     bot.onHitByBullet = function (callback) {
         hitByBulletCallbacks.push(callback);
     }
@@ -246,7 +266,8 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
             },
             angle: bot.angle,
             direction: bot.direction,
-            health: bot.health,
+            maxHealth: bot.maxHealth,
+            health: properties.health,
             movementSpeed: bot.movementSpeed,
             isVisible: bot.isVisible(),
             actionsPerRound: bot.actionsPerRound,
@@ -395,9 +416,16 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         });
     }
 
-    
+    function raiseHealthChanged() {
+        var status = bot.createStatus();
+
+        healthChangedCallbacks.forEach(function(callback) {
+            callback(status);
+        });
+    }
+
     bot.hitBy = function (bullet) {
-        bot.health -= bullet.damage / bot.damageReductionFactor;
+        properties.health -= bullet.damage / bot.damageReductionFactor;
 
         raiseHitByBulletEvent(bullet);
 

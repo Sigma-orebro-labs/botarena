@@ -50,6 +50,10 @@ gosuArena.factories.createMatchViewModel = function () {
             refresh();
         });
 
+        arenaState.onBotHealthChanged(function (bot) {
+            refresh();
+        });
+
         arenaState.onBotHitByBullet(function (bot) {
             refresh();
         });

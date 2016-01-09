@@ -1,7 +1,11 @@
 ﻿var wall = "north";
 
 gosuArena.register({
-    tick: function(actionQueue, status) {
+    tick: function(actionQueue, status, augmentations) {
+
+        if (status.health <= 75 && !augmentations.repair.isActive()) {
+            augmentations.repair.activate();
+        }
 
         function tryFire() {
             if (status.canFire()) {
@@ -77,6 +81,7 @@ gosuArena.register({
         tryFire();
     },
     options: {
-        color: "#f4f"
+        color: "#f4f",
+        augmentations: ["repair"]
     }
 });

@@ -12,7 +12,7 @@ gosuArena.factories.createBotViewModel = function (bot) {
     });
     
     function refresh() {
-        health(bot.health);
+        health(bot.health());
         isAlive(bot.isAlive());
         name(bot.name);
         color(bot.color);

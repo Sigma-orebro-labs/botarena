@@ -2,10 +2,10 @@
 gosuArena.factories = gosuArena.factories || {};
 gosuArena.factories.augmentations = gosuArena.factories.augmentations || {};
 
-gosuArena.factories.augmentations.createCloak = function(botProperties) {
+gosuArena.factories.augmentations.createRepair = function(botProperties, methods) {
 
     var augmentationProperties = {
-        roundsRemaining: 500,
+        roundsRemaining: 300,
         isActive: false
     };
 
@@ -18,22 +18,21 @@ gosuArena.factories.augmentations.createCloak = function(botProperties) {
     }
 
     function tick() {
-        if (getRoundsRemaining() <= 0) {
-            botProperties.isVisible = true;
-        } else if (augmentationProperties.isActive) {
-            augmentationProperties.roundsRemaining -= 1;
+        var roundsRemaining = getRoundsRemaining();
 
-            if (augmentationProperties.roundsRemaining <= 0) {
-                gosuArena.events.raiseTurnBotSolid(botProperties.id); // raise event only when roundsRemaining "runs out"
+        if (augmentationProperties.isActive) {
+
+            if (roundsRemaining >= 0 && (roundsRemaining % 10) === 0) {
+                methods.setHealth(botProperties.health + 1);
             }
+
+            augmentationProperties.roundsRemaining -= 1;
         }
     }
 
     function activate() {
         if (getRoundsRemaining() > 0) {
             augmentationProperties.isActive = true;
-            botProperties.isVisible = false;
-            gosuArena.events.raiseTurnBotTransparent(botProperties.id);
         }
     }
 

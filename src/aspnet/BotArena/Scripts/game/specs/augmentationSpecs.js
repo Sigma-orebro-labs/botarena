@@ -182,5 +182,62 @@ describe("Game", function () {
             expect(wasTick1Called).toBe(true);
             expect(wasTick2Called).toBe(true);
         });
+
+        it("which is damaged gradually regains health when repair is triggered", function () {
+
+            var isRepairFinished = false;
+            var expectedDamage;
+            var shotsFired = 0;
+            var shotCountToFire = 8;
+            var healthSamplesDuringRepair = [];
+
+            addBot({
+                startPosition: { x: 0, y: 0 },
+                tick: function (actionQueue, status, augmentations) {
+
+                    isRepairFinished = augmentations.repair.roundsRemaining() === 0;
+
+                    if (status.health === status.maxHealth - expectedDamage && !augmentations.repair.isActive()) {
+                        augmentations.repair.activate();
+                    }
+
+                    if (augmentations.repair.isActive()) {
+                        healthSamplesDuringRepair.push(status.health);
+                    }
+                },
+                augmentations: ["repair"]
+            });
+
+            addBot({
+                startPosition: { x: 100, y: 0, angle: 90 }, // aiming west
+                tick: function (actionQueue, status) {
+                    if (status.canFire() && shotsFired < shotCountToFire) {
+                        actionQueue.fire();
+                        shotsFired++;
+                    }
+                }
+            });
+
+            startGame();
+
+            var repairingBot = arenaState.bots[0];
+            var normalBot = arenaState.bots[1];
+
+            expectedDamage = normalBot.weapon.calculateDamage() * shotCountToFire;
+
+            for (var i = 0; i < 1000 && !isRepairFinished; i++) {
+                clock.doTick();
+            }
+
+            expect(repairingBot.health()).toBeLessThan(repairingBot.maxHealth);
+            expect(repairingBot.health()).toBeGreaterThan(repairingBot.maxHealth - expectedDamage);
+            expect(healthSamplesDuringRepair.length).toBeGreaterThan(0);
+
+            for (var j = 1; j < healthSamplesDuringRepair.length; j++) {
+
+                // Make sure the health increases gradualy after the repair has been triggered.
+                expect(healthSamplesDuringRepair[j] >= healthSamplesDuringRepair[j - 1]).toBe(true);
+            }
+        });
     });
 });

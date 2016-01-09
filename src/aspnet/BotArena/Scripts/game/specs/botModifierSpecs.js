@@ -1,6 +1,6 @@
 ///<reference path="~/Scripts/_references.js" />
 
-describe("Game", function () {
+describe("Modifiers", function () {
     var clock = null;
 
     var defaultBotOptions;
@@ -50,7 +50,7 @@ describe("Game", function () {
 
             var bot = arenaState.bots[0];
 
-            expect(bot.health).toBe(defaultBotOptions.initialHealthPoints);
+            expect(bot.health()).toBe(defaultBotOptions.initialHealthPoints);
             expect(bot.movementSpeed).toBe(defaultBotOptions.initialMovementSpeed);
             expect(bot.damageReductionFactor).toBe(defaultBotOptions.initialDamageReductionFactor);
         });
@@ -126,7 +126,7 @@ describe("Game", function () {
             expect(wasNormalBotHit).toBe(true);
             expect(wasArmoredBotHit).toBe(true);
 
-            expect(armoredBot.health).toBeGreaterThan(normalBot.health);
+            expect(armoredBot.health()).toBeGreaterThan(normalBot.health());
             expect(armoredBotDamageTaken).toBe(normalBotDamageTaken / 2);
         });
 
@@ -201,7 +201,7 @@ describe("Game", function () {
             expect(wasNormalBotHit).toBe(true);
             expect(wasHighDamageBotHit).toBe(true);
 
-            expect(highDamageBot.health).toBeGreaterThan(normalBot.health);
+            expect(highDamageBot.health()).toBeGreaterThan(normalBot.health());
             expect(normalBotDamageTaken).toBe(highDamageBotDamageTaken * 2);
         });
 

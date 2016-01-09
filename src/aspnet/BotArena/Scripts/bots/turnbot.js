@@ -1,5 +1,5 @@
 ﻿gosuArena.register({
-    tick: function (actionQueue, status) {
+    tick: function (actionQueue, status, augmentations) {
 
         if (status.seenEnemies.length > 0) {
             actionQueue.clear();
