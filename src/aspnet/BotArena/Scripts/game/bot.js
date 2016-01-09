@@ -8,6 +8,8 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
     var collisionCallbacks = [];
     var hitByBulletCallbacks = [];
     var healthChangedCallbacks = [];
+    var augmentationActivatedCallbacks = [];
+    var augmentationDeactivatedCallbacks = [];
 
     var staticModifiers = options.staticModifiers;
 
@@ -56,8 +58,22 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         raiseHealthChanged();
     }
 
+    function raiseAugmentationActivated(augmentation) {
+        augmentationActivatedCallbacks.forEach(function (callback) {
+            callback(augmentation);
+        });
+    }
+
+    function raiseAugmentationDeactivated(augmentation) {
+        augmentationDeactivatedCallbacks.forEach(function (callback) {
+            callback(augmentation);
+        });
+    }
+
     var augmentationExposedMethods = {
-        setHealth: setHealth
+        setHealth: setHealth,
+        raiseAugmentationActivated: raiseAugmentationActivated,
+        raiseAugmentationDeactivated: raiseAugmentationDeactivated
     };
 
     var bot = gosuArena.worldObject.create(properties);
@@ -214,6 +230,14 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
     bot.onCollision = function (callback) {
         collisionCallbacks.push(callback);
     }
+
+    bot.onAugmentationActivated = function(callback) {
+        augmentationActivatedCallbacks.push(callback);
+    };
+
+    bot.onAugmentationDeactivated = function (callback) {
+        augmentationDeactivatedCallbacks.push(callback);
+    };
 
     bot.createStatus = function (simplified) {
 

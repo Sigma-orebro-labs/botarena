@@ -3,6 +3,8 @@ gosuArena.arenaState = gosuArena.arenaState || {};
 
 gosuArena.arenaState.create = function () {
 
+    var botAugmentationActivatedCallbacks = [];
+    var botAugmentationDeactivatedCallbacks = [];
     var botHealthChangedCallbacks = [];
     var botKilledCallbacks = [];
     var botAddedCallbacks = [];
@@ -120,6 +122,14 @@ gosuArena.arenaState.create = function () {
             raiseBotHealthChanged(bot);
         });
 
+        bot.onAugmentationActivated(function (augmentation) {
+            raiseBotAugmentationActivated(bot, augmentation);
+        });
+
+        bot.onAugmentationDeactivated(function (augmentation) {
+            raiseBotAugmentationDeactivated(bot, augmentation);
+        });
+
         bot.onShotFired(onShotFiredByBot);
 
         arenaState.bots.push(bot);
@@ -160,6 +170,14 @@ gosuArena.arenaState.create = function () {
 
     arenaState.onShotFired = function (callback) {
         shotFiredCallbacks.push(callback);
+    };
+
+    arenaState.onBotAugmentationActivated = function(callback) {
+        botAugmentationActivatedCallbacks.push(callback);
+    };
+
+    arenaState.onBotAugmentationDeactivated = function (callback) {
+        botAugmentationDeactivatedCallbacks.push(callback);
     };
 
     arenaState.onBulletHitBot = function (callback) {
@@ -221,6 +239,18 @@ gosuArena.arenaState.create = function () {
     function raiseOnBulletHitTerrain(bullet) {
         bulletHitTerrainCallbacks.forEach(function (callback) {
             callback(bullet);
+        });
+    }
+
+    function raiseBotAugmentationActivated(bot, augmentation) {
+        botAugmentationActivatedCallbacks.forEach(function (callback) {
+            callback(bot, augmentation);
+        });
+    }
+
+    function raiseBotAugmentationDeactivated(bot, augmentation) {
+        botAugmentationDeactivatedCallbacks.forEach(function (callback) {
+            callback(bot, augmentation);
         });
     }
 

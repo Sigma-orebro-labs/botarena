@@ -158,11 +158,9 @@ describe("Game", function () {
                 tick: function (actionQueue, status) {
                     if (roundCount === 0) {
                         expect(status.seenEnemies.length).toBe(1);
-                    } else if (roundCount < cloakDuration + 1) {
+                    } else if (roundCount < cloakDuration) {
                         expect(status.seenEnemies.length).toBe(0);
-
-                        // The augmentations are ticked after the bot, so an extra round is needed for the augmentation to become inactive again
-                    } else if (roundCount > cloakDuration + 1) {
+                    } else if (roundCount > cloakDuration) {
                         expect(status.seenEnemies.length).toBe(1);
                     }
 
@@ -238,6 +236,81 @@ describe("Game", function () {
                 // Make sure the health increases gradualy after the repair has been triggered.
                 expect(healthSamplesDuringRepair[j] >= healthSamplesDuringRepair[j - 1]).toBe(true);
             }
+        });
+
+        it("cannot be repaired above max health", function() {
+
+            addBot({
+                startPosition: { x: 0, y: 0 },
+                tick: function(actionQueue, status, augmentations) {
+
+                    if (!augmentations.repair.isActive()) {
+                        augmentations.repair.activate();
+                    }
+                },
+                augmentations: ["repair"]
+            });
+
+            startGame();
+
+            var repairingBot = arenaState.bots[0];
+
+            for (var i = 0; i < 100; i++) {
+                clock.doTick();
+            }
+
+            expect(repairingBot.health()).toBe(repairingBot.maxHealth);
+        });
+
+        it("raises activated/deactivated events for augmentation through arenaState", function () {
+
+            var roundCount = 0;
+            var wasDeactivatedEventRaised = false;
+            var wasActivatedEventRaised = false;
+            var deactivatedRound = null;
+            var activatedRound = null;
+            var repairingBot;
+
+            addBot({
+                startPosition: { x: 0, y: 0 },
+                tick: function (actionQueue, status, augmentations) {
+
+                    roundCount++;
+
+                    if (!augmentations.repair.isActive()) {
+                        augmentations.repair.activate();
+                    }
+                },
+                augmentations: ["repair"]
+            });
+
+            arenaState.onBotAugmentationActivated(function (bot, augmentation) {
+                wasActivatedEventRaised = true;
+                activatedRound = roundCount;
+
+                expect(bot).toBe(repairingBot);
+                expect(augmentation.id).toBe("repair");
+            });
+
+            arenaState.onBotAugmentationDeactivated(function (bot, augmentation) {
+                wasDeactivatedEventRaised = true;
+                deactivatedRound = roundCount;
+
+                expect(bot).toBe(repairingBot);
+                expect(augmentation.id).toBe("repair");
+            });
+
+            startGame();
+
+            repairingBot = arenaState.bots[0];
+
+            for (var i = 0; i < 1000; i++) {
+                clock.doTick();
+            }
+
+            expect(wasActivatedEventRaised).toBe(true);
+            expect(wasDeactivatedEventRaised).toBe(true);
+            expect(deactivatedRound).toBeGreaterThan(activatedRound);
         });
     });
 });
