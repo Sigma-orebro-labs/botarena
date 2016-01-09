@@ -71,5 +71,8 @@ gosuArena.register({
         var degreesToTurn = eventArgs.angle - status.angle;
 
         actionQueue.turn(degreesToTurn);
+    },
+    options: {
+        augmentations: ["cloak"]
     }
 });

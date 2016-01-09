@@ -1,6 +1,7 @@
 ﻿var gosuArena = gosuArena || {};
 gosuArena.factories = gosuArena.factories || {};
 gosuArena.factories.augmentations = gosuArena.factories.augmentations || {};
+gosuArena.factories.augmentations.cloak = gosuArena.factories.augmentations.cloak || {};
 
 gosuArena.factories.augmentations.createCloak = function(botProperties) {
 

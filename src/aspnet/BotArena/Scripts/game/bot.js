@@ -53,9 +53,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
     var actionQueue = gosuArena.factories.createActionQueue(collisionDetector, bot);
     var userActionQueue = gosuArena.factories.createUserActionQueue(actionQueue);
 
-    var augmentations = {
-        cloak: gosuArena.factories.augmentations.createCloak(properties)
-    };
+    var augmentations = gosuArena.factories.augmentations.createAugmentationCollection(options.augmentations, properties);
 
     bot.augmentations = function() {
         return augmentations;

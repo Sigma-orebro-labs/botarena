@@ -36,6 +36,7 @@ gosuArena.factories.createSafeBotOptions = function (userOptions, isTraining) {
     userOptions = userOptions || {};
     userOptions.startPosition = userOptions.startPosition || {};
     userOptions.equipment = userOptions.equipment || [];
+    userOptions.augmentations = userOptions.augmentations || [];
 
     var x = Math.random() * (gosuArena.arenaWidth - width);
     var y = Math.random() * (gosuArena.arenaHeight - height);
@@ -69,7 +70,11 @@ gosuArena.factories.createSafeBotOptions = function (userOptions, isTraining) {
     var allModifiers = [classModifier].concat(equipmentModifiers);
 
     var staticModifiers = gosuArena.factories.modifiers.createModifierCollection(allModifiers);
-    
+
+    var augmentations = userOptions.augmentations.map(function(name) {
+        return gosuArena.factories.augmentations.createDescriptor(name);
+    }); 
+
     return {
         id: userOptions.id,
         uniqueId: userOptions.uniqueId,
@@ -94,6 +99,7 @@ gosuArena.factories.createSafeBotOptions = function (userOptions, isTraining) {
         initialDamageReductionFactor: initialDamageReductionFactor,
         rotationSpeedInDegrees: rotationSpeedInDegrees,
         botClass: userOptions.botClass,
-        staticModifiers: staticModifiers
+        staticModifiers: staticModifiers,
+        augmentations: augmentations
     };
 };

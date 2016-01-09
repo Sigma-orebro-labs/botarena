@@ -22,7 +22,8 @@ gosuArena.specs.game.addBot = function (options) {
             options: {
                 startPosition: options.startPosition,
                 botClass: options.botClass,
-                equipment: options.equipment
+                equipment: options.equipment,
+                augmentations: options.augmentations
             }
         });
     });

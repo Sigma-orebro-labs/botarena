@@ -31,6 +31,7 @@ describe("bot", function () {
             calculateWeaponCooldownTimeFactor: function () { return 1; },
             canculateRotationSpeedFactor: function () { return 1; }
         };
+        options.augmentations = [];
 
         return options;
     }

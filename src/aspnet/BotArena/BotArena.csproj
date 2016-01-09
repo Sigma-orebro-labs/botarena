@@ -613,6 +613,10 @@
     <Content Include="Scripts\angular\services\notificationService.js" />
     <Content Include="Scripts\angular\services\authService.js" />
     <None Include="Scripts\game\modifiers\modifierConfig.json" />
+    <Content Include="Scripts\game\augmentations\augmentationFactory.js" />
+    <Content Include="Scripts\game\augmentations\augmentationCollection.js" />
+    <Content Include="Scripts\game\augmentations\noopAugmentation.js" />
+    <Content Include="Scripts\game\specs\augmentationSpecs.js" />
     <Content Include="Scripts\infrastructure\util.js" />
     <Content Include="Scripts\infrastructure\modifierConfigLoader.js" />
     <Content Include="Scripts\lib\angular\angular-animate.js" />
