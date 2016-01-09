@@ -14,6 +14,7 @@ namespace GosuArena
                 "~/Scripts/lib/signalR/jquery.signalR-2.2.0.min.js",
                 "~/Scripts/lib/babylon.2.1.js",
                 "~/Scripts/infrastructure/*.js",
+                "~/Scripts/infrastructure/logging/*.js",
                 "~/Scripts/gosu/math/*.js",
                 "~/Scripts/gosu/*.js",
                 "~/Scripts/game/augmentations/*.js",
@@ -31,6 +32,17 @@ namespace GosuArena
             bundles.Add(new ScriptBundle("~/bundles/menu").Include(
                 "~/Scripts/menu/botWizard.js",
                 "~/Scripts/menu/menu.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/angularspa").Include(
+                "~/Scripts/angular/*.js",
+                "~/Scripts/angular/account/*.js",
+                "~/Scripts/angular/bot-wizard/*.js",
+                "~/Scripts/angular/bots/*.js",
+                "~/Scripts/angular/editor/*.js",
+                "~/Scripts/angular/main-menu/*.js",
+                "~/Scripts/angular/match-setup/*.js",
+                "~/Scripts/angular/services/*.js"
+                ));
 
             bundles.Add(new ScriptBundle("~/bundles/commanderlibs").Include(
                 "~/Scripts/lib/jquery/jquery-{version}.js",

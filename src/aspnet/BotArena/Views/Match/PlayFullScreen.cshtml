@@ -1,4 +1,5 @@
-﻿@model IList<GosuArena.Models.Match.BotModel>
+﻿@using System.Web.Optimization
+@model IList<GosuArena.Models.Match.BotModel>
 
 @{
     Layout = "~/Views/Shared/_LayoutWorld.cshtml";
@@ -21,24 +22,9 @@
     <script type="text/javascript" src="@Url.Content("~/Scripts/lib/angular/angular-animate.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/lib/angular/SweetAlert.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/lib/ng-toaster/toaster.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/menuApp.js")"> </script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/main-menu/mainController.js")"> </script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/services/authService.js")"> </script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/services/notificationService.js")"> </script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/services/matchSetupService.js")"> </script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/match-setup/matchSetupCtrl.js")"> </script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/editor/editorCtrl.js")"> </script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/bots/botListCtrl.js")"> </script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/bot-wizard/botWizardCtrl.js")"> </script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/bot-wizard/chooseClassCtrl.js")"> </script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/bot-wizard/chooseWeaponCtrl.js")"> </script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/bot-wizard/chooseEquipmentCtrl.js")"> </script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/bot-wizard/chooseColorCtrl.js")"> </script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/bot-wizard/enterBotNameCtrl.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/bot-wizard/enterEmailCtrl.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/account/loginCtrl.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/account/registerCtrl.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/angular/account/changePasswordCtrl.js")"></script>
+
+    @Scripts.Render("~/bundles/angularspa")
+
     <script type="text/javascript" src="@Url.Content("~/Scripts/lib/knockout/knockout-3.0.0.js")"> </script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/Match/Play/botViewModel.js")"> </script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/Pages/Match/Play/matchViewModel.js")"> </script>

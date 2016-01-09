@@ -151,7 +151,7 @@
         adjustBabylonCanvasSize();
 
         gosuArena.engine.initializeWorld({
-            listeners: [gosuArena.matchViewModel, gosuArena.visualizers.gameVisualizer2D, gosuArena.visualizers.gameVisualizer3D],
+            listeners: [gosuArena.matchViewModel, gosuArena.logging.createEventConsoleLogger(), gosuArena.visualizers.gameVisualizer2D, gosuArena.visualizers.gameVisualizer3D],
             resourceLoaders: [gosuArena.resources.imageLoader, gosuArena.resources.modifierConfigLoader]
         });
 
