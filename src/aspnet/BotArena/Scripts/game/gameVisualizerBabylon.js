@@ -217,8 +217,18 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         gosuArena.events.gameStarting(onGameStarting);
         gosuArena.events.matchEnded(onMatchEnded);
         gosuArena.events.targetCameraOnBot(cameraTargetBot);
-        gosuArena.events.turnBotTransparent(turnBotTransparent);
-        gosuArena.events.turnBotSolid(turnBotSolid);
+
+        arenaState.onBotAugmentationActivated(function (bot, augmentation) {
+            if (augmentation.id === "cloak") {
+                turnBotTransparent(bot.id);
+            }
+        });
+
+        arenaState.onBotAugmentationDeactivated(function (bot, augmentation) {
+            if (augmentation.id === "cloak") {
+                turnBotSolid(bot.id);
+            }
+        });
 
         gosuArena.visualizers.babylonEngine = new BABYLON.Engine(canvas, true);
         engine = gosuArena.visualizers.babylonEngine;
