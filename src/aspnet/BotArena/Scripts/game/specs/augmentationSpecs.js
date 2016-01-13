@@ -28,6 +28,10 @@ describe("Game", function () {
         gosuArena.specs.game.initializeWorld([arenaStateInterceptor]);
     });
 
+    afterEach(function() {
+        arenaState.unsubscribeAllEventListeners();
+    });
+
     describe("Bot", function () {
 
         it("is visible when no augmentations are active", function() {
@@ -311,6 +315,172 @@ describe("Game", function () {
             expect(wasActivatedEventRaised).toBe(true);
             expect(wasDeactivatedEventRaised).toBe(true);
             expect(deactivatedRound).toBeGreaterThan(activatedRound);
+        });
+
+        it("with active damage boost deals more damage", function () {
+
+            var hasNormalBotFired = false,
+                hasHighDamageBotFired = false,
+                wasNormalBotHit = false,
+                wasHighDamageBotHit = false;
+
+            // Let the two bots fire a single shot at each other and see what damage they take
+
+            addBot({
+                startPosition: { x: 0, y: 0, angle: 270 }, // aiming east
+                tick: function (actionQueue, status) {
+
+                    if (!hasNormalBotFired) {
+                        actionQueue.fire();
+                        hasNormalBotFired = true;
+                    }
+                },
+                onHitByBullet: function (actionQueue, status) {
+                    wasNormalBotHit = true;
+                }
+            });
+
+            addBot({
+                startPosition: { x: 100, y: 0, angle: 90 }, // aiming west
+                tick: function (actionQueue, status, augmentations) {
+
+                    if (!augmentations.damageBoost.isActive()) {
+                        augmentations.damageBoost.activate();
+                    }
+
+                    if (!hasHighDamageBotFired) {
+                        actionQueue.fire();
+                        hasHighDamageBotFired = true;
+                    }
+                },
+                onHitByBullet: function (actionQueue, status) {
+                    wasHighDamageBotHit = true;
+                },
+                augmentations: ["damageBoost"]
+            });
+
+            startGame();
+
+            var normalBot = arenaState.bots[0];
+            var highDamageBot = arenaState.bots[1];
+
+            clock.doTick(20);
+
+            expect(wasNormalBotHit).toBe(true);
+            expect(wasHighDamageBotHit).toBe(true);
+
+            expect(highDamageBot.health()).toBeGreaterThan(normalBot.health());
+        });
+
+        it("with damage boost that has not been activated deals standard damage", function() {
+
+            var hasNormalBotFired = false,
+                hasHighDamageBotFired = false,
+                wasNormalBotHit = false,
+                wasHighDamageBotHit = false;
+
+            // Let the two bots fire a single shot at each other and see what damage they take
+
+            addBot({
+                startPosition: { x: 0, y: 0, angle: 270 }, // aiming east
+                tick: function(actionQueue, status) {
+
+                    if (!hasNormalBotFired) {
+                        actionQueue.fire();
+                        hasNormalBotFired = true;
+                    }
+                },
+                onHitByBullet: function(actionQueue, status) {
+                    wasNormalBotHit = true;
+                }
+            });
+
+            addBot({
+                startPosition: { x: 100, y: 0, angle: 90 }, // aiming west
+                tick: function(actionQueue, status) {
+
+                    if (!hasHighDamageBotFired) {
+                        actionQueue.fire();
+                        hasHighDamageBotFired = true;
+                    }
+                },
+                onHitByBullet: function(actionQueue, status) {
+                    wasHighDamageBotHit = true;
+                },
+                augmentations: ["damageBoost"]
+            });
+
+            startGame();
+
+            var normalBot = arenaState.bots[0];
+            var highDamageBot = arenaState.bots[1];
+
+            clock.doTick(20);
+
+            expect(wasNormalBotHit).toBe(true);
+            expect(wasHighDamageBotHit).toBe(true);
+
+            expect(highDamageBot.health()).toEqual(normalBot.health());
+        });
+
+        it("with damage boost that has finished deals standard damage", function () {
+
+            var hasNormalBotFired = false,
+                hasHighDamageBotFired = false,
+                wasNormalBotHit = false,
+                wasHighDamageBotHit = false,
+                roundCount = 0;
+
+            // Let the two bots fire a single shot at each other and see what damage they take
+
+            addBot({
+                startPosition: { x: 0, y: 0, angle: 270 }, // aiming east
+                tick: function (actionQueue, status) {
+
+                    roundCount++;
+
+                    if (roundCount > 1000 && !hasNormalBotFired) {
+                        actionQueue.fire();
+                        hasNormalBotFired = true;
+                    }
+                },
+                onHitByBullet: function (actionQueue, status) {
+                    wasNormalBotHit = true;
+                }
+            });
+
+            addBot({
+                startPosition: { x: 100, y: 0, angle: 90 }, // aiming west
+                tick: function (actionQueue, status, augmentations) {
+
+                    // Activate the damage boost from the start
+                    if (!augmentations.damageBoost.isActive()) {
+                        augmentations.damageBoost.activate();
+                    }
+
+                    // Wait until the damage boost expires before firing
+                    if (roundCount > 1000 && !hasHighDamageBotFired) {
+                        actionQueue.fire();
+                        hasHighDamageBotFired = true;
+                    }
+                },
+                onHitByBullet: function (actionQueue, status) {
+                    wasHighDamageBotHit = true;
+                },
+                augmentations: ["damageBoost"]
+            });
+
+            startGame();
+
+            var normalBot = arenaState.bots[0];
+            var highDamageBot = arenaState.bots[1];
+
+            clock.doTick(1100);
+
+            expect(wasNormalBotHit).toBe(true);
+            expect(wasHighDamageBotHit).toBe(true);
+
+            expect(highDamageBot.health()).toEqual(normalBot.health());
         });
     });
 });

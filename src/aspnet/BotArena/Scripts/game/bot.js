@@ -468,5 +468,16 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         bot.snapshot("x", "y", "angle");
     };
 
+    bot.cleanUp = function() {
+        // Remove all event listeners to avoid ghost events
+        shotFiredCallbacks.length = 0;
+        killedCallbacks.length = 0;
+        collisionCallbacks.length = 0;
+        hitByBulletCallbacks.length = 0;
+        healthChangedCallbacks.length = 0;
+        augmentationActivatedCallbacks.length = 0;
+        augmentationDeactivatedCallbacks.length = 0;
+    };
+
     return bot;
 };

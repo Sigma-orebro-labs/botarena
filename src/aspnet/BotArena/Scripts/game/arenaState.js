@@ -89,6 +89,10 @@ gosuArena.arenaState.create = function () {
 
         raiseOnClearStarting();
 
+        arenaState.bots.forEach(function(bot) {
+            bot.cleanUp();
+        });
+
         // We leave the terrain since it doesn't change between games
         arenaState.bots.length = 0;
         arenaState.bullets.length = 0;
@@ -96,7 +100,7 @@ gosuArena.arenaState.create = function () {
         raiseOnCleared();
     };
 
-    function removeCallbacks() {
+    arenaState.unsubscribeAllEventListeners = function () {
         botKilledCallbacks = [];
         botAddedCallbacks = [];
         botHitByBulletCallbacks = [];
@@ -104,6 +108,9 @@ gosuArena.arenaState.create = function () {
         bulletHitTerrainCallbacks = [];
         shotFiredCallbacks = [];
         tickCallbacks = [];
+        botAugmentationActivatedCallbacks = [];
+        botAugmentationDeactivatedCallbacks = [];
+        botHealthChangedCallbacks = [];
     }
 
     arenaState.addBot = function (bot) {

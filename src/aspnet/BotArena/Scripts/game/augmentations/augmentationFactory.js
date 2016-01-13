@@ -21,6 +21,11 @@ gosuArena.factories.augmentations = gosuArena.factories.augmentations || {};
                 name: "Repair",
                 description: "With a crew trained to do mid-fight ship repairs, the ship can be partially restored when damaged.",
                 create: gosuArena.factories.augmentations.createRepair
+            }, {
+                id: "damageBoost",
+                name: "Barrel of spiked gunpowder",
+                description: "With this special gunpowder blend the bullets do even more damage than otherwise, but you only have one barrel so it quickly runs out.",
+                create: gosuArena.factories.augmentations.createDamageBoost
             }
         ];
     }

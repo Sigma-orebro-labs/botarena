@@ -16,7 +16,7 @@ gosuArena.factories.augmentations.createBaseAugmentation = function(botPropertie
         isActive: false
     };
 
-    augmentation.roundsRemaining = function () {
+    augmentation.roundsRemaining = function () {    
         return state.roundsRemaining;
     }
 

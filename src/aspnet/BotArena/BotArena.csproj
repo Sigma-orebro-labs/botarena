@@ -616,6 +616,7 @@
     <Content Include="Scripts\game\augmentations\augmentationFactory.js" />
     <Content Include="Scripts\game\augmentations\augmentationCollection.js" />
     <Content Include="Scripts\game\augmentations\baseAugmentation.js" />
+    <Content Include="Scripts\game\augmentations\damageBoostAugmentation.js" />
     <Content Include="Scripts\game\augmentations\repairAugmentation.js" />
     <Content Include="Scripts\game\augmentations\noopAugmentation.js" />
     <Content Include="Scripts\game\specs\augmentationSpecs.js" />
