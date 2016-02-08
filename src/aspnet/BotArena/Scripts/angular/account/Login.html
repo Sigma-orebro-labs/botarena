@@ -1,22 +1,29 @@
-﻿<form class="log-in" ng-submit="login()">
-    <div>
-        <label>Username</label>
-        <input name="Username" type="text" placeholder="Username" ng-model="username" />
-    </div>
+﻿<div class="page-login menu-page menu-halfsize">
 
-    <div>
-        <label>Password</label>
-        <input name="Password" type="password" placeholder="Password" ng-model="password" />
-    </div>
+    <form class="log-in" ng-submit="login()">
+        <fieldset>
+            <legend>Login</legend>
 
-    <div>
-        <label>Remember me</label>
-        <input type="checkbox" ng-model="rememberMe"/>
-    </div>
+            <label>Username</label>
+            <div class="editor-field">
+                <input name="Username" type="text" placeholder="Username" ng-model="username" />
+            </div>
 
-    <div class="error" ng-show="invalidCredentials">
-        Username or password was incorrect.
-    </div>
+            <label>Password</label>
+            <div class="editor-field">
+                <input name="Password" type="password" placeholder="Password" ng-model="password" />
+            </div>
 
-    <input type="submit" value="Logga in" ng-disabled="isProcessingLoginRequest" />
-</form>
+            <label><input type="checkbox" ng-model="rememberMe"/> Remember me</label>
+            <br/>
+
+            <div class="error" ng-show="invalidCredentials">
+                Username or password was incorrect.
+            </div>
+            <br/>
+
+            <input class="btn btn-primary" type="submit" value="Logga in" ng-disabled="isProcessingLoginRequest" />
+        </fieldset>
+    </form>
+
+</div>

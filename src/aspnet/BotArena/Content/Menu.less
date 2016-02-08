@@ -135,17 +135,33 @@
 
 .menu-wrapper {
     width: 1000px;
-    margin: 100px auto;       
+    margin-top: 100px;
+    position: absolute;
+    left: 50%;
+    margin-left: -500px;     
 }
 
 .main-menu {
     width: 200px;
-    margin-left: 250px;   
+    margin: 0 auto;
     list-style: none;
     li {
-        background: rgba(255,255,255, 0.9);
-        padding: 0.2em 1em;
-        margin: 3px 0; 
+        width: 100%;
+        a {
+            background: rgba(255,255,255, 0.9);
+            padding: 0.2em 1em;
+            margin: 3px 0; 
+            cursor: pointer;
+            width: 100%;
+            box-sizing: border-box;
+            display: inline-block;
+
+            &:hover {
+                background: #428bca;
+                color: white;
+                text-decoration: none;
+            }
+        }
     }
 }
 
@@ -258,4 +274,9 @@
 
 .error {
     color: #a00
+}
+
+.menu-halfsize {
+    width: 50%;
+    margin: 0 auto;
 }

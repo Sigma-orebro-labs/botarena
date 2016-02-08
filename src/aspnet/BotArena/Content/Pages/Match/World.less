@@ -1,13 +1,61 @@
 ﻿@import "../../GosuArena.less";
 
+
+
+
 html, body, #playing-field, #3d-game-canvas-babylon {
     height: 100%;
     width: 100%;
 }
 
+body { 
+    background-color: #4B4B4B;
+}
+
+a {
+    cursor: pointer;
+}
+
 button {
     .btn;
     .btn-default;
+
+    border: 0;
+    border-radius: 0;
+    box-shadow: #7a7a7a 1px 1px 1px;
+
+    &.btn {
+        border: 0;
+        border-radius: 0;
+        box-shadow: #7a7a7a 1px 1px 1px;
+    }
+}
+
+input[type="email"] {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #555555;
+    vertical-align: middle;
+    background-color: white;
+    background-image: none;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.center {
+    text-align: center;
+}
+
+#gameCanvas {
+    margin-top: 4%;
 }
 
 .game-message-container {
@@ -25,7 +73,8 @@ button {
     width: 100%;
     height: 400px;
     font-family: Verdana;
-    font-size: 80px;
+    font-size: 76px;
+    text-shadow: #7A7A7A 1px 1px 1px;
     color: white;
     pointer-events: none;
 }
