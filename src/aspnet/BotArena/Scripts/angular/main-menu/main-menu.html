@@ -1,9 +1,6 @@
 ﻿<ul class="main-menu">
-    <li>
+    <li ng-show="isLoggedIn()">
         <a ui-sref="bot-wizard.choose-class">Create bot</a>
-    </li>
-    <li>
-        <a ng-href="{{ docsUrl }}" ng-click="toggleMenu()" target="_blank">Documentation</a>
     </li>
     <li ng-hide="isLoggedIn()">
         <a ui-sref="log-in">Sign in</a>
@@ -26,5 +23,7 @@
     <li ng-show="isLoggedIn()">
         <a ng-click="logOff()">Sign out</a>
     </li>
-    
+    <li>
+        <a ng-href="{{ docsUrl }}" ng-click="toggleMenu()" target="_blank">Documentation</a>
+    </li>
 </ul>
