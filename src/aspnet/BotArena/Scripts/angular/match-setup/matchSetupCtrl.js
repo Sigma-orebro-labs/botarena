@@ -55,7 +55,7 @@
             notificationService.showSuccessMessage("Bot removed", bot.name + " was removed from the match");
 
             var index = $scope.getCurrentRoster().selectedBots.indexOf(bot);
-            $scope.selectedBots.splice(index, 1);
+            $scope.getCurrentRoster().selectedBots.splice(index, 1);
         };
 
         $scope.startMatchUrl = function () {
