@@ -171,7 +171,14 @@
             $http({
                 method: "POST",
                 url: gosuArena.url.createAbsolute('api/bots'),
-                data: $scope.bot
+                data: {
+                    name: $scope.bot.name,
+                    colorHexCode: $scope.bot.colorHexCode,
+                    className: $scope.bot.className,
+                    weapon: $scope.bot.weapon,
+                    powerups: [],
+                    equipment: [$scope.bot.equipment]
+                }
             }).then(function (response) {
                 notificationService.showSuccessMessage("Bot created", "Your bot has been created, let's write some code!");
 

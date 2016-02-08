@@ -146,7 +146,10 @@ namespace GosuArena.Controllers.Api
 
             var userId = _repository.GetUserId(User.Identity.Name);
             var defaultScript = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath("~/Scripts/bots/bootstrapping/defaultBotScriptTemplate.js"))
-                .Replace("%COLOR_HEX_CODE%", model.ColorHexCode);
+                .Replace("%COLOR_HEX_CODE%", model.ColorHexCode)
+                .Replace("%BOT_CLASS%", model.ClassName)
+                .Replace("%EQUIPMENT%", string.Join(", ", model.Equipment.Concat(new [] { model.Weapon }).Select(AddQuotes)))
+                .Replace("%AUGMENTATIONS%", string.Join(", ", model.Powerups.Select(AddQuotes)));
 
             var bot = new Bot
             {
@@ -158,6 +161,11 @@ namespace GosuArena.Controllers.Api
             _repository.Insert(bot);
 
             return Request.CreateResponse(HttpStatusCode.Created, new ApiBotModel(bot));
+        }
+
+        private string AddQuotes(string arg)
+        {
+            return $"'{arg}'";
         }
 
         private void ValidateRequest(Bot bot)

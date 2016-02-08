@@ -20,6 +20,9 @@ gosuArena.register({
 
     },
     options: {
-        color: "%COLOR_HEX_CODE%"
+        color: "%COLOR_HEX_CODE%",
+        botClass: "%BOT_CLASS%",
+        equipment: [%EQUIPMENT%],
+        augmentations: [%AUGMENTATIONS%]
     }
 });
