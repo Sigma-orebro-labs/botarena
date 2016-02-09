@@ -590,6 +590,8 @@
     <Content Include="Scripts\angular\bot-wizard\chooseClassCtrl.js" />
     <Content Include="Scripts\angular\bot-wizard\ChooseColor.html" />
     <Content Include="Scripts\angular\bot-wizard\chooseColorCtrl.js" />
+    <Content Include="Scripts\angular\bot-wizard\ChooseAugmentations.html" />
+    <Content Include="Scripts\angular\bot-wizard\chooseAugmentationsCtrl.js" />
     <Content Include="Scripts\angular\bot-wizard\ChooseWeapon.html" />
     <Content Include="Scripts\angular\bot-wizard\ChooseEquipment.html" />
     <Content Include="Scripts\angular\bot-wizard\chooseWeaponCtrl.js" />

@@ -1,0 +1,17 @@
+﻿<div>
+    <h1>Pick Equipment</h1>
+
+    <ul class="modifier-list">
+        <li ng-repeat="augmentation in availableAugmentations" ng-click="selectAugmentation(augmentation)" ng-class="isSelected(augmentation) ? 'selected' : ''">
+            <span class="title">{{augmentation.name}}</span>
+            <span class="description">{{augmentation.description}}</span>
+        </li>
+    </ul>
+
+    <nav>
+        <a class="btn-previous" ui-sref="bot-wizard.choose-equipment"><i class="fa fa-arrow-left"/> Previous</a>
+        <a class="btn-next" ui-sref="bot-wizard.choose-color">Next <i class="fa fa-arrow-right"/></a>
+    </nav>
+</div>
+
+

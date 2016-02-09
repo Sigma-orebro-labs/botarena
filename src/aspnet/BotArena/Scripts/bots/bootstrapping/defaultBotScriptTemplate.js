@@ -2,7 +2,7 @@
 // have naming conflicts with other bots
 
 gosuArena.register({
-    tick: function (actionQueue, status) {
+    tick: function (actionQueue, status, augmentations) {
 
         // Do something interesting here... for example:
 

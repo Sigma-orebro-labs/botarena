@@ -176,7 +176,7 @@
                     colorHexCode: $scope.bot.colorHexCode,
                     className: $scope.bot.className,
                     weapon: $scope.bot.weapon,
-                    powerups: [],
+                    powerups: [$scope.bot.augmentation],
                     equipment: [$scope.bot.equipment]
                 }
             }).then(function (response) {
