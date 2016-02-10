@@ -3,6 +3,7 @@
     .CodeMirror {
         min-height: 600px;
         border: 1px solid #EAE8E8;
+        margin-bottom: 20px;
     }
 
     label[for=editor], legend {
@@ -12,6 +13,10 @@
     // Reset bootstrap stuff, to avoid CodeMirror freaking out
     form div {
         margin: 0;
+    }
+
+    #btn-editor-save {
+        float: right;
     }
 }
 
@@ -36,9 +41,10 @@
         float: none;
     }
 
-    #play-button {
+    .wide-button {
         width: 100%;
         font-size: 18px;
+        margin-bottom: 20px;
     }
 
     .selected {

@@ -29,7 +29,7 @@
                         Make bot avaible for playing with bots written by other players
                     </label>
 
-                    <input type="submit" class="main-submit clear-dirty-flags" value="Save"/>
+                    <input id="btn-editor-save" type="submit" class="btn btn-primary clear-dirty-flags" value="Save"/>
                 </fieldset>
             </form>
             <p>
@@ -38,6 +38,8 @@
         </section>
 
         <aside id="editor-match-setup" class="col-md-3 col-sm-3 col-xs-3">
+
+            <a ng-href="{{ docsUrl }}" target="_blank" class="btn btn-primary wide-button">How to Code a bot</a>
 
             <h2>Play training match</h2>
 
@@ -52,7 +54,7 @@
                 </div>
             </section>
 
-            <a id="play-button" ng-click="startTrainingMatch()" class="btn btn-primary">Play!</a>
+            <a id="play-button" ng-click="startTrainingMatch()" class="btn btn-primary wide-button">Play!</a>
 
         </aside>
     </div>
