@@ -446,7 +446,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             var wallMesh = BABYLON.Mesh.CreateBox("wall_" + i, 1, scene);
 
             wallMesh.scaling = new BABYLON.Vector3(currentTerrain.width, currentTerrain.height, currentTerrain.height / 2);
-            wallMesh.position = new BABYLON.Vector3(terrainCenter.y, -15, terrainCenter.x);
+            wallMesh.position = new BABYLON.Vector3(terrainCenter.y, 0, terrainCenter.x);
 
 
             brickMaterial[i].diffuseTexture.vScale = 0.3;
