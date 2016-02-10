@@ -330,6 +330,12 @@
     <Content Include="Content\lib\ng-toaster\toaster.min.js" />
     <Content Include="Content\lib\sweetalert\sweetalert.css" />
     <Content Include="Content\lib\sweetalert\sweetalert.min.js" />
+    <Content Include="Content\textures\skybox\TropicalSunnyDay_nx.jpg" />
+    <Content Include="Content\textures\skybox\TropicalSunnyDay_ny.jpg" />
+    <Content Include="Content\textures\skybox\TropicalSunnyDay_nz.jpg" />
+    <Content Include="Content\textures\skybox\TropicalSunnyDay_px.jpg" />
+    <Content Include="Content\textures\skybox\TropicalSunnyDay_py.jpg" />
+    <Content Include="Content\textures\skybox\TropicalSunnyDay_pz.jpg" />
     <Content Include="Scripts\angular\account\ChangePassword.html" />
     <Content Include="Scripts\angular\account\Register.html" />
     <Content Include="Scripts\angular\account\changePasswordCtrl.js" />
