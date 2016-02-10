@@ -97,15 +97,7 @@ gosuArena.engine = (function () {
 
     function updateBots() {
         arenaState.livingBots().forEach(function (bot) {
-            try {
-                bot.tick();
-            } catch (error) {
-                clock.stop();
-                gosuArena.events.raiseBotScriptError({
-                    bot: bot,
-                    exception: error
-                });
-            }
+            bot.tick();
         });
     }
 

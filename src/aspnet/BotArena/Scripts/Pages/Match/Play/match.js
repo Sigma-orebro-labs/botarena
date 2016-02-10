@@ -137,7 +137,10 @@
         writeGameMessage(message);
     });
 
-    gosuArena.events.botScriptError(function(eventArgs) {
+    gosuArena.events.botScriptError(function (eventArgs) {
+
+        gameClock.stop();
+
         sweetAlert({
             title: "Bot script error",
             text: "The match has been stopped since the bot '" + eventArgs.bot.name + "' has a script error :/ . The error was: " + eventArgs.exception.message,
