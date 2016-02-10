@@ -19,6 +19,11 @@ gosuArena.register({
         // This will be called if your bot is hit by a bullet from another bot
 
     },
+    onCollision: function (actionQueue, status) {
+
+        // This will be called if your bot collides with a wall or another bot
+
+    },
     options: {
         color: "%COLOR_HEX_CODE%",
         botClass: "%BOT_CLASS%",
