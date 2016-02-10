@@ -39,15 +39,15 @@
 <h3 id="getting-started">Getting Started</h3>
 
 <p>
-    The first thing you have to do is to <a href="@Url.Action("Register", "User")">register</a> a GosuArena account.
-    When you have done that you need to create a bot. You can create bots on you <a href="@Url.Action("MyProfile", "User")">profile page</a>.
-    Your profile shows a list of all your bots. Click the one you want to edit and you will see a very basic editor where you can
-    write your JavaScript code for your bot.
+    The first thing you have to do is to register a BotArena account.
+    When you have done that you need to create a bot. You can create bots via Create Bot wizard in the main menu (upper left corner of the game screen).
+    You can then access your bots via the My bots page, also available through the main menu. Click the one you want to edit and you will see a
+    basic editor where you can write your JavaScript code for your bot.
 </p>
 
 <p>
-    The one thing you have to do to make GosuArena understand that you have a bot that wants to join the party is to call the gosuArena.register
-    method, and specify a tick callback which GosuArena calls once per round during the game.
+    The one thing you have to do to make BotArena understand that you have a bot that wants to join the party is to call the gosuArena.register
+    method, and specify a tick callback which BotArena calls once per round during the game.
 </p>
 
 <p>
@@ -91,7 +91,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 </p>
 
 <p>
-    GosuArena passes two arguments to your tick callback: <a href="#action-queue">actionQueue</a> and <a href="#bot-status">status</a>.
+    BotArena passes two arguments to your tick callback: <a href="#action-queue">actionQueue</a> and <a href="#bot-status">status</a>.
     Status contains information about your bot and the things it can see. Action queue is the object through which you tell gosuArena what
     your bot has decided to do.
 </p>
@@ -104,7 +104,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 </p>
 
 <p>
-    GosuArena passes three arguments to your onHitByBullet callback: <a href="#action-queue">actionQueue</a>, <a href="#bot-status">status</a> and
+    BotArena passes three arguments to your onHitByBullet callback: <a href="#action-queue">actionQueue</a>, <a href="#bot-status">status</a> and
     <a href="#onHitByBullet-eventArgs">eventArgs</a>.
 </p>
 
@@ -136,7 +136,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 </p>
 
 <p>
-    GosuArena passes the two standard arguments to your onCollision callback: <a href="#action-queue">actionQueue</a> and <a href="#bot-status">status</a>.
+    BotArena passes the two standard arguments to your onCollision callback: <a href="#action-queue">actionQueue</a> and <a href="#bot-status">status</a>.
 </p>
 
 <p>
@@ -424,7 +424,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 <h4>Globals and Scoping</h4>
 
 <p>
-    GosuArena has redefined a couple of globals in the context where your script is executed. Window,
+    BotArena has redefined a couple of globals in the context where your script is executed. Window,
     document and alert are redefined to be empty JavaScript objects to avoid some of the worst nastiness.
 </p>
 
@@ -435,7 +435,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 </p>
 
 <p>
-    GosuArena is structured so that you are free to organize the code within your script in what ever way
+    BotArena is structured so that you are free to organize the code within your script in what ever way
     you feel is best, as long as you call gosuArena.register and pass in an object with a tick property.
 </p>
 
@@ -510,7 +510,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 
 <p>
     To make sure your requests are accepted you need to include an Authorization request header. The value of the header must be the string
-    GosuArenaApiKey followed by a space and then your key:
+    BotArenaApiKey followed by a space and then your key:
 </p>
 
 <pre class="prettyprint">
