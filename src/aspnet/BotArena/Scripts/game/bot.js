@@ -440,7 +440,9 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         };
 
         hitByBulletCallbacks.forEach(function (callback) {
-            callback(userActionQueue, status, augmentations, eventArgs);
+            executeUnsafeCode(function() {
+                callback(userActionQueue, status, augmentations, eventArgs);
+            });
         });
     }
 
