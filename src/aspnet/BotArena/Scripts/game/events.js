@@ -50,6 +50,14 @@ gosuArena.events = (function () {
         gosu.eventAggregator.subscribe("targetCameraOnBot", callback);
     }
 
+    function raiseBotScriptError(bot) {
+        gosu.eventAggregator.publish("botScriptError", bot);
+    }
+
+    function botScriptError(callback) {
+        gosu.eventAggregator.subscribe("botScriptError", callback);
+    }
+
     return {
         raiseMatchEnded: raiseMatchEnded,
         matchEnded: matchEnded,
@@ -62,7 +70,9 @@ gosuArena.events = (function () {
         botRegistrationStarting: botRegistrationStarting,
         raiseBotRegistrationStarting: raiseBotRegistrationStarting,
         raiseTargetCameraOnBot: raiseTargetCameraOnBot,
-        targetCameraOnBot: targetCameraOnBot
+        targetCameraOnBot: targetCameraOnBot,
+        raiseBotScriptError: raiseBotScriptError,
+        botScriptError: botScriptError
     };
 })();
 

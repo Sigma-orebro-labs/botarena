@@ -1247,4 +1247,35 @@ describe("Game", function () {
 
         expect(arenaState.bots.length).toEqual(1);
     });
+
+    it("script error in the tick callback of a bot raises script error event for that bot", function () {
+        gosuArena.initiateBotRegistration({
+            id: 11,
+            name: "bot1"
+        }, function () {
+            gosuArena.register({
+                tick: function () {
+                    // Force a runtime error
+                    nonExistingFunction();
+                }
+            });
+        });
+
+        startGame();
+
+        var bot = arenaState.bots[0];
+
+        var wasScriptErrorEventFired = false;
+        var scriptErrorBot = null;
+
+        gosuArena.events.botScriptError(function(eventArgs) {
+            scriptErrorBot = eventArgs.bot;
+            wasScriptErrorEventFired = true;
+        });
+
+        clock.doTick();
+
+        expect(wasScriptErrorEventFired).toBe(true);
+        expect(scriptErrorBot.uniqueId).toBe(bot.uniqueId);
+    });
 });
