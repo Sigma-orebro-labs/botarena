@@ -116,7 +116,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
     }
 
     bot.healthPercentage = function () {
-        return properties.health / options.maxHealth;
+        return properties.health / properties.maxHealth;
     };
 
     bot.weapon.mountingPoint = function() {

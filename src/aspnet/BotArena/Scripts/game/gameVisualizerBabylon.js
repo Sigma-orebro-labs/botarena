@@ -6,7 +6,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
     var shipYValue = 6;
     var bulletYValue = 10;
-    var healthBarYValue = 40;
+    var healthBarYValue = 50;
     var wallYValue = 10;
     var explosionYValue = 20;
     var nameTagYValue = 10;
