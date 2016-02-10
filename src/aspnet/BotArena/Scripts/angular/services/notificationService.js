@@ -38,10 +38,27 @@ app.factory('notificationService', ['toaster', 'SweetAlert', '$q', function (toa
         });
     }
 
+    function showBlockigErrorMessage(title, message) {
+        return $q(function (resolve, reject) {
+            SweetAlert.swal({
+                title: title,
+                text: message,
+                type: "error",
+                showCancelButton: false,
+                confirmButtonText: "OK",
+                closeOnConfirm: true
+            },
+            function () {
+                resolve();
+            });
+        });
+    }
+
     return {
         showSuccessMessage: showSuccessMessage,
         showUnexpectedErrorMessage: showUnexpectedErrorMessage,
         showErrorMessage: showErrorMessage,
-        showConfirmationDialog: showConfirmationDialog
+        showConfirmationDialog: showConfirmationDialog,
+        showBlockigErrorMessage: showBlockigErrorMessage
     };
 }]);

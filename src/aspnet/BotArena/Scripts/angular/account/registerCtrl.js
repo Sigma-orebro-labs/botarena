@@ -24,7 +24,7 @@
                     });
             }, function(e) {
                 if (e.status === 409) {
-                    notificationService.showErrorMessage("Username taken", "The username is already taken, please try another username.");
+                    notificationService.showBlockigErrorMessage("Username taken", "The username is already taken, please try another username.");
                 } else {
                     notificationService.showUnexpectedErrorMessage(e);
                 }
