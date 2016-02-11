@@ -29,6 +29,7 @@
     <li><a href="#action-queue">Action Queue Object</a></li>
     <li><a href="#coordinate-system">Coordinate System and Angles</a></li>
     <li><a href="#debugging">Debugging your bot</a></li>
+    <li><a href="#augmentations">Augmentations - Special Abilities</a></li>
     <li><a href="#team-games">Team Games</a></li>
     <li><a href="#technical-details">Technical Details</a></li>
     <li><a href="#private-bots">Public and Private Bots</a></li>
@@ -338,6 +339,35 @@ Your bot interacts with gosuArena through a couple of different events, and thos
     If you turn by -1 degree when at 0 degrees you will end up at 359 degrees.
     On the same note, if you rotate 1 degree when at 359 degrees you will end up at 0 degrees.
 </p>
+
+<h3 id="augmentations">Augmentations - Special Abilites</h3>
+<p>
+    When creating a bot you can choose between three types of equipment.
+    <ul>
+        <li>Mirage (Cloak)</li>
+        <li>Repair</li>
+        <li>Barrel of spiked gunpowder (Damage Boost)</li>
+    </ul>
+    These are special abilities you can use in battle to gain advantage.
+</p>
+
+<h4>Mirage (Cloak)</h4>
+<p>Cloak makes your bot invisible for a short amount of time. Can only be used once.</p>
+<pre class="prettify">
+  augmentations.cloak.activate();
+</pre>
+
+<h4>Repair</h4>
+<p>With a crew trained to do mid-fight ship repairs, the ship can be partially restored when damaged. A ship can only be repaired once per battle.</p>
+<pre class="prettify">
+  augmentations.repair.activate();
+</pre>
+
+<h4>Barrel of spiked gunpowder (Damage Boost)</h4>
+<p>By using a special powder keg your bullets do more damage for a short amount of time. Can only be fired once.</p>
+<pre class="prettify">
+  augmentations.damageBoost.activate();
+</pre>
 
 <h3 id="debugging">Debugging Your Bot</h3>
 
