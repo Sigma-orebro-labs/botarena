@@ -18,6 +18,9 @@ gosuArena.register({
         
         // This will be called if your bot is hit by a bullet from another bot
 
+        // Example of how to activate your augmentation
+%AUGMENTATION_SNIPPET%
+
     },
     onCollision: function (actionQueue, status) {
 

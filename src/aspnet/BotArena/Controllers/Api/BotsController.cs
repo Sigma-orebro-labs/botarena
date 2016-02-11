@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -144,12 +145,27 @@ namespace GosuArena.Controllers.Api
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid bot name");
             }
 
+            var augmentationStartSnippet = "";
+
+            foreach (string augmentation in model.Powerups)
+            {
+                try
+                {
+                    augmentationStartSnippet += System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath("~/Scripts/bots/bootstrapping/"+ augmentation + "Snippet.js"));
+                }
+                catch (Exception)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Equipment code snippet error.");
+                }
+            }
+
             var userId = _repository.GetUserId(User.Identity.Name);
             var defaultScript = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath("~/Scripts/bots/bootstrapping/defaultBotScriptTemplate.js"))
                 .Replace("%COLOR_HEX_CODE%", model.ColorHexCode)
                 .Replace("%BOT_CLASS%", model.ClassName)
                 .Replace("%EQUIPMENT%", string.Join(", ", model.Equipment.Concat(new [] { model.Weapon }).Select(AddQuotes)))
-                .Replace("%AUGMENTATIONS%", string.Join(", ", model.Powerups.Select(AddQuotes)));
+                .Replace("%AUGMENTATIONS%", string.Join(", ", model.Powerups.Select(AddQuotes)))
+                .Replace("%AUGMENTATION_SNIPPET%", augmentationStartSnippet);
 
             var bot = new Bot
             {
