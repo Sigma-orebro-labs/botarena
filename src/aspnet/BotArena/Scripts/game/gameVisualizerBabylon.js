@@ -400,6 +400,12 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         camera.wheelPrecision = 0.03;
         camera.maxZ = 20000;
 
+        // disable navigation by arrow keys 
+        camera.keysDown = [];
+        camera.keysLeft = [];
+        camera.keysRight = [];
+        camera.keysUp = [];
+
         return newScene;
     };
 
