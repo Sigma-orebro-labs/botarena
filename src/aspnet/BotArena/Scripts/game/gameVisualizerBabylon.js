@@ -507,7 +507,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
                 bot.babylonMesh.position.x = bot.y;
                 bot.babylonMesh.position.z = bot.x;
-                bot.babylonMesh.rotation.y = gosu.math.degreesToRadians(bot.angle);
+                bot.babylonMesh.rotation.y = gosu.math.degreesToRadians(bot.angle + 180); // +180 fixes model facing wrong direction
 
                 bot.healthBarSprite.position.x = bot.y;
                 bot.healthBarSprite.position.z = bot.x;
