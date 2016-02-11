@@ -1,21 +1,21 @@
-﻿<section class="match-setup menu-page">
+﻿<section class="match-setup menu-page clearfix">
     <h2>Which bots should face each other in combat?</h2>
 
-    <div class="row">
+    <div>
         <div id="info">
             <p id="info-message" class="alert alert-info">
                 Can't find the droids you are looking for? Make sure they have been made public by their authors
             </p>
         </div>
     </div>
-    <div class="row">
+    <div>
         <ul id="team-menu" class="nav nav-tabs" ng-show="isTeamSetup">
             <li ng-repeat="roster in rosters" ng-class="roster.isActive ? 'active' : 'inactive'">
                 <a href="#" ng-click="setCurrentRoster(roster)">{{roster.name}}</a>
             </li>
         </ul>
 
-        <section id="bot-lists-container">
+        <section id="bot-lists-container" class="row">
             <div id="available-bots-container">
                 <ul id="bots">
                     <li class="bot well" ng-click="addBot(bot)" ng-repeat="bot in bots">
@@ -38,5 +38,7 @@
         </section>
 
         <a ng-href="{{startMatchUrl()}}" id="play-button" class="btn btn-lg btn-primary">Play!</a>
+
+        <br class="clear"/>
     </div>
 </section>
