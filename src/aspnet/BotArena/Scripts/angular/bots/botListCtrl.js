@@ -1,13 +1,17 @@
-﻿angular.module("menuApp").controller("botListCtrl", ["$scope", "$http", "notificationService", function ($scope, $http, notificationService) {
+﻿angular.module("menuApp").controller("botListCtrl", ["$scope", "$state", "$http", "notificationService", function ($scope, $state, $http, notificationService) {
 
-        $http({
-                method: "GET",
-                url: gosuArena.url.createAbsolute("/api/bots?currentUser=true")
-            })
-            .then(function(response) {
-                $scope.bots = response.data;
-            }, function(e) {
-                notificationService.showUnexpectedErrorMessage(e);
-            });
+    $scope.editBot = function(botId) {
+        $state.go("editbot", { botId: botId });
+    } 
+
+    $http({
+            method: "GET",
+            url: gosuArena.url.createAbsolute("/api/bots?currentUser=true")
+        })
+        .then(function(response) {
+            $scope.bots = response.data;
+        }, function(e) {
+            notificationService.showUnexpectedErrorMessage(e);
+        });
     }
 ]);

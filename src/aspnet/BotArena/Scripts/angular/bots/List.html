@@ -1,15 +1,17 @@
-﻿<div class="menu-page">
+﻿<div class="menu-page menu-halfsize">
     <h3 id="bot-heading">Bots</h3>
     <ul id="bots">
-        <li class="well" ng-repeat="bot in bots | orderBy : '-name'">
-            <a ui-sref="editbot({ botId: bot.id })">
+        <li ng-click="editBot(bot.id)" class="bot well" ng-repeat="bot in bots | orderBy : '-name'">
+            <div class="bot-row">
                 <span class="name">{{bot.name}}</span>
-                <!--<span class="created-date">Created {{bot.createdDate}}</span>-->
-            </a>
-
-            <div class="actions">
-                <!--<a ng-href="{{createDeleteUrl(bot)}})" class="edit-bot">Edit</a>-->
+                <a ui-sref="editbot({ botId: bot.id })">
+                    <span class="bot-action">Edit</span>
+                </a>
             </div>
+            <span class="sub-data">{{bot.isPublic ? "Public Bot" : "Private Bot"}}</span>
+
+            <!--<span class="created-date">Created {{bot.createdDate}}</span>-->
+
         </li>
     </ul>
 </div>
