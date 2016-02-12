@@ -27,3 +27,7 @@ gosu.math.normalizeAngleInDegrees = function (degrees) {
 
     return angle;
 };
+
+gosu.math.clamp = function (value, min, max) {
+    return Math.min(Math.max(value, min), max);
+};

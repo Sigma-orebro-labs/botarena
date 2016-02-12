@@ -14,7 +14,7 @@ gosuArena.factories.createBullet = function (bot) {
         width: width,
         height: height,
         color: "#f00",
-        angle: bot.angle,
+        angle: bot.angle + bot.weapon.angleOffset,
         firedBy: bot,
         damage: bot.weapon.calculateDamage()
     };
