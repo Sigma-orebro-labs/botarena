@@ -342,6 +342,8 @@
     <Content Include="Scripts\angular\account\registerCtrl.js" />
     <Content Include="Scripts\angular\bot-wizard\BotWizardLayout.html" />
     <Content Include="Scripts\angular\bot-wizard\botWizardCtrl.js" />
+    <Content Include="Scripts\angular\bot-wizard\ChooseArmor.html" />
+    <Content Include="Scripts\angular\bot-wizard\chooseArmor.js" />
     <Content Include="Scripts\angular\bot-wizard\ChooseClass.html" />
     <Content Include="Scripts\angular\bot-wizard\chooseClassCtrl.js" />
     <Content Include="Scripts\angular\bot-wizard\ChooseColor.html" />
@@ -373,7 +375,7 @@
     <None Include="Properties\PublishProfiles\botarena - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\botarena - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\botarena-Prod - Web Deploy.pubxml" />
-    <None Include="Scripts\game\modifiers\modifierConfig.json" />
+    <Content Include="Scripts\game\modifiers\modifierConfig.json" />
     <Content Include="Scripts\bots\bootstrapping\cloakSnippet.js" />
     <Content Include="Scripts\bots\bootstrapping\damageBoostSnippet.js" />
     <Content Include="Scripts\bots\bootstrapping\repairSnippet.js" />

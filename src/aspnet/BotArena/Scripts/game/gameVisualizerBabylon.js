@@ -596,9 +596,13 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
             if (bullet.babylonMesh === undefined) {
 
-                bullet.babylonMesh = BABYLON.Mesh.CreateSphere("bullet", 4.0, 4.0, scene);
-                bullet.babylonMesh.color = new BABYLON.Color3.Black();
-                bullet.babylonMesh.material = materials.bullet; // this grey appears completely white. Why?
+                bullet.babylonMesh = BABYLON.Mesh.CreateSphere("bullet", 4.0, 4.0 * (bullet.damage * 0.1), scene);
+                bullet.babylonMesh.color = new BABYLON.Color3.Red();
+                var bulletMaterial = new BABYLON.StandardMaterial("bMat", scene);
+                bulletMaterial.diffuseColor = new BABYLON.Color3.Red();
+                bullet.babylonMesh.material = bulletMaterial;
+                
+                //bullet.babylonMesh.material = materials.bullet; // this grey appears completely white. Why?
                 bullet.babylonMesh.position.y = bulletYValue;
                 shadowGenerator.getShadowMap().renderList.push(bullet.babylonMesh);
                 var smoke = particleSmoke.clone();

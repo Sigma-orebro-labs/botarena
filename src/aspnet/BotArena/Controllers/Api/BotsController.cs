@@ -163,7 +163,7 @@ namespace GosuArena.Controllers.Api
             var defaultScript = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath("~/Scripts/bots/bootstrapping/defaultBotScriptTemplate.js"))
                 .Replace("%COLOR_HEX_CODE%", model.ColorHexCode)
                 .Replace("%BOT_CLASS%", model.ClassName)
-                .Replace("%EQUIPMENT%", string.Join(", ", model.Equipment.Concat(new [] { model.Weapon }).Select(AddQuotes)))
+                .Replace("%EQUIPMENT%", string.Join(", ", model.Equipment.Select(AddQuotes)))
                 .Replace("%AUGMENTATIONS%", string.Join(", ", model.Powerups.Select(AddQuotes)))
                 .Replace("%AUGMENTATION_SNIPPET%", augmentationStartSnippet);
 
