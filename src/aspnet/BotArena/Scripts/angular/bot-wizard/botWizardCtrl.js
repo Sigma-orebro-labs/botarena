@@ -3,7 +3,7 @@
         $scope.bot = {
             className: "", 
             equipment: null,
-            colorHexCode: "",
+            colorHexCode: "#FF0000",
             name: ""
         };
 
@@ -168,7 +168,31 @@
             water.receiveShadows = true;
         }
 
-        $scope.createBot = function() {
+        function getValidateSelectedMessage(value, optionName) {
+            if (!value) {
+                return optionName + '\r\n';
+            }
+
+            return '';
+        }
+
+        $scope.createBot = function () {
+
+            var missingFields = '';
+
+            missingFields += getValidateSelectedMessage($scope.bot.className, "class");
+            missingFields += getValidateSelectedMessage($scope.bot.armor, "armor");
+            missingFields += getValidateSelectedMessage($scope.bot.weapon, "weapon");
+            missingFields += getValidateSelectedMessage($scope.bot.equipment, "equipment");
+            missingFields += getValidateSelectedMessage($scope.bot.augmentation, "augmentation");
+            missingFields += getValidateSelectedMessage($scope.bot.colorHexCode, "color");
+            missingFields += getValidateSelectedMessage($scope.bot.name, "name");
+
+            if (missingFields) {
+                notificationService.showBlockigErrorMessage("Not all options selected", "One or more options have not been selected:\r\n" + missingFields);
+                return;
+            }
+
             $http({
                 method: "POST",
                 url: gosuArena.url.createAbsolute('api/bots'),
@@ -192,7 +216,7 @@
                 } else if (e.status === 400 && e.data.message) {
                     notificationService.showBlockigErrorMessage("Validation error", e.data.message);
                 } else {
-                notificationService.showUnexpectedErrorMessage(e);
+                    notificationService.showUnexpectedErrorMessage(e);
                 }
             });
         };
