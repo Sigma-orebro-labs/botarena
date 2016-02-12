@@ -324,6 +324,8 @@
     <Content Include="Content\lib\codemirror-5.10\mode\javascript\json-ld.html" />
     <Content Include="Content\lib\codemirror-5.10\mode\javascript\test.js" />
     <Content Include="Content\lib\codemirror-5.10\mode\javascript\typescript.html" />
+    <Content Include="Content\lib\minicolors\jquery.minicolors.css" />
+    <Content Include="Content\lib\minicolors\jquery.minicolors.min.js" />
     <Content Include="Content\lib\ng-toaster\toaster.css" />
     <Content Include="Content\lib\ng-toaster\toaster.js" />
     <Content Include="Content\lib\ng-toaster\toaster.min.css" />
@@ -369,6 +371,7 @@
     <Content Include="Scripts\angular\match-setup\setup.html" />
     <Content Include="Scripts\angular\match-setup\matchSetupCtrl.js" />
     <Content Include="Scripts\angular\menuApp.js" />
+    <Content Include="Scripts\angular\services\colorpickerService.js" />
     <Content Include="Scripts\angular\services\matchSetupService.js" />
     <Content Include="Scripts\angular\services\notificationService.js" />
     <Content Include="Scripts\angular\services\authService.js" />

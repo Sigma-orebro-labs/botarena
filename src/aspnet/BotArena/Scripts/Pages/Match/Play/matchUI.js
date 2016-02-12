@@ -5,5 +5,4 @@
             .removeClass('btn-primary')
             .addClass('btn-default');
     });
-
 });

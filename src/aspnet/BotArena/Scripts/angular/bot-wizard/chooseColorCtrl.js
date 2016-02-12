@@ -1,4 +1,6 @@
-﻿angular.module('menuApp').controller('chooseColorCtrl', ['$scope', function ($scope) {
-
-}
+﻿angular.module('menuApp').controller('chooseColorCtrl', ['$scope', 'colorpickerService', function ($scope, colorpickerService) {
+    colorpickerService.initialize($scope.bot.colorHexCode, function (hex) {
+            $scope.bot.colorHexCode = hex;  
+        });
+    }
 ]);
