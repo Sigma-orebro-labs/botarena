@@ -188,9 +188,11 @@
 
             }, function (e) {
                 if (e.status === 409) {
-                    notificationService.showErrorMessage("Bot name taken", "The bot name is already taken, please try another name.");
+                    notificationService.showBlockigErrorMessage("Bot name taken", "The bot name is already taken, please try another name.");
+                } else if (e.status === 400 && e.data.message) {
+                    notificationService.showBlockigErrorMessage("Validation error", e.data.message);
                 } else {
-                    notificationService.showUnexpectedErrorMessage(e);
+                notificationService.showUnexpectedErrorMessage(e);
                 }
             });
         };
