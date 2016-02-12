@@ -176,9 +176,8 @@
                     name: $scope.bot.name,
                     colorHexCode: $scope.bot.colorHexCode,
                     className: $scope.bot.className,
-                    weapon: $scope.bot.weapon,
                     powerups: [$scope.bot.augmentation],
-                    equipment: [$scope.bot.equipment]
+                    equipment: [$scope.bot.equipment, $scope.bot.weapon, $scope.bot.armor]
                 }
             }).then(function (response) {
                 notificationService.showSuccessMessage("Bot created", "Your bot has been created, let's write some code!");

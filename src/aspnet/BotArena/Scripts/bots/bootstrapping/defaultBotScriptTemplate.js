@@ -10,6 +10,9 @@ gosuArena.register({
             actionQueue.clear();
             actionQueue.fire();
         }
+
+        // Example of how to activate your augmentation
+        %AUGMENTATION_SNIPPET%
         
         actionQueue.turn(1);
         actionQueue.forward(1);
@@ -17,9 +20,6 @@ gosuArena.register({
     onHitByBullet: function (actionQueue, status, eventArgs) {
         
         // This will be called if your bot is hit by a bullet from another bot
-
-        // Example of how to activate your augmentation
-%AUGMENTATION_SNIPPET%
 
     },
     onCollision: function (actionQueue, status) {
