@@ -19,6 +19,7 @@ gosuArena.specs.game.addBot = function (options) {
         gosuArena.register({
             tick: options.tick,
             onHitByBullet: options.onHitByBullet,
+            onCollision: options.onCollision,
             options: {
                 startPosition: options.startPosition,
                 botClass: options.botClass,

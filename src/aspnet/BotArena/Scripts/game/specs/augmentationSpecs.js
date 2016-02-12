@@ -99,6 +99,47 @@ describe("Game", function () {
             expect(wasHitByBullet).toBe(true);
         });
 
+        it("gets passed augmentations as a parameter to the onCollision event handler", function () {
+            var wasCollidedCallbackCalledForBot1 = false;
+            var wasCollidedCallbackCalledForBot2 = false;
+
+            addBot({
+                startPosition: { x: 70, y: 0, angle: 90 }, // aiming west
+                tick: function (actionQueue, status, augmentations) {
+                    actionQueue.clear();
+                    actionQueue.forward();
+                }, onCollision: function (actionQueue, status, augmentations) {
+
+                    expect(augmentations).toBeTruthy();
+                    expect(augmentations.repair).toBeTruthy();
+                    expect(augmentations.cloak).toBe(undefined);
+
+                    wasCollidedCallbackCalledForBot1 = true;
+                },
+                augmentations: ['repair']
+            });
+
+            addBot({
+                startPosition: { x: 0, y: 0 },
+                onCollision: function (actionQueue, status, augmentations) {
+
+                    expect(augmentations).toBeTruthy();
+                    expect(augmentations.cloak).toBeTruthy();
+                    expect(augmentations.repair).toBe(undefined);
+
+                    wasCollidedCallbackCalledForBot2 = true;
+                },
+                augmentations: ["cloak"]
+            });
+
+            startGame();
+
+            clock.doTick(200);
+
+            expect(wasCollidedCallbackCalledForBot1).toBe(true);
+            expect(wasCollidedCallbackCalledForBot2).toBe(true);
+        });
+
         it("becomes invisible during a number of rounds when the cloak augmentation is activated", function() {
             var wasTickCalled = false;
             var roundCount = 0;

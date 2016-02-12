@@ -454,7 +454,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
 
         collisionCallbacks.forEach(function (callback) {
             executeUnsafeCode(function() {
-                callback(userActionQueue, status);
+                callback(userActionQueue, status, augmentations);
             });
         });
     }
