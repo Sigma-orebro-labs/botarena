@@ -67,6 +67,11 @@
                 controller: 'chooseEquipmentCtrl',
                 controllerAs: 'equipment'
             })
+            .state('bot-wizard.choose-augmentations', {
+                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/ChooseAugmentations.html'),
+                controller: 'chooseAugmentationsCtrl',
+                controllerAs: 'augmentations'
+            })
             .state('bot-wizard.choose-color', {
                 templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/ChooseColor.html'),
                 controller: 'chooseColorCtrl',

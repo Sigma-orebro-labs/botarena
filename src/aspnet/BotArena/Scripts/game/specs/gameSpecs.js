@@ -1247,4 +1247,155 @@ describe("Game", function () {
 
         expect(arenaState.bots.length).toEqual(1);
     });
+
+    it("script error in the tick callback of a bot raises script error event for that bot", function () {
+        gosuArena.initiateBotRegistration({
+            id: 11,
+            name: "bot1"
+        }, function () {
+            gosuArena.register({
+                tick: function () {
+                    // Force a runtime error
+                    nonExistingFunction();
+                }
+            });
+        });
+
+        startGame();
+
+        var bot = arenaState.bots[0];
+
+        var wasScriptErrorEventFired = false;
+        var scriptErrorBot = null;
+
+        gosuArena.events.botScriptError(function(eventArgs) {
+            scriptErrorBot = eventArgs.bot;
+            wasScriptErrorEventFired = true;
+        });
+
+        clock.doTick();
+
+        expect(wasScriptErrorEventFired).toBe(true);
+        expect(scriptErrorBot.uniqueId).toBe(bot.uniqueId);
+    });
+
+    it("script errors in onCollision callback trigger botScriptError event", function () {
+
+        gosuArena.initiateBotRegistration({
+            id: 1,
+            name: "bot"
+        }, function () {
+            gosuArena.register({
+                tick: function (actionQueue) {
+                    actionQueue.forward();
+                },
+                onCollision: function (actionQueue, status) {
+                    // Force a runtime error
+                    nonExistingFunction();
+                },
+                options: {
+                    startPosition: {
+                        x: 0,
+                        y: 0,
+                        angle: 270 // aiming east
+                    }
+                }
+            });
+        });
+
+        gosuArena.initiateBotRegistration({
+            id: 2,
+            name: "bot2"
+        }, function () {
+            gosuArena.register({
+                tick: function () { },
+                onCollision: function () { },
+                options: {
+                    startPosition: {
+                        x: botWidth,
+                        y: 0,
+                        angle: 0
+                    }
+                }
+            });
+        });
+
+        startGame();
+
+        var bot = arenaState.bots[0];
+
+        var wasScriptErrorEventFired = false;
+        var scriptErrorBot = null;
+
+        gosuArena.events.botScriptError(function (eventArgs) {
+            scriptErrorBot = eventArgs.bot;
+            wasScriptErrorEventFired = true;
+        });
+
+        clock.doTick(10);
+
+        expect(wasScriptErrorEventFired).toBe(true);
+        expect(scriptErrorBot.uniqueId).toBe(bot.uniqueId);
+    });
+
+    it("script errors in onHitByBullet callback trigger botScriptError event", function () {
+
+        gosuArena.initiateBotRegistration({
+            id: 1,
+            name: "bot"
+        }, function () {
+            gosuArena.register({
+                tick: function (actionQueue) {
+                    actionQueue.fire();
+                },
+                onCollision: function (actionQueue, status) {
+                },
+                options: {
+                    startPosition: {
+                        x: 0,
+                        y: 0,
+                        angle: 270 // aiming east
+                    }
+                }
+            });
+        });
+
+        gosuArena.initiateBotRegistration({
+            id: 2,
+            name: "bot2"
+        }, function () {
+            gosuArena.register({
+                tick: function () { },
+                onCollision: function () { },
+                onHitByBullet: function() {
+                    // Force runtime error
+                    undefinedFunction();
+                },
+                options: {
+                    startPosition: {
+                        x: botWidth,
+                        y: 0,
+                        angle: 0
+                    }
+                }
+            });
+        });
+
+        startGame();
+
+        var bot = arenaState.bots[1];
+
+        var wasScriptErrorEventFired = false;
+        var scriptErrorBot = null;
+
+        gosuArena.events.botScriptError(function (eventArgs) {
+            scriptErrorBot = eventArgs.bot;
+            wasScriptErrorEventFired = true;
+        });
+
+        clock.doTick(10);
+
+        expect(wasScriptErrorEventFired).toBe(true);
+        expect(scriptErrorBot.uniqueId).toBe(bot.uniqueId);
+    });
 });

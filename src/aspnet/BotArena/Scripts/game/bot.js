@@ -78,6 +78,17 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
 
     var bot = gosuArena.worldObject.create(properties);
 
+    function executeUnsafeCode(codeBlock) {
+        try {
+            codeBlock();
+        } catch (error) {
+            gosuArena.events.raiseBotScriptError({
+                bot: bot,
+                exception: error
+            });
+        }
+    }
+
     var actionQueue = gosuArena.factories.createActionQueue(collisionDetector, bot);
     var userActionQueue = gosuArena.factories.createUserActionQueue(actionQueue);
 
@@ -116,7 +127,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
     }
 
     bot.healthPercentage = function () {
-        return properties.health / options.maxHealth;
+        return properties.health / properties.maxHealth;
     };
 
     bot.weapon.mountingPoint = function() {
@@ -351,7 +362,9 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
 
         var status = bot.createStatus();
 
-        tickCallback(userActionQueue, status, augmentations);
+        executeUnsafeCode(function() {
+            tickCallback(userActionQueue, status, augmentations);
+        });
 
         for (var i = 0; i < options.actionsPerRound; i++) {
             actionQueue.performNext(bot);
@@ -427,7 +440,9 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         };
 
         hitByBulletCallbacks.forEach(function (callback) {
-            callback(userActionQueue, status, augmentations, eventArgs);
+            executeUnsafeCode(function() {
+                callback(userActionQueue, status, augmentations, eventArgs);
+            });
         });
     }
 
@@ -436,7 +451,9 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         var status = bot.createStatus();
 
         collisionCallbacks.forEach(function (callback) {
-            callback(userActionQueue, status);
+            executeUnsafeCode(function() {
+                callback(userActionQueue, status);
+            });
         });
     }
 

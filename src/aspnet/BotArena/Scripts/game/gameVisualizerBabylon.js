@@ -6,7 +6,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
     var shipYValue = 6;
     var bulletYValue = 10;
-    var healthBarYValue = 40;
+    var healthBarYValue = 50;
     var wallYValue = 10;
     var explosionYValue = 20;
     var nameTagYValue = 10;
@@ -400,6 +400,12 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         camera.wheelPrecision = 0.03;
         camera.maxZ = 20000;
 
+        // disable navigation by arrow keys 
+        camera.keysDown = [];
+        camera.keysLeft = [];
+        camera.keysRight = [];
+        camera.keysUp = [];
+
         return newScene;
     };
 
@@ -446,7 +452,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             var wallMesh = BABYLON.Mesh.CreateBox("wall_" + i, 1, scene);
 
             wallMesh.scaling = new BABYLON.Vector3(currentTerrain.width, currentTerrain.height, currentTerrain.height / 2);
-            wallMesh.position = new BABYLON.Vector3(terrainCenter.y, -15, terrainCenter.x);
+            wallMesh.position = new BABYLON.Vector3(terrainCenter.y, 0, terrainCenter.x);
 
 
             brickMaterial[i].diffuseTexture.vScale = 0.3;
@@ -507,7 +513,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
                 bot.babylonMesh.position.x = bot.y;
                 bot.babylonMesh.position.z = bot.x;
-                bot.babylonMesh.rotation.y = gosu.math.degreesToRadians(bot.angle);
+                bot.babylonMesh.rotation.y = gosu.math.degreesToRadians(bot.angle + 180); // +180 fixes model facing wrong direction
 
                 bot.healthBarSprite.position.x = bot.y;
                 bot.healthBarSprite.position.z = bot.x;

@@ -30,11 +30,7 @@ gosuArena.specs.game.addBot = function (options) {
 };
 
 gosuArena.specs.game.cleanup = function() {
-    gosu.eventAggregator.unsubscribeAll("matchEnded");
-    gosu.eventAggregator.unsubscribeAll("botRegistrationStarting");
-    gosu.eventAggregator.unsubscribeAll("gameStarting");
-    gosu.eventAggregator.unsubscribeAll("worldInitialized");
-    gosu.eventAggregator.unsubscribeAll("resourcesLoaded");
+    gosu.eventAggregator.unsubscribeAll();
 
     gosuArena.engine.reset();
 };

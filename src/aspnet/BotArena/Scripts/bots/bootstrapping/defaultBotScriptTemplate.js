@@ -2,7 +2,7 @@
 // have naming conflicts with other bots
 
 gosuArena.register({
-    tick: function (actionQueue, status) {
+    tick: function (actionQueue, status, augmentations) {
 
         // Do something interesting here... for example:
 
@@ -17,6 +17,14 @@ gosuArena.register({
     onHitByBullet: function (actionQueue, status, eventArgs) {
         
         // This will be called if your bot is hit by a bullet from another bot
+
+        // Example of how to activate your augmentation
+%AUGMENTATION_SNIPPET%
+
+    },
+    onCollision: function (actionQueue, status) {
+
+        // This will be called if your bot collides with a wall or another bot
 
     },
     options: {

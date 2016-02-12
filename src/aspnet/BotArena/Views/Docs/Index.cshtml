@@ -1,4 +1,7 @@
 ﻿@using System.Web.Optimization
+@{
+    var modifierConfigUrl = Url.Content("~/") + "api/modifiers";
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,6 +32,8 @@
     <li><a href="#action-queue">Action Queue Object</a></li>
     <li><a href="#coordinate-system">Coordinate System and Angles</a></li>
     <li><a href="#debugging">Debugging your bot</a></li>
+    <li><a href="#equipment">Equipment and classes</a></li>
+    <li><a href="#augmentations">Augmentations - Special Abilities</a></li>
     <li><a href="#team-games">Team Games</a></li>
     <li><a href="#technical-details">Technical Details</a></li>
     <li><a href="#private-bots">Public and Private Bots</a></li>
@@ -39,15 +44,15 @@
 <h3 id="getting-started">Getting Started</h3>
 
 <p>
-    The first thing you have to do is to <a href="@Url.Action("Register", "User")">register</a> a GosuArena account.
-    When you have done that you need to create a bot. You can create bots on you <a href="@Url.Action("MyProfile", "User")">profile page</a>.
-    Your profile shows a list of all your bots. Click the one you want to edit and you will see a very basic editor where you can
-    write your JavaScript code for your bot.
+    The first thing you have to do is to register a BotArena account.
+    When you have done that you need to create a bot. You can create bots via Create Bot wizard in the main menu (upper left corner of the game screen).
+    You can then access your bots via the My bots page, also available through the main menu. Click the one you want to edit and you will see a
+    basic editor where you can write your JavaScript code for your bot.
 </p>
 
 <p>
-    The one thing you have to do to make GosuArena understand that you have a bot that wants to join the party is to call the gosuArena.register
-    method, and specify a tick callback which GosuArena calls once per round during the game.
+    The one thing you have to do to make BotArena understand that you have a bot that wants to join the party is to call the gosuArena.register
+    method, and specify a tick callback which BotArena calls once per round during the game.
 </p>
 
 <p>
@@ -91,7 +96,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 </p>
 
 <p>
-    GosuArena passes two arguments to your tick callback: <a href="#action-queue">actionQueue</a> and <a href="#bot-status">status</a>.
+    BotArena passes two arguments to your tick callback: <a href="#action-queue">actionQueue</a> and <a href="#bot-status">status</a>.
     Status contains information about your bot and the things it can see. Action queue is the object through which you tell gosuArena what
     your bot has decided to do.
 </p>
@@ -104,7 +109,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 </p>
 
 <p>
-    GosuArena passes three arguments to your onHitByBullet callback: <a href="#action-queue">actionQueue</a>, <a href="#bot-status">status</a> and
+    BotArena passes three arguments to your onHitByBullet callback: <a href="#action-queue">actionQueue</a>, <a href="#bot-status">status</a> and
     <a href="#onHitByBullet-eventArgs">eventArgs</a>.
 </p>
 
@@ -136,7 +141,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 </p>
 
 <p>
-    GosuArena passes the two standard arguments to your onCollision callback: <a href="#action-queue">actionQueue</a> and <a href="#bot-status">status</a>.
+    BotArena passes the two standard arguments to your onCollision callback: <a href="#action-queue">actionQueue</a> and <a href="#bot-status">status</a>.
 </p>
 
 <p>
@@ -339,6 +344,48 @@ Your bot interacts with gosuArena through a couple of different events, and thos
     On the same note, if you rotate 1 degree when at 359 degrees you will end up at 0 degrees.
 </p>
 
+<h3 id="equipment">Equipment and classes</h3>
+<p>
+    To customize you bot you can choose a class, weapon, armor and equipment. All of these change the
+    properties of your bot to make it faster, slower, make more damage etc.
+
+    For a complete list of all available modifiers (classes, equipment etc) see the actual
+    <a href="@modifierConfigUrl">configuration document</a>.
+</p>
+<p>
+    If you want to change the modifiers used by you bot after creating it with the wizard, change
+    the values in the bottom of the script to other ids found in the config document.
+</p>
+
+<h3 id="augmentations">Augmentations - Special Abilites</h3>
+<p>
+    When creating a bot you can choose between three types of augmentations.
+    <ul>
+        <li>Mirage (Cloak)</li>
+        <li>Repair</li>
+        <li>Barrel of spiked gunpowder (Damage Boost)</li>
+    </ul>
+    These are special abilities you can use in battle to gain advantage.
+</p>
+
+<h4>Mirage (Cloak)</h4>
+<p>Cloak makes your bot invisible for a short amount of time. Can only be used once.</p>
+<pre class="prettify">
+  augmentations.cloak.activate();
+</pre>
+
+<h4>Repair</h4>
+<p>With a crew trained to do mid-fight ship repairs, the ship can be partially restored when damaged. A ship can only be repaired once per battle.</p>
+<pre class="prettify">
+  augmentations.repair.activate();
+</pre>
+
+<h4>Barrel of spiked gunpowder (Damage Boost)</h4>
+<p>By using a special powder keg your bullets do more damage for a short amount of time. Can only be fired once.</p>
+<pre class="prettify">
+  augmentations.damageBoost.activate();
+</pre>
+
 <h3 id="debugging">Debugging Your Bot</h3>
 
 <p>
@@ -424,7 +471,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 <h4>Globals and Scoping</h4>
 
 <p>
-    GosuArena has redefined a couple of globals in the context where your script is executed. Window,
+    BotArena has redefined a couple of globals in the context where your script is executed. Window,
     document and alert are redefined to be empty JavaScript objects to avoid some of the worst nastiness.
 </p>
 
@@ -435,7 +482,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 </p>
 
 <p>
-    GosuArena is structured so that you are free to organize the code within your script in what ever way
+    BotArena is structured so that you are free to organize the code within your script in what ever way
     you feel is best, as long as you call gosuArena.register and pass in an object with a tick property.
 </p>
 
@@ -510,7 +557,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 
 <p>
     To make sure your requests are accepted you need to include an Authorization request header. The value of the header must be the string
-    GosuArenaApiKey followed by a space and then your key:
+    BotArenaApiKey followed by a space and then your key:
 </p>
 
 <pre class="prettyprint">
