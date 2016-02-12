@@ -19,8 +19,9 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         cooldownTime: options.weaponCooldownTime * staticModifiers.calculateWeaponCooldownTimeFactor(),
         cooldownTimeLeft: 0,
         baseDamage: options.weaponDamage,
-        offsetDistanceFromCenter: options.weaponOffsetDistanceFromCenter
-    };
+        offsetDistanceFromCenter: options.weaponOffsetDistanceFromCenter,
+        angleOffset: 0
+};
 
     weapon.calculateDamage = function() {
         return weapon.baseDamage * staticModifiers.calculateWeaponDamageFactor();
@@ -211,11 +212,12 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         bot.direction = movementVector.add(previousDirection);
     }
 
-    bot.fire = function () {
-
+    bot.fire = function (angle) {
         if (bot.weapon.cooldownTimeLeft > 0) {
             return;
         }
+
+        bot.weapon.angleOffset = gosu.math.clamp(angle || 0, -20, 20);
 
         raiseShotFiredEvent();
 

@@ -57,6 +57,11 @@
                 controller: 'chooseWeaponCtrl',
                 controllerAs: 'weapon'
             })
+            .state('bot-wizard.choose-armor', {
+                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/ChooseArmor.html'),
+                controller: 'chooseArmorCtrl',
+                controllerAs: 'armor'
+            })
             .state('bot-wizard.choose-equipment', {
                 templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/ChooseEquipment.html'),
                 controller: 'chooseEquipmentCtrl',

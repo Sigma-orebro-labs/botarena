@@ -135,9 +135,9 @@ gosuArena.factories.createActionQueue = function (collisionDetector, bot) {
         nextAction(bot);
     }
 
-    function fire() {
+    function fire(angle) {
         enqueueAction(function (b) {
-            b.fire();
+            b.fire(angle);
         });
     }
 
