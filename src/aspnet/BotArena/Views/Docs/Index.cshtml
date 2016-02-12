@@ -320,7 +320,11 @@ Your bot interacts with gosuArena through a couple of different events, and thos
     
         // Fires a bullet, if the gun is ready to fire
         // The cannon can be rotated between -20 and 20 degrees by passing an additional argument to fire, the default rotation is 0 degrees
-        // e.g. actionQueue.fire(-15)
+        // e.g. actionQueue.fire(-15). The cannon rotation only applies to that specific shot. No cannon rotation is preserved
+        // to future calls to fire().
+        // Remember that a positive offset means that the shot is offset clockwise to the bot's own angle,
+        // while a negative offset would fire the shot with a counter clockwise offset. For example, if you are
+        // aiming due west and fire with a positive offset, the shot would travel mainly west but with an offset to the north.
         fire: function () { ... },  
     
         clear: function () { ... }, // Removes all actions added to the queue but that have not yet been executed
@@ -344,6 +348,10 @@ Your bot interacts with gosuArena through a couple of different events, and thos
     between 0 and 360 degrees (or actually between 0 and 359.999999..., but you get the picture).
     If you turn by -1 degree when at 0 degrees you will end up at 359 degrees.
     On the same note, if you rotate 1 degree when at 359 degrees you will end up at 0 degrees.
+</p>
+<p>
+    This also means that a positive rotation would turn the bot clockwise, and a negative rotation
+    would turn the bot counter clockwise.
 </p>
 
 <h3 id="equipment">Equipment and classes</h3>

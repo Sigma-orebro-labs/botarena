@@ -1398,4 +1398,32 @@ describe("Game", function () {
         expect(wasScriptErrorEventFired).toBe(true);
         expect(scriptErrorBot.uniqueId).toBe(bot.uniqueId);
     });
+
+    it("can fire shots with a slightly different angle than the angle of the bots", function () {
+        var wasHitByBullet = false;
+
+        addBot({
+            startPosition: { x: 200, y: 0, angle: 90 }, // aiming west
+            tick: function (actionQueue, status, augmentations) {
+                actionQueue.clear();
+                actionQueue.fire(-4); // Fire with a 4 degree offset, that is slightly south
+            }
+        });
+
+        // This bot starts more than a bot width to the south of the other bot
+        // so a shot fired straight to the west would miss. But a shot fired west with a slight south offset
+        // would hit.
+        addBot({
+            startPosition: { x: 0, y: 30 },
+            onHitByBullet: function (actionQueue, status, augmentations, eventArgs) {
+                wasHitByBullet = true;
+            }
+        });
+
+        startGame();
+
+        clock.doTick(30);
+
+        expect(wasHitByBullet).toBe(true);
+    });
 });
