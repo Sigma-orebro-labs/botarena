@@ -1,1 +1,3 @@
-﻿        augmentations.damageBoost.activate();
+﻿        if (status.seenEnemies.length > 0) {
+            augmentations.damageBoost.activate();
+        }

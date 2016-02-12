@@ -373,19 +373,35 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 <h4>Mirage (Cloak)</h4>
 <p>Cloak makes your bot invisible for a short amount of time. Can only be used once.</p>
 <pre class="prettify">
-  augmentations.cloak.activate();
+    if (!augmentations.cloak.isActive()) {
+        augmentations.cloak.activate();
+    }
 </pre>
 
 <h4>Repair</h4>
 <p>With a crew trained to do mid-fight ship repairs, the ship can be partially restored when damaged. A ship can only be repaired once per battle.</p>
 <pre class="prettify">
-  augmentations.repair.activate();
+    if (!augmentations.repair.isActive()) {
+        augmentations.repair.activate();
+    }
 </pre>
 
 <h4>Barrel of spiked gunpowder (Damage Boost)</h4>
 <p>By using a special powder keg your bullets do more damage for a short amount of time. Can only be fired once.</p>
 <pre class="prettify">
-  augmentations.damageBoost.activate();
+    if (!augmentations.damageBoost.isActive()) {
+        augmentations.damageBoost.activate();
+    }
+</pre>
+    
+<h4>Being smart about when the augmentation ends</h4>
+<p>
+    If you want to do something clever when an augmentation expires, you can use the roundsRemaining method.
+</p>
+<pre class="prettify">
+    if (augmentations.cloak.isActive() && augmentations.cloak.roundsRemaining() < 50) {
+        // Start preparing to be visible again. Perhaps time to disengage any sneaky attacks and run away?
+    }
 </pre>
 
 <h3 id="debugging">Debugging Your Bot</h3>

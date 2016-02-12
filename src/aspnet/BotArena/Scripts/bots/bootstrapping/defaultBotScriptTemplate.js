@@ -12,7 +12,7 @@ gosuArena.register({
         }
 
         // Example of how to activate your augmentation
-        %AUGMENTATION_SNIPPET%
+%AUGMENTATION_SNIPPET%
         
         actionQueue.turn(1);
         actionQueue.forward(1);
