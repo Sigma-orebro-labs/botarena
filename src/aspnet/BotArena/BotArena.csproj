@@ -373,7 +373,7 @@
     <None Include="Properties\PublishProfiles\botarena - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\botarena - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\botarena-Prod - Web Deploy.pubxml" />
-    <None Include="Scripts\game\modifiers\modifierConfig.json" />
+    <Content Include="Scripts\game\modifiers\modifierConfig.json" />
     <Content Include="Scripts\bots\bootstrapping\cloakSnippet.js" />
     <Content Include="Scripts\bots\bootstrapping\damageBoostSnippet.js" />
     <Content Include="Scripts\bots\bootstrapping\repairSnippet.js" />

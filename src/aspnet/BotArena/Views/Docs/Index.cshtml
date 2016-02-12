@@ -1,4 +1,7 @@
 ﻿@using System.Web.Optimization
+@{
+    var modifierConfigUrl = Url.Content("~/") + "api/modifiers";
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,6 +32,7 @@
     <li><a href="#action-queue">Action Queue Object</a></li>
     <li><a href="#coordinate-system">Coordinate System and Angles</a></li>
     <li><a href="#debugging">Debugging your bot</a></li>
+    <li><a href="#equipment">Equipment and classes</a></li>
     <li><a href="#augmentations">Augmentations - Special Abilities</a></li>
     <li><a href="#team-games">Team Games</a></li>
     <li><a href="#technical-details">Technical Details</a></li>
@@ -338,6 +342,19 @@ Your bot interacts with gosuArena through a couple of different events, and thos
     between 0 and 360 degrees (or actually between 0 and 359.999999..., but you get the picture).
     If you turn by -1 degree when at 0 degrees you will end up at 359 degrees.
     On the same note, if you rotate 1 degree when at 359 degrees you will end up at 0 degrees.
+</p>
+
+<h3 id="equipment">Equipment and classes</h3>
+<p>
+    To customize you bot you can choose a class, weapon, armor and equipment. All of these change the
+    properties of your bot to make it faster, slower, make more damage etc.
+
+    For a complete list of all available modifiers (classes, equipment etc) see the actual
+    <a href="@modifierConfigUrl">configuration document</a>.
+</p>
+<p>
+    If you want to change the modifiers used by you bot after creating it with the wizard, change
+    the values in the bottom of the script to other ids found in the config document.
 </p>
 
 <h3 id="augmentations">Augmentations - Special Abilites</h3>
