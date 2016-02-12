@@ -88,7 +88,7 @@
 
             var light = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(-1, -2, -1), scene);
 
-            BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "corvette.babylon", scene, function (meshes1) {
+            BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "ship.babylon", scene, function (meshes1) {
                 var mesh = meshes1[1];
                 $scope.allMeshes.push(mesh);
             
