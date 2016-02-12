@@ -315,6 +315,8 @@ Your bot interacts with gosuArena through a couple of different events, and thos
         turn: function (degrees) { ... },
     
         // Fires a bullet, if the gun is ready to fire
+        // The cannon can be rotated between -20 and 20 degrees by passing an additional argument to fire, the default rotation is 0 degrees
+        // e.g. actionQueue.fire(-15)
         fire: function () { ... },  
     
         clear: function () { ... }, // Removes all actions added to the queue but that have not yet been executed
