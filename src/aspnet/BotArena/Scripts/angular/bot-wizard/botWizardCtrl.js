@@ -36,6 +36,7 @@
                 botClass: $scope.bot.className,
                 equipment: [
                     $scope.bot.weapon,
+                    $scope.bot.armor,
                     $scope.bot.equipment
                 ]
             };

@@ -586,6 +586,8 @@
     <Content Include="Scripts\angular\account\registerCtrl.js" />
     <Content Include="Scripts\angular\bot-wizard\BotWizardLayout.html" />
     <Content Include="Scripts\angular\bot-wizard\botWizardCtrl.js" />
+    <Content Include="Scripts\angular\bot-wizard\ChooseArmor.html" />
+    <Content Include="Scripts\angular\bot-wizard\chooseArmor.js" />
     <Content Include="Scripts\angular\bot-wizard\ChooseClass.html" />
     <Content Include="Scripts\angular\bot-wizard\chooseClassCtrl.js" />
     <Content Include="Scripts\angular\bot-wizard\ChooseColor.html" />
