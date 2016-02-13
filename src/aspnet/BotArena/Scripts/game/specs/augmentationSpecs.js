@@ -202,11 +202,11 @@ describe("Game", function () {
                 startPosition: { x: 100, y: 0, angle: 90 }, // aiming west
                 tick: function (actionQueue, status) {
                     if (roundCount === 0) {
-                        expect(status.seenEnemies.length).toBe(1);
+                        expect(status.enemiesOnTarget.length).toBe(1);
                     } else if (roundCount < cloakDuration) {
-                        expect(status.seenEnemies.length).toBe(0);
+                        expect(status.enemiesOnTarget.length).toBe(0);
                     } else if (roundCount > cloakDuration) {
-                        expect(status.seenEnemies.length).toBe(1);
+                        expect(status.enemiesOnTarget.length).toBe(1);
                     }
 
                     wasTick2Called = true;

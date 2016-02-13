@@ -272,8 +272,8 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
 
     bot.createStatus = function (simplified) {
 
-        var seenEnemies = null;
-        var seenAllies = null;
+        var enemiesOnTarget = null;
+        var alliesOnTarget = null;
 
         var enemiesInFieldOfVision = null;
         var alliesInFieldOfVision = null;
@@ -285,8 +285,8 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         // another bot can see. That would be a bit too much info to give away.
         if (!simplified) {
 
-            seenEnemies = [];
-            seenAllies = [];
+            enemiesOnTarget = [];
+            alliesOnTarget = [];
 
             enemiesInFieldOfVision = [];
             alliesInFieldOfVision = [];
@@ -294,7 +294,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
             var seenBots = collisionDetector.seenBots(bot);
             var botsInFieldOfVision = collisionDetector.botsInFieldOfView(bot);
 
-            createBotStatusesForSeenBots(seenBots, seenEnemies, seenAllies);
+            createBotStatusesForSeenBots(seenBots, enemiesOnTarget, alliesOnTarget);
             createBotStatusesForSeenBots(botsInFieldOfVision, enemiesInFieldOfVision, alliesInFieldOfVision);
         }
 
@@ -326,8 +326,8 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
             canFire: function () {
                 return bot.weapon.cooldownTimeLeft <= 0;
             },
-            seenEnemies: seenEnemies,
-            seenAllies: seenAllies,
+            enemiesOnTarget: enemiesOnTarget,
+            alliesOnTarget: alliesOnTarget,
             enemiesInFieldOfVision: enemiesInFieldOfVision,
             alliesInFieldOfVision: alliesInFieldOfVision,
             canMoveForward: function () {

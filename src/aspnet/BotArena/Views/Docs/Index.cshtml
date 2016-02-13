@@ -31,6 +31,7 @@
     <li><a href="#bot-status">Bot Status Object</a></li>
     <li><a href="#action-queue">Action Queue Object</a></li>
     <li><a href="#coordinate-system">Coordinate System and Angles</a></li>
+    <li><a href="#field-of-vision">Bot Field of Vision</a></li>
     <li><a href="#debugging">Debugging your bot</a></li>
     <li><a href="#equipment">Equipment and classes</a></li>
     <li><a href="#augmentations">Augmentations - Special Abilities</a></li>
@@ -223,17 +224,25 @@ Your bot interacts with gosuArena through a couple of different events, and thos
         // be one action. forward(2) would be 2 actions, and forward(1) followed by turn(1) would be 
         // two actions in total.
         actionsPerRound,
-        // An array of <a href="#bot-status">bot status</a> objects representing the enemy bots your bot currently can see.
+        // An array of <a href="#bot-status">bot status</a> objects representing the enemy bots your bot currently can see
+        // straight ahead.
         // In an FFA match, all other bots are considered enemies. In a team match, all bots on other teams are considered
         // enemies.
         // The line of sight of the bot is a thin, straight line from the sight and forward so you can only see bots
         // on which your bot has aimed its gun.
         enemiesOnTarget, 
-        // An array of <a href="#bot-status">bot status</a> objects representing the allied bots your bot currently can see.
+        // An array of <a href="#bot-status">bot status</a> objects representing the allied bots your bot currently can see
+        // straight ahead.
         // This property is only used during team matches. Bots on the same team as the current bot are considered allies.
         // The line of sight of the bot is a thin, straight line from the sight and forward so you can only see bots
         // on which your bot has aimed its gun.
         alliesOnTarget,
+        // An array of <a href="#bot-status">bot status</a> objects representing the enemy bots your bot currently can see
+        // in its entire field of vision. See the enemiesOnTarget property and the <a href="#field-of-vision">field of vision section</a> for more info.
+        enemiesInFieldOfVision,
+        // An array of <a href="#bot-status">bot status</a> objects representing the allied bots your bot currently can see
+        // in its entire field of vision. See the alliesOnTarget property and the <a href="#field-of-vision">field of vision section</a> for more info.
+        alliesInFieldOfVision,
         canFire: function () { ... },  // True if the weapon is ready for firing, false if the weapon is still cooling down
         roundsUntilWeaponIsReady, // The number of rounds remaining until the weapon is ready to fire
         // The following functions return true if the bot is able to perform the
@@ -352,6 +361,32 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 <p>
     This also means that a positive rotation would turn the bot clockwise, and a negative rotation
     would turn the bot counter clockwise.
+</p>
+
+<h3 id="field-of-vision">Bot Field of Vision</h3>
+
+<p>
+    The bots have a 90 degree field of vision (FOV). The FOV "starts" in the center of the bot and points
+    45 degrees to either side of the line along which the bot is aiming, which is a straight line forward
+    relative to the bot. Think of the FOV as a cone with its point in the center of the bot, and expanding outward in the
+    direction that the bot is pointing.
+</p>
+
+<p>
+    In the image below the dotted lines represent the line along which the bot is aiming, while the solid lines
+    show the limits of the field of vision. If an enemy bot overlaps the aiming line of another bot, that
+    bot is included in the enemiesOnTarget array of the <a href="#bot-status">bot status</a> object.
+    All enemies within the entire field of vision (the slightly colored area between the solid lines) is
+    included in the enemiesInFieldOfView array of the <a href="#bot-status">bot status</a> object.
+</p>
+
+<img src="@Url.Content("~/Content/images/docs/fov.png")" alt="Visualization of the bot field of view (FOV)" />
+
+<p>
+    While the default behaviour is to fire along the aiming line, remember that you can specify an angle
+    offset when firing your cannon to shoot either to the left or to the right of the aiming line. However,
+    angle offset is only allowed to be -20 degrees to +20 degrees, which means that your bot will be able
+    to see more bots than it can target with its cannon.
 </p>
 
 <h3 id="equipment">Equipment and classes</h3>

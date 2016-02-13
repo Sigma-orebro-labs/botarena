@@ -536,20 +536,20 @@ describe("Game", function () {
                 gosuArena.register({
                     tick: function (actionQueue, status) {
 
-                        expect(status.seenEnemies.length).toEqual(2);
+                        expect(status.enemiesOnTarget.length).toEqual(2);
 
                         // Make sure that the object passed as a seen bot
                         // doesn't have actual move actions defined
-                        expect(status.seenEnemies[0].moveForward).toBe(undefined);
+                        expect(status.enemiesOnTarget[0].moveForward).toBe(undefined);
 
                         // Make sure there are seen bots matching the positions
                         // of the actual bots
-                        expect(status.seenEnemies.filter(function (b) {
+                        expect(status.enemiesOnTarget.filter(function (b) {
                             return b.position.x == bot1Position.x &&
                                 b.position.y == bot1Position.y;
                         }).length).toEqual(1);
 
-                        expect(status.seenEnemies.filter(function (b) {
+                        expect(status.enemiesOnTarget.filter(function (b) {
                             return b.position.x == bot2Position.x &&
                                 b.position.y == bot2Position.y;
                         }).length).toEqual(1);
@@ -599,10 +599,10 @@ describe("Game", function () {
                 gosuArena.register({
                     tick: function (actionQueue, status) {
 
-                        expect(status.seenEnemies.length).toEqual(1);
+                        expect(status.enemiesOnTarget.length).toEqual(1);
 
                         if (round > 0) {
-                            expect(status.seenEnemies[0].direction).toEqualVector({ x: 1, y: 0 });
+                            expect(status.enemiesOnTarget[0].direction).toEqualVector({ x: 1, y: 0 });
                         }
 
                         wasTickCalled = true;
@@ -658,11 +658,11 @@ describe("Game", function () {
                 gosuArena.register({
                     tick: function (actionQueue, status) {
 
-                        expect(status.seenEnemies.length).toEqual(1);
+                        expect(status.enemiesOnTarget.length).toEqual(1);
 
                         if (round > 0) {
-                            expect(status.seenEnemies[0].id).toEqual(1);
-                            expect(status.seenEnemies[0].teamId).toEqual(2);
+                            expect(status.enemiesOnTarget[0].id).toEqual(1);
+                            expect(status.enemiesOnTarget[0].teamId).toEqual(2);
                         }
 
                         wasTickCalled = true;
@@ -686,7 +686,7 @@ describe("Game", function () {
             expect(wasTickCalled).toBe(true);
         });
 
-        it("In a team game seenAllies includes all seen bots on the same team and seenEnemies includes all other seen bots", function () {
+        it("In a team game alliesOnTarget includes all seen bots on the same team and enemiesOnTarget includes all other seen bots", function () {
 
             // seen
             addBot({ id: 1, teamId: 2, startPosition: { x: 1, y: 10, angle: 0 } });
@@ -711,14 +711,14 @@ describe("Game", function () {
                 gosuArena.register({
                     tick: function (actionQueue, status) {
 
-                        expect(status.seenEnemies.length).toEqual(3);
-                        expect(status.seenEnemies).toContainElementMatching(function(bot) { return bot.id === 1; });
-                        expect(status.seenEnemies).toContainElementMatching(function(bot) { return bot.id === 4; });
-                        expect(status.seenEnemies).toContainElementMatching(function(bot) { return bot.id === 5; });
+                        expect(status.enemiesOnTarget.length).toEqual(3);
+                        expect(status.enemiesOnTarget).toContainElementMatching(function(bot) { return bot.id === 1; });
+                        expect(status.enemiesOnTarget).toContainElementMatching(function(bot) { return bot.id === 4; });
+                        expect(status.enemiesOnTarget).toContainElementMatching(function(bot) { return bot.id === 5; });
 
-                        expect(status.seenAllies.length).toEqual(2);
-                        expect(status.seenAllies).toContainElementMatching(function (bot) { return bot.id === 2; });
-                        expect(status.seenAllies).toContainElementMatching(function (bot) { return bot.id === 3; });
+                        expect(status.alliesOnTarget.length).toEqual(2);
+                        expect(status.alliesOnTarget).toContainElementMatching(function (bot) { return bot.id === 2; });
+                        expect(status.alliesOnTarget).toContainElementMatching(function (bot) { return bot.id === 3; });
 
                         wasTickCalled = true;
                     },
@@ -739,7 +739,7 @@ describe("Game", function () {
             expect(wasTickCalled).toBe(true);
         });
 
-        it("In an FFA game seenEnemies includes all seen bots and seenAllies is empty", function () {
+        it("In an FFA game enemiesOnTarget includes all seen bots and alliesOnTarget is empty", function () {
 
             // seen
             addBot({ id: 1, teamId: undefined, startPosition: { x: 1, y: 10, angle: 0 } });
@@ -760,11 +760,11 @@ describe("Game", function () {
                 gosuArena.register({
                     tick: function (actionQueue, status) {
 
-                        expect(status.seenEnemies.length).toEqual(2);
-                        expect(status.seenEnemies).toContainElementMatching(function (bot) { return bot.id = 1; });
-                        expect(status.seenEnemies).toContainElementMatching(function (bot) { return bot.id = 2; });
+                        expect(status.enemiesOnTarget.length).toEqual(2);
+                        expect(status.enemiesOnTarget).toContainElementMatching(function (bot) { return bot.id = 1; });
+                        expect(status.enemiesOnTarget).toContainElementMatching(function (bot) { return bot.id = 2; });
 
-                        expect(status.seenAllies).toBeEmpty();
+                        expect(status.alliesOnTarget).toBeEmpty();
 
                         wasTickCalled = true;
                     },
