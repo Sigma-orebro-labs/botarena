@@ -44,6 +44,9 @@ describe("bot", function () {
             seenBots: function () {
                 return [];
             },
+            botsInFieldOfView: function() {
+                return [];
+            },
             canPerformMoveAction: function () {
                 return true;
             }
@@ -107,6 +110,9 @@ describe("bot", function () {
             weaponCooldownTime: 2
         }), {
             seenBots: function () {
+                return [];
+            },
+            botsInFieldOfView: function () {
                 return [];
             },
             canPerformMoveAction: function () {
