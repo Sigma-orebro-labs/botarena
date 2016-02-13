@@ -164,7 +164,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 <p>
     You might be missing some event which you feel would make your life much better. One of those might be something along the lines of
     onEnemySpotted. There is currently no such event since you can get information about all bots which your bot can currently see through
-    the seenEnemies and seenAllies properties of the <a href="#bot-status">status</a> object in the existing events. However, that event
+    the enemiesOnTarget and alliesOnTarget properties of the <a href="#bot-status">status</a> object in the existing events. However, that event
     might be added later if people feel strongly about it.
 </p>
 
@@ -228,12 +228,12 @@ Your bot interacts with gosuArena through a couple of different events, and thos
         // enemies.
         // The line of sight of the bot is a thin, straight line from the sight and forward so you can only see bots
         // on which your bot has aimed its gun.
-        seenEnemies, 
+        enemiesOnTarget, 
         // An array of <a href="#bot-status">bot status</a> objects representing the allied bots your bot currently can see.
         // This property is only used during team matches. Bots on the same team as the current bot are considered allies.
         // The line of sight of the bot is a thin, straight line from the sight and forward so you can only see bots
         // on which your bot has aimed its gun.
-        seenAllies,
+        alliesOnTarget,
         canFire: function () { ... },  // True if the weapon is ready for firing, false if the weapon is still cooling down
         roundsUntilWeaponIsReady, // The number of rounds remaining until the weapon is ready to fire
         // The following functions return true if the bot is able to perform the
@@ -259,7 +259,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 <p>
     As mentioned above, as a part of the <a href="#bot-status">bot status</a> object there
     are two arrays containing the bots that your own bot currently can see. The objects in the
-    seenEnemies/seenAllies array are themselves bot status objects, so you can get quite a lot of information
+    enemiesOnTarget/alliesOnTarget array are themselves bot status objects, so you can get quite a lot of information
     about the bots you can see, which can help your bot make intelligent decisions. For example,
     your bot can look at the position and direction of the bot to guess where the bot will be in
     a few turns, so that it can fire at that point rather than at the point where the opponent

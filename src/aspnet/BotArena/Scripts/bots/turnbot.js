@@ -1,7 +1,7 @@
 ﻿gosuArena.register({
     tick: function (actionQueue, status, augmentations) {
 
-        if (status.seenEnemies.length > 0) {
+        if (status.enemiesOnTarget.length > 0) {
             actionQueue.clear();
             
             if (status.roundsUntilWeaponIsReady <= 0) {
