@@ -6,7 +6,7 @@ gosuArena.register({
 
         // Do something interesting here... for example:
 
-        if (status.seenEnemies.length > 0 && status.canFire()) {
+        if (status.enemiesOnTarget.length > 0 && status.canFire()) {
             actionQueue.clear();
             actionQueue.fire();
         }

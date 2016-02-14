@@ -46,6 +46,19 @@ gosuArena.factories.createCollisionDetector = function(arenaState) {
         });
     }
 
+    function botsInFieldOfView(bot) {
+
+        var fieldOfVisionRectangle = bot.fieldOfVisionRectangle();
+
+        return arenaState.livingBots().filter(function (otherBot) {
+            if (otherBot === bot) {
+                return false;
+            }
+
+            return fieldOfVisionRectangle.overlaps(otherBot.rectangle());
+        });
+    }
+
     function canPerformMoveAction(bot, moveAction) {
         var canPerformAction = false;
 
@@ -67,6 +80,7 @@ gosuArena.factories.createCollisionDetector = function(arenaState) {
         hitBullets: hitBullets,
         bulletsHitTerrain: bulletsHitTerrain,
         seenBots: seenBots,
+        botsInFieldOfView: botsInFieldOfView,
         canPerformMoveAction: canPerformMoveAction
     };
 };

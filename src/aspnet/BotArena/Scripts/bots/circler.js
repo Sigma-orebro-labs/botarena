@@ -22,10 +22,10 @@ gosuArena.register({
             }
         }
 
-        if (status.seenEnemies.length > 0) {
+        if (status.enemiesOnTarget.length > 0) {
             actionQueue.clear();
             
-            var other = status.seenEnemies[0];
+            var other = status.enemiesOnTarget[0];
 
             tryFire();
 

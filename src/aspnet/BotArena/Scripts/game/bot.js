@@ -252,36 +252,50 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         augmentationDeactivatedCallbacks.push(callback);
     };
 
+    function createBotStatusesForSeenBots(seenBots, enemiesArray, alliesArray) {
+        for (var j = 0; j < seenBots.length; j++) {
+            var seenBot = seenBots[j];
+
+            if (!seenBot.isVisible()) {
+                continue;
+            }
+
+            var botStatusForSeenBot = seenBot.createStatus(true);
+
+            if (bot.teamId && botStatusForSeenBot.teamId == bot.teamId) {
+                alliesArray.push(botStatusForSeenBot);
+            } else {
+                enemiesArray.push(botStatusForSeenBot);
+            }
+        }
+    }
+
     bot.createStatus = function (simplified) {
 
-        var seenEnemies = null;
-        var seenAllies = null;
+        var enemiesOnTarget = null;
+        var alliesOnTarget = null;
+
+        var enemiesInFieldOfVision = null;
+        var alliesInFieldOfVision = null;
 
         // Since seenBots calls createStatus for the other bots
         // this is an endless loop waiting to happen if two bots see
-        // each other at the same time. 
+        // each other at the same time.
+        // We also don't want to let one bot know which bots 
+        // another bot can see. That would be a bit too much info to give away.
         if (!simplified) {
 
-            seenEnemies = [];
-            seenAllies = [];
+            enemiesOnTarget = [];
+            alliesOnTarget = [];
+
+            enemiesInFieldOfVision = [];
+            alliesInFieldOfVision = [];
 
             var seenBots = collisionDetector.seenBots(bot);
+            var botsInFieldOfVision = collisionDetector.botsInFieldOfView(bot);
 
-            for (var j = 0; j < seenBots.length; j++) {
-                var seenBot = seenBots[j];
-
-                if (!seenBot.isVisible()) {
-                    continue;
-                }
-
-                var botStatusForSeenBot = seenBot.createStatus(true);
-
-                if (bot.teamId && botStatusForSeenBot.teamId == bot.teamId) {
-                    seenAllies.push(botStatusForSeenBot);
-                } else {
-                    seenEnemies.push(botStatusForSeenBot);
-                }
-            }
+            createBotStatusesForSeenBots(seenBots, enemiesOnTarget, alliesOnTarget);
+            createBotStatusesForSeenBots(botsInFieldOfVision, enemiesInFieldOfVision, alliesInFieldOfVision);
         }
 
         return {
@@ -312,8 +326,10 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
             canFire: function () {
                 return bot.weapon.cooldownTimeLeft <= 0;
             },
-            seenEnemies: seenEnemies,
-            seenAllies: seenAllies,
+            enemiesOnTarget: enemiesOnTarget,
+            alliesOnTarget: alliesOnTarget,
+            enemiesInFieldOfVision: enemiesInFieldOfVision,
+            alliesInFieldOfVision: alliesInFieldOfVision,
             canMoveForward: function () {
                 return collisionDetector.canPerformMoveAction(bot, bot.moveForward);
             },
@@ -384,6 +400,16 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
 
     var rectangleCache = gosuArena.rectangleCache.create(bot);
     var sightRectangleCache = gosuArena.rectangleCache.create(bot);
+    var fieldOfVisionRectangleCache = gosuArena.rectangleCache.create(bot);
+
+    bot.fieldOfVisionRectangle = function () {
+
+        if (!fieldOfVisionRectangleCache.isValidFor(bot)) {
+            fieldOfVisionRectangleCache.addEntry(bot, calculateFieldOfVisionRectangle());
+        }
+
+        return fieldOfVisionRectangleCache.getEntry(bot);
+    }
 
     bot.rectangle = function() {
         if (!rectangleCache.isValidFor(bot)) {
@@ -401,6 +427,13 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
 
         return sightRectangleCache.getEntry(bot);
     }
+
+    function calculateFieldOfVisionRectangle() {
+        var botCenter = bot.center();
+        var rectangle = gosu.math.rectangle.create(botCenter, 2000, 2000);
+        var rotatedRectangle = rectangle.rotate(bot.angle + 45, botCenter);
+        return rotatedRectangle;
+    };
 
     function calculateSightRectangle() {
 

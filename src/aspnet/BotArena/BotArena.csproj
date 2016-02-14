@@ -388,6 +388,7 @@
     <Content Include="Scripts\game\augmentations\damageBoostAugmentation.js" />
     <Content Include="Scripts\game\augmentations\repairAugmentation.js" />
     <Content Include="Scripts\game\augmentations\noopAugmentation.js" />
+    <Content Include="Scripts\game\specs\botVisionSpecs.js" />
     <Content Include="Scripts\game\specs\augmentationSpecs.js" />
     <Content Include="Scripts\infrastructure\logging\eventConsoleLogger.js" />
     <Content Include="Scripts\infrastructure\util.js" />

@@ -53,6 +53,15 @@ gosu.math.rectangle = gosu.math.rectangle || {};
             });
 
             return createFromCorners(rotatedCorners);
+        },
+        toString: function () {
+            var output = "";
+
+            for (var i = 0; i < this.corners.length; i++) {
+                output += "(" + this.corners[i].x + ", " + this.corners[i].y + ") ";
+            }
+
+            return output;
         }
     };
 
