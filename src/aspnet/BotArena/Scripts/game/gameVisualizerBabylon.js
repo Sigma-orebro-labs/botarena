@@ -166,7 +166,9 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         newMesh.material = botMesh.material.clone();
 
         for (var i = 0; i < botMesh.material.subMaterials.length; i++) {
-            newMesh.material.subMaterials[i] = botMesh.material.subMaterials[i].clone();
+            if (newMesh.material.subMaterials[i]) { // safe up if null
+                newMesh.material.subMaterials[i] = botMesh.material.subMaterials[i].clone();
+            }
         }
 
         return newMesh;
@@ -497,8 +499,8 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     }
 
     function loadBotMesh() {
-        BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "ship.babylon", scene, function (newMeshes, particleSystems) {
-            botMesh = newMeshes[1];
+        BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "ninja.babylon", scene, function (newMeshes, particleSystems) {
+            botMesh = newMeshes[0];
             addBotsToScene();
         });
     }
