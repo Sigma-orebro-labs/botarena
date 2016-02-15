@@ -4,7 +4,7 @@ gosuArena.visualizers = gosuArena.visualizers || {};
 
 gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
-    var shipYValue = 6;
+    var shipYValue = 0;
     var bulletYValue = 10;
     var healthBarYValue = 50;
     var wallYValue = 10;
@@ -25,7 +25,11 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     var nameBarSpritesManagers = [];
     var explosionSpriteManager;
     var arenaState;
-    var botMesh;
+    var botMeshes = {
+        standardClass: null,
+        ninja: null,
+        tank: null
+    };
     var materials = {};
 
     var particleExplosion;
@@ -112,7 +116,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
     function addBotsToScene() {
 
-        if (!botMesh) {
+        if (!botMeshes.standardClass || !botMeshes.ninja || !botMeshes.tank) {
             // The bot mesh has not yet been loaded. The meshes will be added when the load is complete
             return;
         }
@@ -129,7 +133,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
             botsCurrentlyInScene.push(bot);
 
-            bot.babylonMesh = cloneBotMeshAndMaterials(i); // i is passed along just to give the bot mesh a "unique" id
+            bot.babylonMesh = cloneBotMeshAndMaterials(i, bot.class || 'standardClass'); // Default to standardClass if bot is created before the botClass era. i is passed along just to give the bot mesh a "unique" id
 
             bot.babylonMesh.position.x = bot.y;
             bot.babylonMesh.position.y = shipYValue;
@@ -161,13 +165,15 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         }
     }
 
-    function cloneBotMeshAndMaterials(index) {
-        var newMesh = botMesh.clone("bot" + index);
-        newMesh.material = botMesh.material.clone();
+    function cloneBotMeshAndMaterials(index, botClass) {
+        var newMesh = botMeshes[botClass].clone("bot" + index);
+        newMesh.material = botMeshes[botClass].material.clone();
 
-        for (var i = 0; i < botMesh.material.subMaterials.length; i++) {
-            if (newMesh.material.subMaterials[i]) { // safe up if null
-                newMesh.material.subMaterials[i] = botMesh.material.subMaterials[i].clone();
+        if (botMeshes[botClass].material.subMaterials !== undefined) {
+            for (var i = 0; i < botMeshes[botClass].material.subMaterials.length; i++) {
+                if (newMesh.material.subMaterials[i]) { // if a submaterial exists
+                    newMesh.material.subMaterials[i] = botMeshes[botClass].material.subMaterials[i].clone();
+                }
             }
         }
 
@@ -262,7 +268,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         });
         
 
-        loadBotMesh();
+        loadBotMeshes();
 
         engine.runRenderLoop(function () {
             scene.render();
@@ -498,11 +504,25 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         setUpTerrain(arenaState);
     }
 
-    function loadBotMesh() {
-        BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "ninja.babylon", scene, function (newMeshes, particleSystems) {
-            botMesh = newMeshes[0];
+    function loadBotMeshes() {
+        BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "standardClass.babylon", scene, function (newMeshes, particleSystems) {
+            botMeshes.standardClass = newMeshes[0];
+            botMeshes.standardClass.scaling = new BABYLON.Vector3(1, 1, 1);
             addBotsToScene();
         });
+
+        BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "ninja.babylon", scene, function (newMeshes, particleSystems) {
+            botMeshes.ninja = newMeshes[0];
+            botMeshes.ninja.scaling = new BABYLON.Vector3(1, 1, 1);
+            addBotsToScene();
+        });
+
+        BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "tank.babylon", scene, function (newMeshes, particleSystems) {
+            botMeshes.tank = newMeshes[0];
+            botMeshes.tank.scaling = new BABYLON.Vector3(1, 1, 1);
+            addBotsToScene();
+        });
+
     }
 
     function updateBots(arenaState) {
@@ -549,8 +569,10 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     }
 
     function setBotTransparency(material, value) {
-        for (var j = 0; j < material.subMaterials.length; j++) {
-            material.subMaterials[j].alpha = value;
+        if (material.subMaterials !== undefined) {
+            for (var j = 0; j < material.subMaterials.length; j++) {
+                material.subMaterials[j].alpha = value;
+            }
         }
     }
 
