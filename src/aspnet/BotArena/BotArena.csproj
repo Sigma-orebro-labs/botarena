@@ -249,6 +249,7 @@
     <Compile Include="Models\Match\MatchSetupModel.cs" />
     <Compile Include="Models\RealTime\EventTriggerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Content\images\docs\fov.png" />
     <Content Include="Content\lib\codemirror-5.10\addon\comment\comment.js" />
     <Content Include="Content\lib\codemirror-5.10\addon\comment\continuecomment.js" />
     <Content Include="Content\lib\codemirror-5.10\addon\dialog\dialog.css" />
