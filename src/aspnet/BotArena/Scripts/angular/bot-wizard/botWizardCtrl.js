@@ -71,7 +71,12 @@
         }
 
         $scope.currentMesh = null;
-        $scope.allMeshes = [];
+        $scope.allMeshes = {
+            standardClass: null,
+            tank: null,
+            ninja: null
+        };
+        $scope.water = null;
 
         $scope.init = function () {
             
@@ -87,38 +92,43 @@
             camera.upperBetaLimit = Math.PI / 2.05;
             camera.attachControl(canvas, false);
 
+            var skybox = BABYLON.Mesh.CreateBox("skyBox", 10000.0, scene);
+            var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+            skyboxMaterial.backFaceCulling = false;
+            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(gosuArena.url.createAbsolute("/Content/textures/skybox/TropicalSunnyDay"), scene);
+            skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+            skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+            skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+            skybox.material = skyboxMaterial;
             var light = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(-1, -2, -1), scene);
+            $scope.setUpWater(scene, light);
 
-            BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "ship.babylon", scene, function (meshes1) {
-                var mesh = meshes1[1];
-                $scope.allMeshes.push(mesh);
-            
-                mesh.position.x = 0;
-                mesh.position.y = 2;
-                mesh.position.z = 0;
-                
-                mesh.scaling = new BABYLON.Vector3(2, 2, 2);
 
-                $scope.setMeshTransparancy(mesh, 0);
 
-                // load next mesh in this callback to force some sort of synchronized load of models since the order of the bots in the $scope.allMeshes matter
-                // TODO: Go back to using Magnus ship model here. I had to change to ship.babylon since magnus_skepp.babylon is not properly
-                //       committed to the version control. It is included in the project, but is missing on disk.
-                BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "ship.babylon", scene, function (meshes) {
-                    var tempMaterial = new BABYLON.StandardMaterial("tempMaterial", scene);
-                    tempMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.7, 0.1);
-
-                    meshes[0].position.x = 0;
-                    meshes[0].position.y = 2;
-                    meshes[0].position.z = 0;
-
-                    meshes[0].material = tempMaterial;
-                    $scope.allMeshes.push(meshes[0]);
-                    $scope.setMeshTransparancy(meshes[0], 0);
-
-                    $scope.setUpWater(scene, light);
-                });
+            BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "standardClass.babylon", scene, function (meshArray) {
+                $scope.setupMesh(meshArray, 'standardClass');
             });
+
+            BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "ninja.babylon", scene, function (meshArray) {
+                $scope.setupMesh(meshArray, 'ninja');
+            });
+
+            BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "tank.babylon", scene, function (meshArray) {
+                $scope.setupMesh(meshArray, 'tank');
+            });
+
+            $scope.setupMesh = function (meshArray, meshId) {
+
+                // make sure the babylonjs file consists of a single mesh. Join meshes in Blender by selecting all meshes and pressing Ctrl + J before exporting.
+                var mesh = meshArray[0];
+                $scope.allMeshes[meshId] = mesh;
+                $scope.hideMesh(meshId);
+                mesh.rotation.y = gosu.math.degreesToRadians(90);
+
+                $scope.water.material.reflectionTexture.renderList.push(mesh);
+                $scope.water.material.refractionTexture.renderList.push(mesh);
+
+            }
 
             engine.runRenderLoop(function () {
                 if ($scope.currentMesh) {
@@ -129,43 +139,37 @@
                 scene.render();
             });
         }
-        
-        $scope.setMeshTransparancy = function (mesh, value) {
-            mesh.material.alpha = value;
-            if (mesh.material.subMaterials === undefined)
-                return;
-            for (var i = 0; i < mesh.material.subMaterials.length; i++) {
-                mesh.material.subMaterials[i].alpha = value;
+
+        $scope.showMesh = function (meshId) {
+            $scope.allMeshes[meshId].position.z = 0;   // move out of sight
+        }
+
+        $scope.hideMesh = function (meshId) {
+            $scope.allMeshes[meshId].position.z = -99999;   // move out of sight
+        }
+
+        $scope.hideAllMeshes = function () {
+            for (var i in $scope.allMeshes) {
+                $scope.allMeshes[i].position.z = -99999; // move each mesh out of sight
             }
         }
 
-        $scope.showTankModel = function () {
-            $scope.currentMesh = $scope.allMeshes[1];
-            $scope.setMeshTransparancy($scope.allMeshes[1], 1);
-            $scope.setMeshTransparancy($scope.allMeshes[0], 0);
+        $scope.changeModelTo = function(meshId) {
+            $scope.hideAllMeshes();
+            $scope.showMesh(meshId);
         }
 
-        $scope.showNinjaModel = function () {
-            $scope.currentMesh = $scope.allMeshes[0];
-            $scope.setMeshTransparancy($scope.allMeshes[1], 0);
-            $scope.setMeshTransparancy($scope.allMeshes[0], 1);
-        }
-
-        $scope.setUpWater = function (scene, sun) {
-
+        $scope.setUpWater = function (scene, sun, sky) {
             var water = BABYLON.Mesh.CreateGround("water", 100, 100, 1, scene, false);
-
             var waterMaterial = new gosu.WaterMaterial("water", scene, sun, 0.2, 0.4);
-
-            for (var i = 0; i < $scope.allMeshes.length; i++) {
-                waterMaterial.reflectionTexture.renderList.push($scope.allMeshes[i]);
-                waterMaterial.refractionTexture.renderList.push($scope.allMeshes[i]);
-            }
 
             water.isPickable = false;
             water.material = waterMaterial;
-
             water.receiveShadows = true;
+
+            waterMaterial.reflectionTexture.renderList.push(sky);
+
+            $scope.water = water;
         }
 
         function getValidateSelectedMessage(value, optionName) {
