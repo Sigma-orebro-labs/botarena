@@ -13,6 +13,8 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
 
     var staticModifiers = options.staticModifiers;
 
+    var currentRoundDirection = { x: 0, y: 0 };
+
     var weapon = {
         width: options.weaponWidth,
         height: options.weaponHeight,
@@ -207,9 +209,9 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         bot.translate({ x: vector.x * bot.movementSpeed, y: vector.y * bot.movementSpeed });
 
         var movementVector = gosu.math.createVector(vector.x, vector.y);
-        var previousDirection = bot.direction;
+        var previousDirection = currentRoundDirection;
         
-        bot.direction = movementVector.add(previousDirection);
+        currentRoundDirection = movementVector.add(previousDirection);
     }
 
     bot.fire = function (angle) {
@@ -372,7 +374,8 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         // determined by the actions during this tick rather than remembering
         // a previous direction if this tick turns out to be one where
         // the bot is standing still
-        bot.direction = { x: 0, y: 0 };
+        bot.previousRoundDirection = currentRoundDirection;
+        currentRoundDirection = { x: 0, y: 0 };
         
         if (bot.weapon.cooldownTimeLeft > 0) {
             bot.weapon.cooldownTimeLeft--;
