@@ -206,6 +206,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
             height // The height of the playing field
         }
         angle, // The angle of your bot. A value between 0 and 360 degrees where 0 degrees is south.
+
         // The direction of the bot is a vector which indicate which direction the bot moved during its
         // latest round. So, if the bot moved one unit north during the latest round the vector will be { x: 0, y: -1 },
         // since the positive direction of the y axis is from the top to the bottom of the screen.
@@ -214,10 +215,11 @@ Your bot interacts with gosuArena through a couple of different events, and thos
         // Since the vector is the total movement vector of the bot during the latest round it can be used 
         // to determine both in which direction a bot is moving (the angle of the vector) and the speed with 
         // which it is moving (the length of the vector).
-        direction: {
+        previousRoundDirection: {
             x,
             y
         },
+
         // Remaining health (hit points) for the bot. The bot hass 100 hp when the match starts.
         // At 0 hp the bot is killed
         health,
