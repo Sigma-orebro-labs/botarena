@@ -113,6 +113,7 @@
                 var mesh = meshArray[0];
                 $scope.allMeshes[meshId] = mesh;
                 $scope.hideMesh(meshId);
+                mesh.rotation.y = gosu.math.degreesToRadians(90);
 
                 $scope.water.material.reflectionTexture.renderList.push(mesh);
                 $scope.water.material.refractionTexture.renderList.push(mesh);
