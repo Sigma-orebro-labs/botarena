@@ -382,6 +382,10 @@
     <None Include="Properties\PublishProfiles\botarena - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\botarena - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\botarena-Prod - Web Deploy.pubxml" />
+    <Content Include="Scripts\bots\bootstrapping\behaviour\circler.js" />
+    <Content Include="Scripts\bots\bootstrapping\behaviour\randomizer.js" />
+    <Content Include="Scripts\bots\bootstrapping\behaviour\turnbot.js" />
+    <Content Include="Scripts\bots\bootstrapping\behaviour\waller.js" />
     <Content Include="Scripts\game\modifiers\modifierConfig.json" />
     <Content Include="Scripts\bots\bootstrapping\augmentations\cloakSnippet.js" />
     <Content Include="Scripts\bots\bootstrapping\augmentations\damageBoostSnippet.js" />
@@ -392,6 +396,7 @@
     <Content Include="Scripts\game\augmentations\damageBoostAugmentation.js" />
     <Content Include="Scripts\game\augmentations\repairAugmentation.js" />
     <Content Include="Scripts\game\augmentations\noopAugmentation.js" />
+    <Content Include="Scripts\game\specs\botDirectionSpecs.js" />
     <Content Include="Scripts\game\specs\botVisionSpecs.js" />
     <Content Include="Scripts\game\specs\augmentationSpecs.js" />
     <Content Include="Scripts\infrastructure\logging\eventConsoleLogger.js" />

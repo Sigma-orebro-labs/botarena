@@ -100,6 +100,7 @@ gosuArena.factories.createSafeBotOptions = function (userOptions, isTraining) {
         rotationSpeedInDegrees: rotationSpeedInDegrees,
         botClass: userOptions.botClass,
         staticModifiers: staticModifiers,
-        augmentations: augmentations
+        augmentations: augmentations,
+        rethrowScriptErrors: userOptions.rethrowScriptErrors
     };
 };
