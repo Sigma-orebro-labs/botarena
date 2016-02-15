@@ -376,6 +376,9 @@
     <Content Include="Scripts\angular\services\matchSetupService.js" />
     <Content Include="Scripts\angular\services\notificationService.js" />
     <Content Include="Scripts\angular\services\authService.js" />
+    <Content Include="Content\models\ninja.babylon" />
+    <Content Include="Content\models\standardClass.babylon" />
+    <Content Include="Content\models\tank.babylon" />
     <None Include="Properties\PublishProfiles\botarena - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\botarena - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\botarena-Prod - Web Deploy.pubxml" />
