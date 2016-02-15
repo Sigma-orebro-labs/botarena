@@ -34,113 +34,154 @@ describe("Game", function () {
 
     describe("Bot", function () {
 
-        addBot({
-            startPosition: { x: 0, y: 0, angle: 270 }, // aiming east
-            tick: function (actionQueue, status) {
-                wasTickCalled = true;
-                expect(status.enemiesInFieldOfVision.length).toBe(1);
-            }
+        it("has no initial direction", function() {
+
+            var wasTickCalled = false;
+
+            addBot({
+                startPosition: { x: 0, y: 0, angle: 270 }, // aiming east
+                tick: function(actionQueue, status) {
+                    wasTickCalled = true;
+                    expect(status.previousRoundDirection).toEqualVector({ x: 0, y: 0 });
+                }
+            });
+
+            startGame();
+
+            clock.doTick();
+
+            expect(wasTickCalled).toBe(true);
+
         });
 
         it("has no direction after standing still during a round", function () {
-            var bot = gosuArena.factories.createBot(tick, createOptions({
-                x: 0,
-                y: 0,
-                angle: 0
-            }), collisionDetector);
 
-            tickWith(bot, function () { bot.moveForward(); });
+            var roundCount = 0;
 
-            tickWith(bot, function () { }); // Do nothing for one turn
+            addBot({
+                startPosition: { x: 0, y: 0, angle: 270 }, // aiming east
+                tick: function (actionQueue, status) {
 
-            expect(bot.direction).toEqualVector({ x: 0, y: 0 });
+                    if (roundCount === 0) {
+                        actionQueue.forward();
+                    } else if (roundCount === 1) {
+                        // Movement in the first round was forward, which was to the east
+                        expect(status.previousRoundDirection).toEqualVector({ x: 1, y: 0 });
+                    } else if (roundCount > 1) {
+                        // There was no movement in the second round
+                        expect(status.previousRoundDirection).toEqualVector({ x: 0, y: 0 });
+                    }
+
+                    roundCount++;
+                }
+            });
+
+            startGame();
+
+            clock.doTick(3);
+
+            expect(roundCount).toBe(3);
         });
 
         it("has direction south when moving south, north when moving north, etc.", function () {
-            var bot = gosuArena.factories.createBot(tick, createOptions({
-                x: 0,
-                y: 0,
-                angle: 0
-            }), collisionDetector);
 
-            expect(bot.direction).toEqualVector({ x: 0, y: 0 });
+            var roundCount = 0;
 
-            tickWith(bot, function () { bot.moveSouth(); });
+            addBot({
+                startPosition: { x: 100, y: 100, angle: 45 },
+                tick: function (actionQueue, status) {
 
-            expect(bot.direction).toEqualVector({ x: 0, y: 1 });
+                    if (roundCount === 0) {
+                        actionQueue.south();
+                        expect(status.previousRoundDirection).toEqualVector({ x: 0, y: 0 });
+                    } else if (roundCount === 1) {
+                        actionQueue.north();
+                        expect(status.previousRoundDirection).toEqualVector({ x: 0, y: 1 });
+                    } else if (roundCount === 2) {
+                        actionQueue.east();
+                        expect(status.previousRoundDirection).toEqualVector({ x: 0, y: -1 });
+                    } else if (roundCount === 3) {
+                        actionQueue.west();
+                        expect(status.previousRoundDirection).toEqualVector({ x: 1, y: 0 });
+                    } else if (roundCount === 4) {
+                        expect(status.previousRoundDirection).toEqualVector({ x: -1, y: 0 });
+                    }
 
-            tickWith(bot, function () { bot.moveNorth(); });
+                    roundCount++;
+                }
+            });
 
-            expect(bot.direction).toEqualVector({ x: 0, y: -1 });
+            startGame();
 
-            tickWith(bot, function () { bot.moveWest(); });
+            clock.doTick(5);
 
-            expect(bot.direction).toEqualVector({ x: -1, y: 0 });
-
-            tickWith(bot, function () { bot.moveEast(); });
-
-            expect(bot.direction).toEqualVector({ x: 1, y: 0 });
+            expect(roundCount).toBe(5);
         });
 
         it("has direction which is absolute, even when moving relative to bot", function () {
-            var bot = gosuArena.factories.createBot(tick, createOptions({
-                x: 0,
-                y: 0,
-                angle: 0
-            }), collisionDetector);
 
-            // Facing north
+            var roundCount = 0;
 
-            expect(bot.direction).toEqualVector({ x: 0, y: 0 });
+            addBot({
+                startPosition: { x: 100, y: 100, angle: 0 }, // aiming south
+                tick: function (actionQueue, status) {
 
-            tickWith(bot, function () { bot.moveForward(); }); // south
+                    if (roundCount === 0) {
+                        actionQueue.forward();
+                        expect(status.previousRoundDirection).toEqualVector({ x: 0, y: 0 });
+                    } else if (roundCount === 1) {
+                        actionQueue.back();
+                        expect(status.previousRoundDirection).toEqualVector({ x: 0, y: 1 });
+                    } else if (roundCount === 2) {
+                        actionQueue.left();
+                        expect(status.previousRoundDirection).toEqualVector({ x: 0, y: -1 });
+                    } else if (roundCount === 3) {
+                        actionQueue.right();
+                        expect(status.previousRoundDirection).toEqualVector({ x: 1, y: 0 });
+                    } else if (roundCount === 4) {
+                        expect(status.previousRoundDirection).toEqualVector({ x: -1, y: 0 });
+                    }
 
-            expect(bot.direction).toEqualVector({ x: 0, y: 1 });
+                    roundCount++;
+                }
+            });
 
-            tickWith(bot, function () { bot.moveBack(); }); // north
+            startGame();
 
-            expect(bot.direction).toEqualVector({ x: 0, y: -1 });
+            clock.doTick(5);
 
-            tickWith(bot, function () { bot.moveLeft(); }); // east
-
-            expect(bot.direction).toEqualVector({ x: 1, y: 0 });
-
-            tickWith(bot, function () { bot.moveRight(); }); // west
-
-            expect(bot.direction).toEqualVector({ x: -1, y: 0 });
-
-            tickWith(bot, function () { bot.turn(90); }); // Facing west
-
-            tickWith(bot, function () { bot.moveLeft(); }); // South
-
-            expect(bot.direction).toEqualVector({ x: 0, y: 1 });
-
-            tickWith(bot, function () { bot.moveRight(); }); // north
-
-            expect(bot.direction).toEqualVector({ x: 0, y: -1 });
-
-            tickWith(bot, function () { bot.moveBack(); }); // east
-
-            expect(bot.direction).toEqualVector({ x: 1, y: 0 });
-
-            tickWith(bot, function () { bot.moveForward(); }); // west
-
-            expect(bot.direction).toEqualVector({ x: -1, y: 0 });
+            expect(roundCount).toBe(5);
         });
 
         it("combines all movement actions during a round to calculate total direction vector", function () {
-            var bot = gosuArena.factories.createBot(tick, createOptions({
-                x: 0,
-                y: 0,
-                angle: 0
-            }), collisionDetector);
 
-            tickWith(bot, function () {
-                bot.moveNorth();
-                bot.moveEast();
+            var roundCount = 0;
+
+            addBot({
+                startPosition: { x: 100, y: 100, angle: 270 }, // aiming east
+                tick: function (actionQueue, status) {
+
+                    if (roundCount === 0) {
+                        actionQueue.north();
+                        actionQueue.east();
+                        expect(status.previousRoundDirection).toEqualVector({ x: 0, y: 0 });
+                    } else if (roundCount === 1) {
+                        actionQueue.south();
+                        actionQueue.south();
+                        expect(status.previousRoundDirection).toEqualVector({ x: 1, y: -1 });
+                    } else if (roundCount === 2) {
+                        expect(status.previousRoundDirection).toEqualVector({ x: 0, y: 2 });
+                    }
+
+                    roundCount++;
+                }
             });
 
-            expect(bot.direction).toEqualVector({ x: 1, y: -1 });
+            startGame();
+
+            clock.doTick(3);
+
+            expect(roundCount).toBe(3);
         });
     });
 });

@@ -46,6 +46,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         actionsPerRound: options.actionsPerRound,
         maxHealth: initialHealthPoints,
         health: initialHealthPoints,
+        previousRoundDirection: { x: 0, y: 0},
         movementSpeed: options.initialMovementSpeed * staticModifiers.calculateMovementSpeedFactor(),
         damageReductionFactor: options.initialDamageReductionFactor * staticModifiers.calculateDamageReductionFactor(),
         rotationSpeedInDegrees: options.rotationSpeedInDegrees * staticModifiers.canculateRotationSpeedFactor(),
@@ -89,6 +90,10 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
                 bot: bot,
                 exception: error
             });
+
+            if (options.rethrowScriptErrors) {
+                throw error;
+            }
         }
     }
 
@@ -318,7 +323,7 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
                 height: gosuArena.arenaHeight
             },
             angle: bot.angle,
-            direction: bot.direction,
+            previousRoundDirection: bot.previousRoundDirection,
             maxHealth: bot.maxHealth,
             health: properties.health,
             movementSpeed: bot.movementSpeed,
