@@ -92,8 +92,18 @@
             camera.upperBetaLimit = Math.PI / 2.05;
             camera.attachControl(canvas, false);
 
+            var skybox = BABYLON.Mesh.CreateBox("skyBox", 10000.0, scene);
+            var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+            skyboxMaterial.backFaceCulling = false;
+            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(gosuArena.url.createAbsolute("/Content/textures/skybox/TropicalSunnyDay"), scene);
+            skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+            skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+            skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+            skybox.material = skyboxMaterial;
             var light = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(-1, -2, -1), scene);
             $scope.setUpWater(scene, light);
+
+
 
             BABYLON.SceneLoader.ImportMesh("", gosuArena.url.createAbsolute("/Content/models/"), "standardClass.babylon", scene, function (meshArray) {
                 $scope.setupMesh(meshArray, 'standardClass');
@@ -149,13 +159,15 @@
             $scope.showMesh(meshId);
         }
 
-        $scope.setUpWater = function (scene, sun) {
+        $scope.setUpWater = function (scene, sun, sky) {
             var water = BABYLON.Mesh.CreateGround("water", 100, 100, 1, scene, false);
             var waterMaterial = new gosu.WaterMaterial("water", scene, sun, 0.2, 0.4);
 
             water.isPickable = false;
             water.material = waterMaterial;
             water.receiveShadows = true;
+
+            waterMaterial.reflectionTexture.renderList.push(sky);
 
             $scope.water = water;
         }
