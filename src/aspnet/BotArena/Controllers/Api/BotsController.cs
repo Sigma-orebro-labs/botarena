@@ -151,7 +151,7 @@ namespace GosuArena.Controllers.Api
             {
                 try
                 {
-                    augmentationStartSnippet += System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath("~/Scripts/bots/bootstrapping/"+ augmentation + "Snippet.js"));
+                    augmentationStartSnippet += System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath("~/Scripts/bots/bootstrapping/augmentations"+ augmentation + "Snippet.js"));
                 }
                 catch (Exception)
                 {
