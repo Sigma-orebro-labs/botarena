@@ -110,8 +110,8 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 </p>
 
 <p>
-    BotArena passes three arguments to your onHitByBullet callback: <a href="#action-queue">actionQueue</a>, <a href="#bot-status">status</a> and
-    <a href="#onHitByBullet-eventArgs">eventArgs</a>.
+    BotArena passes four arguments to your onHitByBullet callback: <a href="#action-queue">actionQueue</a>, <a href="#bot-status">status</a>,
+    <a href="#augmentations">augmentations</a> and <a href="#onHitByBullet-eventArgs">eventArgs</a>.
 </p>
 
 <h5 id="onHitByBullet-eventArgs">OnHitByBullet Event Args</h5>
@@ -142,7 +142,8 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 </p>
 
 <p>
-    BotArena passes the two standard arguments to your onCollision callback: <a href="#action-queue">actionQueue</a> and <a href="#bot-status">status</a>.
+    BotArena passes the three standard arguments to your onCollision callback: <a href="#action-queue">actionQueue</a>, 
+    <a href="#bot-status">status</a> and <a href="#augmentations">augmentations</a>.
 </p>
 
 <p>
@@ -154,7 +155,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
         tick: function (actionQueue, status) { 
             // This gets called once every round
         },
-        onCollision: function (actionQueue, status) {
+        onCollision: function (actionQueue, status, augmentations) {
             // This will be called when your bot collides with something else
         }
     });
