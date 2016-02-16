@@ -4,6 +4,8 @@
 @{
     Layout = "~/Views/Shared/_LayoutWorld.cshtml";
     ViewBag.Title = "Play match!";
+    var isTraning = HttpContext.Current.Request.QueryString["isTraining"] == "true";
+    var isTrainingValue = isTraning ? "true" : "false";
 }
 
 @section styles {
@@ -43,6 +45,12 @@
     <script type="text/javascript" src="@Url.Content("~/Content/lib/codemirror-5.10/addon/lint/javascript-lint.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/lib/codemirror-5.10/mode/javascript/javascript.js")"></script>
 }
+
+<script type="text/javascript">
+
+    var gosuArena = gosuArena || {};
+    gosuArena.isTraining = @isTrainingValue;
+</script>
 
 <section id="playing-field">
     <div class="center"><canvas id="gameCanvas" class="hide-from-start" width="800" height="600"></canvas></div>

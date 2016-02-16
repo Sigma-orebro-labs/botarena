@@ -38,7 +38,9 @@
     }
 
     function restartMatchWithCountDown(countDownsRemaining, delay, hasShownInitialMessage) {
-        countDownsRemaining = countDownsRemaining === undefined ? 3 : countDownsRemaining;
+        var defaultCountDownsRemaining = gosuArena.isTraining ? 0 : 3;
+
+        countDownsRemaining = countDownsRemaining === undefined ? defaultCountDownsRemaining : countDownsRemaining;
         delay = delay || 1000;
 
         if (!countDownsRemaining || countDownsRemaining <= 0) {

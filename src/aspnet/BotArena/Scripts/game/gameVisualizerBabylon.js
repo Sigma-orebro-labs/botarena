@@ -398,7 +398,11 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
        
         var newScene = new BABYLON.Scene(engine);
 
-        var camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0, Math.PI / 2.5, 2000, new BABYLON.Vector3(300, 0, 400), newScene);
+        var toBeta = gosuArena.isTraining ? Math.PI / 4 : Math.PI / 2.5;
+        var toRadius = gosuArena.isTraining ? 1000 : 2000;
+
+        var camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0, toBeta, toRadius, new BABYLON.Vector3(300, 0, 400), newScene);
+
         newScene.activeCamera = camera;
         camera.attachControl(canvas, false);
         camera.upperBetaLimit = Math.PI / 2.05;

@@ -573,7 +573,7 @@
     <Content Include="Scripts\game\bot.js" />
     <Content Include="Scripts\game\botOptions.js" />
     <Content Include="Scripts\game\specs\botSpecs.js" />
-    <Content Include="Scripts\bots\bootstrapping\augmentations\defaultBotScriptTemplate.js" />
+    <Content Include="Scripts\bots\bootstrapping\defaultBotScriptTemplate.js" />
     <Content Include="Scripts\bots\randomizer.js" />
     <Content Include="Scripts\bots\demo.bot2.js" />
     <Content Include="Scripts\bots\demo.bot3.js" />
