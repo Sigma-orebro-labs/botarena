@@ -1,9 +1,9 @@
-angular.module('menuApp').controller('botWizardCtrl', ['$scope', '$http', '$state', 'notificationService', function($scope, $http, $state, notificationService) {
+﻿angular.module('menuApp').controller('botWizardCtrl', ['$scope', '$http', '$state', 'notificationService', function($scope, $http, $state, notificationService) {
 
         $scope.bot = {
             className: "", 
             equipment: null,
-            colorHexCode: "#FF0000",
+            colorHexCode: "#FFFFFF",
             name: ""
         };
 
@@ -134,20 +134,7 @@ angular.module('menuApp').controller('botWizardCtrl', ['$scope', '$http', '$stat
 
             $scope.updateMeshColor = function (meshId) {
                 var mesh = $scope.allMeshes[meshId];
-                if (mesh.material) {
-                    if (mesh.material.subMaterials !== undefined) {
-                        for (var i = 0; i < mesh.material.subMaterials.length; i++) {
-                            if (mesh.material.subMaterials[i]) { // if a submaterial exists
-                                if (mesh.material.subMaterials[i].name.indexOf('botColor') > -1) { // if a submaterial exists
-                                    var material = new BABYLON.StandardMaterial("botColor_" + meshId + i, scene);
-                                    material.diffuseColor = hexToColor3($scope.bot.colorHexCode);
-                                    material.specularColor = new BABYLON.Color3(0, 0, 0);
-                                    mesh.material.subMaterials[i] = material;
-                                }
-                            }
-                        }
-                    }
-                }
+                helpers.babylon.setMeshColor(mesh, $scope.bot.colorHexCode, 'botColor', scene);
             }
 
             engine.runRenderLoop(function () {
@@ -198,26 +185,6 @@ angular.module('menuApp').controller('botWizardCtrl', ['$scope', '$http', '$stat
             }
 
             return '';
-        }
-
-        function hexToRgb(hex) {
-            // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-            var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-            hex = hex.replace(shorthandRegex, function (m, r, g, b) {
-                return r + r + g + g + b + b;
-            });
-
-            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-            return result ? {
-                r: parseInt(result[1], 16),
-                g: parseInt(result[2], 16),
-                b: parseInt(result[3], 16)
-            } : null;
-        }
-
-        function hexToColor3(hex) {
-            var rgb = hexToRgb(hex);
-            return new BABYLON.Color3(rgb.r / 255, rgb.g / 255, rgb.b / 255);
         }
 
         $scope.createBot = function () {

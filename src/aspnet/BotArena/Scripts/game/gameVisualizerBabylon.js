@@ -183,12 +183,11 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             if (botMeshes[botClass].material.subMaterials !== undefined) {
                 for (var i = 0; i < botMeshes[botClass].material.subMaterials.length; i++) {
                     if (newMesh.material.subMaterials[i]) { // if a submaterial exists
-                        if (newMesh.material.subMaterials[i].name.indexOf('botColor') > -1) { // if a submaterial exists
-                            var material = new BABYLON.StandardMaterial("botColor_" + botClass + '_' + i, scene);
-                            material.diffuseColor = hexToColor3(bot.color);
-                            material.specularColor = new BABYLON.Color3(0, 0, 0);
-                            newMesh.material.subMaterials[i] = material;
+                        if (newMesh.material.subMaterials[i].name.indexOf('botColor') > -1) {
+                            // replace with colored material
+                            newMesh.material.subMaterials[i] = helpers.babylon.createColoredMaterial(bot.color, "botColor_" + bot.name, scene);
                         } else {
+                            // clone existing material
                             newMesh.material.subMaterials[i] = botMeshes[botClass].material.subMaterials[i].clone();
                             newMesh.material.subMaterials[i].name = botMeshes[botClass].material.subMaterials[i].name + botClass + '_' + i;
                         }
@@ -718,26 +717,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         particleSmoke.maxEmitPower = 40;
         particleSmoke.updateSpeed = 0.010;
 
-    }
-
-    function hexToRgb(hex) {
-        // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-        var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-        hex = hex.replace(shorthandRegex, function(m, r, g, b) {
-            return r + r + g + g + b + b;
-        });
-
-        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16)
-        } : null;
-    }
-    
-    function hexToColor3(hex) {
-        var rgb = hexToRgb(hex);
-        return new BABYLON.Color3(rgb.r / 255, rgb.g / 255, rgb.b / 255);
     }
 
     return {
