@@ -174,23 +174,30 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
     }
 
     function cloneBotMeshAndMaterials(index, bot) {
-        var botClass = bot.class || 'standardClass'; // default to standardClass if no class is set
-        var newMesh = botMeshes[botClass].clone("bot" + index);
-        newMesh.material = botMeshes[botClass].material.clone();
+        try
+        {
+            var botClass = bot.class || 'standardClass'; // default to standardClass if no class is set
+            var newMesh = botMeshes[botClass].clone("bot" + index);
+            newMesh.material = botMeshes[botClass].material.clone();
 
-        if (botMeshes[botClass].material.subMaterials !== undefined) {
-            for (var i = 0; i < botMeshes[botClass].material.subMaterials.length; i++) {
-                if (newMesh.material.subMaterials[i]) { // if a submaterial exists
-                    if (newMesh.material.subMaterials[i].name.indexOf('botColor') > -1) { // if a submaterial exists
-                        var material = new BABYLON.StandardMaterial("botColor_"+botClass+i, scene);
-                        material.diffuseColor = hexToColor3(bot.color);
-                        material.specularColor = new BABYLON.Color3(0, 0, 0);
-                        newMesh.material.subMaterials[i] = material;
-                    } else {
-                        newMesh.material.subMaterials[i] = botMeshes[botClass].material.subMaterials[i].clone()
+            if (botMeshes[botClass].material.subMaterials !== undefined) {
+                for (var i = 0; i < botMeshes[botClass].material.subMaterials.length; i++) {
+                    if (newMesh.material.subMaterials[i]) { // if a submaterial exists
+                        if (newMesh.material.subMaterials[i].name.indexOf('botColor') > -1) { // if a submaterial exists
+                            var material = new BABYLON.StandardMaterial("botColor_" + botClass + '_' + i, scene);
+                            material.diffuseColor = hexToColor3(bot.color);
+                            material.specularColor = new BABYLON.Color3(0, 0, 0);
+                            newMesh.material.subMaterials[i] = material;
+                        } else {
+                            newMesh.material.subMaterials[i] = botMeshes[botClass].material.subMaterials[i].clone();
+                            newMesh.material.subMaterials[i].name = botMeshes[botClass].material.subMaterials[i].name + botClass + '_' + i;
+                        }
                     }
                 }
             }
+        } catch(e)
+        {
+            console.log('err: ' +e);
         }
 
         return newMesh;
