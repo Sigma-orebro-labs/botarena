@@ -27,6 +27,7 @@
 
 <ul>
     <li><a href="#getting-started">Getting Started</a></li>
+    <li><a href="#behaviour-snippets">Bot Behaviour Code Samples</a></li>
     <li><a href="#events">Events</a></li>
     <li><a href="#bot-status">Bot Status Object</a></li>
     <li><a href="#action-queue">Action Queue Object</a></li>
@@ -76,6 +77,108 @@
     You can read more about the tick method's parameters in the sections <a href="#action-queue">Action queue</a> and <a href="#bot-status">Bot status</a>.
 </p>
 
+<h3 id="behaviour-snippets">Bot Behaviour Code Samples</h3>
+
+<p>
+    In this section you can find a few code samples of simple forms of bot behaviour. If you want to try one out,
+    just copy and paste the code into the tick function of your own bot.
+</p>
+
+<h4>Turning bot</h4>
+
+<p>This bot turns in one spot and shoots if it sees an enemy in the crosshair.</p>
+
+<pre class="prettyprint">
+
+        // Any enemies in the crosshair?
+        if (status.enemiesOnTarget.length > 0) {
+
+            // Clear the action queue to make sure no "old" actions are still queued
+            // that would delay the fire command
+            actionQueue.clear();
+        
+            actionQueue.fire();
+        }
+
+        // Turn using two actions, to speed up the turning
+        actionQueue.turn(2);
+</pre>
+    
+    
+<h4>Circler</h4>
+
+<p>This bot just moves in a small circle and shoots whenever it can.</p>
+
+<pre class="prettyprint">
+        // Only try to fire if the weapon has cooled down enough to fire again,
+        // otherwise actions will be wasted on trying to fire when the cannon is not yet ready
+        if (status.canFire()) {
+            actionQueue.clear();
+            actionQueue.fire();
+        }
+
+        actionQueue.turn(1);
+        actionQueue.forward(2);
+</pre>
+    
+    
+<h4>Randomizer</h4>
+
+<p>This bot does random actions each turn</p>
+
+<pre class="prettyprint">
+        var random = Math.random();
+        if (random < 0.2) {
+            actionQueue.north(2);
+        } else if (random < 0.4) {
+            actionQueue.south(2);
+        } else if (random < 0.6) {
+            actionQueue.west(2);
+        } else if (random < 0.8) {
+            actionQueue.east(2);
+        } else {
+            actionQueue.turn(2);
+        }
+</pre>
+    
+<h4>Waller</h4>
+
+<p>This bot moves to the east wall as fast as it can and then moves up and down along that wall.</p>
+
+<pre class="prettyprint">
+        if (status.angle < 88) {
+            actionQueue.turn(2);
+            return;
+        } if (status.angle > 92) {
+            actionQueue.turn(-2);
+            return;
+        }
+     
+        if (status.position.x < status.arena.width - status.position.height - 10) {
+            actionQueue.east(2);
+            return;
+        }
+     
+        // Moving south and starting to get close to the bottom wall?
+        if (status.previousRoundDirection.y >= 0 && status.position.y > status.arena.height - status.position.width - 10) {
+            // then start moving north instead
+            actionQueue.north(2);
+            return;
+        } else if (status.previousRoundDirection.y <= 0 && status.position.y < 10) { // Moving north and getting close to north wall?
+            actionQueue.south(2);
+            return;
+        }
+     
+        // Continue in the current direction. Use a positive direction if
+        // the direction currently has no y component (i.e. moving east-west etc)
+        if (status.previousRoundDirection.y < 0) {
+            actionQueue.north(2);
+        } else {
+            actionQueue.south(2);
+        }
+</pre>
+    
+
 <h3 id="events">Events</h3>
 
 Your bot interacts with gosuArena through a couple of different events, and those events are described in this section.
@@ -110,8 +213,8 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 </p>
 
 <p>
-    BotArena passes three arguments to your onHitByBullet callback: <a href="#action-queue">actionQueue</a>, <a href="#bot-status">status</a> and
-    <a href="#onHitByBullet-eventArgs">eventArgs</a>.
+    BotArena passes four arguments to your onHitByBullet callback: <a href="#action-queue">actionQueue</a>, <a href="#bot-status">status</a>,
+    <a href="#augmentations">augmentations</a> and <a href="#onHitByBullet-eventArgs">eventArgs</a>.
 </p>
 
 <h5 id="onHitByBullet-eventArgs">OnHitByBullet Event Args</h5>
@@ -142,7 +245,8 @@ Your bot interacts with gosuArena through a couple of different events, and thos
 </p>
 
 <p>
-    BotArena passes the two standard arguments to your onCollision callback: <a href="#action-queue">actionQueue</a> and <a href="#bot-status">status</a>.
+    BotArena passes the three standard arguments to your onCollision callback: <a href="#action-queue">actionQueue</a>, 
+    <a href="#bot-status">status</a> and <a href="#augmentations">augmentations</a>.
 </p>
 
 <p>
@@ -154,7 +258,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
         tick: function (actionQueue, status) { 
             // This gets called once every round
         },
-        onCollision: function (actionQueue, status) {
+        onCollision: function (actionQueue, status, augmentations) {
             // This will be called when your bot collides with something else
         }
     });
@@ -205,6 +309,7 @@ Your bot interacts with gosuArena through a couple of different events, and thos
             height // The height of the playing field
         }
         angle, // The angle of your bot. A value between 0 and 360 degrees where 0 degrees is south.
+
         // The direction of the bot is a vector which indicate which direction the bot moved during its
         // latest round. So, if the bot moved one unit north during the latest round the vector will be { x: 0, y: -1 },
         // since the positive direction of the y axis is from the top to the bottom of the screen.
@@ -213,10 +318,11 @@ Your bot interacts with gosuArena through a couple of different events, and thos
         // Since the vector is the total movement vector of the bot during the latest round it can be used 
         // to determine both in which direction a bot is moving (the angle of the vector) and the speed with 
         // which it is moving (the length of the vector).
-        direction: {
+        previousRoundDirection: {
             x,
             y
         },
+
         // Remaining health (hit points) for the bot. The bot hass 100 hp when the match starts.
         // At 0 hp the bot is killed
         health,

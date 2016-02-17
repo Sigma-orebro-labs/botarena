@@ -6,7 +6,7 @@
     var canvasBabylon = document.getElementById("3d-game-canvas-babylon");
 
     gosuArena.visualizers = {
-        gameVisualizer2D: gosuArena.factories.createGameVisualizer(canvas),
+        //gameVisualizer2D: gosuArena.factories.createGameVisualizer(canvas),
         gameVisualizer3D: gosuArena.factories.createGameVisualizerBabylon(canvasBabylon)
     };
 
@@ -38,7 +38,9 @@
     }
 
     function restartMatchWithCountDown(countDownsRemaining, delay, hasShownInitialMessage) {
-        countDownsRemaining = countDownsRemaining === undefined ? 3 : countDownsRemaining;
+        var defaultCountDownsRemaining = gosuArena.isTraining ? 0 : 3;
+
+        countDownsRemaining = countDownsRemaining === undefined ? defaultCountDownsRemaining : countDownsRemaining;
         delay = delay || 1000;
 
         if (!countDownsRemaining || countDownsRemaining <= 0) {
@@ -104,9 +106,9 @@
     }
     document.getElementById("stopMatch").onclick = stopMatch;
 
-    document.getElementById("2d-mode").onclick = setRenderingMode;
-    document.getElementById("3d-mode").onclick = setRenderingMode;
-    document.getElementById("both-mode").onclick = setRenderingMode;
+    //document.getElementById("2d-mode").onclick = setRenderingMode;
+    //document.getElementById("3d-mode").onclick = setRenderingMode;
+    //document.getElementById("both-mode").onclick = setRenderingMode;
 
     function adjustBabylonCanvasSize() {
         var canvas = document.getElementById("3d-game-canvas-babylon");
@@ -165,7 +167,7 @@
         adjustBabylonCanvasSize();
 
         gosuArena.engine.initializeWorld({
-            listeners: [gosuArena.matchViewModel, gosuArena.logging.createEventConsoleLogger(), gosuArena.visualizers.gameVisualizer2D, gosuArena.visualizers.gameVisualizer3D],
+            listeners: [gosuArena.matchViewModel, gosuArena.logging.createEventConsoleLogger(), gosuArena.visualizers.gameVisualizer3D],
             resourceLoaders: [gosuArena.resources.imageLoader, gosuArena.resources.modifierConfigLoader]
         });
 

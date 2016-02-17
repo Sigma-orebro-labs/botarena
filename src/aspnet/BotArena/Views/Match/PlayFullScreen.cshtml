@@ -4,6 +4,8 @@
 @{
     Layout = "~/Views/Shared/_LayoutWorld.cshtml";
     ViewBag.Title = "Play match!";
+    var isTraning = HttpContext.Current.Request.QueryString["isTraining"] == "true";
+    var isTrainingValue = isTraning ? "true" : "false";
 }
 
 @section styles {
@@ -44,6 +46,12 @@
     <script type="text/javascript" src="@Url.Content("~/Content/lib/codemirror-5.10/mode/javascript/javascript.js")"></script>
 }
 
+<script type="text/javascript">
+
+    var gosuArena = gosuArena || {};
+    gosuArena.isTraining = @isTrainingValue;
+</script>
+
 <section id="playing-field">
     <div class="center"><canvas id="gameCanvas" class="hide-from-start" width="800" height="600"></canvas></div>
     <canvas id="3d-game-canvas-babylon" class="fullscreen-canvas"></canvas>
@@ -73,18 +81,18 @@
     </li>
 </ul>
 
-<form class="options overlay-bottom-left">
+@*<form class="options overlay-bottom-left">
     <label for="showBotNames">Show bot names</label>
     <input id="showBotNames" type="checkbox" name="showBotNames" checked="checked" />
 
     <label for="showBotSights">Show bot sights</label>
     <input id="showBotSights" type="checkbox" name="showBotSights" />
-</form>
+</form>*@
 
 <menu class="actions overlay-bottom-right">
-    <button id="2d-mode" class="btn btn-default">2D</button>
+    @*<button id="2d-mode" class="btn btn-default">2D</button>
     <button id="3d-mode" class="btn btn-default">3D</button>
-    <button id="both-mode" class="btn btn-default hidden">2D & 3D</button>
+    <button id="both-mode" class="btn btn-default hidden">2D & 3D</button>*@
     <button id="restartMatch" class="btn btn-primary">Start match</button>
     <button id="stopMatch">Stop match</button>
 </menu>

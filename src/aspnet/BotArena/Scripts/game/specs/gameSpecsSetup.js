@@ -4,6 +4,7 @@ gosuArena.specs.game = gosuArena.specs.game || {};
 
 gosuArena.specs.game.addBot = function (options) {
     options = options || {};
+
     options.startPosition = options.startPosition || {};
     options.startPosition.x = options.startPosition.x || 0;
     options.startPosition.y = options.startPosition.y || 0;
@@ -24,7 +25,8 @@ gosuArena.specs.game.addBot = function (options) {
                 startPosition: options.startPosition,
                 botClass: options.botClass,
                 equipment: options.equipment,
-                augmentations: options.augmentations
+                augmentations: options.augmentations,
+                rethrowScriptErrors: true
             }
         });
     });

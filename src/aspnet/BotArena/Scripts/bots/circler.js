@@ -29,15 +29,15 @@ gosuArena.register({
 
             tryFire();
 
-            if (other.direction.x > 0) {
+            if (other.previousRoundDirection.x > 0) {
                 actionQueue.east();
-            } else if (other.direction.x < 0) {
+            } else if (other.previousRoundDirection.x < 0) {
                 actionQueue.west();
             }
             
-            if (other.direction.y > 0) {
+            if (other.previousRoundDirection.y > 0) {
                 actionQueue.south();
-            } else if (other.direction.y < 0) {
+            } else if (other.previousRoundDirection.y < 0) {
                 actionQueue.north();
             }
 
