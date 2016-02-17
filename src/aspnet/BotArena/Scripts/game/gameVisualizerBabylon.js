@@ -1,4 +1,4 @@
-﻿var gosuArena = gosuArena || {};
+var gosuArena = gosuArena || {};
 gosuArena.factories = gosuArena.factories || {};
 gosuArena.visualizers = gosuArena.visualizers || {};
 
@@ -133,11 +133,19 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
             botsCurrentlyInScene.push(bot);
 
-            bot.babylonMesh = cloneBotMeshAndMaterials(i, bot.class || 'standardClass'); // Default to standardClass if bot is created before the botClass era. i is passed along just to give the bot mesh a "unique" id
+            bot.babylonMesh = cloneBotMeshAndMaterials(i, bot); // Default to standardClass if bot is created before the botClass era. i is passed along just to give the bot mesh a "unique" id
 
             bot.babylonMesh.position.x = bot.y;
             bot.babylonMesh.position.y = shipYValue;
             bot.babylonMesh.position.z = bot.x;
+
+            /*if (bot.babylonMesh.material.subMaterials !== undefined) {
+                for (var i in bot.babylonMesh.material.subMaterials) {
+                    if (bot.babylonMesh.material.subMaterials[i].name !== undefined && bot.babylonMesh.material.subMaterials[i].name == 'botColor') {
+                        bot.babylonMesh.material.subMaterials[i].diffuseColor = new BABYLON.Color3(1, 0, 0);
+                    }
+                }
+            }*/
 
             bot.babylonMesh.scaling = new BABYLON.Vector3(10, 10, 10);
 
@@ -165,14 +173,22 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         }
     }
 
-    function cloneBotMeshAndMaterials(index, botClass) {
+    function cloneBotMeshAndMaterials(index, bot) {
+        var botClass = bot.class || 'standardClass'; // default to standardClass if no class is set
         var newMesh = botMeshes[botClass].clone("bot" + index);
         newMesh.material = botMeshes[botClass].material.clone();
 
         if (botMeshes[botClass].material.subMaterials !== undefined) {
             for (var i = 0; i < botMeshes[botClass].material.subMaterials.length; i++) {
                 if (newMesh.material.subMaterials[i]) { // if a submaterial exists
-                    newMesh.material.subMaterials[i] = botMeshes[botClass].material.subMaterials[i].clone();
+                    if (newMesh.material.subMaterials[i].name.indexOf('botColor') > -1) { // if a submaterial exists
+                        var material = new BABYLON.StandardMaterial("botColor_"+botClass+i, scene);
+                        material.diffuseColor = hexToColor3(bot.color);
+                        material.specularColor = new BABYLON.Color3(0, 0, 0);
+                        newMesh.material.subMaterials[i] = material;
+                    } else {
+                        newMesh.material.subMaterials[i] = botMeshes[botClass].material.subMaterials[i].clone()
+                    }
                 }
             }
         }
@@ -693,7 +709,25 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
     }
 
+    function hexToRgb(hex) {
+        // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+        var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+            return r + r + g + g + b + b;
+        });
 
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    }
+    
+    function hexToColor3(hex) {
+        var rgb = hexToRgb(hex);
+        return new BABYLON.Color3(rgb.r / 255, rgb.g / 255, rgb.b / 255);
+    }
 
     return {
         initialize: initialize,
