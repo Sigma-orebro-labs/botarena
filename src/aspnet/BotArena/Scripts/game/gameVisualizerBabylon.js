@@ -135,9 +135,11 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
             bot.babylonMesh = cloneBotMeshAndMaterials(i, bot); // Default to standardClass if bot is created before the botClass era. i is passed along just to give the bot mesh a "unique" id
 
-            bot.babylonMesh.position.x = bot.y;
+            var botCenterPosition = bot.center();
+
+            bot.babylonMesh.position.x = botCenterPosition.y;
             bot.babylonMesh.position.y = shipYValue;
-            bot.babylonMesh.position.z = bot.x;
+            bot.babylonMesh.position.z = botCenterPosition.x;
 
             /*if (bot.babylonMesh.material.subMaterials !== undefined) {
                 for (var i in bot.babylonMesh.material.subMaterials) {
@@ -151,9 +153,9 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
             bot.healthBarSprite = new BABYLON.Sprite("healthbar_" + i, healthBarSpritesManager);
             bot.healthBarSprite.color = new BABYLON.Color4(0, 1, 0.2, 1);
-            bot.healthBarSprite.position.x = bot.y;
+            bot.healthBarSprite.position.x = botCenterPosition.y;
             bot.healthBarSprite.position.y = healthBarYValue;
-            bot.healthBarSprite.position.z = bot.x;
+            bot.healthBarSprite.position.z = botCenterPosition.x;
             bot.healthBarSprite.size = 45;
             refreshHealthBarWidth(bot);
 
@@ -162,9 +164,9 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             var nameBar = new BABYLON.SpriteManager("bot_" + i + "_name_bar", nameImageUrl, 100, 300, scene);
             nameBarSpritesManagers[i] = nameBar;
             bot.nameBar = new BABYLON.Sprite("namebar_" + i, nameBarSpritesManagers[i]);
-            bot.nameBar.position.x = bot.y;
+            bot.nameBar.position.x = botCenterPosition.y;
             bot.nameBar.position.y = nameTagYValue;
-            bot.nameBar.position.z = bot.x;
+            bot.nameBar.position.z = botCenterPosition.x;
             bot.nameBar.size = 150;
 
             shadowGenerator.getShadowMap().renderList.push(bot.babylonMesh);
@@ -559,15 +561,17 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             
             if (bot.babylonMesh !== undefined) {
 
-                bot.babylonMesh.position.x = bot.y;
-                bot.babylonMesh.position.z = bot.x;
+                var botCenterPosition = bot.center();
+
+                bot.babylonMesh.position.x = botCenterPosition.y;
+                bot.babylonMesh.position.z = botCenterPosition.x;
                 bot.babylonMesh.rotation.y = gosu.math.degreesToRadians(bot.angle + 180); // +180 fixes model facing wrong direction
 
-                bot.healthBarSprite.position.x = bot.y;
-                bot.healthBarSprite.position.z = bot.x;
+                bot.healthBarSprite.position.x = botCenterPosition.y;
+                bot.healthBarSprite.position.z = botCenterPosition.x;
                 
-                bot.nameBar.position.x = bot.y;
-                bot.nameBar.position.z = bot.x;
+                bot.nameBar.position.x = botCenterPosition.y;
+                bot.nameBar.position.z = botCenterPosition.x;
             }
         }
     }
@@ -612,9 +616,12 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         refreshHealthBarWidth(bot);
 
         // explosion
+
+        var botCenterPosition = bot.center();
+
         var explosion = new BABYLON.Sprite("explosion", explosionSpriteManager);
-        explosion.position.x = bot.y;
-        explosion.position.z = bot.x;
+        explosion.position.x = botCenterPosition.y;
+        explosion.position.z = botCenterPosition.x;
         explosion.position.y = explosionYValue;
         explosion.size = 20;
         explosion.disposeWhenFinishedAnimating = true;
@@ -660,8 +667,11 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
                 smoke.start();
             }
 
-            bullet.babylonMesh.position.x = bullet.y;
-            bullet.babylonMesh.position.z = bullet.x;
+            var bulletCenterPosition = bullet.center();
+
+
+            bullet.babylonMesh.position.x = bulletCenterPosition.y;
+            bullet.babylonMesh.position.z = bulletCenterPosition.x;
         }
     }
 
