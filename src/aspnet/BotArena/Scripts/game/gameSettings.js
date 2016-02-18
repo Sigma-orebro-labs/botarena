@@ -10,7 +10,7 @@ gosuArena.settings = gosuArena.settings || {};
     }
 
     gosuArena.settings.isTraining = function() {
-        var training = getParameterByName("training");
+        var training = getParameterByName("isTraining");
         return training && training.toLowerCase() == "true";
     };
 
