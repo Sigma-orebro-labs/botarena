@@ -3,7 +3,7 @@
         $scope.bot = {
             className: "", 
             equipment: null,
-            colorHexCode: "#FF0000",
+            colorHexCode: "#FFFFFF",
             name: ""
         };
 
@@ -125,9 +125,16 @@
                 $scope.hideMesh(meshId);
                 mesh.rotation.y = gosu.math.degreesToRadians(90);
 
+                $scope.updateMeshColor(meshId);
+
                 $scope.water.material.reflectionTexture.renderList.push(mesh);
                 $scope.water.material.refractionTexture.renderList.push(mesh);
 
+            }
+
+            $scope.updateMeshColor = function (meshId) {
+                var mesh = $scope.allMeshes[meshId];
+                helpers.babylon.setMeshColor(mesh, $scope.bot.colorHexCode, 'botColor', scene);
             }
 
             engine.runRenderLoop(function () {

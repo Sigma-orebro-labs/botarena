@@ -486,6 +486,13 @@ Your bot interacts with gosuArena through a couple of different events, and thos
     included in the enemiesInFieldOfView array of the <a href="#bot-status">bot status</a> object.
 </p>
 
+<pre class="prettify">
+    if(status.enemiesInFieldOfView.length > 0) {
+        // there is one or more enemies in view
+        // Initiate super smart destructive sequence
+    }
+</pre>
+
 <img src="@Url.Content("~/Content/images/docs/fov.png")" alt="Visualization of the bot field of view (FOV)" />
 
 <p>
@@ -494,6 +501,12 @@ Your bot interacts with gosuArena through a couple of different events, and thos
     angle offset is only allowed to be -20 degrees to +20 degrees, which means that your bot will be able
     to see more bots than it can target with its cannon.
 </p>
+
+<pre class="prettify">
+    // firing 10° left of the aiming line (-20 to 20 allowed)
+    var angle = -10;
+    actionQueue.fire(angle);
+</pre>
 
 <h3 id="equipment">Equipment and classes</h3>
 <p>

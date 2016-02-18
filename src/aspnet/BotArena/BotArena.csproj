@@ -388,6 +388,7 @@
     <Content Include="Scripts\bots\bootstrapping\behaviour\randomizerSnippet.js" />
     <Content Include="Scripts\bots\bootstrapping\behaviour\turnbotSnippet.js" />
     <Content Include="Scripts\bots\bootstrapping\behaviour\wallerSnippet.js" />
+    <Content Include="Scripts\game\helpers.babylon.js" />
     <Content Include="Scripts\game\modifiers\modifierConfig.json" />
     <Content Include="Scripts\bots\bootstrapping\augmentations\cloakSnippet.js" />
     <Content Include="Scripts\bots\bootstrapping\augmentations\damageBoostSnippet.js" />

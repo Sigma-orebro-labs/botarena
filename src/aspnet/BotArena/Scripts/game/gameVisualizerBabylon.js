@@ -1,4 +1,4 @@
-﻿var gosuArena = gosuArena || {};
+var gosuArena = gosuArena || {};
 gosuArena.factories = gosuArena.factories || {};
 gosuArena.visualizers = gosuArena.visualizers || {};
 
@@ -133,11 +133,19 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
 
             botsCurrentlyInScene.push(bot);
 
-            bot.babylonMesh = cloneBotMeshAndMaterials(i, bot.class || 'standardClass'); // Default to standardClass if bot is created before the botClass era. i is passed along just to give the bot mesh a "unique" id
+            bot.babylonMesh = cloneBotMeshAndMaterials(i, bot); // Default to standardClass if bot is created before the botClass era. i is passed along just to give the bot mesh a "unique" id
 
             bot.babylonMesh.position.x = bot.y;
             bot.babylonMesh.position.y = shipYValue;
             bot.babylonMesh.position.z = bot.x;
+
+            /*if (bot.babylonMesh.material.subMaterials !== undefined) {
+                for (var i in bot.babylonMesh.material.subMaterials) {
+                    if (bot.babylonMesh.material.subMaterials[i].name !== undefined && bot.babylonMesh.material.subMaterials[i].name == 'botColor') {
+                        bot.babylonMesh.material.subMaterials[i].diffuseColor = new BABYLON.Color3(1, 0, 0);
+                    }
+                }
+            }*/
 
             bot.babylonMesh.scaling = new BABYLON.Vector3(10, 10, 10);
 
@@ -165,16 +173,30 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         }
     }
 
-    function cloneBotMeshAndMaterials(index, botClass) {
-        var newMesh = botMeshes[botClass].clone("bot" + index);
-        newMesh.material = botMeshes[botClass].material.clone();
+    function cloneBotMeshAndMaterials(index, bot) {
+        try
+        {
+            var botClass = bot.class || 'standardClass'; // default to standardClass if no class is set
+            var newMesh = botMeshes[botClass].clone("bot" + index);
+            newMesh.material = botMeshes[botClass].material.clone();
 
-        if (botMeshes[botClass].material.subMaterials !== undefined) {
-            for (var i = 0; i < botMeshes[botClass].material.subMaterials.length; i++) {
-                if (newMesh.material.subMaterials[i]) { // if a submaterial exists
-                    newMesh.material.subMaterials[i] = botMeshes[botClass].material.subMaterials[i].clone();
+            if (botMeshes[botClass].material.subMaterials !== undefined) {
+                for (var i = 0; i < botMeshes[botClass].material.subMaterials.length; i++) {
+                    if (newMesh.material.subMaterials[i]) { // if a submaterial exists
+                        if (newMesh.material.subMaterials[i].name.indexOf('botColor') > -1) {
+                            // replace with colored material
+                            newMesh.material.subMaterials[i] = helpers.babylon.createColoredMaterial(bot.color, "botColor_" + bot.name, scene);
+                        } else {
+                            // clone existing material
+                            newMesh.material.subMaterials[i] = botMeshes[botClass].material.subMaterials[i].clone();
+                            newMesh.material.subMaterials[i].name = botMeshes[botClass].material.subMaterials[i].name + botClass + '_' + i;
+                        }
+                    }
                 }
             }
+        } catch(e)
+        {
+            console.log('err: ' +e);
         }
 
         return newMesh;
@@ -696,8 +718,6 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         particleSmoke.updateSpeed = 0.010;
 
     }
-
-
 
     return {
         initialize: initialize,
