@@ -1,0 +1,17 @@
+﻿<div>
+    <h1>Behaviour</h1>
+
+    <ul class="modifier-list">
+        <li ng-repeat="behaviour in availableBehaviours" ng-click="selectBehaviour(behaviour)" ng-class="isSelected(behaviour) ? 'selected' : ''">
+            <span class="title">{{behaviour.name}}</span>
+            <span class="description">{{behaviour.description}}</span>
+        </li>
+    </ul>
+
+    <nav>
+        <a class="btn-previous" ui-sref="bot-wizard.choose-augmentations"><i class="fa fa-arrow-left"/> Previous</a>
+        <a class="btn-next" ui-sref="bot-wizard.choose-color">Next <i class="fa fa-arrow-right"/></a>
+    </nav>
+</div>
+
+

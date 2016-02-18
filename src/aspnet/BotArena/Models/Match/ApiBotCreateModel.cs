@@ -6,6 +6,7 @@ namespace GosuArena.Models.Match
     {
         public string Name { get; set; }
         public string ColorHexCode { get; set; }
+        public string Behaviour { get; set; }
         public string ClassName { get; set; }
         public string[] Equipment { get; set; }
         public string[] Powerups { get; set; }

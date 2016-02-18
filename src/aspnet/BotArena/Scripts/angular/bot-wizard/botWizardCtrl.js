@@ -189,6 +189,7 @@
             missingFields += getValidateSelectedMessage($scope.bot.weapon, "weapon");
             missingFields += getValidateSelectedMessage($scope.bot.equipment, "equipment");
             missingFields += getValidateSelectedMessage($scope.bot.augmentation, "augmentation");
+            missingFields += getValidateSelectedMessage($scope.bot.behaviour, "behaviour");
             missingFields += getValidateSelectedMessage($scope.bot.colorHexCode, "color");
             missingFields += getValidateSelectedMessage($scope.bot.name, "name");
 
@@ -203,6 +204,7 @@
                 data: {
                     name: $scope.bot.name,
                     colorHexCode: $scope.bot.colorHexCode,
+                    behaviour: $scope.bot.behaviour,
                     className: $scope.bot.className,
                     powerups: [$scope.bot.augmentation],
                     equipment: [$scope.bot.equipment, $scope.bot.weapon, $scope.bot.armor]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -151,7 +152,7 @@ namespace GosuArena.Controllers.Api
             {
                 try
                 {
-                    augmentationStartSnippet += System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath("~/Scripts/bots/bootstrapping/augmentations/"+ augmentation + "Snippet.js"));
+                    augmentationStartSnippet += File.ReadAllText(HttpContext.Current.Server.MapPath("~/Scripts/bots/bootstrapping/augmentations/"+ augmentation + "Snippet.js"));
                 }
                 catch (Exception)
                 {
@@ -159,13 +160,26 @@ namespace GosuArena.Controllers.Api
                 }
             }
 
+            string behaviourSnippet;
+
+            try
+            {
+                behaviourSnippet = File.ReadAllText(HttpContext.Current.Server.MapPath("~/Scripts/bots/bootstrapping/behaviour/" + model.Behaviour + "Snippet.js"));
+            }
+            catch (Exception)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Behaviour code snippet error.");
+            }
+
             var userId = _repository.GetUserId(User.Identity.Name);
-            var defaultScript = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath("~/Scripts/bots/bootstrapping/defaultBotScriptTemplate.js"))
+
+            var defaultScript = File.ReadAllText(HttpContext.Current.Server.MapPath("~/Scripts/bots/bootstrapping/defaultBotScriptTemplate.js"))
                 .Replace("%COLOR_HEX_CODE%", model.ColorHexCode)
                 .Replace("%BOT_CLASS%", model.ClassName)
                 .Replace("%EQUIPMENT%", string.Join(", ", model.Equipment.Select(AddQuotes)))
                 .Replace("%AUGMENTATIONS%", string.Join(", ", model.Powerups.Select(AddQuotes)))
-                .Replace("%AUGMENTATION_SNIPPET%", augmentationStartSnippet);
+                .Replace("%AUGMENTATION_SNIPPET%", augmentationStartSnippet)
+                .Replace("%BEHAVIOUR_SNIPPET%", behaviourSnippet);
 
             var bot = new Bot
             {

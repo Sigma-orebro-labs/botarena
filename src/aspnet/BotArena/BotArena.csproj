@@ -347,6 +347,8 @@
     <Content Include="Scripts\angular\bot-wizard\botWizardCtrl.js" />
     <Content Include="Scripts\angular\bot-wizard\ChooseArmor.html" />
     <Content Include="Scripts\angular\bot-wizard\chooseArmorCtrl.js" />
+    <Content Include="Scripts\angular\bot-wizard\ChooseBehaviour.html" />
+    <Content Include="Scripts\angular\bot-wizard\chooseBehaviourCtrl.js" />
     <Content Include="Scripts\angular\bot-wizard\ChooseClass.html" />
     <Content Include="Scripts\angular\bot-wizard\chooseClassCtrl.js" />
     <Content Include="Scripts\angular\bot-wizard\ChooseColor.html" />
@@ -382,10 +384,10 @@
     <None Include="Properties\PublishProfiles\botarena - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\botarena - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\botarena-Prod - Web Deploy.pubxml" />
-    <Content Include="Scripts\bots\bootstrapping\behaviour\circler.js" />
-    <Content Include="Scripts\bots\bootstrapping\behaviour\randomizer.js" />
-    <Content Include="Scripts\bots\bootstrapping\behaviour\turnbot.js" />
-    <Content Include="Scripts\bots\bootstrapping\behaviour\waller.js" />
+    <Content Include="Scripts\bots\bootstrapping\behaviour\circlerSnippet.js" />
+    <Content Include="Scripts\bots\bootstrapping\behaviour\randomizerSnippet.js" />
+    <Content Include="Scripts\bots\bootstrapping\behaviour\turnbotSnippet.js" />
+    <Content Include="Scripts\bots\bootstrapping\behaviour\wallerSnippet.js" />
     <Content Include="Scripts\game\modifiers\modifierConfig.json" />
     <Content Include="Scripts\bots\bootstrapping\augmentations\cloakSnippet.js" />
     <Content Include="Scripts\bots\bootstrapping\augmentations\damageBoostSnippet.js" />

@@ -4,15 +4,13 @@
 gosuArena.register({
     tick: function (actionQueue, status, augmentations) {
 
-        // Clear the action queue to make sure there are no
-        // actions remaining in the queue. This ensures that
-        // the actions queued here will actually be executed,
-        // and not just put at the end of the queue.
-        actionQueue.clear();
-
         // Do something interesting here... for example:
 
         if (status.enemiesOnTarget.length > 0 && status.canFire()) {
+
+            // Clear the action queue to make sure that the shot is fired immediately.
+            // Otherwise there might be lots of move or rotate actions, or something like that,
+            // on the queue which causes the fire command to be delayed for several turns.
             actionQueue.clear();
             actionQueue.fire();
         }
@@ -20,8 +18,9 @@ gosuArena.register({
         // Example of how to activate your augmentation
 %AUGMENTATION_SNIPPET%
 
-        actionQueue.turn(1);
-        actionQueue.forward(1);
+        // Example bot behaviour. Check out the documentation for other examples.
+%BEHAVIOUR_SNIPPET%
+
     },
     onHitByBullet: function (actionQueue, status, augmentations, eventArgs) {
         
@@ -33,7 +32,9 @@ gosuArena.register({
         // This will be called if your bot collides with a wall or another bot
 
     },
-    options: {
+    // To change the class, equipment or augmentation of your bot, check out the documentation
+    // for a complete listing of the available equipment, classes, augmentations etc.
+    options: { 
         color: "%COLOR_HEX_CODE%",
         botClass: "%BOT_CLASS%",
         equipment: [%EQUIPMENT%],
