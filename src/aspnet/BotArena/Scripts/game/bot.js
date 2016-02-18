@@ -15,10 +15,20 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
 
     var currentRoundDirection = { x: 0, y: 0 };
 
+    function calculateWeaponCooldown() {
+        var cooldown = options.weaponCooldownTime * staticModifiers.calculateWeaponCooldownTimeFactor();
+
+        if (cooldown < options.minimalAllowedWeaponCooldown) {
+            return options.minimalAllowedWeaponCooldown;
+        }
+
+        return cooldown;
+    }
+
     var weapon = {
         width: options.weaponWidth,
         height: options.weaponHeight,
-        cooldownTime: options.weaponCooldownTime * staticModifiers.calculateWeaponCooldownTimeFactor(),
+        cooldownTime: calculateWeaponCooldown(),
         cooldownTimeLeft: 0,
         baseDamage: options.weaponDamage,
         offsetDistanceFromCenter: options.weaponOffsetDistanceFromCenter,
