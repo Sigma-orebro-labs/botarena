@@ -27,7 +27,7 @@ app.factory('matchSetupService', [function () {
         var isTeamValue = options.isTeamSetup ? "true" : "false";
         var isTrainingValue = options.isTraining ? "true" : "false";
 
-        return gosuArena.url.createAbsolute("/Match/Play?" + rosterQueryString + "&isTeam=" + isTeamValue + "&isTraining="  + isTrainingValue);
+        return gosuArena.url.createAbsoluteWithCacheBusting("/Match/Play?" + rosterQueryString + "&isTeam=" + isTeamValue + "&isTraining=" + isTrainingValue);
     };
 
     return {

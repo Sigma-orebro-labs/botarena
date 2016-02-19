@@ -230,6 +230,7 @@
     <Compile Include="Extensions\RepositoryExtensions.cs" />
     <Compile Include="Extensions\ValidationExtensions.cs" />
     <Compile Include="Infrastructure\Authorization\AdminAttribute.cs" />
+    <Compile Include="Infrastructure\Environment.cs" />
     <Compile Include="Infrastructure\Graphics\ImageRenderer.cs" />
     <Compile Include="Models\Account\ApiUserModel.cs" />
     <Compile Include="Models\Controls\MatchSetupModel.cs" />

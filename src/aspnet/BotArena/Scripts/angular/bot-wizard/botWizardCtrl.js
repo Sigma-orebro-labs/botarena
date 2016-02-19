@@ -207,7 +207,7 @@
 
             $http({
                 method: "POST",
-                url: gosuArena.url.createAbsolute('api/bots'),
+                url: gosuArena.url.createAbsoluteWithCacheBusting('api/bots'),
                 data: {
                     name: $scope.bot.name,
                     colorHexCode: $scope.bot.colorHexCode,

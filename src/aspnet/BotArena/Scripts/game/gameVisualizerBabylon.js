@@ -159,7 +159,7 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
             bot.healthBarSprite.size = 45;
             refreshHealthBarWidth(bot);
 
-            var nameImageUrl = gosuArena.url.createAbsolute("/api/botnameimage", { name: bot.name, colorHexCode: bot.color });
+            var nameImageUrl = gosuArena.url.createAbsoluteWithCacheBusting("/api/botnameimage", { name: bot.name, colorHexCode: bot.color });
 
             var nameBar = new BABYLON.SpriteManager("bot_" + i + "_name_bar", nameImageUrl, 100, 300, scene);
             nameBarSpritesManagers[i] = nameBar;

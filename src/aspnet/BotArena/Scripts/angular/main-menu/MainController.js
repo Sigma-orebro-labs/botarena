@@ -23,5 +23,5 @@
         return authService.isLoggedIn();
     }
 
-    $scope.docsUrl = gosuArena.url.createAbsolute("/docs");
+    $scope.docsUrl = gosuArena.url.createAbsoluteWithCacheBusting("/docs");
 }]);

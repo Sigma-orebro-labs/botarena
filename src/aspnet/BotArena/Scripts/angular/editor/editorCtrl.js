@@ -73,7 +73,7 @@
 
             $http({
                     method: "GET",
-                    url: gosuArena.url.createAbsolute("/api/bots/" + $stateParams.botId)
+                    url: gosuArena.url.createAbsoluteWithCacheBusting("/api/bots/" + $stateParams.botId)
                 })
                 .then(function(response) {
                     $scope.bot = response.data;
@@ -83,7 +83,7 @@
 
             $http({
                     method: "GET",
-                    url: gosuArena.url.createAbsolute("/api/bots/" + $stateParams.botId + "/trainingbots")
+                    url: gosuArena.url.createAbsoluteWithCacheBusting("/api/bots/" + $stateParams.botId + "/trainingbots")
                 })
                 .then(function(response) {
                     $scope.trainingBots = response.data;

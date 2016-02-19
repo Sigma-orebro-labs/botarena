@@ -8,87 +8,87 @@
                 url: "/"
             })
             .state('main-menu', {
-                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/main-menu/main-menu.html'),
+                templateUrl: gosuArena.url.createAbsoluteWithCacheBusting('/Scripts/angular/main-menu/main-menu.html'),
                 controller: 'MainController',
                 controllerAs: 'main'
             })
             .state('log-in', {
-                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/account/Login.html'),
+                templateUrl: gosuArena.url.createAbsoluteWithCacheBusting('/Scripts/angular/account/Login.html'),
                 controller: 'loginCtrl'
             })
             .state('register', {
-                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/account/Register.html'),
+                templateUrl: gosuArena.url.createAbsoluteWithCacheBusting('/Scripts/angular/account/Register.html'),
                 controller: 'registerCtrl'
             })
             .state('changepassword', {
-                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/account/ChangePassword.html'),
+                templateUrl: gosuArena.url.createAbsoluteWithCacheBusting('/Scripts/angular/account/ChangePassword.html'),
                 controller: 'changePasswordCtrl'
             })
             .state('ffasetup', {
-                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/match-setup/setup.html'),
+                templateUrl: gosuArena.url.createAbsoluteWithCacheBusting('/Scripts/angular/match-setup/setup.html'),
                 controller: 'matchSetupCtrl'
             })
             .state('teamsetup', {
-                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/match-setup/setup.html'),
+                templateUrl: gosuArena.url.createAbsoluteWithCacheBusting('/Scripts/angular/match-setup/setup.html'),
                 controller: 'matchSetupCtrl'
             })
             .state('mybots', {
-                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bots/list.html'),
+                templateUrl: gosuArena.url.createAbsoluteWithCacheBusting('/Scripts/angular/bots/list.html'),
                 controller: 'botListCtrl'
             })
             .state('editbot', {
                 url: '/edit/:botId',
-                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/editor/editor.html'),
+                templateUrl: gosuArena.url.createAbsoluteWithCacheBusting('/Scripts/angular/editor/editor.html'),
                 controller: 'editorCtrl'
             })
             .state('bot-wizard', {
                 abstract: true,
-                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/BotWizardLayout.html'),
+                templateUrl: gosuArena.url.createAbsoluteWithCacheBusting('/Scripts/angular/bot-wizard/BotWizardLayout.html'),
                 controller: 'botWizardCtrl',
                 controllerAs: 'wizard'
             })
             .state('bot-wizard.choose-class', {
-                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/ChooseClass.html'),
+                templateUrl: gosuArena.url.createAbsoluteWithCacheBusting('/Scripts/angular/bot-wizard/ChooseClass.html'),
                 controller: 'chooseClassCtrl',
                 controllerAs: 'class'
             })
             .state('bot-wizard.choose-weapon', {
-                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/ChooseWeapon.html'),
+                templateUrl: gosuArena.url.createAbsoluteWithCacheBusting('/Scripts/angular/bot-wizard/ChooseWeapon.html'),
                 controller: 'chooseWeaponCtrl',
                 controllerAs: 'weapon'
             })
             .state('bot-wizard.choose-armor', {
-                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/ChooseArmor.html'),
+                templateUrl: gosuArena.url.createAbsoluteWithCacheBusting('/Scripts/angular/bot-wizard/ChooseArmor.html'),
                 controller: 'chooseArmorCtrl',
                 controllerAs: 'armor'
             })
             .state('bot-wizard.choose-equipment', {
-                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/ChooseEquipment.html'),
+                templateUrl: gosuArena.url.createAbsoluteWithCacheBusting('/Scripts/angular/bot-wizard/ChooseEquipment.html'),
                 controller: 'chooseEquipmentCtrl',
                 controllerAs: 'equipment'
             })
             .state('bot-wizard.choose-augmentations', {
-                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/ChooseAugmentations.html'),
+                templateUrl: gosuArena.url.createAbsoluteWithCacheBusting('/Scripts/angular/bot-wizard/ChooseAugmentations.html'),
                 controller: 'chooseAugmentationsCtrl',
                 controllerAs: 'augmentations'
             })
             .state('bot-wizard.choose-behaviour', {
-                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/ChooseBehaviour.html'),
+                templateUrl: gosuArena.url.createAbsoluteWithCacheBusting('/Scripts/angular/bot-wizard/ChooseBehaviour.html'),
                 controller: 'chooseBehaviourCtrl',
                 controllerAs: 'behaviour'
             })
             .state('bot-wizard.choose-color', {
-                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/ChooseColor.html'),
+                templateUrl: gosuArena.url.createAbsoluteWithCacheBusting('/Scripts/angular/bot-wizard/ChooseColor.html'),
                 controller: 'chooseColorCtrl',
                 controllerAs: 'color'
             })
             .state('bot-wizard.enter-bot-name', {
-                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/EnterBotName.html'),
+                templateUrl: gosuArena.url.createAbsoluteWithCacheBusting('/Scripts/angular/bot-wizard/EnterBotName.html'),
                 controller: 'enterBotNameCtrl',
                 controllerAs: 'enterName'
             })
             .state('bot-wizard.enter-email', {
-                templateUrl: gosuArena.url.createAbsolute('/Scripts/angular/bot-wizard/EnterEmail.html'),
+                templateUrl: gosuArena.url.createAbsoluteWithCacheBusting('/Scripts/angular/bot-wizard/EnterEmail.html'),
                 controller: 'enterEmailCtrl',
                 controllerAs: 'enterEmail'
             });
