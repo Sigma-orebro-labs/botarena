@@ -15,6 +15,9 @@ namespace GosuArena
             routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
             routes.IgnoreRoute("robots.txt");
 
+            AddBabylonManifestRoute(routes, "Match/BotArena/Content/models/");;
+            AddBabylonManifestRoute(routes, "BotArena/Content/models/");;
+
             routes.MapRoute(
                 name: "User profile",
                 url: "Profile/{username}",
@@ -30,6 +33,15 @@ namespace GosuArena
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Match", action = "Index", id = UrlParameter.Optional }
             );
+        }
+
+        private static void AddBabylonManifestRoute(RouteCollection routes, string prefixPath)
+        {
+            routes.MapRoute(
+                name: $"Babylon resource manifest '{prefixPath}'",
+                url: prefixPath + "{manifestpath}",
+                defaults: new {controller = "Resources", action = "BabylonManifest"},
+                constraints: new {manifestpath = @".*\.babylon\.manifest.*"});
         }
     }
 }

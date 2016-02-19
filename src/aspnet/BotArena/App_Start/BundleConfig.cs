@@ -12,7 +12,7 @@ namespace GosuArena
 
             bundles.Add(new ScriptBundle("~/bundles/game").Include(
                 "~/Scripts/lib/signalR/jquery.signalR-2.2.0.min.js",
-                "~/Scripts/lib/babylon.2.1.js",
+                "~/Scripts/lib/babylon-2.3.js",
                 "~/Scripts/infrastructure/*.js",
                 "~/Scripts/infrastructure/logging/*.js",
                 "~/Scripts/gosu/math/*.js",

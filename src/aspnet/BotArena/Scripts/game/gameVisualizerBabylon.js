@@ -265,6 +265,10 @@ gosuArena.factories.createGameVisualizerBabylon = function (canvas) {
         gosuArena.visualizers.babylonEngine = new BABYLON.Engine(canvas, true);
         engine = gosuArena.visualizers.babylonEngine;
 
+        // This is supposed to disable offline support to avoid Babylon requesting manifest files,
+        // but it does not really seem to work. It is still requesting the manifest files.
+        engine.enableOfflineSupport = false;
+
         scene = createScene(canvas);
         setUpLights();
 
