@@ -3,12 +3,27 @@ gosuArena.commander = gosuArena.commander || {};
 
 gosuArena.commander.createGameListener = function (callback) {
 
+    var pingIntervalHandle = null;
+
+    function pingServer() {
+        gosuArena.realtime.call(function(connection) {
+            connection.gameHub.server.ping(gosuArena.settings.gameRoom.id)
+            .done(function() {
+                console.log("Pinged server to keep game room active");
+            })
+            .fail(function(e) {
+                console.error(e);
+            });
+        });
+    }
+
     function initialize(arenaState) {
+
+        pingIntervalHandle = setInterval(pingServer, 20000);
 
         gosuArena.events.gameStarting(function () {
             gosuArena.realtime.call(function(connection) {
                 var botInfos = arenaState.bots.map(function (bot) {
-                    console.log(bot.commandNames());
                     return {
                         id: bot.id,
                         name: bot.name,

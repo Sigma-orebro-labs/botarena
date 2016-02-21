@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using GosuArena.Models.Commander;
 using GosuArena.Services;
@@ -8,7 +9,7 @@ namespace GosuArena.Controllers.RealTime
 {
     public class GameHub : Hub
     {
-        private static ConcurrentBag<GameModel> _games = new ConcurrentBag<GameModel>();
+        private static ConcurrentDictionary<string, GameModel> _games = new ConcurrentDictionary<string, GameModel>();
 
         public void Subscribe(string gameId)
         {
@@ -30,12 +31,23 @@ namespace GosuArena.Controllers.RealTime
 
         public GameModel[] GetOpenGameRooms()
         {
-            return _games.ToArray();
+            CleanUpInactiveGameRooms();
+
+            return _games.Values.ToArray();
+        }
+
+        private void CleanUpInactiveGameRooms()
+        {
+            foreach (var game in _games.Values.Where(x => x.LastPingTime < DateTime.Now.AddMinutes(-1)).ToList())
+            {
+                GameModel removed;
+                _games.TryRemove(game.Id, out removed);
+            }
         }
 
         public GameModel GetGameRoom(string id)
         {
-            return _games.FirstOrDefault(x => x.Id == id);
+            return _games[id];
         }
 
         public CommanderBotModel GetBot(string roomId, int botId)
@@ -44,14 +56,20 @@ namespace GosuArena.Controllers.RealTime
             return game.Bots.FirstOrDefault(x => x.Id == botId);
         }
 
+        public void Ping(string roomId)
+        {
+            var room = GetGameRoom(roomId);
+            room.LastPingTime = DateTime.Now;
+        }
+
         public GameModel CreateGameRoom()
         {
             var generator = new NameGenerator();
-            var name = generator.GenerateUnique(_games.Select(x => x.Id));
+            var name = generator.GenerateUnique(_games.Keys);
 
             var gameModel = new GameModel(name);
 
-            _games.Add(gameModel);
+            _games[gameModel.Id] = gameModel;
 
             return gameModel;
         }

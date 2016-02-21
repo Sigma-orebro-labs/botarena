@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace GosuArena.Models.Commander
@@ -9,6 +10,7 @@ namespace GosuArena.Models.Commander
         {
             Id = id;
             Name = id;
+            LastPingTime = DateTime.Now;
         }
 
         [JsonProperty("id")]
@@ -19,5 +21,8 @@ namespace GosuArena.Models.Commander
 
         [JsonProperty("bots")]
         public List<CommanderBotModel> Bots { get; set; }
+
+        [JsonProperty("lastPingTime")]
+        public DateTime LastPingTime { get; set; }
     }
 }
