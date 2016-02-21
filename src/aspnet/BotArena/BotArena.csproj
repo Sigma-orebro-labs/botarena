@@ -388,6 +388,9 @@
     <Content Include="Content\models\ninja.babylon" />
     <Content Include="Content\models\standardClass.babylon" />
     <Content Include="Content\models\tank.babylon" />
+    <Content Include="Content\models\ninja.blend" />
+    <Content Include="Content\models\standardClass.blend" />
+    <Content Include="Content\models\tank.blend" />
     <None Include="Properties\PublishProfiles\botarena - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\botarena - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\botarena-Prod - Web Deploy.pubxml" />
