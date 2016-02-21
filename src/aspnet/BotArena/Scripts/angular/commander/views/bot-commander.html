@@ -1,7 +1,7 @@
 ﻿<h1>{{ roomId }} - {{ bot.name }}</h1>
 <h2>Commands</h2>
 <ul>
-    <li ng-repeat="command in bot.commands">
+    <li ng-repeat="command in bot.commands" ng-click="sendCommand(command)">
         {{ command }}
     </li>
 </ul>

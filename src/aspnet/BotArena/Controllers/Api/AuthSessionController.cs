@@ -1,6 +1,8 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using GosuArena.Entities;
+using GosuArena.Extensions;
 using GosuArena.Models.Account;
 using GosuArena.Services;
 
@@ -16,7 +18,7 @@ namespace GosuArena.Controllers.Api
         {
             if (User.Identity.IsAuthenticated)
             {
-                return Request.CreateResponse(HttpStatusCode.OK, GetUserModel(User.Identity.Name));
+                return Request.CreateResponse(HttpStatusCode.OK, GetUserModel(User.UserId()));
             }
 
             return Request.CreateResponse(HttpStatusCode.NotFound, "The current user has no auth session");
@@ -42,14 +44,25 @@ namespace GosuArena.Controllers.Api
             _authService.LogOff();
         }
 
+        private object GetUserModel(int userId)
+        {
+            var currentUser = _authService.GetUser(userId);
+            return GetUserModel(currentUser);
+        }
+
         private object GetUserModel(string username)
         {
             var currentUser = _authService.GetUser(username);
+            return GetUserModel(currentUser);
+        }
 
+        private object GetUserModel(User user)
+        {
             return new
             {
-                username = currentUser.Username,
-                currentUser.Email
+                id = user.Id,
+                username = user.Username,
+                user.Email
             };
         }
     }

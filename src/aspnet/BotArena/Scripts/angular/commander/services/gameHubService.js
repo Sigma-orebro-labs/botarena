@@ -52,7 +52,7 @@
 
         function getGameRoom(id, callback) {
             connect(function () {
-                gameHub.server.getGameRoom(id)
+                gameHub.server.getGameRoomForCurrentUser(id)
                     .done(function (gameRoom) {
                         $rootScope.$apply(function () {
                             callback(gameRoom);
@@ -76,12 +76,26 @@
             });
         }
 
+        function sendCommand(roomId, botId, commandName, callback) {
+            connect(function () {
+                gameHub.server.onCommand(roomId, botId, commandName)
+                    .done(function () {
+                        $rootScope.$apply(function () {
+                            callback();
+                        });
+                    }).fail(function (e) {
+                        console.error(e);
+                    });
+            });
+        }
+
         return {
             subscribe: subscribe,
             unsubscribe: unsubscribe,
             getGameRooms: getGameRooms,
             getGameRoom: getGameRoom,
-            getBot: getBot
+            getBot: getBot,
+            sendCommand: sendCommand
         };
     }
 

@@ -15,12 +15,14 @@ namespace GosuArena.Services
 
         public bool TryLogin(string username, string password, bool rememberMe)
         {
-            if (!IsValid(username, password))
+            var user = GetUserByCredentials(username, password);
+
+            if (user == null)
             {
                 return false;
             }
 
-            FormsAuthentication.SetAuthCookie(username, rememberMe);
+            FormsAuthentication.SetAuthCookie(user.Id.ToString(), rememberMe);
 
             _repository.Update<User>()
                 .Set(x => x.LastLoginDate, DateTime.Now)
@@ -35,7 +37,7 @@ namespace GosuArena.Services
             FormsAuthentication.SignOut();
         }
 
-        private bool IsValid(string username, string password)
+        private User GetUserByCredentials(string username, string password)
         {
             var user = _repository.Find<User>()
                 .Where(x => x.Username == username)
@@ -43,9 +45,9 @@ namespace GosuArena.Services
                 .FirstOrDefault();
 
             if (user == null)
-                return false;
+                return null;
 
-            return user.IsPasswordValid(password);
+            return user.IsPasswordValid(password) ? user : null;
         }
 
         public User GetUser(string username)
@@ -53,6 +55,14 @@ namespace GosuArena.Services
             return _repository
                 .Find<User>()
                 .Where(x => x.Username == username)
+                .Execute();
+        }
+
+        public User GetUser(int id)
+        {
+            return _repository
+                .Find<User>()
+                .Where(x => x.Id == id)
                 .Execute();
         }
     }

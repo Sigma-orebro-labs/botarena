@@ -18,6 +18,8 @@ gosuArena.realtime = gosuArena.realtime || {};
         if ($.connection.hub && $.connection.hub.state === $.signalR.connectionState.disconnected) {
             $.connection.hub.start().done(function () {
                 callback();
+            }).fail(function(e) {
+                console.error(e);
             });
         }
     };

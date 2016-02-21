@@ -7,6 +7,9 @@ namespace GosuArena.Models.Commander
         [JsonProperty("id")]
         public int Id { get; set; }
 
+        [JsonProperty("userId")]
+        public int UserId { get; set; }
+
         [JsonProperty("name")]
         public string Name { get; set; }
 

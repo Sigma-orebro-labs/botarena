@@ -3,6 +3,25 @@ gosuArena.commander = gosuArena.commander || {};
 
 gosuArena.commander.createGameListener = function (callback) {
 
+    $.connection.gameHub.client.foo = function () {
+        console.log("foo received");
+    }
+
+    $.connection.gameHub.client.onCommand = function (roomId, botId, commandName) {
+        console.log(gosuArena.settings.gameRoom.id + ": Command '" + commandName + "' recieved for bot " + botId + " in " + roomId)
+    }
+
+    gosuArena.realtime.call(function (connection) {
+        var gameHub = connection.gameHub;
+
+        gameHub.server.createGameRoom().done(function (room) {
+            console.log("Started game room: " + room.id + "...");
+            gosuArena.settings.gameRoom = room;
+        }).fail(function (e) {
+            console.error(e);
+        });
+    });
+
     var pingIntervalHandle = null;
 
     function pingServer() {
@@ -27,12 +46,18 @@ gosuArena.commander.createGameListener = function (callback) {
                     return {
                         id: bot.id,
                         name: bot.name,
-                        health: bot.health,
+                        health: bot.health(),
                         commands: bot.commandNames()
                     };
                 });
 
-                connection.gameHub.server.gameStarting(gosuArena.settings.gameRoom.id, botInfos);
+                connection.gameHub.server.gameStarting(gosuArena.settings.gameRoom.id, botInfos)
+                    .done(function() {
+                        console.log("Updated game room with bot info");
+                    })
+                    .fail(function(e) {
+                        console.error(e);
+                    });
             });
         });
 

@@ -56,13 +56,7 @@ namespace GosuArena.Controllers.Api
 
             if (currentUser)
             {
-                var userId = _repository
-                    .Find<User>()
-                    .Select(x => x.Id)
-                    .Where(x => x.Username == User.Identity.Name)
-                    .ExecuteScalar<int>();
-
-                query = query.AndWhere(x => x.UserId == userId && !x.IsTrainer);
+                query = query.AndWhere(x => x.UserId == User.UserId() && !x.IsTrainer);
             }
             else
             {
@@ -84,21 +78,19 @@ namespace GosuArena.Controllers.Api
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Not logged in"));
             }
 
-            var userId = _repository.GetUserId(User.Identity.Name);
-
             var botAuthorId = _repository
                 .Find<Bot>()
                 .Select(x => x.UserId)
                 .Where(x => x.Id == botId)
                 .ExecuteScalar<int>();
 
-            if (userId != botAuthorId)
+            if (User.UserId() != botAuthorId)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "You do not own the requested bot"));
             }
 
             var trainingBots = _repository.Find<Bot>()
-                .Where(x => !x.IsDemoBot && (x.IsTrainer || x.UserId == userId))
+                .Where(x => !x.IsDemoBot && (x.IsTrainer || x.UserId == User.UserId()))
                 .Join(x => x.User)
                 .OrderBy(x => x.Name)
                 .ExecuteList();
@@ -171,8 +163,6 @@ namespace GosuArena.Controllers.Api
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Behaviour code snippet error.");
             }
 
-            var userId = _repository.GetUserId(User.Identity.Name);
-
             var defaultScript = File.ReadAllText(HttpContext.Current.Server.MapPath("~/Scripts/bots/bootstrapping/defaultBotScriptTemplate.js"))
                 .Replace("%COLOR_HEX_CODE%", model.ColorHexCode)
                 .Replace("%BOT_CLASS%", model.ClassName)
@@ -185,7 +175,7 @@ namespace GosuArena.Controllers.Api
             {
                 Name = model.Name,
                 Script = defaultScript,
-                UserId = userId
+                UserId = User.UserId()
             };
 
             _repository.Insert(bot);
@@ -217,7 +207,7 @@ namespace GosuArena.Controllers.Api
 
         private void ValidateAuthenticatedCall(Bot bot)
         {
-            if (!bot.IsUserAuthorized(User.Identity.Name))
+            if (!bot.IsUserAuthorized(User.UserId()))
             {
                 ThrowUnauthorizedException();
             }

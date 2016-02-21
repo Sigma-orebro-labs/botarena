@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Web.Http;
 using DataAnnotationsExtensions;
 using GosuArena.Entities;
+using GosuArena.Extensions;
 using GosuArena.Models.Account;
 using WeenyMapper;
 
@@ -52,7 +53,7 @@ namespace GosuArena.Controllers.Api
         [Route("api/accounts/current/password")]
         public HttpResponseMessage PutNewPassword(ChangePasswordModel model)
         {
-            var user = _repository.Find<User>().Where(x => x.Username == User.Identity.Name).Execute();
+            var user = _repository.Find<User>().Where(x => x.Id == User.UserId()).Execute();
 
             if (user == null)
             {

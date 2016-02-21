@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using GosuArena.Entities;
+using GosuArena.Extensions;
 using GosuArena.Models.Match;
 using WeenyMapper.Extensions;
 
@@ -113,7 +114,7 @@ namespace GosuArena.Controllers
         private IList<Bot> GetBots(IEnumerable<string> botNames)
         {
             var distinctNames = botNames.Distinct().ToList();
-            var currentUserId = GetCurrentUserId();
+            var currentUserId = User.UserId();
 
             return Repository.Find<Bot>()
                 .Where(x => distinctNames.Contains(x.Name) && (x.IsPublic || x.UserId == currentUserId))
@@ -123,7 +124,7 @@ namespace GosuArena.Controllers
 
         private bool IsBotSetupInvalid(IList<Bot> bots)
         {
-            var currentUserId = GetCurrentUserId();
+            var currentUserId = User.UserId();
 
             var matchIncludesPrivateBots = bots.Any(x => !x.IsPublic);
             var matchIncludesBotsWrittenByAnotherUser = bots.Any(x => !x.IsTrainer && x.UserId != currentUserId);

@@ -59,9 +59,9 @@ namespace GosuArena.Entities
             return string.Equals(Name, botName, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public bool IsUserAuthorized(string username)
+        public bool IsUserAuthorized(int userId)
         {
-            return string.Equals(User.Username, username, StringComparison.InvariantCultureIgnoreCase);
+            return UserId == userId;
         }
     }
 }

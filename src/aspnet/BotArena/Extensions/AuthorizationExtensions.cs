@@ -9,5 +9,10 @@ namespace GosuArena.Extensions
          {
              return User.IsAdmin(user.Identity.Name);
          }
+
+        public static int UserId(this IPrincipal user)
+        {
+            return int.Parse(user.Identity.Name);
+        }
     }
 }

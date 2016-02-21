@@ -1,50 +1,12 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using GosuArena.Entities;
-using GosuArena.Models;
-using GosuArena.Services;
+using GosuArena.Extensions;
 
 namespace GosuArena.Controllers
 {
     public class UserController : BaseController
     {
-        [Authorize]
-        public ActionResult MyProfile()
-        {
-            var username = User.Identity.Name;
-
-            return RedirectToAction("Profile", new { username = username });
-        }
-
-        [Authorize]
-        public new ActionResult Profile(string username)
-        {
-            var user = GetUserWithBots(username);
-
-            if (user == null)
-            {
-                return new HttpNotFoundResult();
-            }
-
-            var isCurrentUserProfile = username == User.Identity.Name;
-
-            if (isCurrentUserProfile)
-                return View(user);
-
-            return View("ReadOnlyProfile", user);
-        }
-
-        protected User GetUserWithBots(string username)
-        {
-            return Repository.Find<User>()
-                .Where(x => x.Username == username)
-                .Join(x => x.Bots, x => x.User)
-                .Execute();
-        }
-
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -54,7 +16,7 @@ namespace GosuArena.Controllers
 
             Repository.Update<User>()
                 .Set(x => x.ApiKey, newKey)
-                .Where(x => x.Id == GetCurrentUserId())
+                .Where(x => x.Id == User.UserId())
                 .Execute();
 
             return RedirectToAction("MyProfile");
@@ -84,7 +46,7 @@ namespace GosuArena.Controllers
         {
             Repository.Update<User>()
                 .Set(x => x.IsApiAccessAllowed, isApiAccessAllowed)
-                .Where(x => x.Id == GetCurrentUserId())
+                .Where(x => x.Id == User.UserId())
                 .Execute();
         }
     }
