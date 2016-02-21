@@ -1,0 +1,6 @@
+﻿<h1>BotArena Game Rooms</h1>
+<ul>
+    <li ng-repeat="room in gameRooms">
+        <a ui-sref="game-room({ roomId: room.id })">{{ room.name }}</a>
+    </li>
+</ul>

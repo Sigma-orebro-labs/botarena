@@ -14,6 +14,7 @@ namespace GosuArena
                 "~/Scripts/lib/signalR/jquery.signalR-2.2.0.min.js",
                 "~/Scripts/lib/babylon-2.3.js",
                 "~/Scripts/infrastructure/*.js",
+                "~/Scripts/infrastructure/commander/*.js",
                 "~/Scripts/infrastructure/logging/*.js",
                 "~/Scripts/gosu/math/*.js",
                 "~/Scripts/gosu/*.js",
@@ -49,13 +50,16 @@ namespace GosuArena
                 "~/Scripts/lib/signalR/jquery.signalR-2.2.0.min.js",
                 "~/signalr/hubs",
                 "~/Scripts/lib/angular/angular.min.js",
-                "~/Scripts/lib/angular/angular-route.js"));
+                "~/Scripts/lib/angular/angular-ui-router.js",
+                "~/Scripts/lib/angular/angular-animate.min.js",
+                "~/Scripts/lib/angular/SweetAlert.min.js",
+                "~/Content/lib/ng-toaster/toaster.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/commander").Include(
                 "~/Scripts/infrastructure/*.js",
-                "~/Scripts/Pages/Commander/commander.js",
-                "~/Scripts/Pages/Commander/Controllers/*.js",
-                "~/Scripts/Pages/Commander/Services/*.js"
+                "~/Scripts/angular/commander/commander.js",
+                "~/Scripts/angular/commander/controllers/*.js",
+                "~/Scripts/angular/commander/services/*.js"
                 ));
 
             //#if DEBUG

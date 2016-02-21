@@ -24,4 +24,5 @@
     }
 
     $scope.docsUrl = gosuArena.url.createAbsoluteWithCacheBusting("/docs");
+    $scope.commanderUrl = gosuArena.url.createAbsoluteWithCacheBusting("/Match/Commander");
 }]);

@@ -39,18 +39,35 @@
 
         function getGameRooms(callback) {
             connect(function () {
-                gameHub.server.getOpenGameRooms().done(function(gameRooms) {
-                    $rootScope.$apply(function () {
-                        callback(gameRooms);
+                gameHub.server.getOpenGameRooms()
+                    .done(function (gameRooms) {
+                        $rootScope.$apply(function () {
+                            callback(gameRooms);
+                        });
+                    }).fail(function (e) {
+                        console.error(e);
                     });
-                });
+            });
+        }
+
+        function getGameRoom(id, callback) {
+            connect(function () {
+                gameHub.server.getGameRoom(id)
+                    .done(function (gameRoom) {
+                        $rootScope.$apply(function () {
+                            callback(gameRoom);
+                        });
+                    }).fail(function(e) {
+                        console.error(e);
+                    });
             });
         }
 
         return {
             subscribe: subscribe,
             unsubscribe: unsubscribe,
-            getGameRooms: getGameRooms
+            getGameRooms: getGameRooms,
+            getGameRoom: getGameRoom,
         };
     }
 

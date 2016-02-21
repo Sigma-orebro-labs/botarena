@@ -159,15 +159,21 @@
 
         gosuArena.realtime.connect(function() {
             var gameHub = $.connection.gameHub;
-            gameHub.server.createGameRoom().done(function(roomName) {
-                console.log("Started game room: " + roomName + "...");
+            gameHub.server.createGameRoom().done(function(room) {
+                console.log("Started game room: " + room.id + "...");
+                gosuArena.settings.gameRoom = room;
             });
         });
 
         adjustBabylonCanvasSize();
 
         gosuArena.engine.initializeWorld({
-            listeners: [gosuArena.matchViewModel, gosuArena.logging.createEventConsoleLogger(), gosuArena.visualizers.gameVisualizer3D],
+            listeners: [
+                gosuArena.matchViewModel,
+                gosuArena.logging.createEventConsoleLogger(),
+                gosuArena.visualizers.gameVisualizer3D,
+                gosuArena.commander.createGameListener()
+            ],
             resourceLoaders: [
                 //gosuArena.resources.imageLoader, -- 2d mode is disabled
                 gosuArena.resources.modifierConfigLoader

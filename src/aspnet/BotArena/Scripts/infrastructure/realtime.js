@@ -1,17 +1,40 @@
 ﻿var gosuArena = gosuArena || {};
 gosuArena.realtime = gosuArena.realtime || {};
 
-gosuArena.realtime.disconnect = function() {
-    $.connection.hub.stop();
-};
+(function() {
 
-gosuArena.realtime.connect = function (callback) {
+    function isConnected() {
+        return $.connection.hub && $.connection.hub.state === $.signalR.connectionState.connected;
+    };
 
-    gosuArena.realtime.disconnect();
+    function disconnect() {
+        $.connection.hub.stop();
+    };
 
-    if ($.connection.hub && $.connection.hub.state === $.signalR.connectionState.disconnected) {
-        $.connection.hub.start().done(function () {
-            callback();
-        });
+    function connect(callback) {
+
+        gosuArena.realtime.disconnect();
+
+        if ($.connection.hub && $.connection.hub.state === $.signalR.connectionState.disconnected) {
+            $.connection.hub.start().done(function () {
+                callback();
+            });
+        }
+    };
+
+    function call(action) {
+        if (!gosuArena.realtime.isConnected()) {
+            gosuArena.realtime.connect(function() {
+                action($.connection);
+            });
+        } else {
+            action($.connection);
+        }
     }
-};
+
+    gosuArena.realtime.isConnected = isConnected;
+    gosuArena.realtime.disconnect = disconnect;
+    gosuArena.realtime.connect = connect;
+    gosuArena.realtime.call = call;
+
+})();

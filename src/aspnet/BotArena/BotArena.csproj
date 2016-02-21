@@ -234,6 +234,8 @@
     <Compile Include="Infrastructure\Environment.cs" />
     <Compile Include="Infrastructure\Graphics\ImageRenderer.cs" />
     <Compile Include="Models\Account\ApiUserModel.cs" />
+    <Compile Include="Models\Commander\CommanderBotModel.cs" />
+    <Compile Include="Models\Commander\GameModel.cs" />
     <Compile Include="Models\Controls\MatchSetupModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -369,6 +371,9 @@
     <Content Include="Scripts\angular\account\loginCtrl.js" />
     <Content Include="Scripts\angular\bots\List.html" />
     <Content Include="Scripts\angular\bots\botListCtrl.js" />
+    <Content Include="Scripts\angular\commander\controllers\gameRoomController.js" />
+    <Content Include="Scripts\angular\commander\views\bot-commander.html" />
+    <Content Include="Scripts\angular\commander\views\game-room.html" />
     <Content Include="Scripts\angular\editor\editorCtrl.js" />
     <Content Include="Scripts\angular\editor\editor.html" />
     <Content Include="Scripts\angular\main-menu\main-menu.html" />
@@ -404,6 +409,7 @@
     <Content Include="Scripts\game\specs\botDirectionSpecs.js" />
     <Content Include="Scripts\game\specs\botVisionSpecs.js" />
     <Content Include="Scripts\game\specs\augmentationSpecs.js" />
+    <Content Include="Scripts\infrastructure\commander\commanderGameListener.js" />
     <Content Include="Scripts\infrastructure\logging\eventConsoleLogger.js" />
     <Content Include="Scripts\infrastructure\util.js" />
     <Content Include="Scripts\infrastructure\modifierConfigLoader.js" />
@@ -414,7 +420,7 @@
     <Content Include="Scripts\lib\angular\SweetAlert.min.js" />
     <Content Include="Scripts\lib\angular\ui-codemirror.js" />
     <Content Include="Scripts\lib\jshint.js" />
-    <Content Include="Scripts\Pages\Commander\Services\gameHubService.js" />
+    <Content Include="Scripts\angular\commander\services\gameHubService.js" />
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\NameGenerator.cs" />
     <Compile Include="Startup.cs" />
@@ -466,8 +472,8 @@
     <Content Include="Scripts\menu\menu.js" />
     <Content Include="Scripts\lib\signalR\jquery.signalR-2.2.0.js" />
     <Content Include="Scripts\lib\signalR\jquery.signalR-2.2.0.min.js" />
-    <Content Include="Scripts\Pages\Commander\commander.js" />
-    <Content Include="Scripts\Pages\Commander\Controllers\gameRoomListController.js" />
+    <Content Include="Scripts\angular\commander\commander.js" />
+    <Content Include="Scripts\angular\commander\controllers\gameRoomListController.js" />
     <Content Include="Scripts\Shaders\Water\bump.png" />
     <Content Include="Scripts\Shaders\Water\water.fragment.fx" />
     <Content Include="Scripts\Shaders\Water\water.vertex.fx" />
@@ -712,7 +718,7 @@
     <Content Include="Scripts\SpecRunner.html" />
     <Content Include="Scripts\game\userActionQueue.js" />
     <None Include="Scripts\_references.js" />
-    <Content Include="Content\Pages\Commander\GameRoomList.html" />
+    <Content Include="Scripts\angular\commander\views\game-room-list.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

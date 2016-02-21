@@ -1,4 +1,6 @@
 ﻿using System.Collections.Concurrent;
+using System.Linq;
+using GosuArena.Models.Commander;
 using GosuArena.Services;
 using Microsoft.AspNet.SignalR;
 
@@ -6,16 +8,21 @@ namespace GosuArena.Controllers.RealTime
 {
     public class GameHub : Hub
     {
-        private static ConcurrentBag<string> _games = new ConcurrentBag<string>();
+        private static ConcurrentBag<GameModel> _games = new ConcurrentBag<GameModel>();
 
         public void Subscribe(string gameId)
         {
             Groups.Add(Context.ConnectionId, gameId);
         }
 
-        public string[] GetOpenGameRooms()
+        public GameModel[] GetOpenGameRooms()
         {
             return _games.ToArray();
+        }
+
+        public GameModel GetGameRoom(string id)
+        {
+            return _games.FirstOrDefault(x => x.Id == id);
         }
 
         public void Unsubscribe(string gameId)
@@ -31,14 +38,22 @@ namespace GosuArena.Controllers.RealTime
             }
         }
 
-        public string CreateGameRoom()
+        public GameModel CreateGameRoom()
         {
             var generator = new NameGenerator();
-            var name = generator.GenerateUnique(_games);
+            var name = generator.GenerateUnique(_games.Select(x => x.Id));
 
-            _games.Add(name);
+            var gameModel = new GameModel(name);
 
-            return name;
+            _games.Add(gameModel);
+
+            return gameModel;
+        }
+
+        public void GameStarting(string roomId, CommanderBotModel[] bots)
+        {
+            var room = GetGameRoom(roomId);
+            room.Bots = bots.ToList();
         }
 
         public void Foo(string bar)

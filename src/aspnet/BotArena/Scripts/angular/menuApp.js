@@ -1,4 +1,4 @@
-﻿    angular.module('menuApp', ['ui.router', 'toaster', 'ui.codemirror', 'oitozero.ngSweetAlert'])
+﻿angular.module('menuApp', ['ui.router', 'toaster', 'ui.codemirror', 'oitozero.ngSweetAlert'])
     .config(function($stateProvider, $urlRouterProvider) {
 
         $urlRouterProvider.otherwise('/'); // default route when no other matching url is found

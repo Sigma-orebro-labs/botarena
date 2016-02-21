@@ -18,6 +18,9 @@
         <a ui-sref="mybots">My bots</a>
     </li>
     <li ng-show="isLoggedIn()">
+        <a ng-href="{{ commanderUrl }}" ng-click="toggleMenu()" target="_blank">Commander</a>
+    </li>
+    <li ng-show="isLoggedIn()">
         <a ui-sref="changepassword">Change password</a>
     </li>
     <li>

@@ -6,21 +6,30 @@
 
 <html>
 <head>
+    <meta name="viewport" content="width=device-width"/>
+    <title>Commander - BotArena</title>
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/lib/ng-toaster/toaster.min.css")"/>
+
     <script type="text/javascript">
         var gosuArena = gosuArena || {};
         gosuArena.pageData = gosuArena.pageData || {};
-        gosuArena.pageData.gameRoomListUrl = '@Url.Content("~/Content/Pages/Commander/GameRoomList.html")';
-        gosuArena.pageData.gameRoomUrl = '@Url.Content("~/Content/Pages/Commander/GameRoom.html")';
-        gosuArena.pageData.botCommanderUrl = '@Url.Content("~/Content/Pages/Commander/BotCommander.html")';
+
+        gosuArena.versionNumber = '@GosuArena.Infrastructure.Environment.VersionIdentifier';
+
+        gosuArena.url = gosuArena.url || {};
+        gosuArena.url.baseUrl = '@Url.Content("~/")';
+        gosuArena.url.cacheBustingFragment = gosuArena.versionNumber;
     </script>
 </head>
-<body ng-app="commander" ng-controller="gameRoomListController">
 
-<section ng-view>
+<body ng-app="commander">
+
+    <section ui-view>
     
-</section>
+    </section>
 
-@Scripts.Render("~/bundles/commanderlibs")
+    @Scripts.Render("~/bundles/commanderlibs")
 
     <script type="text/javascript" src="~/signalr/hubs"></script>
 
