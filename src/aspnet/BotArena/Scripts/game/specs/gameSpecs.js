@@ -1406,7 +1406,7 @@ describe("Game", function () {
             startPosition: { x: 200, y: 0, angle: 90 }, // aiming west
             tick: function (actionQueue, status, augmentations) {
                 actionQueue.clear();
-                actionQueue.fire(-4); // Fire with a 4 degree offset, that is slightly south
+                actionQueue.fire(-8); // Fire with a 4 degree offset, that is slightly south
             }
         });
 

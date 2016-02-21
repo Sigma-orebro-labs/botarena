@@ -73,7 +73,7 @@
 
         $http({
                 method: "GET",
-                url: gosuArena.url.createAbsolute("/api/bots")
+                url: gosuArena.url.createAbsoluteWithCacheBusting("/api/bots")
             })
             .then(function(response) {
                 $scope.bots = response.data;

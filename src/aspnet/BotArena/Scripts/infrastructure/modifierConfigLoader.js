@@ -7,7 +7,7 @@ gosuArena.sprites = gosuArena.sprites || {};
 (function() {
 
     gosuArena.resources.modifierConfigLoader.load = function (arenaState, allResourcesLoadedCallback) {
-        $.getJSON(gosuArena.url.createAbsolute("/api/modifiers"), function (data) {
+        $.getJSON(gosuArena.url.createAbsoluteWithCacheBusting("/api/modifiers"), function (data) {
             gosuArena.factories.modifiers.initialize(data);
             allResourcesLoadedCallback();
         });

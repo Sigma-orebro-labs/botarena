@@ -38,7 +38,7 @@
     }
 
     function restartMatchWithCountDown(countDownsRemaining, delay, hasShownInitialMessage) {
-        var defaultCountDownsRemaining = gosuArena.isTraining ? 0 : 3;
+        var defaultCountDownsRemaining = gosuArena.settings.isTraining() ? 0 : 3;
 
         countDownsRemaining = countDownsRemaining === undefined ? defaultCountDownsRemaining : countDownsRemaining;
         delay = delay || 1000;
@@ -168,7 +168,10 @@
 
         gosuArena.engine.initializeWorld({
             listeners: [gosuArena.matchViewModel, gosuArena.logging.createEventConsoleLogger(), gosuArena.visualizers.gameVisualizer3D],
-            resourceLoaders: [gosuArena.resources.imageLoader, gosuArena.resources.modifierConfigLoader]
+            resourceLoaders: [
+                //gosuArena.resources.imageLoader, -- 2d mode is disabled
+                gosuArena.resources.modifierConfigLoader
+            ]
         });
 
         ko.applyBindings(gosuArena.matchViewModel);

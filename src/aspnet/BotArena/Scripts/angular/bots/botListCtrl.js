@@ -6,7 +6,7 @@
 
     $http({
             method: "GET",
-            url: gosuArena.url.createAbsolute("/api/bots?currentUser=true")
+            url: gosuArena.url.createAbsoluteWithCacheBusting("/api/bots?currentUser=true")
         })
         .then(function(response) {
             $scope.bots = response.data;

@@ -1,5 +1,4 @@
 ﻿@using System.Web.Optimization
-@using GosuArena.Extensions
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,8 +7,12 @@
 
     <script type="text/javascript">
         var gosuArena = gosuArena || {};
+
+        gosuArena.versionNumber = '@GosuArena.Infrastructure.Environment.VersionIdentifier';
+
         gosuArena.url = gosuArena.url || {};
         gosuArena.url.baseUrl = '@Url.Content("~/")';
+        gosuArena.url.cacheBustingFragment = gosuArena.versionNumber;
     </script>
 
     <link rel="stylesheet" href="@Url.Content("~/Content/Pages/Match/World.less")" />
