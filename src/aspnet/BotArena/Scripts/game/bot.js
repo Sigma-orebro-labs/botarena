@@ -549,6 +549,18 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         augmentationDeactivatedCallbacks.length = 0;
     };
 
+    bot.commandNames = function() {
+        var names = [];
+
+        for (var prop in bot.commands) {
+            if (bot.commands.hasOwnProperty(prop)) {
+                names.push(prop);
+            }
+        }
+
+        return names;
+    };
+
     bot.class = options.botClass;
 
     return bot;

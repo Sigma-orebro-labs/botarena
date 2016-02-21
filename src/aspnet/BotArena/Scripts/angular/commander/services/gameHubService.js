@@ -63,11 +63,25 @@
             });
         }
 
+        function getBot(roomId, botId, callback) {
+            connect(function () {
+                gameHub.server.getBot(roomId, botId)
+                    .done(function (bot) {
+                        $rootScope.$apply(function () {
+                            callback(bot);
+                        });
+                    }).fail(function(e) {
+                        console.error(e);
+                    });
+            });
+        }
+
         return {
             subscribe: subscribe,
             unsubscribe: unsubscribe,
             getGameRooms: getGameRooms,
             getGameRoom: getGameRoom,
+            getBot: getBot
         };
     }
 

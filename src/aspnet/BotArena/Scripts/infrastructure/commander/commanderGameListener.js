@@ -7,12 +7,13 @@ gosuArena.commander.createGameListener = function (callback) {
 
         gosuArena.events.gameStarting(function () {
             gosuArena.realtime.call(function(connection) {
-                var botInfos = arenaState.bots.map(function(bot) {
+                var botInfos = arenaState.bots.map(function (bot) {
+                    console.log(bot.commandNames());
                     return {
                         id: bot.id,
                         name: bot.name,
                         health: bot.health,
-                        events: ['foo', 'bar']
+                        commands: bot.commandNames()
                     };
                 });
 

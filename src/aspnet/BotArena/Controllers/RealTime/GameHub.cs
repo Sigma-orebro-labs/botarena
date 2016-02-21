@@ -15,16 +15,6 @@ namespace GosuArena.Controllers.RealTime
             Groups.Add(Context.ConnectionId, gameId);
         }
 
-        public GameModel[] GetOpenGameRooms()
-        {
-            return _games.ToArray();
-        }
-
-        public GameModel GetGameRoom(string id)
-        {
-            return _games.FirstOrDefault(x => x.Id == id);
-        }
-
         public void Unsubscribe(string gameId)
         {
             Groups.Remove(Context.ConnectionId, gameId);
@@ -36,6 +26,22 @@ namespace GosuArena.Controllers.RealTime
             {
                 Unsubscribe(id);
             }
+        }
+
+        public GameModel[] GetOpenGameRooms()
+        {
+            return _games.ToArray();
+        }
+
+        public GameModel GetGameRoom(string id)
+        {
+            return _games.FirstOrDefault(x => x.Id == id);
+        }
+
+        public CommanderBotModel GetBot(string roomId, int botId)
+        {
+            var game = GetGameRoom(roomId);
+            return game.Bots.FirstOrDefault(x => x.Id == botId);
         }
 
         public GameModel CreateGameRoom()

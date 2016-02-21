@@ -1,6 +1,7 @@
-﻿<h1>Available game rooms</h1>
+﻿<h1>{{ roomId }} - {{ bot.name }}</h1>
+<h2>Commands</h2>
 <ul>
-    <li ng-repeat="room in gameRooms">
-        {{ room }}
+    <li ng-repeat="command in bot.commands">
+        {{ command }}
     </li>
 </ul>

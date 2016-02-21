@@ -371,6 +371,7 @@
     <Content Include="Scripts\angular\account\loginCtrl.js" />
     <Content Include="Scripts\angular\bots\List.html" />
     <Content Include="Scripts\angular\bots\botListCtrl.js" />
+    <Content Include="Scripts\angular\commander\controllers\botCommanderController.js" />
     <Content Include="Scripts\angular\commander\controllers\gameRoomController.js" />
     <Content Include="Scripts\angular\commander\views\bot-commander.html" />
     <Content Include="Scripts\angular\commander\views\game-room.html" />

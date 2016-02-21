@@ -13,7 +13,7 @@ namespace GosuArena.Models.Commander
         [JsonProperty("health")]
         public int Health { get; set; }
 
-        [JsonProperty("events")]
-        public string[] Events { get; set; }
+        [JsonProperty("commands")]
+        public string[] Commands { get; set; }
     }
 }

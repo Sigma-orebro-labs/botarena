@@ -32,6 +32,13 @@ gosuArena.register({
         // This will be called if your bot collides with a wall or another bot
 
     },
+    commands: {
+        // Here you can define your own commands which you can trigger manually when playing
+        // with the commander app. You can call the commands what every you like. For example:
+        panic: function(actionQueue, status, augmentations) {
+            // Do something smart here
+        }
+    },
     // To change the class, equipment or augmentation of your bot, check out the documentation
     // for a complete listing of the available equipment, classes, augmentations etc.
     options: { 

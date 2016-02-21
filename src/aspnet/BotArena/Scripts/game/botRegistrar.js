@@ -57,6 +57,8 @@ gosuArena.botRegistrar.create = function (collisionDetector, arenaState) {
             bot.onCollision(options.onCollision);
         }
 
+        bot.commands = options.commands || {};
+        
         arenaState.addBot(bot);
 
         currentRegisteringBotInternalOptions = null;

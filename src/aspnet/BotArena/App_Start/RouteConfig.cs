@@ -14,9 +14,9 @@ namespace GosuArena
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
             routes.IgnoreRoute("robots.txt");
-
+            
             AddBabylonManifestRoute(routes, "Match/BotArena/Content/models/");;
-            AddBabylonManifestRoute(routes, "BotArena/Content/models/");;
+            AddBabylonManifestRoute(routes, "Content/models/");;
 
             routes.MapRoute(
                 name: "User profile",
