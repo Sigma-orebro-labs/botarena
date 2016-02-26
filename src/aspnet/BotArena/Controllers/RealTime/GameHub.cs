@@ -95,10 +95,7 @@ namespace GosuArena.Controllers.RealTime
             var repository = new Repository();
             var names = bots.Select(x => x.Name).ToList();
 
-            var botEntities = repository
-                .Find<Bot>().Select(x => x.Id, x => x.Name, x => x.UserId)
-                .Where(x => names.Contains(x.Name))
-                .ExecuteList();
+            var botEntities = repository.GetBotsByNames(names);
 
             foreach (var bot in bots)
             {
@@ -118,11 +115,6 @@ namespace GosuArena.Controllers.RealTime
             {
                 Clients.Group(roomId).onCommand(roomId, botId, commandName);
             }
-        }
-
-        public void Foo(string bar)
-        {
-            Clients.All.foo();
         }
     }
 }

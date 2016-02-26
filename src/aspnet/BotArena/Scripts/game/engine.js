@@ -258,9 +258,18 @@ gosuArena.engine = (function () {
         readyForBotRegistrationCallbacks.length = 0;
     }
 
+    function executeBotCommand(botId, commandName) {
+        var bot = arenaState.getLivingBot(botId);
+
+        if (bot) {
+            bot.executeCommand(commandName);
+        }
+    }
+
     return {
         start: restartMatch,
         reset: reset,
-        initializeWorld: initializeWorld
+        initializeWorld: initializeWorld,
+        executeBotCommand: executeBotCommand
     };
 })();

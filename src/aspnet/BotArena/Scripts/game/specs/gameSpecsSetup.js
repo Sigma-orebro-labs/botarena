@@ -21,6 +21,7 @@ gosuArena.specs.game.addBot = function (options) {
             tick: options.tick,
             onHitByBullet: options.onHitByBullet,
             onCollision: options.onCollision,
+            commands: options.commands,
             options: {
                 startPosition: options.startPosition,
                 botClass: options.botClass,
@@ -48,4 +49,40 @@ gosuArena.specs.game.startGame = function (clock) {
     gosuArena.engine.start(clock, {
         isTraining: true
     });
+};
+
+gosuArena.specs.createGameSetup = function() {
+    var setup = {
+        clock: null,
+        arenaState: null
+    };
+
+    var arenaStateInterceptor = {
+        initialize: function (state) {
+            setup.arenaState = state;
+        }
+    };
+
+    setup.startGame = function () {
+        gosuArena.specs.game.startGame(setup.clock);
+    }
+
+    setup.addBot = gosuArena.specs.game.addBot;
+
+    setup.beforeEach = function() {
+
+        jasmine.addMatchers(gosuArena.specs.matchers);
+
+        setup.clock = gosuArena.gameClock.createFake();
+
+        gosuArena.specs.game.cleanup();
+
+        gosuArena.specs.game.initializeWorld([arenaStateInterceptor]);
+    };
+
+    setup.afterEach = function() {
+        setup.arenaState.unsubscribeAllEventListeners();
+    };
+
+    return setup;
 };

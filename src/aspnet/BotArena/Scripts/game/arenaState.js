@@ -207,6 +207,14 @@ gosuArena.arenaState.create = function () {
         clearedCallbacks.push(callback);
     };
 
+    arenaState.getLivingBot = function(botId) {
+        var bots = arenaState.livingBots().filter(function(bot) {
+            return bot.id === botId;
+        });
+
+        return bots.length > 0 ? bots[0] : null;
+    };
+
     function raiseBotHealthChanged(bot) {
         botHealthChangedCallbacks.forEach(function (callback) {
             callback(bot);

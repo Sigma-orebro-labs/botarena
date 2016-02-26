@@ -29,7 +29,7 @@ namespace GosuArena.Models.Match
 
         public string GetScriptToRender(IPrincipal user)
         {
-            var isBotWrittenByCurrentUser = user.UserId() == UserId;
+            var isBotWrittenByCurrentUser = user.TryGetUserId() == UserId;
             var shouldRenderPlainScript = isBotWrittenByCurrentUser || IsTrainer || IsDemoBot;
 
             var compressor = new JavaScriptCompressor();

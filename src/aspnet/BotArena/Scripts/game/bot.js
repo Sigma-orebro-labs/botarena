@@ -561,6 +561,19 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         return names;
     };
 
+    bot.executeCommand = function(commandName) {
+        var commandFunction = bot.commands[commandName];
+
+        if (typeof commandFunction === 'function') {
+
+            var status = bot.createStatus();
+
+            executeUnsafeCode(function () {
+                commandFunction(userActionQueue, status, augmentations);
+            });
+        }
+    };
+
     bot.class = options.botClass;
 
     return bot;

@@ -1,4 +1,7 @@
-﻿using GosuArena.Entities;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using GosuArena.Entities;
 using WeenyMapper;
 
 namespace GosuArena.Extensions
@@ -12,6 +15,17 @@ namespace GosuArena.Extensions
                 .Select(x => x.Id)
                 .Where(x => x.Username == username)
                 .ExecuteScalar<int>();
+        }
+
+        public static IList<Bot> GetBotsByNames(this Repository repository, IEnumerable<string> names)
+        {
+            var nameList = names.ToList();
+
+            return repository
+                .Find<Bot>()
+                .Select(x => x.Id, x => x.Name, x => x.UserId)
+                .Where(x => nameList.Contains(x.Name))
+                .ExecuteList();
         }
     }
 }
