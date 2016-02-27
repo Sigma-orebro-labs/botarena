@@ -45,10 +45,15 @@ gosuArena.specs.game.initializeWorld = function (listeners) {
     });
 }
 
-gosuArena.specs.game.startGame = function (clock) {
-    gosuArena.engine.start(clock, {
-        isTraining: true
-    });
+gosuArena.specs.game.startGame = function (clock, options) {
+
+    options = options || {};
+
+    if (options.isTraining !== false) {
+        options.isTraining = true;
+    }
+
+    gosuArena.engine.start(clock, options);
 };
 
 gosuArena.specs.createGameSetup = function() {
@@ -63,8 +68,8 @@ gosuArena.specs.createGameSetup = function() {
         }
     };
 
-    setup.startGame = function () {
-        gosuArena.specs.game.startGame(setup.clock);
+    setup.startGame = function (options) {
+        gosuArena.specs.game.startGame(setup.clock, options);
     }
 
     setup.addBot = gosuArena.specs.game.addBot;

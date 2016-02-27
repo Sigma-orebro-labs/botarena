@@ -18,6 +18,7 @@ namespace GosuArena
                 "~/Scripts/infrastructure/logging/*.js",
                 "~/Scripts/gosu/math/*.js",
                 "~/Scripts/gosu/*.js",
+                "~/Scripts/game/rules/*.js",
                 "~/Scripts/game/augmentations/*.js",
                 "~/Scripts/game/modifiers/*.js",
                 "~/Scripts/game/*.js",

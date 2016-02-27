@@ -58,6 +58,14 @@ gosuArena.events = (function () {
         gosu.eventAggregator.subscribe("botScriptError", callback);
     }
 
+    function raiseSuddenDeath(number) {
+        gosu.eventAggregator.publish("suddenDeath", number);
+    }
+
+    function suddenDeath(callback) {
+        gosu.eventAggregator.subscribe("suddenDeath", callback);
+    }
+
     return {
         raiseMatchEnded: raiseMatchEnded,
         matchEnded: matchEnded,
@@ -72,7 +80,9 @@ gosuArena.events = (function () {
         raiseTargetCameraOnBot: raiseTargetCameraOnBot,
         targetCameraOnBot: targetCameraOnBot,
         raiseBotScriptError: raiseBotScriptError,
-        botScriptError: botScriptError
+        botScriptError: botScriptError,
+        raiseSuddenDeath: raiseSuddenDeath,
+        suddenDeath: suddenDeath
     };
 })();
 

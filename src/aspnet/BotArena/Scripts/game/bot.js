@@ -518,6 +518,16 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         });
     }
 
+    // Used for game mechanics, such as rules, to punish the bot or control 
+    // their remaining health
+    bot.smite = function (damage) {
+        setHealth(properties.health - damage);
+
+        if (!bot.isAlive()) {
+            raiseKilledEvent();
+        }
+    };
+
     bot.hitBy = function (bullet) {
         properties.health -= bullet.damage / bot.damageReductionFactor;
 

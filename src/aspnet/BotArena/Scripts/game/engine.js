@@ -6,6 +6,7 @@ gosuArena.engine = (function () {
     var isTraining = null;
     var gameListeners = [];
     var resourceLoaders = [];
+    var rules = [];
 
     var arenaHeight = 550;
     var arenaWidth = 750;
@@ -88,11 +89,7 @@ gosuArena.engine = (function () {
     }
 
     function fixStartPositionsToAvoidCollisions() {
-        arenaState.bots.forEach(function (bot) {
-            while (collisionDetector.hasCollided(bot)) {
-                bot.teleportToRandomLocation();
-            }
-        });
+        gosuArena.positioning.resolveCollisions(arenaState.bots, collisionDetector);
     }
 
     function updateBots() {
@@ -123,6 +120,12 @@ gosuArena.engine = (function () {
                 arenaState.bulletHitTerrain(bullet);
             });
         });
+    }
+
+    function updateRules() {
+        for (var i = 0; i < rules.length; i++) {
+            rules[i].tick();
+        }
     }
 
     function startGameLoop() {
@@ -157,12 +160,20 @@ gosuArena.engine = (function () {
         updateBullets();
 
         arenaState.tick();
+
+        updateRules();
     }
 
     function initializeGameListeners() {
         gameListeners.forEach(function (listener) {
             listener.initialize(arenaState);
         });
+    }
+
+    function initializeRules() {
+        for (var i = 0; i < rules.length; i++) {
+            rules[i].initialize(arenaState, collisionDetector);
+        }
     }
 
     function raiseReadyForBotRegistrationEvent() {
@@ -233,6 +244,7 @@ gosuArena.engine = (function () {
         clock = gameClock;
 
         options = options || {};
+        rules = options.rules || [];
 
         arenaState.clearGame();
 
@@ -247,6 +259,8 @@ gosuArena.engine = (function () {
         raiseReadyForBotRegistrationEvent();
 
         fixStartPositionsToAvoidCollisions();
+
+        initializeRules();
 
         startGameLoop();
 
