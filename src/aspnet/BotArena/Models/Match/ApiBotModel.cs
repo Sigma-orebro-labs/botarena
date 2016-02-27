@@ -1,4 +1,5 @@
-﻿using GosuArena.Entities;
+﻿using System;
+using GosuArena.Entities;
 
 namespace GosuArena.Models.Match
 {
@@ -15,6 +16,7 @@ namespace GosuArena.Models.Match
             AuthorUsername = bot.AuthorUsername;
             Script = bot.Script;
             IsPublic = bot.IsPublic;
+            CreatedDate = bot.CreatedDate;
         }
 
         public int Id { get; set; }
@@ -22,5 +24,6 @@ namespace GosuArena.Models.Match
         public string AuthorUsername { get; set; }
         public string Script { get; set; }
         public bool IsPublic { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

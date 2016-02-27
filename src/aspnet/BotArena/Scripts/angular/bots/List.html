@@ -2,15 +2,19 @@
     <h3 id="bot-heading">Bots</h3>
     <ul id="bots">
         <li ng-click="editBot(bot.id)" class="bot well" ng-repeat="bot in bots | orderBy : '-name'">
+            
             <div class="bot-row">
                 <span class="name">{{bot.name}}</span>
+                <a ng-click="deleteBot(bot)">
+                    <span class="bot-action">Delete</span>
+                </a>
                 <a ui-sref="editbot({ botId: bot.id })">
                     <span class="bot-action">Edit</span>
                 </a>
             </div>
-            <span class="sub-data">{{bot.isPublic ? "Public Bot" : "Private Bot"}}</span>
 
-            <!--<span class="created-date">Created {{bot.createdDate}}</span>-->
+            <span class="sub-data">{{bot.isPublic ? "Public Bot" : "Private Bot"}}</span>
+            <span class="sub-data created-date">Created {{bot.createdDate}}</span>
 
         </li>
     </ul>

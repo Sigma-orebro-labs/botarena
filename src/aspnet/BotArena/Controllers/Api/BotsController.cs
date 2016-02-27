@@ -183,6 +183,30 @@ namespace GosuArena.Controllers.Api
             return Request.CreateResponse(HttpStatusCode.Created, new ApiBotModel(bot));
         }
 
+        [Authorize]
+        public HttpResponseMessage Delete(int id)
+        {
+            var existingBot = _repository
+                .Find<Bot>()
+                .Where(x => x.Id == id)
+                .Execute();
+
+            if (existingBot == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No such bot");
+            }
+
+            if (existingBot.UserId != User.UserId())
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Unauthorized");
+            }
+
+            _repository.Delete(existingBot);
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+
         private string AddQuotes(string arg)
         {
             return $"'{arg}'";
