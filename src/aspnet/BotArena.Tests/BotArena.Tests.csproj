@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="Controllers\BotApiControllerTests.cs" />
     <Compile Include="Extensions\ValidationExtensionTests.cs" />
+    <Compile Include="Infrastructure\TestRunContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\NameGeneratorTests.cs" />
   </ItemGroup>

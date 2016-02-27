@@ -2,9 +2,11 @@
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using BotArena.Tests.Infrastructure;
 using GosuArena.Controllers;
 using GosuArena.Controllers.Api;
 using GosuArena.Entities;
+using GosuArena.Extensions;
 using GosuArena.Models.Match;
 using NUnit.Framework;
 using WeenyMapper;
@@ -25,13 +27,7 @@ namespace BotArena.Tests.Controllers
         {
             _repository = new InMemoryRepository();
 
-            _request = new HttpRequestMessage();
-            
-            _controller = new BotsController(_repository)
-            {
-                Request = _request, 
-                Configuration = new HttpConfiguration()
-            };
+            CreateController();
 
             _user = new User
             {
@@ -150,6 +146,45 @@ namespace BotArena.Tests.Controllers
             Assert.AreEqual("new script", actualScript);
         }
 
+        [Test]
+        public void User_can_delete_their_own_bots()
+        {
+            TestRunContext.SetCurrentIdentity(_user.Id);
+
+            CreateController();
+
+            var response = _controller.Delete(_bot.Id);
+
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            Assert.IsNull(_repository.GetBotById(_bot.Id));
+        }
+
+        [Test]
+        public void Deleting_another_users_bot_fails_with_unauthorized()
+        {
+            TestRunContext.SetCurrentIdentity(1234);
+
+            CreateController();
+
+            var response = _controller.Delete(_bot.Id);
+
+            Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
+            Assert.IsNotNull(_repository.GetBotById(_bot.Id));
+        }
+
+        [Test]
+        public void Deleting_a_non_existing_bot_fails_with_Not_found()
+        {
+            TestRunContext.SetCurrentIdentity(_user.Id);
+
+            CreateController();
+
+            var response = _controller.Delete(12345);
+
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+            Assert.IsNotNull(_repository.GetBotById(_bot.Id));
+        }
+
         private void ShouldThrow(HttpStatusCode statusCode, Action action)
         {
             try
@@ -172,6 +207,17 @@ namespace BotArena.Tests.Controllers
                 .Select(x => x.ApiRequestCount).ExecuteScalar<int>();
 
             Assert.AreEqual(expectedApiRequestCount, actualRequestCount);
+        }
+
+        private void CreateController()
+        {
+            _request = new HttpRequestMessage();
+
+            _controller = new BotsController(_repository)
+            {
+                Request = _request,
+                Configuration = new HttpConfiguration()
+            };
         }
     }
 }

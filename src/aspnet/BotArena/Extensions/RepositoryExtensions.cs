@@ -27,5 +27,10 @@ namespace GosuArena.Extensions
                 .Where(x => nameList.Contains(x.Name))
                 .ExecuteList();
         }
+
+        public static Bot GetBotById(this Repository repository, int botId)
+        {
+            return repository.Find<Bot>().Where(x => x.Id == botId).Execute();
+        }
     }
 }
