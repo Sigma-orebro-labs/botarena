@@ -66,6 +66,14 @@ gosuArena.events = (function () {
         gosu.eventAggregator.subscribe("suddenDeath", callback);
     }
 
+    function raiseBotValidationErrors(number) {
+        gosu.eventAggregator.publish("botValidationErrors", number);
+    }
+
+    function botValidationErrors(callback) {
+        gosu.eventAggregator.subscribe("botValidationErrors", callback);
+    }
+
     return {
         raiseMatchEnded: raiseMatchEnded,
         matchEnded: matchEnded,
@@ -82,7 +90,9 @@ gosuArena.events = (function () {
         raiseBotScriptError: raiseBotScriptError,
         botScriptError: botScriptError,
         raiseSuddenDeath: raiseSuddenDeath,
-        suddenDeath: suddenDeath
+        suddenDeath: suddenDeath,
+        raiseBotValidationErrors: raiseBotValidationErrors,
+        botValidationErrors: botValidationErrors
     };
 })();
 

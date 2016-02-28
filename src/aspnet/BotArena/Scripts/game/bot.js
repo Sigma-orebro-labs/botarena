@@ -116,6 +116,18 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         return augmentations;
     };
 
+    bot.augmentationNames = function () {
+        var names = [];
+
+        for (var prop in augmentations) {
+            if (augmentations.hasOwnProperty(prop)) {
+                names.push(prop);
+            }
+        }
+
+        return names;
+    };
+
     bot.isVisible = function() {
         return properties.isVisible;
     };

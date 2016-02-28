@@ -183,5 +183,59 @@ describe("Game", function () {
 
             expect(eventFiredCount).toBe(2);
         });
+
+        it("validation rule raises single event for all validation errors in the bot configs", function() {
+
+            var botsWithValidationErrors = null;
+            var eventCount = 0;
+
+            gosuArena.events.botValidationErrors(function (botsWithErrors) {
+                botsWithValidationErrors = botsWithErrors;
+                eventCount++;
+            });
+
+            setup.addBot({
+                id: 1,
+                tick: function() {
+                },
+                augmentations: ["damageBoost", "cloak"]
+            });
+
+            setup.addBot({
+                id: 2,
+                tick: function() {
+                },
+                augmentations: ["damageBoost"]
+            });
+
+            setup.addBot({
+                id: 3,
+                tick: function() {
+                },
+                augmentations: ["damageBoost", "cloak"]
+            });
+
+            var validationRule =
+                gosuArena.rules.createBotConfigValidationRule(setup.clock, {
+                    maxAllowedAugmentationCount: 1
+                });
+
+            setup.startGame({
+                rules: [validationRule]
+            });
+
+            setup.clock.doTick(1);
+
+            expect(eventCount).toBe(1);
+            expect(botsWithValidationErrors).toBeTruthy();
+            expect(botsWithValidationErrors.length).toBe(2);
+
+            expect(botsWithValidationErrors).toContainElementMatching(function(bot) {
+                return bot.id === 1;
+            });
+            expect(botsWithValidationErrors).toContainElementMatching(function(bot) {
+                return bot.id === 3;
+            });
+        });
     });
 });

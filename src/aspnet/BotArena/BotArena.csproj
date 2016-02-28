@@ -411,6 +411,7 @@
     <Content Include="Scripts\game\augmentations\repairAugmentation.js" />
     <Content Include="Scripts\game\augmentations\noopAugmentation.js" />
     <Content Include="Scripts\game\positioning.js" />
+    <Content Include="Scripts\game\rules\botConfigValidationRule.js" />
     <Content Include="Scripts\game\rules\suddenDeathRule.js" />
     <Content Include="Scripts\game\specs\ruleSpecs.js" />
     <Content Include="Scripts\game\specs\commanderSpecs.js" />
