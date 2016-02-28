@@ -33,6 +33,7 @@ gosuArena.rules.createBotConfigValidationRule = function (gameClock, options) {
 
         if (botsWithValidationErrors.length > 0) {
             gosuArena.events.raiseBotValidationErrors(botsWithValidationErrors);
+            gameClock.stop();
         }
     }
 

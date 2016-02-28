@@ -77,9 +77,14 @@
                 // roundCountReductionFactor: 0.5 // not implemented yet
             });
 
+        var validationRule =
+            gosuArena.rules.createBotConfigValidationRule(gameClock, {
+                maxAllowedAugmentationCount: 1
+            });
+
         gosuArena.engine.start(gameClock, {
             isTraining: gosuArena.settings.isTraining(),
-            rules: [suddenDeathRule] 
+            rules: [suddenDeathRule, validationRule] 
         });
 
         gameClock.start();
@@ -122,6 +127,22 @@
 
     gosuArena.events.suddenDeath(function(number) {
         writeGameMessage("Sudden death #" + number + "!", 3000);
+    });
+
+    gosuArena.events.botValidationErrors(function (bots) {
+
+        var botNames = bots.map(function(bot) {
+            return bot.name;
+        });
+
+        sweetAlert({
+            title: "Bot validation errors",
+            text: "The match has been stopped since validation errors were found for the following bots: " + botNames.join(", "),
+            type: "error",
+            showCancelButton: false,
+            confirmButtonText: "OK",
+            closeOnConfirm: true
+        });
     });
 
     gosuArena.events.botScriptError(function (eventArgs) {
