@@ -4,15 +4,39 @@ gosuArena.rules = gosuArena.rules || {};
 gosuArena.rules.createBotConfigValidationRule = function (gameClock, options) {
 
     var arenaState;
-
+    
     function hasValue(val) {
         return val !== undefined && val !== null;
     }
 
-    function hasValidationErrors(bot) {
+    function isModifierCountValidForModifierType(bot, modifierType, maxAllowedForModifierType) {
+        var staticModifiers = bot.staticModifiers();
+
+        var modifiersMatchingCategory = staticModifiers.modifiers.filter(function(modifier) {
+            return modifier.type === modifierType;
+        });
+
+        return modifiersMatchingCategory.length <= maxAllowedForModifierType;
+    }
+
+    function isBotValid(bot) {
         if (hasValue(options.maxAllowedAugmentationCount) && bot.augmentationNames().length > options.maxAllowedAugmentationCount) {
-            return true;
+            return false;
         }
+
+        for (var prop in options.modifiers) {
+            if (options.modifiers.hasOwnProperty(prop)) {
+
+                var maxAllowedForCategory = options.modifiers[prop].maxAllowedCount;
+                var isValid = isModifierCountValidForModifierType(bot, prop, maxAllowedForCategory);
+
+                if (!isValid) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     function initialize(initArenaState) {
@@ -20,13 +44,12 @@ gosuArena.rules.createBotConfigValidationRule = function (gameClock, options) {
     }
 
     function tick() {
-
         var botsWithValidationErrors = [];
 
         for (var i = 0; i < arenaState.bots.length; i++) {
             var bot = arenaState.bots[i];
 
-            if (hasValidationErrors(bot)) {
+            if (!isBotValid(bot)) {
                 botsWithValidationErrors.push(bot);
             }
         }

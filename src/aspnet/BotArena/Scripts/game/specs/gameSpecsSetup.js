@@ -72,6 +72,8 @@ gosuArena.specs.createGameSetup = function() {
         gosuArena.specs.game.startGame(setup.clock, options);
     }
 
+    setup.initializeModifiers = gosuArena.factories.modifiers.initialize;
+
     setup.addBot = gosuArena.specs.game.addBot;
 
     setup.beforeEach = function() {

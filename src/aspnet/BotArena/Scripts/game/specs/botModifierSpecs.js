@@ -1,54 +1,27 @@
 ///<reference path="~/Scripts/_references.js" />
 
 describe("Modifiers", function () {
-    var clock = null;
 
     var defaultBotOptions;
+    var setup = gosuArena.specs.createGameSetup();
 
-    var arenaState = null;
-
-    var arenaStateInterceptor = {
-        initialize: function(state) {
-            arenaState = state;
-        }
-    };
-
-    function startGame() {
-        gosuArena.specs.game.startGame(clock, [arenaStateInterceptor]);
-    }
-
-    function initializeModifiers(modifierConfig) {
-
-        gosuArena.factories.modifiers.initialize(modifierConfig);
-    }
-
-    var addBot = gosuArena.specs.game.addBot;
-
-    beforeEach(function () {
-
-        jasmine.addMatchers(gosuArena.specs.matchers);
-
+    beforeEach(function() {
+        setup.beforeEach();
         defaultBotOptions = gosuArena.factories.createSafeBotOptions();
-
-        clock = gosuArena.gameClock.createFake();
-
-        gosuArena.specs.game.initializeWorld([arenaStateInterceptor]);
     });
-
-    afterEach(function() {
-        gosuArena.specs.game.cleanup();
-    });
+    
+    afterEach(setup.afterEach);
 
     describe("Bot", function() {
 
         it("with invalid class name has default properties", function() {
-            addBot({
+            setup.addBot({
                 botClass: "invalidClassName"
             });
 
-            startGame();
+            setup.startGame();
 
-            var bot = arenaState.bots[0];
+            var bot = setup.arenaState.bots[0];
 
             expect(bot.health()).toBe(defaultBotOptions.initialHealthPoints);
             expect(bot.movementSpeed).toBe(defaultBotOptions.initialMovementSpeed);
@@ -57,7 +30,7 @@ describe("Modifiers", function () {
 
         it("with increased damage reduction takes less damage", function () {
 
-            initializeModifiers([
+            setup.initializeModifiers([
                 {
                     "type": "class",
                     "id": "armored",
@@ -79,7 +52,7 @@ describe("Modifiers", function () {
 
             // Let the two bots fire a single shot at each other and see what damage they take
 
-            addBot({
+            setup.addBot({
                 startPosition: { x: 0, y: 0, angle: 270 }, // aiming east
                 tick: function (actionQueue, status) {
 
@@ -97,7 +70,7 @@ describe("Modifiers", function () {
                 }
             });
 
-            addBot({
+            setup.addBot({
                 startPosition: { x: 100, y: 0, angle: 90 }, // aiming west
                 tick: function (actionQueue, status) {
 
@@ -116,12 +89,12 @@ describe("Modifiers", function () {
                 botClass: "armored"
             });
 
-            startGame();
+            setup.startGame();
 
-            var normalBot = arenaState.bots[0];
-            var armoredBot = arenaState.bots[1];
+            var normalBot = setup.arenaState.bots[0];
+            var armoredBot = setup.arenaState.bots[1];
 
-            clock.doTick(20);
+            setup.clock.doTick(20);
 
             expect(wasNormalBotHit).toBe(true);
             expect(wasArmoredBotHit).toBe(true);
@@ -132,7 +105,7 @@ describe("Modifiers", function () {
 
         it("with increased weapon damage output deals more damage", function() {
 
-            initializeModifiers([
+            setup.initializeModifiers([
                 {
                     "type": "class",
                     "id": "highDamage",
@@ -154,7 +127,7 @@ describe("Modifiers", function () {
 
             // Let the two bots fire a single shot at each other and see what damage they take
 
-            addBot({
+            setup.addBot({
                 startPosition: { x: 0, y: 0, angle: 270 }, // aiming east
                 tick: function(actionQueue, status) {
 
@@ -172,7 +145,7 @@ describe("Modifiers", function () {
                 }
             });
 
-            addBot({
+            setup.addBot({
                 startPosition: { x: 100, y: 0, angle: 90 }, // aiming west
                 tick: function(actionQueue, status) {
 
@@ -191,12 +164,12 @@ describe("Modifiers", function () {
                 botClass: "highDamage"
             });
 
-            startGame();
+            setup.startGame();
 
-            var normalBot = arenaState.bots[0];
-            var highDamageBot = arenaState.bots[1];
+            var normalBot = setup.arenaState.bots[0];
+            var highDamageBot = setup.arenaState.bots[1];
 
-            clock.doTick(20);
+            setup.clock.doTick(20);
 
             expect(wasNormalBotHit).toBe(true);
             expect(wasHighDamageBotHit).toBe(true);
@@ -207,7 +180,7 @@ describe("Modifiers", function () {
 
         it("with increased movement speed moves faster", function() {
 
-            initializeModifiers([ {
+            setup.initializeModifiers([ {
                 "type": "bonusEquipment",
                 "id": "boosters",
                 "name": "Speed bosters",
@@ -216,7 +189,7 @@ describe("Modifiers", function () {
                 }
             }]);
 
-            addBot({
+            setup.addBot({
                 startPosition: { x: 0, y: 0, angle: 270 }, // aiming west
                 tick: function(actionQueue) {
                     actionQueue.forward();
@@ -224,19 +197,19 @@ describe("Modifiers", function () {
                 equipment: ["boosters"]
             });
 
-            addBot({
+            setup.addBot({
                 startPosition: { x: 0, y: 100, angle: 270 }, // aiming west
                 tick: function(actionQueue, status) {
                     actionQueue.forward();
                 }
             });
 
-            startGame();
+            setup.startGame();
 
-            var fastBot = arenaState.bots[0];
-            var normalBot = arenaState.bots[1];
+            var fastBot = setup.arenaState.bots[0];
+            var normalBot = setup.arenaState.bots[1];
 
-            clock.doTick();
+            setup.clock.doTick();
 
             expect(fastBot.position().x).toBeGreaterThan(0);
             expect(fastBot.position().x).toBe(normalBot.position().x * 2);
@@ -244,7 +217,7 @@ describe("Modifiers", function () {
 
         it("with reduced weapon cooldown fires more often", function() {
 
-            initializeModifiers([
+            setup.initializeModifiers([
                 {
                     "type": "weapon",
                     "id": "rapidFireCannons",
@@ -262,7 +235,7 @@ describe("Modifiers", function () {
 
             // Let the two bots fire until the fast bot has fired 6 times. The slow one should have fired 3 times by then.
 
-            addBot({
+            setup.addBot({
                 startPosition: { x: 0, y: 0, angle: 270 }, // aiming east
                 tick: function(actionQueue, status) {
 
@@ -276,7 +249,7 @@ describe("Modifiers", function () {
                 }
             });
 
-            addBot({
+            setup.addBot({
                 startPosition: { x: 100, y: 0, angle: 90 }, // aiming west
                 tick: function(actionQueue, status) {
 
@@ -291,11 +264,11 @@ describe("Modifiers", function () {
                 botClass: "rapidFireCannons"
             });
 
-            startGame();
+            setup.startGame();
 
             // Add a max of 1000 rounds to avoid infinite loops if the code breaks
             for (var i = 0; i < 1000 && rapidFireBotFiredBulletCount < 8; i++) {
-                clock.doTick();
+                setup.clock.doTick();
             }
 
             expect(normalBotFiredBulletCount).toBe(4);
@@ -312,7 +285,7 @@ describe("Modifiers", function () {
 
         it("with increased rotation speed rotates more in one round (when rotating a positive angle)", function() {
 
-            initializeModifiers([
+            setup.initializeModifiers([
                 {
                     "type": "class",
                     "id": "fastRotation",
@@ -323,14 +296,14 @@ describe("Modifiers", function () {
                 }
             ]);
 
-            addBot({
+            setup.addBot({
                 startPosition: { x: 25, y: 25, angle: 0 },
                 tick: function(actionQueue, status) {
                     actionQueue.turn(100);
                 }
             });
 
-            addBot({
+            setup.addBot({
                 startPosition: { x: 100, y: 100, angle: 0 },
                 tick: function(actionQueue, status) {
                     actionQueue.turn(100);
@@ -338,19 +311,19 @@ describe("Modifiers", function () {
                 botClass: "fastRotation"
             });
 
-            startGame();
+            setup.startGame();
 
-            var normalBot = arenaState.bots[0];
-            var rotationBot = arenaState.bots[1];
+            var normalBot = setup.arenaState.bots[0];
+            var rotationBot = setup.arenaState.bots[1];
 
-            clock.doTick();
+            setup.clock.doTick();
 
             expect(rotationBot.angle).toBeGreaterThan(normalBot.angle);
         });
 
         it("with increased rotation speed rotates more in one round (when rotating a negative angle)", function () {
 
-            initializeModifiers([
+            setup.initializeModifiers([
                 {
                     "type": "class",
                     "id": "fastRotation",
@@ -361,14 +334,14 @@ describe("Modifiers", function () {
                 }
             ]);
 
-            addBot({
+            setup.addBot({
                 startPosition: { x: 25, y: 25, angle: 90 },
                 tick: function (actionQueue, status) {
                     actionQueue.turn(-100);
                 }
             });
 
-            addBot({
+            setup.addBot({
                 startPosition: { x: 100, y: 100, angle: 90 },
                 tick: function (actionQueue, status) {
                     actionQueue.turn(-100);
@@ -376,18 +349,18 @@ describe("Modifiers", function () {
                 botClass: "fastRotation"
             });
 
-            startGame();
+            setup.startGame();
 
-            var normalBot = arenaState.bots[0];
-            var rotationBot = arenaState.bots[1];
+            var normalBot = setup.arenaState.bots[0];
+            var rotationBot = setup.arenaState.bots[1];
 
-            clock.doTick();
+            setup.clock.doTick();
 
             expect(rotationBot.angle).toBeLessThan(normalBot.angle);
         });
 
         it("is assigned modifiers accordng to the specified class and equipment", function() {
-            initializeModifiers([{
+            setup.initializeModifiers([{
                 "type": "class",
                 "id": "tank",
                 "name": "tank class name",
@@ -469,7 +442,7 @@ describe("Modifiers", function () {
                 }
             ];
 
-            initializeModifiers(originalConfig);
+            setup.initializeModifiers(originalConfig);
 
             var modifierConfig = gosuArena.factories.modifiers.getCurrentConfig();
 

@@ -583,6 +583,10 @@ gosuArena.factories.createBot = function (tickCallback, options, collisionDetect
         return names;
     };
 
+    bot.staticModifiers = function() {
+        return gosuArena.util.deepCopy(staticModifiers);
+    };
+
     bot.executeCommand = function(commandName) {
         var commandFunction = bot.commands[commandName];
 

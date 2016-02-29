@@ -30,6 +30,7 @@ gosuArena.factories.modifiers = gosuArena.factories.modifiers || {};
         return {
             id: "default",
             name: "default",
+            type: "default",
             modifiers: gosuArena.factories.modifiers.default.create()
         };
     }

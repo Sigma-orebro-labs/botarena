@@ -237,5 +237,121 @@ describe("Game", function () {
                 return bot.id === 3;
             });
         });
+
+        it("validation rule checks number of items per modifier type", function () {
+
+            setup.initializeModifiers([
+                {
+                    "type": "class",
+                    "id": "class1",
+                    "name": "class1",
+                    "modifiers": {}
+                }, {
+                    "type": "class",
+                    "id": "class2",
+                    "name": "class2",
+                    "modifiers": {}
+                }, {
+                    "type": "armor",
+                    "id": "armor1",
+                    "name": "armor1",
+                    "modifiers": {}
+                }, {
+                    "type": "armor",
+                    "id": "armor2",
+                    "name": "armor2",
+                    "modifiers": {}
+                }, {
+                    "type": "weapon",
+                    "id": "weapon1",
+                    "name": "weapon1",
+                    "modifiers": {}
+                }, {
+                    "type": "weapon",
+                    "id": "weapon2",
+                    "name": "weapon2",
+                    "modifiers": {}
+                }
+            ]);
+
+            var botsWithValidationErrors = null;
+            var eventCount = 0;
+
+            gosuArena.events.botValidationErrors(function (botsWithErrors) {
+                botsWithValidationErrors = botsWithErrors;
+                eventCount++;
+            });
+
+            setup.addBot({
+                id: 1,
+                tick: function () {},
+                botClass: "class1",
+                equipment: ["weapon1", "weapon2", "armor1"] 
+            });
+
+            setup.addBot({
+                id: 2,
+                tick: function () {},
+                botClass: "class2",
+                equipment: ["weapon1", "armor1"],
+                augmentations: ["damageBoost"]
+            });
+
+            setup.addBot({
+                id: 3,
+                tick: function () {},
+                equipment: ["weapon1", "armor2", "armor1"],
+                augmentations: ["damageBoost"]
+            });
+
+            // Bot without any modifiers should not trigger validation errors
+            setup.addBot({
+                id: 4,
+                tick: function () {}
+            });
+
+            // You shouldn't be able to sneak in another class through the equipment array
+            setup.addBot({
+                id: 5,
+                tick: function () { },
+                botClass: "class1",
+                equipment: ["weapon1", "armor2", "class2"],
+                augmentations: ["damageBoost"]
+            });
+
+            var validationRule =
+                gosuArena.rules.createBotConfigValidationRule(setup.clock, {
+                    maxAllowedAugmentationCount: 1,
+                    modifiers: {
+                        "class" : {
+                            maxAllowedCount: 1
+                        },
+                        weapon: {
+                            maxAllowedCount: 1
+                        }, armor: {
+                            maxAllowedCount: 1
+                        }
+                    }
+                });
+
+            setup.startGame({
+                rules: [validationRule]
+            });
+
+            setup.clock.doTick(1);
+
+            expect(botsWithValidationErrors).toBeTruthy();
+            expect(botsWithValidationErrors.length).toBe(3);
+
+            expect(botsWithValidationErrors).toContainElementMatching(function (bot) {
+                return bot.id === 1;
+            });
+            expect(botsWithValidationErrors).toContainElementMatching(function (bot) {
+                return bot.id === 3;
+            });
+            expect(botsWithValidationErrors).toContainElementMatching(function (bot) {
+                return bot.id === 5;
+            });
+        });
     });
 });
