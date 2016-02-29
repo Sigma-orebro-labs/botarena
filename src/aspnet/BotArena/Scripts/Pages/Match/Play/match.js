@@ -79,7 +79,18 @@
 
         var validationRule =
             gosuArena.rules.createBotConfigValidationRule(gameClock, {
-                maxAllowedAugmentationCount: 1
+                maxAllowedAugmentationCount: 1,
+                modifiers: {
+                    "class": {
+                        maxAllowedCount: 1
+                    }, weapon: {
+                        maxAllowedCount: 1
+                    }, armor: {
+                        maxAllowedCount: 1
+                    }, bonusGear: {
+                        maxAllowedCount: 1
+                    }
+                }
             });
 
         gosuArena.engine.start(gameClock, {
